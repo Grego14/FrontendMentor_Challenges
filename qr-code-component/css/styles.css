@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap');
+
+body{
+    margin: 0;
+    background-color: hsl(212, 45%, 89%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.container{
+    max-height: 32.5em;
+    max-width: 19em;
+    background-color: hsl(0, 0%, 100%);
+    border-radius: 2em;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.box-h1{
+    font-family: 'Outfit',sans-serif;
+    font-weight: 700;
+    font-size: 1.3em;
+    max-width: 12em;
+    margin: 1em 0 0;
+    color: hsl(218, 44%, 22%);
+}
+
+.box-p{
+    font-family: 'Outfit',sans-serif;
+    font-weight: 400;
+    font-size: 0.9em;
+    max-width: 17em;
+    color: hsl(220, 15%, 55%);
+    margin: 1em;
+}
+
+#qr-image{
+    border-radius: 8%;
+    margin-top: 1.2em;
+    max-width: 15em;
+    height: 15em;
+}
+
+.attribution{
+    text-align: center;
+    font-size: 0.9em;
+    color: hsl(220, 15%, 55%);
+    font-family: 'Kanit',sans-serif;
+    font-weight: 400;
+    margin: 1.8em 0 0.3em;
+}
+
+.attribution a{
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+.attribution a:any-link{
+    color: hsl(218, 44%, 22%);
+}
+
+.attribution a:hover{
+    color: hsl(218, 44%, 40%);
+}
