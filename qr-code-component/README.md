@@ -26,5 +26,4 @@ I learned a bit more about flexbox and responsive layouts
 
 ## Author
 
-- Github Profile - [@Grego14](https://github.com/Grego14)
 - Frontend Mentor - [@Grego14](https://www.frontendmentor.io/profile/Grego14)
