@@ -1,13 +1,17 @@
 @font-face {
 	font-family: 'FigtreeSB';
-	src: url('./assets/fonts/Figtree-SemiBold.ttf') format('truetype');
-	font-weight: 500;
+	src: local('Figtree SemiBold'),
+		url('./assets/fonts/Figtree-SemiBold.woff2') format('woff2'),
+		url('./assets/fonts/Figtree-SemiBold.ttf') format('truetype');
+	font-weight: 600;
 }
 
 @font-face {
 	font-family: 'FigtreeEB';
-	src: url('./assets/fonts/Figtree-ExtraBold.ttf') format('truetype');
-	font-weight: 700;
+	src: local('Figtree ExtraBold'),
+		url('./assets/fonts/Figtree-ExtraBold.woff2') format('woff2'),
+		url('./assets/fonts/Figtree-ExtraBold.ttf') format('truetype');
+	font-weight: 800;
 }
 
 :root {
@@ -39,7 +43,7 @@ body {
 
 .wrapper {
 	background-color: var(--white);
-	max-width: 25rem;
+	max-width: 20rem;
 	border: 2px solid var(--black);
 	border-radius: 1rem;
 	padding: 1.5rem;
@@ -47,7 +51,7 @@ body {
 	transition: box-shadow 200ms ease-in-out;
 }
 
-.wrapper:hover{
+.wrapper:hover {
 	box-shadow: 12px 12px 0px black;
 }
 
@@ -79,13 +83,15 @@ body {
 	margin: 1rem 0 1.2rem 0;
 	display: block;
 	opacity: .7;
+	font-size: .9rem;
+	letter-spacing: 0.02rem;
 }
 
 .title__anchor {
 	font-family: var(--figtree-font-extrabold);
-	letter-spacing: 0.020rem;
+	letter-spacing: 0.025rem;
 	transition: color 200ms ease-in-out;
-	font-size: 1.5rem;
+	font-size: 1.25rem;
 }
 
 .title__anchor:any-link {
@@ -101,6 +107,7 @@ body {
 	color: var(--grey);
 	max-width: 22rem;
 	letter-spacing: .025rem;
+	font-size: .9rem;
 }
 
 .bottom-stuff__author {
@@ -111,10 +118,12 @@ body {
 }
 
 .author__image {
-	width: 45px;
-	height: 45px
+	width: 40px;
+	height: 40px
 }
 
 .author__name {
 	font-weight: bold;
+	font-size: .9rem;
+	letter-spacing: 0.025rem;
 }
