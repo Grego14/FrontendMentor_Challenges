@@ -16,11 +16,11 @@ This is a solution to the [3-column preview card component challenge on Frontend
 
 ### Screenshot
 
-![](./images/screenshot.png)
+![](../screenshots/3-column-card-screenshot.webp)
 
 ### Links
 
-[Solution](https://github.com/Grego14/3-column-preview-card-component) | [Live Site](https://grego14.github.io/3-column-preview-card-component/)
+[Solution](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/3-column-preview-card-component) | [Live Site]()
 
 ## My process
 
@@ -33,9 +33,8 @@ This is a solution to the [3-column preview card component challenge on Frontend
 
 ### What I learned
 
-I learned to change the values ​​of some properties using media query.
+I learned to change the values of some properties using media query.
 
 ## Author
 
-- Github Profile - [@Grego14](https://github.com/Grego14)
 - Frontend Mentor - [@Grego14](https://www.frontendmentor.io/profile/Grego14)
