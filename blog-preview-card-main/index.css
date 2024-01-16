@@ -1,0 +1,120 @@
+@font-face {
+	font-family: 'FigtreeSB';
+	src: url('./assets/fonts/Figtree-SemiBold.ttf') format('truetype');
+	font-weight: 500;
+}
+
+@font-face {
+	font-family: 'FigtreeEB';
+	src: url('./assets/fonts/Figtree-ExtraBold.ttf') format('truetype');
+	font-weight: 700;
+}
+
+:root {
+	--yellow: hsl(47, 88%, 63%);
+	--white: hsl(0, 0%, 100%);
+	--grey: hsl(0, 0%, 50%);
+	--black: hsl(0, 0%, 7%);
+
+	--figtree-font-semibold: 'FigtreeSB', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	--figtree-font-extrabold: 'FigtreeEB', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+}
+
+body {
+	background-color: var(--yellow);
+	line-height: 150%;
+	color: var(--black);
+	margin: 0;
+	height: 100svh;
+	font-family: var(--figtree-font-semibold);
+}
+
+.main {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+}
+
+.wrapper {
+	background-color: var(--white);
+	max-width: 25rem;
+	border: 2px solid var(--black);
+	border-radius: 1rem;
+	padding: 1.5rem;
+	box-shadow: 8px 8px 0px black;
+	transition: box-shadow 200ms ease-in-out;
+}
+
+.wrapper:hover{
+	box-shadow: 12px 12px 0px black;
+}
+
+.top-stuff__image {
+	min-width: 100%;
+	height: auto;
+	border-radius: 1rem;
+	margin-bottom: 1.2rem;
+}
+
+.top-stuff__tag {
+	appearance: none;
+	border: none;
+	padding: .5rem .8rem;
+	border-radius: .3rem;
+	color: inherit;
+	background-color: var(--yellow);
+	cursor: pointer;
+	font-weight: bold;
+	transition: opacity 200ms ease-in-out, transform 200ms ease-in-out;
+}
+
+.top-stuff__tag:hover {
+	opacity: .80;
+	transform: scale(1.05)
+}
+
+.top-stuff__published {
+	margin: 1rem 0 1.2rem 0;
+	display: block;
+	opacity: .7;
+}
+
+.title__anchor {
+	font-family: var(--figtree-font-extrabold);
+	letter-spacing: 0.020rem;
+	transition: color 200ms ease-in-out;
+	font-size: 1.5rem;
+}
+
+.title__anchor:any-link {
+	color: inherit;
+	text-decoration: none;
+}
+
+.title__anchor:hover {
+	color: var(--yellow)
+}
+
+.bottom-stuff__text {
+	color: var(--grey);
+	max-width: 22rem;
+	letter-spacing: .025rem;
+}
+
+.bottom-stuff__author {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	margin-top: 1.5rem;
+}
+
+.author__image {
+	width: 45px;
+	height: 45px
+}
+
+.author__name {
+	font-weight: bold;
+}
