@@ -19,7 +19,7 @@ This is a solution to the [Product preview card component challenge on Frontend 
 
 ### Links
 
-[Solution](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/product-preview-card-component) | [Live Site URL]()
+[Solution](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/product-preview-card-component) | [Live Site URL](https://grego14.github.io/FrontendMentor_Challenges/product-preview-card-component/)
 
 ## My process
 
@@ -32,5 +32,4 @@ This is a solution to the [Product preview card component challenge on Frontend 
 
 ## Author
 
-- Github Profile - [@Grego14](https://github.com/Grego14)
 - Frontend Mentor - [@Grego14](https://www.frontendmentor.io/profile/Grego14)
