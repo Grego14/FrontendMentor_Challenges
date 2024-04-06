@@ -1,0 +1,171 @@
+@font-face {
+    font-family: 'Work Sans';
+    src: local('Work Sans Regular'),
+        url('assets/fonts/WorkSans-Regular.woff2') format('woff2'),
+        url('assets/fonts/WorkSans-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Work Sans';
+    src: local('Work Sans Bold'),
+        url('assets/fonts/WorkSans-Bold.woff2') format('woff2'),
+        url('assets/fonts/WorkSans-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Work Sans';
+    src: local('Work Sans SemiBold'),
+        url('assets/fonts/WorkSans-SemiBold.woff2') format('woff2'),
+        url('assets/fonts/WorkSans-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root{
+	font-family: 'Work Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+	--font-white: hsl(0, 0%, 100%);
+	--font-light-pink: hsl(275, 100%, 97%);
+	--font-grayish-purple: hsl(292, 16%, 49%);
+	--font-dark-purple: hsl(292, 42%, 14%);
+	--accordion-padding: 2rem;
+
+	--font-grayish-purple-shadow: hsl(275, 90%, 98%);
+
+	--text-normal-size: max(1vw + 5px, 14px);
+	--text-medium-size: max(1vw + 5px, 18px);
+
+	line-height: 1.1;
+	font-size: var(--text-normal-size);
+}
+
+*, *::after, *::before{
+	box-sizing: border-box;
+	margin: 0;
+}
+
+.main{
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	position: relative;
+	background-color: var(--font-light-pink);
+	overflow: hidden;
+}
+
+.overlay{
+	position: absolute;
+	top: 0;
+	max-height: 20rem;
+	min-width: 100%;
+	z-index: 1;
+}
+
+.accordion{
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	background-color: var(--font-white);
+	border-radius: .6rem;
+	z-index: 2;
+	padding: 1.5rem 2rem;
+	max-width: min(calc(32.5rem + var(--accordion-padding) * 2), 90vw);
+	box-shadow: 0 20px 32px 0 var(--font-grayish-purple-shadow);
+	max-height: calc(max-content + var(--accordion-padding) * 2);
+}
+
+.accordion__header{
+	display: flex;
+	align-items: center;
+	gap: 1.5rem;
+}
+
+.header__title{
+	font-size: 3rem;
+	margin: 1rem 0;
+}
+
+.accordion__title{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	min-width: 100%;
+	cursor: pointer;
+}
+
+.accordion__title *:focus-visible{
+	outline: 3px dotted var(--font-grayish-purple)
+}
+
+.accordion__anchor{
+	text-decoration: none;
+	transition: color 120ms ease-in;
+	color: var(--font-dark-purple);
+	font-weight: bold;
+	font-size: var(--text-medium-size);
+}
+
+.accordion__icon:hover{
+	animation: rotate-icon 3s ease-in-out infinite;
+}
+
+@keyframes rotate-icon{
+	from{
+		transform: rotate(0)
+	}
+	to{
+		transform: rotate(180deg)
+	}
+}
+
+.accordion__anchor:hover{
+	color: var(--font-grayish-purple);
+}
+
+.accordion__text{
+	max-width: 32.5rem;
+	color: var(--font-grayish-purple);
+	line-height: 1.4;
+	padding: .5rem 0 0;
+	opacity: 1;
+	transition: opacity 250ms ease-in-out;
+}
+
+.accordion__text.text--closed{
+	visibility: hidden;
+	max-height: 0;
+	opacity: 0;
+	padding: 0;
+}
+
+.accordion__item{
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.accordion__item:not(:last-child)::after{
+	content: '';
+	display: block;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	box-shadow: 0 0 5px 1px #e8e8e8;
+}
+
+.accordion__item:not(:last-child){
+	position: relative;
+	padding: 1.2rem 0;
+}
+
+.accordion__item:not(:has(.text--open)){
+	padding: 1.2rem 0;
+}

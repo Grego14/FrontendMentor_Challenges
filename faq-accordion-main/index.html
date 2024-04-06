@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+  <title>Frontend Mentor | FAQ accordion</title>
+	<link rel='stylesheet' href='./styles.css' type='text/css'/>
+	<link
+    rel="preload"
+    href="/assets/fonts/WorkSans-Regular.woff2"
+    as="font"
+    type="font/woff2"
+    crossorigin />
+  <link
+    rel="preload"
+    href="/assets/fonts/WorkSans-Bold.woff2"
+    as="font"
+    type="font/woff2"
+    crossorigin />
+</head>
+<body>
+
+		<main class='main'>
+			<img class='overlay' src='./assets/images/background-pattern-desktop.svg' alt='' />
+			<section class='accordion'>
+				<div class='accordion__header'>
+					<img class='header__star' src='./assets/images/icon-star.svg' alt=''/>
+					<h1 class='header__title'>FAQs</h1>
+				</div>
+				<div class='accordion__item' name='accordion'>
+					<div class='accordion__title'>
+						<a class='accordion__anchor' href='#'>What is Frontend Mentor, and how will it help me?</a>
+						<img class='accordion__icon' src='./assets/images/icon-minus.svg' alt='' />
+					</div>
+					<p class='accordion__text' tabIndex='0'>
+						Frontend Mentor offers realistic coding challenges to help developers improve their 
+						frontend coding skills with projects in HTML, CSS, and JavaScript. It's suitable for 
+						all levels and ideal for portfolio building.
+					</p>
+				</div>
+				<div class='accordion__item' name='accordion' >
+					<div class='accordion__title'>
+						<a class='accordion__anchor' href='#'>Is Frontend Mentor free?</a>
+							<img class='accordion__icon' src='./assets/images/icon-plus.svg' alt='' />
+					</div>
+					<p class='accordion__text text--closed' tabIndex='0'>
+						Yes, Frontend Mentor offers both free and premium coding challenges, with the free 
+						option providing access to a range of projects suitable for all skill levels.
+					</p>
+				</div>
+				<div class='accordion__item' name='accordion' >
+					<div class='accordion__title'>
+						<a class='accordion__anchor' href='#'>Can I use Frontend Mentor projects in my portfolio?</a>
+						<img class='accordion__icon' src='./assets/images/icon-plus.svg' alt='' />
+					</div>
+					<p class='accordion__text text--closed' tabIndex='0'>
+						Yes, you can use projects completed on Frontend Mentor in your portfolio. It's an excellent
+						way to showcase your skills to potential employers!
+					</p>
+				</div>
+				<div class='accordion__item' name='accordion' >
+					<div class='accordion__title'>
+						<a class='accordion__anchor' href='#'> How can I get help if I'm stuck on a challenge?</a>
+						<img class='accordion__icon' src='./assets/images/icon-plus.svg' alt='' />
+					</div>
+					<p class='accordion__text text--closed' tabIndex='0'>
+						The best place to get help is inside Frontend Mentor's Discord community. There's a help 
+						channel where you can ask questions and seek support from other community members.
+					</p>
+				</div>
+			</section>
+		</main>
+  <!--<div class="attribution">-->
+    <!--Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. -->
+    <!--Coded by <a href="#">Your Name Here</a>.-->
+  <!--</div>-->
+		<script src='./main.js'></script>
+</body>
+</html>
