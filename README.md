@@ -8,6 +8,8 @@
 
 #### Faq Accordion [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/faq-accordion-main) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/faq-accordion-main/)
 
+#### Article Preview [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/.learning_paths/javascript-fundamentals/article-preview-component-master) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/.learning_paths/javascript-fundamentals/article-preview-component-master/)
+
 <!--#### Results summary **|** [**Solution**](https://github.com/Grego14/Frontend-Mentor/tree/main/results-summary-component-main) **|** [**Live site**]()-->
 
 ***Frontent Mentor Profile*** ➡️ [@Grego14](https://www.frontendmentor.io/profile/Grego14)
