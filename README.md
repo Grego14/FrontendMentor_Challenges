@@ -10,6 +10,8 @@
 
 #### Article Preview [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/.learning_paths/javascript-fundamentals/article-preview-component-master) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/.learning_paths/javascript-fundamentals/article-preview-component-master/)
 
+#### Time Tracking Dashboard [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/.learning_paths/javascript-fundamentals/time-tracking-dashboard-main) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/.learning_paths/javascript-fundamentals/time-tracking-dashboard-main/)
+
 <!--#### Results summary **|** [**Solution**](https://github.com/Grego14/Frontend-Mentor/tree/main/results-summary-component-main) **|** [**Live site**]()-->
 
 ***Frontent Mentor Profile*** ➡️ [@Grego14](https://www.frontendmentor.io/profile/Grego14)
