@@ -13,8 +13,9 @@
 			<h1 class='main__title'><span class='main__title-splitter'>Spli</span><span class='main__title-splitter'>tter</span></h1>
 			<article class='splitter'>
 				<section class='splitter__left-content'>
-					<div class='splitter__bill'>
+					<div class='splitter__bill splitter__box'>
 						<label class='splitter__label' for='bill'>Bill</label>
+						<span class='splitter__people__error error-element'></span>
 						<div class='splitter__input-container'>
 							<input class='splitter__input' type='text' placeholder='0' autocomplete='off' name='bill' id='bill'/>
 							<img class='splitter__input-icon' src='./assets/images/icon-dollar.svg' alt='' />
@@ -22,15 +23,16 @@
 					</div>
 					<div class='splitter__tips'>
 						<h2 class='splitter__tips__title'>Select Tip %</h2>
-						<button class='splitter__tip' id='tip-5'>5%</button>
-						<button class='splitter__tip' id='tip-10'>10%</button>
-						<button class='splitter__tip' id='tip-15'>15%</button>
-						<button class='splitter__tip' id='tip-25'>25%</button>
-						<button class='splitter__tip' id='tip-50'>50%</button>
+						<button class='splitter__tip' id='5'>5%</button>
+						<button class='splitter__tip' id='10'>10%</button>
+						<button class='splitter__tip' id='15'>15%</button>
+						<button class='splitter__tip' id='25'>25%</button>
+						<button class='splitter__tip' id='50'>50%</button>
 						<input class='splitter__tip custom--tip' type='text' name='tip' id='tip-custom' placeholder='Custom' autocomplete='off'/>
 					</div>
-					<div class='splitter__people'>
+					<div class='splitter__people splitter__box'>
 						<label class='splitter__label' for='people'>Number of People</label>
+						<span class='splitter__people__error error-element'></span>
 						<div class='splitter__input-container'>
 							<input class='splitter__input' type='text' placeholder='0' autocomplete='off' name='people' id='people' inputmode='numeric'/>
 							<img class='splitter__input-icon' src='./assets/images/icon-person.svg' alt='' />
@@ -54,7 +56,7 @@
 							<span class='total-amount__right amount-right' id='total-amount'>$0.00</span>
 						</div>
 					</div>
-					<button class='splitter__reset'>Reset</button>
+					<button class='splitter__reset' id='reset-btn'>Reset</button>
 				</section>
 			</article>
 		</main>
