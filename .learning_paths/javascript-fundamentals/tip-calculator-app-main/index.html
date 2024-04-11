@@ -2,43 +2,67 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
-
-  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
   <title>Frontend Mentor | Tip calculator app</title>
-
-  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
-  <style>
-    .attribution { font-size: 11px; text-align: center; }
-    .attribution a { color: hsl(228, 45%, 44%); }
-  </style>
+	<link rel="stylesheet" href="./styles.css">
 </head>
 <body>
 
-  Bill
-
-  Select Tip %
-  5%
-  10%
-  15%
-  25%
-  50%
-  Custom
-
-  Number of People
-
-  Tip Amount
-  / person
-
-  Total
-  / person
-
-  Reset
+		<main class='main'>
+			<h1 class='main__title'><span class='main__title-splitter'>Spli</span><span class='main__title-splitter'>tter</span></h1>
+			<article class='splitter'>
+				<section class='splitter__left-content'>
+					<div class='splitter__bill'>
+						<label class='splitter__label' for='bill'>Bill</label>
+						<div class='splitter__input-container'>
+							<input class='splitter__input' type='text' placeholder='0' autocomplete='off' name='bill' id='bill'/>
+							<img class='splitter__input-icon' src='./assets/images/icon-dollar.svg' alt='' />
+						</div>
+					</div>
+					<div class='splitter__tips'>
+						<h2 class='splitter__tips__title'>Select Tip %</h2>
+						<button class='splitter__tip' id='tip-5'>5%</button>
+						<button class='splitter__tip' id='tip-10'>10%</button>
+						<button class='splitter__tip' id='tip-15'>15%</button>
+						<button class='splitter__tip' id='tip-25'>25%</button>
+						<button class='splitter__tip' id='tip-50'>50%</button>
+						<input class='splitter__tip custom--tip' type='text' name='tip' id='tip-custom' placeholder='Custom' autocomplete='off'/>
+					</div>
+					<div class='splitter__people'>
+						<label class='splitter__label' for='people'>Number of People</label>
+						<div class='splitter__input-container'>
+							<input class='splitter__input' type='text' placeholder='0' autocomplete='off' name='people' id='people' inputmode='numeric'/>
+							<img class='splitter__input-icon' src='./assets/images/icon-person.svg' alt='' />
+						</div>
+					</div>
+				</section>
+				<section class='splitter__right-content'>
+					<div class='splitter__right-content-top'>
+						<div class='splitter__tip-amount splitter__amount'>
+							<span class='tip-amount__left amount-left'>
+								<span class='amount-left__text'>Tip Amount</span>
+								<span class='amount-left__person'>/ person</span>
+							</span>
+							<span class='tip-amount__right amount-right' id='tip-amount'>$0.00</span>
+						</div>
+						<div class='splitter__total-amount splitter__amount'>
+							<span class='total-amount__left amount-left'>
+								<span class='amount-left__text'>Total</span>
+								<span class='amount-left__person'>/ person</span>
+							</span>
+							<span class='total-amount__right amount-right' id='total-amount'>$0.00</span>
+						</div>
+					</div>
+					<button class='splitter__reset'>Reset</button>
+				</section>
+			</article>
+		</main>
   
-  <div class="attribution">
-    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
-    Coded by <a href="#">Your Name Here</a>.
-  </div>
+  <!--<div class="attribution">-->
+    <!--Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. -->
+    <!--Coded by <a href="#">Your Name Here</a>.-->
+  <!--</div>-->
+	<script src='./script.js'></script>
 </body>
 </html>
