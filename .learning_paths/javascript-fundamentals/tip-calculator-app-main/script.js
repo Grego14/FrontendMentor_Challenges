@@ -12,27 +12,27 @@ let selectedTip = tips.filter(tip => tip.classList.contains('selected'))
 const errEls = d.querySelectorAll('.error-element')
 
 const UI = {
-	tipAmount: 0,
-	totalAmount: 0,
+	tipAmount: '0.00',
+	totalAmount: '0.00',
 	bill: '',
 	people: 1,
 	tip: 0
 }
 
 function updateUI(){
-	tipAmount.textContent = UI.tipAmount
-	totalAmount.textContent = UI.totalAmount
+	tipAmount.textContent = `$${Number(UI.tipAmount).toFixed(2)}`
+	totalAmount.textContent = `$${Number(UI.totalAmount).toFixed(2)}`
 	peopleInput.value = UI.people
 	billInput.value = UI.bill
 }
 
 function personAmount(){
-	return UI.bill / UI.people
+	return Number(UI.bill) / Number(UI.people)
 }
 
 function updateValues(){
-	UI.tipAmount = Number(personAmount() / 100 * UI.tip)
-	UI.totalAmount = Number(personAmount() + UI.tipAmount)
+	UI.tipAmount = Number(personAmount() / 100 * (UI.tip)) || UI.tipAmount 
+	UI.totalAmount = Number(personAmount()) + Number(UI.tipAmount) || UI.totalAmount
 
 	updateUI()
 }
@@ -58,12 +58,12 @@ function handleCustomTip(e){
 	if(e.target.id === 'tip-custom'){
 		selectedTip?.classList?.remove('selected')
 
-		updateValue('tip', e.target.id)
+		updateValue('tip', e.target.value)
 
 		// use the las selectedTip if the value is invalid
 		if(e.target.value <= 0 || !/^[0-9]+$/.test(e.target.value)){
 			selectedTip?.classList?.add('selected')
-			updateValue('tip', e.target.id)
+			updateValue('tip', selectedTip?.id)
 		}
 	}
 }
@@ -112,7 +112,6 @@ function handlePeople(e){
 		setError(errEls[1], '')
 	}else{
 		e.target.classList.add('input--error')
-		updateValue('people', 1)
 	}
 }
 
@@ -122,14 +121,18 @@ function handleReset(e){
 		const resetAllValues = {
 			tipAmount: '0.00',
 			totalAmount: '0.00',
-			bill: 0,
-			people: 0,
+			bill: '',
+			people: '',
 			tip: 0,
 		}
 
 		for (const [key, value] of Object.entries(resetAllValues)) {
 			UI[key] = value
 		}
+
+		customTip.value = ''
+		selectedTip?.classList?.remove('selected')
+		selectedTip = null
 
 		updateUI()
 	}
