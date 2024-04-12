@@ -137,11 +137,11 @@
 	display: grid;
 	grid-template-rows: max-content 1fr;
 	grid-template-columns: repeat(3, 1fr);
-	gap: .8rem;
+	gap: .8rem 0;
 
 	& .splitter__tips__title{
 		font-size: 1rem;
-		grid-column: span 3;
+		grid-column: span 2;
 	}
 
 	& .splitter__tip{
@@ -231,5 +231,41 @@
 
 	&:where(:hover, :focus){
 		background-color: var(--light-grayish-cyan);
+	}
+}
+
+@media only screen and (max-width: 850px){
+	.splitter{
+		flex-direction: column;
+	}
+}
+
+@media only screen and (max-width: 470px){
+	.main{
+		justify-content: space-between;
+	}
+
+	.main__title{
+		margin-top: auto;
+	}
+
+	.splitter{
+		max-width: 100%;
+	}
+
+	.splitter__tips{
+		grid-template-rows: max-content repeat(3, 1fr);
+		grid-template-columns: repeat(2, 1fr);
+		place-items: center;
+
+		& .splitter__tip{
+			font-size: 1.5rem;
+			min-width: 8rem;
+			height: 3rem;
+		}
+
+		& .splitter__tips__title{
+			place-self: start;
+		}
 	}
 }
