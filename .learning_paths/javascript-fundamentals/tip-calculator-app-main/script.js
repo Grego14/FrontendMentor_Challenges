@@ -14,7 +14,7 @@ const errEls = d.querySelectorAll('.error-element')
 const UI = {
 	tipAmount: 0,
 	totalAmount: 0,
-	bill: '',
+	bill: 1,
 	people: 1,
 	tip: 0
 }
@@ -30,15 +30,23 @@ function personAmount(){
 	return Number(UI.bill) / Number(UI.people)
 }
 
+function getTipAmount(){
+	return Number(personAmount() / 100 * (UI.tip))
+}
+
+function getTotalAmount(){
+	return Number(personAmount()) + Number(UI.tipAmount)
+}
+
 function updateValues(){
-	UI.tipAmount = Number(personAmount() / 100 * (UI.tip)) || UI.tipAmount 
-	UI.totalAmount = Number(personAmount()) + Number(UI.tipAmount) || UI.totalAmount
+	UI.tipAmount = getTipAmount()
+	UI.totalAmount = getTotalAmount()
 
 	updateUI()
 }
 
 function updateValue(k,v){
-	UI[k] = Number(v)
+	UI[k] = v
 	updateValues()
 }
 
@@ -68,15 +76,15 @@ function handleCustomTip(e){
 	}
 }
 
-function validateNumber(value){
-	return !/^[^0-9]+$/.test(value)
+function validateNumber(value, regex){
+	return regex ? regex.test(value) : /^[0-9]+$/.test(value)
 }
 
 function setError(el, err){
 	el.textContent = err
 }
 
-function validate(target, el){
+function validate(target, el, customRegex){
 	const value = target.value
 
 	el.classList.remove('show')
@@ -86,16 +94,18 @@ function validate(target, el){
 		el.classList.add('show')
 	}
 
-	if(!validateNumber(value)) {
+	if(!validateNumber(value, customRegex)) {
 		setError(el, 'Value isn\'t a number')
 		el.classList.add('show')
 	}
 
-	return validateNumber(value) && value > 0
+	return validateNumber(value, customRegex) && value > 0
 }
 
 function handleBill(e){
-	if(validate(e.target, errEls[0])){
+	const customRegex = /^[0-9\.]+$/
+
+	if(validate(e.target, errEls[0], customRegex)){
 		updateValue('bill', e.target.value)
 		e.target.classList.remove('input--error')
 		setError(errEls[0], '')
