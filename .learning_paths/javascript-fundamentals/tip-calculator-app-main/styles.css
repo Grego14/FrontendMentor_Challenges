@@ -200,7 +200,8 @@
 	& .amount-right{
 		font-size: 2.5rem;
 		color: var(--strong-cyan);
-		margin-left: 5rem;
+		max-width: 200px;
+		overflow: scroll;
 	}
 
 	& .amount-left{
