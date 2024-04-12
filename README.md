@@ -14,6 +14,8 @@
 
 #### Tip Calculator App [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/.learning_paths/javascript-fundamentals/tip-calculator-app-main) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/.learning_paths/javascript-fundamentals/tip-calculator-app-main/)
 
+#### Blog Card [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/blog-preview-card-main) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/blog-preview-card-main/)
+
 <!--#### Results summary **|** [**Solution**](https://github.com/Grego14/Frontend-Mentor/tree/main/results-summary-component-main) **|** [**Live site**]()-->
 
 ***Frontent Mentor Profile*** ➡️ [@Grego14](https://www.frontendmentor.io/profile/Grego14)
