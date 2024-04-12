@@ -42,14 +42,14 @@
 	gap: 3rem;
 	height: 100vh;
 	background-color: var(--light-grayish-cyan);
-}
 
-.main__title{
-	text-transform: uppercase;
-	letter-spacing: .5rem;
-  font-size: 1.5rem;
-	display: flex;
-	flex-direction: column;
+	& .main__title{
+		text-transform: uppercase;
+		letter-spacing: .5rem;
+		font-size: 1.5rem;
+		display: flex;
+		flex-direction: column;
+	}
 }
 
 .splitter{
@@ -141,7 +141,7 @@
 
 	& .splitter__tips__title{
 		font-size: 1rem;
-		grid-column: span 2;
+		grid-column: span 3;
 	}
 
 	& .splitter__tip{
@@ -265,7 +265,7 @@
 		}
 
 		& .splitter__tips__title{
-			place-self: start;
+			grid-column: span 2;
 		}
 	}
 }
