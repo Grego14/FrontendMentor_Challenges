@@ -101,7 +101,7 @@ function handleBill(e){
 		setError(errEls[0], '')
 	}else{
 		e.target.classList.add('input--error')
-		updateValue('bill', 0)
+		updateValue('bill', '')
 	}
 }
 
@@ -122,12 +122,12 @@ function handleReset(e){
 			tipAmount: '0.00',
 			totalAmount: '0.00',
 			bill: '',
-			people: '',
+			people: 1,
 			tip: 0,
 		}
 
 		for (const [key, value] of Object.entries(resetAllValues)) {
-			UI[key] = value
+			UI[key] = Number(value)
 		}
 
 		customTip.value = ''
