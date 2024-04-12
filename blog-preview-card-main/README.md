@@ -6,7 +6,7 @@ This is a solution to the [Blog preview card](https://www.frontendmentor.io/chal
 
 ### Screenshot
 
-![](../screenshots/blog-preview-card.webp)
+![](/screenshots/blog-card.webp)
 
 ### Links
 
