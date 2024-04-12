@@ -12,8 +12,8 @@ let selectedTip = tips.filter(tip => tip.classList.contains('selected'))
 const errEls = d.querySelectorAll('.error-element')
 
 const UI = {
-	tipAmount: '0.00',
-	totalAmount: '0.00',
+	tipAmount: 0,
+	totalAmount: 0,
 	bill: '',
 	people: 1,
 	tip: 0
@@ -119,15 +119,15 @@ function handleReset(e){
 	if(e.target === resetBtn){
 
 		const resetAllValues = {
-			tipAmount: '0.00',
-			totalAmount: '0.00',
+			tipAmount: 0,
+			totalAmount: 0,
 			bill: '',
 			people: 1,
 			tip: 0,
 		}
 
 		for (const [key, value] of Object.entries(resetAllValues)) {
-			UI[key] = Number(value)
+			UI[key] = value
 		}
 
 		customTip.value = ''
