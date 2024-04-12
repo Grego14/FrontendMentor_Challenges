@@ -25,7 +25,7 @@ Users should be able to:
 
 ### Screenshot
 
-![](/screenshots/tip-calculator.webp)
+![](/screenshots/tip-calculator-app.webp)
 
 ### Links
 
