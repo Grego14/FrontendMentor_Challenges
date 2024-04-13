@@ -328,6 +328,11 @@
 		min-width: var(--card-width);
 		cursor: pointer;
 
+		/* necessary... otherwise it looks very small */
+		&:has(.card__free-months.show){
+			min-height: calc(var(--card-height) + 1rem)
+		}
+
 		& .form__card__text {
 			display: flex;
 			flex-direction: column;
@@ -339,6 +344,15 @@
 			& .card__price {
 				color: var(--cool-gray);
 				font-size: var(--fs-label);
+			}
+		}
+
+		& .card__free-months{
+			font-size: var(--fs-small);
+			display: none;
+
+			&.show{
+				display: inline;
 			}
 		}
 
