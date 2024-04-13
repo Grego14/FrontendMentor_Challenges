@@ -1,175 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
 	<link rel='stylesheet' href='./styles.css' />
-  <title>Frontend Mentor | Multi-step form</title>
+	<title>Frontend Mentor | Multi-step form</title>
 </head>
+
 <body>
-		<main class='main'>
-			<form class='form'>
-				<aside class='form__sidebar'>
-					<picture>
-						<source srcset="./assets/images/bg-sidebar-mobile.svg" media='(max-width: 850px)'>
-						<img src='./assets/images/bg-sidebar-desktop.svg' alt='' />
-					</picture>
-					<div class='form__steps'>
-						<div class='form__step'>
-							<span class='circle actual'>1</span>
-							<span class='form__step__text'>
-								<span class='step__text-top text--uppercase'>Step 1</span>
-								<span class='step__text-bottom text--uppercase'>Your info</span>
-							</span>
+	<main class='main'>
+		<form class='form'>
+			<aside class='form__sidebar'>
+				<picture>
+					<source srcset="./assets/images/bg-sidebar-mobile.svg" media='(max-width: 850px)'>
+					<img src='./assets/images/bg-sidebar-desktop.svg' alt='' />
+				</picture>
+				<div class='form__steps'>
+					<div class='form__step'>
+						<span class='circle actual'>1</span>
+						<span class='form__step__text'>
+							<span class='step__text-top text--uppercase'>Step 1</span>
+							<span class='step__text-bottom text--uppercase'>Your info</span>
+						</span>
+					</div>
+					<div class='form__step'>
+						<span class='circle'>2</span>
+						<span class='form__step__text'>
+							<span class='step__text-top text--uppercase'>Step 2</span>
+							<span class='step__text-bottom text--uppercase'>Select plan</span>
+						</span>
+					</div>
+					<div class='form__step'>
+						<span class='circle'>3</span>
+						<span class='form__step__text'>
+							<span class='step__text-top text--uppercase'>Step 3</span>
+							<span class='step__text-bottom text--uppercase'>Add-ons</span>
+						</span>
+					</div>
+					<div class='form__step'>
+						<span class='circle'>4</span>
+						<span class='form__step__text'>
+							<span class='step__text-top text--uppercase'>Step 4</span>
+							<span class='step__text-bottom text--uppercase'>Summary</span>
+						</span>
+					</div>
+				</div>
+			</aside>
+			<section class='form__right-side'>
+				<h1 class='form__title' id='title'>Personal info</h1>
+				<p class='form__description' id='description'>Please provide your name, email address, and phone number.</p>
+				<div class='form__step form__step--1'>
+					<div class='form__inputs'>
+						<div class='form__input__container'>
+							<label class='form__label' for='name'>Name</label>
+							<input class='form__input' type='text' name='name' id='name' placeholder='e.g. Stephen King' required
+								autocomplete='off' />
+							<span class='form__input__error'></span>
 						</div>
-						<div class='form__step'>
-							<span class='circle'>2</span>
-							<span class='form__step__text'>
-								<span class='step__text-top text--uppercase'>Step 2</span>
-								<span class='step__text-bottom text--uppercase'>Select plan</span>
-							</span>
+						<div class='form__input__container'>
+							<label class='form__label' for='email'>Email Address</label>
+							<input class='form__input' type='email' name='email' id='email' placeholder='e.g. stephenking@lorem.com'
+								required autocomplete='off' />
+							<span class='form__input__error'></span>
 						</div>
-						<div class='form__step'>
-							<span class='circle'>3</span>
-							<span class='form__step__text'>
-								<span class='step__text-top text--uppercase'>Step 3</span>
-								<span class='step__text-bottom text--uppercase'>Add-ons</span>
-							</span>
-						</div>
-						<div class='form__step'>
-							<span class='circle'>4</span>
-							<span class='form__step__text'>
-								<span class='step__text-top text--uppercase'>Step 4</span>
-								<span class='step__text-bottom text--uppercase'>Summary</span>
-							</span>
+						<div class='form__input__container'>
+							<label class='form__label' for='phone'>Phone Number</label>
+							<input class='form__input' type='tel' name='phone' id='phone' placeholder='e.g. +1 234 567 890' required
+								autocomplete='off' />
+							<span class='form__input__error'></span>
 						</div>
 					</div>
-				</aside>
-				<section class='form__right-side'>
-					<h1 class='form__title' id='title'>Personal info</h1>
-					<p class='form__description' id='description'>Please provide your name, email address, and phone number.</p>
-					<div class='form__step form__step--1 show'>
-						<div class='form__inputs'>
-							<div class='form__input__container'>
-								<label for='name'>Name</label>
-								<input class='form__input' type='text' name='name' id='name' placeholder='e.g. Stephen King' required autocomplete='off'/>
-								<span class='form__input__error'></span>
-							</div>
-							<div class='form__input__container'>
-								<label for='email'>Email Address</label>
-								<input class='form__input' type='email' name='email' id='email'placeholder='e.g. stephenking@lorem.com' required autocomplete='off'/>
-								<span class='form__input__error'></span>
-							</div>
-							<div class='form__input__container'>
-								<label for='phone'>Phone Number</label>
-								<input class='form__input' type='tel' name='phone' id='phone'placeholder='e.g. +1 234 567 890' required autocomplete='off'/>
-								<span class='form__input__error'></span>
+				</div>
+				<section class='form__step form__step--2'>
+					<section class='form__cards'>
+						<div class='form__card card--selected'>
+							<img class='form__card__icon' src='./assets/images/icon-arcade.svg' alt='' />
+							<div class='form__card__text'>
+								<span class='card__plan'>Arcade</span>
+								<span class='card__price' id='card-price'>$9/mo</span>
 							</div>
 						</div>
-					</div>
-					<section class='form__step form__step-2'>
-						<section class='form__cards'>
-							<div class='form__card'>
-								<img src='./assets/images/icon-arcade.svg' alt='' />
-								<div class='form__card-text'>
-									<span class='card__plan'>Arcade</span>
-									<span class='card__price' id='card-price'>$9/mo</span>
-								</div>
+						<div class='form__card'>
+							<img class='form__card__icon' src='./assets/images/icon-advanced.svg' alt='' />
+							<div class='form__card__text'>
+								<span class='card__plan'>Advanced</span>
+								<span class='card__price' id='card-price'>$12/mo</span>
 							</div>
-							<div class='form__card'>
-								<img src='./assets/images/icon-advanced.svg' alt='' />
-								<div class='form__card-text'>
-									<span class='card__plan'>Advanced</span>
-									<span class='card__price' id='card-price'>$12/mo</span>
-								</div>
-							</div>
-							<div class='form__card'>
-								<img src='./assets/images/icon-pro.svg' alt='' />
-								<div class='form__card-text'>
-									<span class='card__plan'>Pro</span>
-									<span class='card__price' id='card-price'>$15/mo</span>
-								</div>
-							</div>
-							<section class='form__step-2__plan'>
-								<span class='step-2__price selected'>Monthly</span>
-								<button class='step-2__button'>Price btn</button>
-								<span class='step-2__price'>Yearly</span>
-							</section>
-						</section>
-					</section>
-					<section class='form__step form__step--3'>
-						<div class='form__addons'>
-							<div class='form__addon'>
-								<img class='form__addon__check' src='./assets/images/icon-checkmark.svg' alt='' />
-								<div class='form__addon__text'>
-									<h2 class='addon__text-title'>Online service</h2>
-									<p class='addon__text-desc'>Access to multiplayer games</p>
-								</div>
-								<span class='addon__text-price'>+$1/mo</span>
-							</div>
-							<div class='form__addon'>
-								<img class='form__addon__check' src='./assets/images/icon-checkmark.svg' alt='' />
-								<div class='form__addon__text'>
-									<h2 class='addon__text-title'>Larger storage</h2>
-									<p class='addon__text-desc'>Extra 1TB of cloud save</p>
-								</div>
-								<span class='addon__text-price'>+$2/mo</span>
-							</div>
-							<div class='form__addon'>
-								<img class='form__addon__check' src='./assets/images/icon-checkmark.svg' alt='' />
-								<div class='form__addon__text'>
-									<h2 class='addon__text-title'>Customizable Profile</h2>
-									<p class='addon__text-desc'>Custom theme on your profile</p>
-								</div>
-								<span class='addon__text-price'>+$2/mo</span>
+						</div>
+						<div class='form__card'>
+							<img class='form__card__icon' src='./assets/images/icon-pro.svg' alt='' />
+							<div class='form__card__text'>
+								<span class='card__plan'>Pro</span>
+								<span class='card__price' id='card-price'>$15/mo</span>
 							</div>
 						</div>
 					</section>
-					<section class='form__step form__step--4'>
-						<div class='form__summary'>
-							<section class='form__summary__plan'>
-								<div class='plan__content'>
-									<span class='plan__content-left'>
-										<h2 class='form__summary__title'>Arcade (Monthly)</h2>
-										<a class='form__summary__change' href='#'>Change</a>
-									</span>
-									<span class='plan__content-right' id='summary-plan-price'></span>
-								</div>
-								<div class='form__summary__addons' id='summary-addons'></div>
-							</section>
-							<div class='form__summary__total'>
-								<span id='total-per'></span>
-								<span id='total-price'></span>
-							</div>
-						</div>
+					<section class='form__step__plan'>
+						<span class='step__plan__price selected'>Monthly</span>
+						<button type='button' class='step__plan__button'></button>
+						<span class='step__plan__price'>Yearly</span>
 					</section>
-					<section class='form__step form__step--5'>
-						<img src='./assets/images/icon-thank-you.svg' alt='' />
-					</section>
-					<button class='form__button next' type='submit'>Next Step</button>
-					<button class='form__button back hide' type='button'>Go Back</button>
 				</section>
-			</form>
-		</main>
+				<section class='form__step form__step--3 show'>
+					<div class='form__addons'>
+						<div class='form__addon'>
+							<div class='form__addon__left'>
+								<span class='addon__icon'>
+									<img class='form__addon__check' src='./assets/images/icon-checkmark.svg' alt='' />
+								</span>
+								<span class='addon__text'>
+									<h2 class='addon__text__title'>Online service</h2>
+									<p class='addon__text__desc'>Access to multiplayer games</p>
+								</span>
+							</div>
+							<span class='addon__text__price'>+$1/mo</span>
+						</div>
+						<div class='form__addon'>
+							<div class='form__addon__left'>
+								<span class='addon__icon'>
+									<img class='form__addon__check' src='./assets/images/icon-checkmark.svg' alt='' />
+								</span>
+								<span class='addon__text'>
+									<h2 class='addon__text__title'>Larger storage</h2>
+									<p class='addon__text__desc'>Extra 1TB of cloud save</p>
+								</span>
+							</div>
+							<span class='addon__text__price'>+$2/mo</span>
+						</div>
+						<div class='form__addon'>
+							<div class='form__addon__left'>
+								<span class='addon__icon'>
+									<img class='form__addon__check' src='./assets/images/icon-checkmark.svg' alt='' />
+								</span>
+								<span class='addon__text'>
+									<h2 class='addon__text__title'>Customizable Profile</h2>
+									<p class='addon__text__desc'>Custom theme on your profile</p>
+								</span>
+							</div>
+							<span class='addon__text__price'>+$2/mo</span>
+						</div>
+					</div>
+				</section>
+				<section class='form__step form__step--4'>
+					<div class='form__summary'>
+						<section class='form__summary__plan'>
+							<div class='plan__content'>
+								<span class='plan__content-left'>
+									<h2 class='form__summary__title'>Arcade (Monthly)</h2>
+									<a class='form__summary__change' href='#'>Change</a>
+								</span>
+								<span class='plan__content-right' id='summary-plan-price'></span>
+							</div>
+							<div class='form__summary__addons' id='summary-addons'></div>
+						</section>
+						<div class='form__summary__total'>
+							<span id='total-per'></span>
+							<span id='total-price'></span>
+						</div>
+					</div>
+				</section>
+				<section class='form__step form__step--5'>
+					<img src='./assets/images/icon-thank-you.svg' alt='' />
+				</section>
+				<div class='form__buttons'>
+					<button class='form__button back' type='button'>Go Back</button>
+					<button class='form__button next' type='submit'>Next Step</button>
+				</div>
+			</section>
+		</form>
+	</main>
 
-  <!--Finishing up-->
-  <!--Double-check everything looks OK before confirming.-->
+	<!--Finishing up-->
+	<!--Double-check everything looks OK before confirming.-->
 
-  <!--[> Step 5 start <]-->
+	<!--[> Step 5 start <]-->
 
-  <!--Thank you!-->
+	<!--Thank you!-->
 
-  <!--Thanks for confirming your subscription! We hope you have fun -->
-  <!--using our platform. If you ever need support, please feel free -->
-  <!--to email us at support@loremgaming.com.-->
+	<!--Thanks for confirming your subscription! We hope you have fun -->
+	<!--using our platform. If you ever need support, please feel free -->
+	<!--to email us at support@loremgaming.com.-->
 
-  <!-- Step 5 end -->
-  
-  <!--<div class="attribution">-->
-    <!--Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. -->
-    <!--Coded by <a href="#">Your Name Here</a>.-->
-  <!--</div>-->
+	<!-- Step 5 end -->
+
+	<!--<div class="attribution">-->
+	<!--Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. -->
+	<!--Coded by <a href="#">Your Name Here</a>.-->
+	<!--</div>-->
 	<script src='./script.js'></script>
 </body>
+
 </html>
