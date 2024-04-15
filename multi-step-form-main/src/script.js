@@ -1,11 +1,5 @@
 import * as funcs from './utilities/usefulFunctions.js'
 
-const regexs = {
-	email: /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/i,
-	name: /^[a-zA-Z\s.'-]{3,}$/ ,
-	phone: /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/
-}
-
 // shortcuts
 const d = document;
 
@@ -19,6 +13,9 @@ const cardBtn = funcs.gebi('button-price')
 const cards = funcs.qsa('.form__card')
 let actualCard = funcs.qs('.form__card.card--selected')
 
+const backBtn = funcs.gebi('back-btn')
+const nextBtn = funcs.gebi('next-btn')
+
 const userInfo = {
 	name: '',
 	email: '',
@@ -28,13 +25,6 @@ const userInfo = {
 	yearly: false
 }
 
-function changeActualFormStep(){
-	actualFormStep.nextElementSibling.classList.add('show')
-	actualFormStep.classList.remove('show')
-
-	actualFormStep = actualFormStep.nextElementSibling
-}
-
 const invalidMessages = {
 	name:  'Invalid Name',
 	email: 'Invalid Email',
@@ -42,48 +32,60 @@ const invalidMessages = {
 	required: 'This field is required'
 }
 
+function handleBtns(btn, hide){
+	if(btn){
+		hide ? btn.classList.add('hide')
+		: btn.classList.remove('hide')
+	}
+}
+
+function changeActualFormStep(){
+	actualFormStep.nextElementSibling.classList.add('show')
+	actualFormStep.classList.remove('show')
+
+	actualFormStep.previousElementSibling
+	? handleBtns(backBtn, true)
+	: handleBtns(backBtn, false)
+
+	actualFormStep = actualFormStep.nextElementSibling
+}
+
 function validateForm(e){
-
-	if(!e.target.classList.contains('form__input')) return
-
-	validateInput({
-		input: e.target,
-		value: e.target.value, 
-		msg: invalidMessages[e.target.name], 
-		regex: getRegex(e.target.name), 
-		msgRequired: invalidMessages.required
-	})
+	for (const [key, input] of Object.entries(form)) {
+		if(!input.classList.contains('form__input')) return
+		validateInput(input)
+	}
 }
 
 function throwError(input, msg){
 	updateError(input, msg)
+	input.classList.add('input--error')
 	return false
 }
 
-function validateInput({input, value, msg, regex, msgRequired}){
-	if(!value) throwError(input, msgRequired)
+function validateInput(e){
+	const input = e.target
+	const value = input.value
+	const msg = invalidMessages[input.name]
+	const regex = funcs.getRegex(input.name)
+	const msgRequired = invalidMessages.required
 
-	if(input.name === 'name' && funcs.characters(value) < 3) throwError(input, 'Must be 3 or more characters!')
+	if(!value) return throwError(input, msgRequired)
 
-	if(!regex.test(value)) throwError(input, msg)
+	if(input.name === 'name' && funcs.characters(value) < 3) return throwError(input, 'Must be 3 or more characters!')
 
-	if(input.name === 'email' && verifyUsername(value) < 6) throwError(input, 'Must be 6 or more characters!')
+	if(!regex.test(value)) return throwError(input, msg)
+
+	if(input.name === 'email' && funcs.verifyUsername(value) < 6) return throwError(input, 'Username must be 6 or more characters! (text before @)')
 
 	updateError(input)
+	input.classList.remove('input--error')
 	return true
 }
 
 function updateError(el, msg){
 	const inputError = el.parentElement.querySelector('.form__input__error')
 	inputError.textContent = msg || ''
-}
-
-function validateEmail(email){
-	emailRegex.test(email) ? updateError(form.email) : updateError(form.email, 'Invalid Email')
-}
-
-function validatePhone(phone){
-	phoneRegex.test(phone) ? updateError(form.phone) : updateError(form.phone, 'Invalid Phone')
 }
 
 function updateCardsPrices(price){
@@ -132,12 +134,11 @@ function updatePlan(){
 	if(!selectedCard) return false
 
 	userInfo.plan = selectedCard.dataset.plan
-	console.log(userInfo)
 	return true
 }
 
 function handleInputBlur(e){
-	validateForm(e)
+	validateInput(e)
 }
 
 function handleInputFocus(e){
@@ -146,32 +147,37 @@ function handleInputFocus(e){
 
 d.addEventListener('DOMContentLoaded', e =>{
 
-	for (const card of cards) {
-		card.addEventListener('click', handleCardsClick)
-	}
-
 	d.addEventListener('click', e =>{
 		if(e.target === cardBtn) updateCards()
-	})
 
-	d.addEventListener('input', e =>{
-		validateForm(e)
+		if(e.target.classList.contains('form__card')){
+			handleCardsClick(e)
+		}
+		//console.log(e.target)
 	})
-
 
 	for (const [key, input] of Object.entries(form)) {
+
 		if(!input.classList.contains('form__input')) return
-		addEvent(input, 'blur', handleInputBlur)
-		addEvent(input, 'focus', handleInputFocus)
+
+		funcs.addEvent(input, 'blur', handleInputBlur)
+		funcs.addEvent(input, 'focus', handleInputFocus)
+		funcs.addEvent(input, 'input', validateInput)
 	}
 
 	form.addEventListener('submit', e =>{
 		e.preventDefault()
+
 		if(actualFormStep.dataset.step === '1'){
-			userInfo.name = form.name.value
-			userInfo.email = form.email.value
-			userInfo.phone = form.phone.value
+
+			if(!validateForm()) return
+
+			userInfo.name = form.name.value.trim()
+			userInfo.email = form.email.value.trim()
+			userInfo.phone = form.phone.value.trim()
+
 			changeActualFormStep()
+
 		}else if(actualFormStep.dataset.step === '2'){
 			if(!updatePlan()) return
 			changeActualFormStep()
