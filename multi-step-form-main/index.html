@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="icon" type="image/png" sizes="32x32" href="./src/assets/images/favicon-32x32.png">
-	<link rel='stylesheet' href='./src/styles.css' />
+	<link rel='stylesheet' href='./src/styles.css'>
 	<title>Frontend Mentor | Multi-step form</title>
 </head>
 
@@ -15,7 +15,7 @@
 			<aside class='form__sidebar'>
 				<picture>
 					<source srcset="./src/assets/images/bg-sidebar-mobile.svg" media='(max-width: 850px)'>
-					<img src='./src/assets/images/bg-sidebar-desktop.svg' alt='' />
+					<img src='./src/assets/images/bg-sidebar-desktop.svg' alt=''>
 				</picture>
 				<div class='form__steps'>
 					<div class='form__step'>
@@ -56,19 +56,19 @@
 						<div class='form__input__container'>
 							<label class='form__label' for='name'>Name</label>
 							<input class='form__input' type='text' name='name' id='name' placeholder='e.g. Stephen King' required
-								autocomplete='off' />
+								autocomplete='off'>
 							<span class='form__input__error'></span>
 						</div>
 						<div class='form__input__container'>
 							<label class='form__label' for='email'>Email Address</label>
 							<input class='form__input' type='email' name='email' id='email' placeholder='e.g. stephenking@lorem.com'
-								required autocomplete='off' />
+								required autocomplete='off'>
 							<span class='form__input__error'></span>
 						</div>
 						<div class='form__input__container'>
 							<label class='form__label' for='phone'>Phone Number</label>
 							<input class='form__input' type='tel' name='phone' id='phone' placeholder='e.g. +1 234 567 890' required
-								autocomplete='off' />
+								autocomplete='off'>
 							<span class='form__input__error'></span>
 						</div>
 					</div>
@@ -76,34 +76,34 @@
 				<section class='form__step form__step--2' data-step='2'>
 					<section class='form__cards'>
 						<div class='form__card' data-plan='arcade'>
-							<img class='form__card__icon' src='./src/assets/images/icon-arcade.svg' alt='' />
+							<img class='form__card__icon' src='./src/assets/images/icon-arcade.svg' alt=''>
 							<div class='form__card__text'>
-								<span class='card__plan'>Arcade</span>
-								<span class='card__price' id='card-price'>$9/mo</span>
+								<h2 class='card__plan'>Arcade</h2>
+								<span class='card__price'>$9/mo</span>
 									<span class='card__free-months'>2 months free</span>
 							</div>
 						</div>
 						<div class='form__card' data-plan='advanced'>
-							<img class='form__card__icon' src='./src/assets/images/icon-advanced.svg' alt='' />
+							<img class='form__card__icon' src='./src/assets/images/icon-advanced.svg' alt=''>
 							<div class='form__card__text'>
-								<span class='card__plan'>Advanced</span>
-								<span class='card__price' id='card-price'>$12/mo</span>
+								<h2 class='card__plan'>Advanced</h2>
+								<span class='card__price'>$12/mo</span>
 									<span class='card__free-months'>2 months free</span>
 							</div>
 						</div>
 						<div class='form__card' data-plan='pro'>
-							<img class='form__card__icon' src='./src/assets/images/icon-pro.svg' alt='' />
+							<img class='form__card__icon' src='./src/assets/images/icon-pro.svg' alt=''>
 							<div class='form__card__text'>
-								<span class='card__plan'>Pro</span>
-								<span class='card__price' id='card-price'>$15/mo</span>
+								<h2 class='card__plan'>Pro</h2>
+								<span class='card__price'>$15/mo</span>
 									<span class='card__free-months'>2 months free</span>
 							</div>
 						</div>
 					</section>
 					<section class='form__step__plan'>
-						<span class='step__plan__price selected'>Monthly</span>
+						<div class='step__plan__price selected'>Monthly</div>
 						<button class='step__plan__button' id='button-price' type='button' data-price='monthly'></button>
-						<span class='step__plan__price'>Yearly</span>
+						<div class='step__plan__price'>Yearly</div>
 					</section>
 				</section>
 				<section class='form__step form__step--3' data-step='3'>
@@ -111,36 +111,36 @@
 						<div class='form__addon'>
 							<div class='form__addon__left'>
 								<span class='addon__icon'>
-									<img class='form__addon__check' src='./src/assets/images/icon-checkmark.svg' alt='' />
+									<img class='form__addon__check' src='./src/assets/images/icon-checkmark.svg' alt=''>
 								</span>
-								<span class='addon__text'>
+								<div class='addon__text'>
 									<h2 class='addon__text__title'>Online service</h2>
 									<p class='addon__text__desc'>Access to multiplayer games</p>
-								</span>
+								</div>
 							</div>
 							<span class='addon__text__price'>+$1/mo</span>
 						</div>
 						<div class='form__addon'>
 							<div class='form__addon__left'>
 								<span class='addon__icon'>
-									<img class='form__addon__check' src='./src/assets/images/icon-checkmark.svg' alt='' />
+									<img class='form__addon__check' src='./src/assets/images/icon-checkmark.svg' alt=''>
 								</span>
-								<span class='addon__text'>
+								<div class='addon__text'>
 									<h2 class='addon__text__title'>Larger storage</h2>
 									<p class='addon__text__desc'>Extra 1TB of cloud save</p>
-								</span>
+								</div>
 							</div>
 							<span class='addon__text__price'>+$2/mo</span>
 						</div>
 						<div class='form__addon'>
 							<div class='form__addon__left'>
 								<span class='addon__icon'>
-									<img class='form__addon__check' src='./src/assets/images/icon-checkmark.svg' alt='' />
+									<img class='form__addon__check' src='./src/assets/images/icon-checkmark.svg' alt=''>
 								</span>
-								<span class='addon__text'>
+								<div class='addon__text'>
 									<h2 class='addon__text__title'>Customizable Profile</h2>
 									<p class='addon__text__desc'>Custom theme on your profile</p>
-								</span>
+								</div>
 							</div>
 							<span class='addon__text__price'>+$2/mo</span>
 						</div>
@@ -150,10 +150,10 @@
 					<div class='form__summary'>
 						<section class='form__summary__plan'>
 							<div class='plan__content'>
-								<span class='plan__content-left'>
+								<div class='plan__content-left'>
 									<h2 class='form__summary__title'>Arcade (Monthly)</h2>
 									<a class='form__summary__change' href='#'>Change</a>
-								</span>
+								</div>
 								<span class='plan__content-right' id='summary-plan-price'></span>
 							</div>
 							<div class='form__summary__addons' id='summary-addons'></div>
@@ -165,7 +165,7 @@
 					</div>
 				</section>
 				<section class='form__step form__step--5' data-step='5'>
-					<img class='thank-icon' src='./src/assets/images/icon-thank-you.svg' alt='' />
+					<img class='thank-icon' src='./src/assets/images/icon-thank-you.svg' alt=''>
 						<h2 class='thank-title'>Thank you!</h2>
 						<p class='thank-text'>Thanks for confirming your subscription! We hope you have fun using our platform. If you ever need support, please feel free to email us at support@loremgaming.com.</p>
 				</section>
