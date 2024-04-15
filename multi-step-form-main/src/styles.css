@@ -59,6 +59,8 @@
 
 	--card-height: 10rem;
 	--card-width: 9.5rem;
+
+	--form-width: 500px;
 }
 
 .main {
@@ -104,9 +106,9 @@
 	min-width: 120px;
 	padding: 1rem 1.5rem;
 	border-radius: .5rem;
-	align-self: flex-end;
 	font-size: inherit;
 	transition: background-color 250ms ease;
+	margin-left: auto;
 
 	&:hover {
 		background-color: var(--purplish-blue);
@@ -164,6 +166,12 @@
 		border: 1px solid var(--white);
 		border-radius: 50%;
 		padding: .35rem .8em;
+		cursor: pointer;
+		transition: opacity 250ms ease-in-out;
+	}
+
+	& .form__step .circle:hover{
+		opacity: .6;
 	}
 
 	& .form__step .circle.actual {
@@ -200,6 +208,8 @@
 
 	&.show {
 		display: flex;
+		min-width: var(--form-width);
+		max-width: var(--form-width);
 	}
 }
 
@@ -437,3 +447,33 @@
 }
 
 /* step 3 end */
+
+/* step 4 */
+
+/* step 4 end */
+
+/* step 5 */
+
+.form__step--5{
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	justify-content: center;
+	gap: 1rem;
+	min-height: 100%;
+
+	& .thank-icon{
+		margin-bottom: 1rem;
+	}
+
+	& .thank-title{
+		font-size: 2rem;
+	}
+
+	& .thank-text{
+		color: var(--cool-gray);
+		max-width: 450px;
+	}
+}
+
+/* step 5 end */
