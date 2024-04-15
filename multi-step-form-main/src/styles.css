@@ -82,9 +82,11 @@
 	border: none;
 	background: none;
 	cursor: pointer;
+	outline-width: 1px;
+	outline-style: solid;
 
 	&:focus {
-		outline: none;
+		outline-width: 2px;
 	}
 }
 
@@ -110,8 +112,13 @@
 	transition: background-color 250ms ease;
 	margin-left: auto;
 
-	&:hover {
+	&:hover { 
 		background-color: var(--purplish-blue);
+	}
+
+	&:focus{
+		background-color: var(--purplish-blue);
+		outline-color: var(--marine-blue);
 	}
 }
 
@@ -233,29 +240,6 @@
 		font-size: var(--fs-label);
 	}
 
-	& .form__input:not(.input--error):focus {
-		border: 1px solid var(--purplish-blue);
-	}
-
-	& .form__input {
-		border: 1px solid var(--light-gray);
-		border-radius: .5rem;
-		padding: .8rem 1rem;
-		font-weight: 500;
-		font-size: inherit;
-		color: inherit;
-		transition: border 250ms ease;
-
-		&::placeholder {
-			font-weight: bold;
-			color: var(--cool-gray)
-		}
-
-		&.input--error {
-			border: 1px solid var(--strawberry);
-		}
-	}
-
 	& .form__input__error {
 		position: absolute;
 		color: var(--strawberry);
@@ -263,6 +247,29 @@
 		top: 0;
 		right: 0;
 		font-size: var(--fs-label);
+	}
+}
+
+.form__input {
+	border-radius: .5rem;
+	padding: .8rem 1rem;
+	font-weight: 500;
+	font-size: inherit;
+	color: inherit;
+	transition: border 250ms ease;
+	outline-color: var(--light-gray);
+
+	&::placeholder {
+		font-weight: bold;
+		color: var(--cool-gray)
+	}
+
+	&:not(.input--error):focus {
+		outline-color: var(--purplish-blue);
+	}
+
+	&.input--error {
+		outline-color: var(--strawberry);
 	}
 }
 
@@ -284,21 +291,6 @@
 		align-items: center;
 		justify-content: center;
 
-		& .step__plan__button {
-			margin-inline: 1.5rem;
-			min-width: 45px;
-			min-height: 20px;
-			background-color: var(--marine-blue);
-			border-radius: 1rem;
-			position: relative;
-			display: flex;
-			align-items: center;
-
-			&.yearly::after {
-				left: calc(100% - .3rem - 12px)
-			}
-		}
-
 		& .step__plan__button::after {
 			content: '';
 			position: absolute;
@@ -309,16 +301,31 @@
 			border-radius: 50%;
 			transition: left 250ms ease;
 		}
+	}
+}
 
-		& .step__plan__price {
-			color: var(--cool-gray);
-			font-weight: 500;
-			transition: color 250ms ease;
+.step__plan__button {
+	margin-inline: 1.5rem;
+	min-width: 45px;
+	min-height: 20px;
+	background-color: var(--marine-blue);
+	border-radius: 1rem;
+	position: relative;
+	display: flex;
+	align-items: center;
 
-			&.selected {
-				color: inherit;
-			}
-		}
+	&.yearly::after {
+		left: calc(100% - .3rem - 12px)
+	}
+}
+
+.step__plan__price {
+	color: var(--cool-gray);
+	font-weight: 500;
+	transition: color 250ms ease;
+
+	&.selected {
+		color: inherit;
 	}
 }
 
@@ -343,29 +350,6 @@
 			min-height: calc(var(--card-height) + 1rem)
 		}
 
-		& .form__card__text {
-			display: flex;
-			flex-direction: column;
-
-			& .card__plan {
-				font-weight: 500;
-			}
-
-			& .card__price {
-				color: var(--cool-gray);
-				font-size: var(--fs-label);
-			}
-		}
-
-		& .card__free-months{
-			font-size: var(--fs-small);
-			display: none;
-
-			&.show{
-				display: inline;
-			}
-		}
-
 		& .form__card__icon {
 			width: 40px;
 			height: 40px;
@@ -375,6 +359,29 @@
 			border: 1px solid var(--purplish-blue);
 			background-color: var(--alabaster);
 		}
+	}
+}
+
+.form__card__text {
+	display: flex;
+	flex-direction: column;
+
+	& .card__plan {
+		font-weight: 500;
+	}
+
+	& .card__price {
+		color: var(--cool-gray);
+		font-size: var(--fs-label);
+	}
+}
+
+.card__free-months{
+	font-size: var(--fs-small);
+	display: none;
+
+	&.show{
+		display: inline;
 	}
 }
 
@@ -399,36 +406,37 @@
 		padding: 1rem 1.5rem;
 		transition: background-color 250ms ease;
 
-		& .addon__text__price{
-			color: var(--purplish-blue);
-			font-size: var(--fs-label);
-			font-weight: 500;
-		}
-
 		&.selected{
 			background-color: var(--magnolia);
 		}
 	}
+}
 
-	& .form__addon__left {
+
+.addon__text__price{
+	color: var(--purplish-blue);
+	font-size: var(--fs-label);
+	font-weight: 500;
+}
+
+.form__addon__left {
+	display: flex;
+	align-items: center;
+	gap: 1.5rem;
+
+	& .addon__icon {
 		display: flex;
 		align-items: center;
-		gap: 1.5rem;
+		justify-content: center;
+		width: 20px;
+		height: 20px;
+		border: 1px solid var(--cool-gray);
+		border-radius: .3rem;
+		transition: background-color 250ms ease;
 
-		& .addon__icon {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			width: 20px;
-			height: 20px;
-			border: 1px solid var(--cool-gray);
-			border-radius: .3rem;
-			transition: background-color 250ms ease;
-
-			&.selected{
-				background-color: var(--purplish-blue);
-				border: 1px solid var(--purplish-blue);
-			}
+		&.selected{
+			background-color: var(--purplish-blue);
+			border: 1px solid var(--purplish-blue);
 		}
 	}
 }
