@@ -13,8 +13,7 @@ const cardBtn = funcs.gebi('button-price')
 const cards = funcs.qsa('.form__card')
 let actualCard;
 
-const addons = funcs.qsa('.form__addon')
-let actualAddons = []
+const addons = Array.from(funcs.qsa('.form__addon'))
 
 const backBtn = funcs.gebi('back-btn')
 const nextBtn = funcs.gebi('next-btn')
@@ -25,7 +24,9 @@ const userInfo = {
 	phone: '',
 	plan: '',
 	planPrice: '',
-	yearly: false
+	yearly: false,
+	addons: [],
+	addonsPrice: 0
 }
 
 const invalidMessages = {
@@ -95,29 +96,33 @@ function updateError(el, msg){
 	inputError.textContent = msg || ''
 }
 
-function getPrice(element){
-	return Number(element.textContent.split(/[^0-9]/).filter(Boolean)[0])
+function getPrice({element, total, convert = true}){
+	const price = Number(element?.textContent?.split(/[^0-9]/).filter(Boolean)[0]) || Number(element?.split(/[^0-9]/).filter(Boolean)[0])
+
+	if(!price) return
+
+	// returns the converted price, but does not multiply or divide, format: $ + price + / + (yr || mo)
+	if((total && !convert) || (!total && !convert)) return `$${price}/${userInfo.yearly ? 'yr' : 'mo'}`
+
+	// returns the price 
+	if(total) return price
+
+	// returns the price converted, but multiplies or divides, format: $ + (price (* || /) 10) + / + (yr || mo)
+	if(convert) return `$${userInfo.yearly ? price * 10 : price / 10}/${userInfo.yearly ? 'yr' : 'mo'}`
 }
 
 function updateCardsPrices(price){
-	for (const card of cards) {
-
-		const cardPrice = card.querySelector('.card__price')
-		const actualPrice = getPrice(cardPrice)
-
-		const prices = {
-			yearly: actualPrice * 10,
-			monthly: actualPrice / 10,
-		}
-		
-		cardPrice.textContent = price === 'monthly'
-		? `$${prices.yearly}/yr`
-		: `$${prices.monthly}/mo`;
-	}
-
 	cardBtn.dataset.price = price === 'yearly' ? 'monthly' : 'yearly'
 	userInfo.yearly = cardBtn.dataset.price === 'yearly' ? true : false
-	userInfo.planPrice = getPrice(actualCard.querySelector('.card__price'))
+
+	for (const card of cards) {
+		const cardPrice = card.querySelector('.card__price')
+		const actualPrice = getPrice({element: cardPrice})
+		
+		cardPrice.textContent = actualPrice
+	}
+
+	userInfo.planPrice = getPrice({element: actualCard?.querySelector('.card__price'), convert: false})
 }
 
 function updateCards(){
@@ -130,7 +135,6 @@ function updateCards(){
 	for (const freeMonth of freeMonthsEls) {
 		freeMonth.classList.toggle('show')
 	}
-
 }
 
 function handleCardsClick(card){
@@ -142,7 +146,7 @@ function handleCardsClick(card){
 	}
 
 	actualCard = card 
-	userInfo.planPrice = getPrice(actualCard.querySelector('.card__price'))
+	userInfo.planPrice = getPrice({element: actualCard.querySelector('.card__price'), total: true})
 }
 
 function updatePlan(){
@@ -158,7 +162,69 @@ function handleInputBlur(e){
 	validateInput(e)
 }
 
-function handleAddonsClick(card){
+function handleAddonsClick(addon){
+	addon.classList.toggle('addon--selected')
+}
+
+function updateSelectedAddons(){
+	const selectedAddons = addons.filter(addon => addon.classList.contains('addon--selected'))
+
+	for (const addon of selectedAddons) {
+		const addonTitle = addon.querySelector('.addon__text__title')
+		const addonPrice = addon.querySelector('.addon__text__price')
+
+		userInfo.addons.push([addonTitle.textContent, addonPrice.textContent])
+	}
+
+	return selectedAddons.length
+}
+
+function getSelectedAddonsPrice(){
+	let addonsPrice = 0
+
+	for (const addon of userInfo.addons) {
+		const price = getPrice({element: addon[1], total: true})
+		addonsPrice += price
+	}
+	userInfo.addonsPrice = addonsPrice
+}
+
+// collect all data and updates ui
+function updateSummary(){
+	const addonsContainer = funcs.gebi('summary-addons')
+	const planPrice = funcs.gebi('summary-plan-price')
+	const selectedPlan = funcs.gebi('plan-selected')
+	const totalPer = funcs.gebi('total-per')
+	const totalPrice = funcs.gebi('total-price')
+
+	selectedPlan.textContent = `${funcs.firstLetter(userInfo.plan)} (${userInfo.yearly ? 'Yearly' : 'Monthly'})`
+	planPrice.textContent = `${getPrice({element: userInfo.planPrice.toString(), convert: false})}`
+	totalPer.textContent = `Total (per ${userInfo.yearly ? 'year' : 'month'})`
+	totalPrice.textContent = getPrice({element: (userInfo.planPrice + userInfo.addonsPrice).toString(), convert: false})
+
+	// get template and make a addon for each addon in userInfo.addons
+	const template = funcs.gebi('summary-addons-template').content
+
+	for (const addon of userInfo.addons) {
+		const newAddon = template.cloneNode(true)
+
+		const addonName = newAddon.getElementById('summary__addon-name')
+		const addonPrice = newAddon.getElementById('summary__addon-price')
+
+		addonName.textContent = addon[0]
+		addonPrice.textContent = addon[1]
+
+		addonsContainer.append(newAddon)
+	}
+}
+
+function updateAddonsPrice(){
+	for (const addon of addons) {
+		const addonPrice = addon.querySelector('.addon__text__price')
+		const price = getPrice({element: addonPrice, total: true, convert: false})
+
+		addonPrice.textContent = price
+	}
 }
 
 d.addEventListener('DOMContentLoaded', e => {
@@ -182,7 +248,6 @@ d.addEventListener('DOMContentLoaded', e => {
 
 			handleAddonsClick(addon)
 		}
-		console.log(e.target)
 	})
 
 	form.addEventListener('submit', e =>{
@@ -201,7 +266,16 @@ d.addEventListener('DOMContentLoaded', e => {
 		}else if(actualFormStep.dataset.step === '2'){
 			if(!updatePlan()) return
 
+			updateAddonsPrice()
 			changeActualFormStep()
+			console.log(userInfo)
+		}else if(actualFormStep.dataset.step === '3'){
+
+			if(updateSelectedAddons() < 1) return
+
+			getSelectedAddonsPrice()
+			changeActualFormStep()
+			updateSummary()
 			console.log(userInfo)
 		}
 	})
