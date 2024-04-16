@@ -127,6 +127,7 @@
 	font-size: inherit;
 	font-weight: 500;
 	transition: color 250ms ease;
+	outline: none;
 
 	&:hover {
 		color: var(--marine-blue);
@@ -290,17 +291,6 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-
-		& .step__plan__button::after {
-			content: '';
-			position: absolute;
-			min-width: 12px;
-			min-height: 12px;
-			background-color: var(--white);
-			left: .3rem;
-			border-radius: 50%;
-			transition: left 250ms ease;
-		}
 	}
 }
 
@@ -313,6 +303,17 @@
 	position: relative;
 	display: flex;
 	align-items: center;
+
+	&::after {
+		content: '';
+		position: absolute;
+		min-width: 12px;
+		min-height: 12px;
+		background-color: var(--white);
+		left: .3rem;
+		border-radius: 50%;
+		transition: left 250ms ease;
+	}
 
 	&.yearly::after {
 		left: calc(100% - .3rem - 12px)
@@ -344,6 +345,7 @@
 		min-height: var(--card-height);
 		min-width: var(--card-width);
 		cursor: pointer;
+		transition: border 150ms ease-in-out;
 
 		/* necessary... otherwise it looks very small */
 		&:has(.card__free-months.show){
@@ -359,6 +361,10 @@
 			border: 1px solid var(--purplish-blue);
 			background-color: var(--alabaster);
 		}
+
+		&:hover{
+			border-color: var(--purplish-blue);
+		}
 	}
 }
 
@@ -368,6 +374,7 @@
 
 	& .card__plan {
 		font-weight: 500;
+		font-size: inherit;
 	}
 
 	& .card__price {
@@ -406,8 +413,13 @@
 		padding: 1rem 1.5rem;
 		transition: background-color 250ms ease;
 
-		&.selected{
+		&.addon--selected{
 			background-color: var(--magnolia);
+		}
+
+		&.addon--selected .addon__icon{
+			background-color: var(--purplish-blue);
+			border: 1px solid var(--purplish-blue);
 		}
 	}
 }
@@ -433,11 +445,6 @@
 		border: 1px solid var(--cool-gray);
 		border-radius: .3rem;
 		transition: background-color 250ms ease;
-
-		&.selected{
-			background-color: var(--purplish-blue);
-			border: 1px solid var(--purplish-blue);
-		}
 	}
 }
 
