@@ -150,13 +150,22 @@
 					<div class='form__summary'>
 						<section class='form__summary__plan'>
 							<div class='plan__content'>
-								<div class='plan__content-left'>
-									<h2 class='form__summary__title'>Arcade (Monthly)</h2>
-									<a class='form__summary__change' href='#'>Change</a>
-								</div>
-								<span class='plan__content-right' id='summary-plan-price'></span>
+								<div class='plan__content-top'>
+										<div class='content-top__left'>
+											<h2 class='form__summary__title' id='plan-selected'></h2>
+											<a class='form__summary__change' href='#' id='change-plan'>Change</a>
+										</div>
+										<div class='content-top__right'>
+											<span id='summary-plan-price'></span>
+										</div>
+									</div>
+									<div class='form__summary__addons' id='summary-addons'>
+										<template id='summary-addons-template'>
+											<div id='summary__addon-name'></div>
+											<div id='summary__addon-price'></div>
+										</template>
+									</div>
 							</div>
-							<div class='form__summary__addons' id='summary-addons'></div>
 						</section>
 						<div class='form__summary__total'>
 							<span id='total-per'></span>
