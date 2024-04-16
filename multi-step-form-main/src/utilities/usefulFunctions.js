@@ -27,4 +27,12 @@ function addEvent(element, event, handler){
 	element.addEventListener(event, handler)
 }
 
-export { characters, verifyUsername, getRegex, addEvent, gebi, qs, qsa }
+function firstLetter(string){
+	const arr = string.split('')
+	const upperCasedLetter = arr[0].toUpperCase()
+	arr[0] = upperCasedLetter
+
+	return arr.join('')
+}
+
+export { characters, verifyUsername, getRegex, addEvent, gebi, qs, qsa, firstLetter }
