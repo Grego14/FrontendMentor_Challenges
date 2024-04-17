@@ -120,6 +120,10 @@
 		background-color: var(--purplish-blue);
 		outline-color: var(--marine-blue);
 	}
+
+	&.confirm{
+		background-color: var(--purplish-blue);
+	}
 }
 
 .form__button.back {
@@ -163,30 +167,27 @@
 	top: 2.5rem;
 	left: 2rem;
 
-	& .form__step {
+	& .form__step-indicator {
 		display: flex;
 		align-items: center;
 		gap: 1rem;
+
+		& .circle {
+			color: var(--white);
+			border: 1px solid var(--white);
+			border-radius: 50%;
+			padding: .35rem .8em;
+			transition: opacity 250ms ease-in-out;
+			user-select: none;
+		}
+
+		&.actual .circle{
+			background-color: var(--light-blue);
+			border: 1px solid var(--light-blue);
+			color: inherit;
+		}
 	}
 
-	& .form__step .circle {
-		color: var(--white);
-		border: 1px solid var(--white);
-		border-radius: 50%;
-		padding: .35rem .8em;
-		cursor: pointer;
-		transition: opacity 250ms ease-in-out;
-	}
-
-	& .form__step .circle:hover{
-		opacity: .6;
-	}
-
-	& .form__step .circle.actual {
-		background-color: var(--light-blue);
-		border: 1px solid var(--light-blue);
-		color: inherit;
-	}
 
 	& .form__step__text {
 		display: flex;
@@ -213,6 +214,7 @@
 
 .form__step {
 	display: none;
+	margin-top: 2rem;
 
 	&.show {
 		display: flex;
@@ -227,7 +229,6 @@
 	display: flex;
 	flex-direction: column;
 	gap: 1.5rem;
-	margin-top: 2rem;
 	min-width: 100%;
 
 	& .form__input__container {
@@ -248,6 +249,12 @@
 		top: 0;
 		right: 0;
 		font-size: var(--fs-label);
+		transition: opacity 250ms ease-in-out;
+		opacity: 0;
+
+		&.show{
+			opacity: 1;
+		}
 	}
 }
 
@@ -333,7 +340,6 @@
 .form__cards {
 	display: flex;
 	gap: 1.5rem;
-	margin-top: 2rem;
 
 	& .form__card {
 		display: flex;
@@ -401,7 +407,6 @@
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
-	margin-top: 2.5rem;
 
 	& .form__addon {
 		border: 1px solid var(--purplish-blue);
@@ -464,6 +469,81 @@
 /* step 3 end */
 
 /* step 4 */
+
+.form__summary{
+	min-width: 100%;
+
+	& .form__summary__plan{
+		background-color: var(--alabaster);
+		border-radius: .5rem;
+		padding: 2rem;
+	}
+
+	& .plan__content-top{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		border-bottom: 1px solid var(--light-gray);
+		padding-bottom: 1.5rem;
+
+		& .content-top__right{
+			font-weight: bold;
+		}
+	}
+
+	& .form__summary__title{
+		font-size: 1rem;
+		font-weight: 500;
+	}
+
+	& .form__summary__change{
+		color: var(--cool-gray);
+		transition: color 250ms ease;
+		font-size: var(--fs-label);
+
+		&:hover,
+		&:focus{
+			color: var(--purplish-blue);
+		}
+	}
+
+	& .form__summary__addons{
+		display: flex;
+		flex-direction: column;
+		gap: .8rem;
+		margin-top: 1.5rem;
+	}
+
+	& .summary__addon{
+		display: flex;
+		justify-content: space-between;
+	}
+
+	& .addon__name{
+		color: var(--cool-gray)
+	}
+
+	& .addon__price{
+		font-size: var(--fs-label)
+	}
+
+	& .form__summary__total{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 2rem;
+
+		& .total__price{
+			font-size: 1.2rem;
+			font-weight: bold;
+			color: var(--purplish-blue);
+		}
+
+		& .total__per{
+			color: var(--cool-gray);
+		}
+	}
+}
 
 /* step 4 end */
 
