@@ -18,28 +18,28 @@
 					<img src='./src/assets/images/bg-sidebar-desktop.svg' alt=''>
 				</picture>
 				<div class='form__steps'>
-					<div class='form__step'>
-						<span class='circle actual'>1</span>
+					<div class='form__step-indicator actual' data-step='1'>
+						<span class='circle'>1</span>
 						<span class='form__step__text'>
 							<span class='step__text-top text--uppercase'>Step 1</span>
 							<span class='step__text-bottom text--uppercase'>Your info</span>
 						</span>
 					</div>
-					<div class='form__step'>
+					<div class='form__step-indicator' data-step='2'>
 						<span class='circle'>2</span>
 						<span class='form__step__text'>
 							<span class='step__text-top text--uppercase'>Step 2</span>
 							<span class='step__text-bottom text--uppercase'>Select plan</span>
 						</span>
 					</div>
-					<div class='form__step'>
+					<div class='form__step-indicator' data-step='3'>
 						<span class='circle'>3</span>
 						<span class='form__step__text'>
 							<span class='step__text-top text--uppercase'>Step 3</span>
 							<span class='step__text-bottom text--uppercase'>Add-ons</span>
 						</span>
 					</div>
-					<div class='form__step'>
+					<div class='form__step-indicator' data-step='4'>
 						<span class='circle'>4</span>
 						<span class='form__step__text'>
 							<span class='step__text-top text--uppercase'>Step 4</span>
@@ -108,7 +108,7 @@
 				</section>
 				<section class='form__step form__step--3' data-step='3'>
 					<div class='form__addons'>
-						<div class='form__addon'>
+						<div class='form__addon' data-name='OS'>
 							<div class='form__addon__left'>
 								<span class='addon__icon'>
 									<img class='form__addon__check' src='./src/assets/images/icon-checkmark.svg' alt=''>
@@ -120,7 +120,7 @@
 							</div>
 							<span class='addon__text__price'>+$1/mo</span>
 						</div>
-						<div class='form__addon'>
+						<div class='form__addon' data-name='LS'>
 							<div class='form__addon__left'>
 								<span class='addon__icon'>
 									<img class='form__addon__check' src='./src/assets/images/icon-checkmark.svg' alt=''>
@@ -132,7 +132,7 @@
 							</div>
 							<span class='addon__text__price'>+$2/mo</span>
 						</div>
-						<div class='form__addon'>
+						<div class='form__addon' data-name='CP'>
 							<div class='form__addon__left'>
 								<span class='addon__icon'>
 									<img class='form__addon__check' src='./src/assets/images/icon-checkmark.svg' alt=''>
@@ -161,15 +161,17 @@
 									</div>
 									<div class='form__summary__addons' id='summary-addons'>
 										<template id='summary-addons-template'>
-											<div id='summary__addon-name'></div>
-											<div id='summary__addon-price'></div>
+											<div class='summary__addon'>
+												<div class='addon__name' id='summary__addon__name'></div>
+												<div class='addon__price'id='summary__addon__price'></div>
+											</div>
 										</template>
 									</div>
 							</div>
 						</section>
 						<div class='form__summary__total'>
-							<span id='total-per'></span>
-							<span id='total-price'></span>
+							<span class='total__per' id='total-per'></span>
+							<span class='total__price' id='total-price'></span>
 						</div>
 					</div>
 				</section>
