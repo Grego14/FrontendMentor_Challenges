@@ -14,36 +14,36 @@
 		<form class='form' id='form' novalidate>
 			<aside class='form__sidebar'>
 				<picture>
-					<source srcset="./src/assets/images/bg-sidebar-mobile.svg" media='(max-width: 850px)'>
-					<img src='./src/assets/images/bg-sidebar-desktop.svg' alt=''>
+					<source srcset="./src/assets/images/bg-sidebar-mobile.svg" media='(max-width: 800px)'>
+					<img class='form__sidebar__img' src='./src/assets/images/bg-sidebar-desktop.svg' alt=''>
 				</picture>
 				<div class='form__steps'>
-					<div class='form__step-indicator actual' data-step='1'>
+					<div class='form__step-indicator indicator--actual' data-step='1'>
 						<span class='circle'>1</span>
 						<span class='form__step__text'>
-							<span class='step__text-top text--uppercase'>Step 1</span>
-							<span class='step__text-bottom text--uppercase'>Your info</span>
+							<span class='form__step__text-top text--uppercase'>Step 1</span>
+							<span class='form__step__text-bottom text--uppercase'>Your info</span>
 						</span>
 					</div>
 					<div class='form__step-indicator' data-step='2'>
 						<span class='circle'>2</span>
 						<span class='form__step__text'>
-							<span class='step__text-top text--uppercase'>Step 2</span>
-							<span class='step__text-bottom text--uppercase'>Select plan</span>
+							<span class='form__step__text-top text--uppercase'>Step 2</span>
+							<span class='form__step__text-bottom text--uppercase'>Select plan</span>
 						</span>
 					</div>
 					<div class='form__step-indicator' data-step='3'>
 						<span class='circle'>3</span>
 						<span class='form__step__text'>
-							<span class='step__text-top text--uppercase'>Step 3</span>
-							<span class='step__text-bottom text--uppercase'>Add-ons</span>
+							<span class='form__step__text-top text--uppercase'>Step 3</span>
+							<span class='form__step__text-bottom text--uppercase'>Add-ons</span>
 						</span>
 					</div>
 					<div class='form__step-indicator' data-step='4'>
 						<span class='circle'>4</span>
 						<span class='form__step__text'>
-							<span class='step__text-top text--uppercase'>Step 4</span>
-							<span class='step__text-bottom text--uppercase'>Summary</span>
+							<span class='form__step__text-top text--uppercase'>Step 4</span>
+							<span class='form__step__text-bottom text--uppercase'>Summary</span>
 						</span>
 					</div>
 				</div>
@@ -51,31 +51,31 @@
 			<section class='form__right-side'>
 				<h1 class='form__title' id='title'>Personal info</h1>
 				<p class='form__description' id='description'>Please provide your name, email address, and phone number.</p>
-				<div class='form__step form__step--1 show' data-step='1'>
+				<section class='form__step form__step--1 form--show' data-step='1'>
 					<div class='form__inputs'>
 						<div class='form__input__container'>
 							<label class='form__label' for='name'>Name</label>
 							<input class='form__input' type='text' name='name' id='name' placeholder='e.g. Stephen King' required
-								autocomplete='off'>
-							<span class='form__input__error'></span>
+								autocomplete='off' tabIndex='1'>
+							<span class='form__input__error' data-error></span>
 						</div>
 						<div class='form__input__container'>
 							<label class='form__label' for='email'>Email Address</label>
 							<input class='form__input' type='email' name='email' id='email' placeholder='e.g. stephenking@lorem.com'
-								required autocomplete='off'>
-							<span class='form__input__error'></span>
+								required autocomplete='off' tabIndex='1'>
+							<span class='form__input__error' data-error></span>
 						</div>
 						<div class='form__input__container'>
 							<label class='form__label' for='phone'>Phone Number</label>
 							<input class='form__input' type='tel' name='phone' id='phone' placeholder='e.g. +1 234 567 890' required
-								autocomplete='off'>
-							<span class='form__input__error'></span>
+								autocomplete='off' tabIndex='1'>
+							<span class='form__input__error' data-error></span>
 						</div>
 					</div>
-				</div>
-				<section class='form__step form__step--2' data-step='2'>
+				</section>
+				<section class='form__step form__step--2' data-step='2' aria-hidden='true'>
 					<section class='form__cards'>
-						<div class='form__card' data-plan='arcade'>
+						<div class='form__card' data-plan='arcade' tabIndex='-1'>
 							<img class='form__card__icon' src='./src/assets/images/icon-arcade.svg' alt=''>
 							<div class='form__card__text'>
 								<h2 class='card__plan'>Arcade</h2>
@@ -83,7 +83,7 @@
 									<span class='card__free-months'>2 months free</span>
 							</div>
 						</div>
-						<div class='form__card' data-plan='advanced'>
+						<div class='form__card' data-plan='advanced' tabIndex='-1'>
 							<img class='form__card__icon' src='./src/assets/images/icon-advanced.svg' alt=''>
 							<div class='form__card__text'>
 								<h2 class='card__plan'>Advanced</h2>
@@ -91,7 +91,7 @@
 									<span class='card__free-months'>2 months free</span>
 							</div>
 						</div>
-						<div class='form__card' data-plan='pro'>
+						<div class='form__card' data-plan='pro' tabIndex='-1'>
 							<img class='form__card__icon' src='./src/assets/images/icon-pro.svg' alt=''>
 							<div class='form__card__text'>
 								<h2 class='card__plan'>Pro</h2>
@@ -102,13 +102,13 @@
 					</section>
 					<section class='form__step__plan'>
 						<div class='step__plan__price selected'>Monthly</div>
-						<button class='step__plan__button' id='button-price' type='button' data-price='monthly'></button>
+						<button class='step__plan__button' id='button-price' type='button' data-price='monthly' tabIndex='-1'></button>
 						<div class='step__plan__price'>Yearly</div>
 					</section>
 				</section>
-				<section class='form__step form__step--3' data-step='3'>
+				<section class='form__step form__step--3' data-step='3' aria-hidden='true'>
 					<div class='form__addons'>
-						<div class='form__addon' data-name='OS'>
+						<div class='form__addon' data-name='OS' tabIndex='-1'>
 							<div class='form__addon__left'>
 								<span class='addon__icon'>
 									<img class='form__addon__check' src='./src/assets/images/icon-checkmark.svg' alt=''>
@@ -120,7 +120,7 @@
 							</div>
 							<span class='addon__text__price'>+$1/mo</span>
 						</div>
-						<div class='form__addon' data-name='LS'>
+						<div class='form__addon' data-name='LS' tabIndex='-1'>
 							<div class='form__addon__left'>
 								<span class='addon__icon'>
 									<img class='form__addon__check' src='./src/assets/images/icon-checkmark.svg' alt=''>
@@ -132,7 +132,7 @@
 							</div>
 							<span class='addon__text__price'>+$2/mo</span>
 						</div>
-						<div class='form__addon' data-name='CP'>
+						<div class='form__addon' data-name='CP' tabIndex='-1'>
 							<div class='form__addon__left'>
 								<span class='addon__icon'>
 									<img class='form__addon__check' src='./src/assets/images/icon-checkmark.svg' alt=''>
@@ -146,14 +146,14 @@
 						</div>
 					</div>
 				</section>
-				<section class='form__step form__step--4' data-step='4'>
+				<section class='form__step form__step--4' data-step='4' aria-hidden='true'>
 					<div class='form__summary'>
 						<section class='form__summary__plan'>
 							<div class='plan__content'>
 								<div class='plan__content-top'>
 										<div class='content-top__left'>
 											<h2 class='form__summary__title' id='plan-selected'></h2>
-											<a class='form__summary__change' href='#' id='change-plan'>Change</a>
+											<a class='form__summary__change' href='#' id='change-plan' tabIndex='-1'>Change</a>
 										</div>
 										<div class='content-top__right'>
 											<span id='summary-plan-price'></span>
@@ -163,7 +163,7 @@
 										<template id='summary-addons-template'>
 											<div class='summary__addon'>
 												<div class='addon__name' id='summary__addon__name'></div>
-												<div class='addon__price'id='summary__addon__price'></div>
+												<div class='addon__price' id='summary__addon__price'></div>
 											</div>
 										</template>
 									</div>
@@ -175,13 +175,13 @@
 						</div>
 					</div>
 				</section>
-				<section class='form__step form__step--5' data-step='5'>
+				<section class='form__step form__step--5' data-step='5' aria-hidden='true'>
 					<img class='thank-icon' src='./src/assets/images/icon-thank-you.svg' alt=''>
 						<h2 class='thank-title'>Thank you!</h2>
 						<p class='thank-text'>Thanks for confirming your subscription! We hope you have fun using our platform. If you ever need support, please feel free to email us at support@loremgaming.com.</p>
 				</section>
-				<div class='form__buttons'>
-					<button class='form__button back hide' type='button' id='back-btn'>Go Back</button>
+				<div class='form__buttons' id='buttons-container'>
+					<button class='form__button back button--hide' type='button' id='back-btn'>Go Back</button>
 					<button class='form__button next' type='submit' id='next-btn'>Next Step</button>
 				</div>
 			</section>

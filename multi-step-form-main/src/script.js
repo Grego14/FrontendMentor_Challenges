@@ -7,21 +7,23 @@ const form = funcs.gebi('form')
 const formTitle = funcs.gebi('title')
 const formDesc = funcs.gebi('description')
 
-let actualFormStep = funcs.qs('.form__step.show')
+let actualFormStep = funcs.qs('.form__step.form--show')
 
 const cardBtn = funcs.gebi('button-price')
 const cards = funcs.qsa('.form__card')
+const cardsError = funcs.gebi('cards-error')
 let actualCard;
 
 const changePlan = funcs.gebi('change-plan')
 
 const addons = Array.from(funcs.qsa('.form__addon'))
 
+const buttonsParent = funcs.gebi('buttons-container')
 const backBtn = funcs.gebi('back-btn')
 const nextBtn = funcs.gebi('next-btn')
 
 const stepIndicators = funcs.qsa('.form__step-indicator')
-let actualStepIndicator = funcs.qs('.form__step-indicator.actual')
+let actualStepIndicator = funcs.qs('.form__step-indicator.indicator--actual')
 
 const userInfo = {
 	name: '',
@@ -64,28 +66,46 @@ const titleAndDesc = new Map([
 	}]
 ])
 
-function handleBtns(btn, hide){
-	hide ? btn.classList.add('hide')
-		: btn.classList.remove('hide')
+function changeActualFormStep(formStep, animationName = 'form--hide-forward'){
+	actualFormStep.classList.add(animationName)
+
+	actualFormStep.addEventListener('animationend', e =>{
+		actualFormStep.classList.remove('form--show')
+		actualFormStep.classList.remove(animationName)
+		actualFormStep.setAttribute('aria-hidden', 'true')
+		actualFormStep.setAttribute('tabIndex', '-1')
+
+		updateTitleAndDesc(formStep.toString())
+
+		const newStep = funcs.qs(`.form__step[data-step="${formStep}"]`)
+
+		if(!newStep) return
+
+		newStep.classList.add('form--show')
+		newStep.removeAttribute('aria-hidden')
+		newStep.removeAttribute('tabIndex')
+
+		updateTabIndexs(actualFormStep, newStep)
+		actualFormStep = newStep
+
+		// remove the backBtn if the previousElement isn't a step
+		!newStep.previousElementSibling.getAttribute('data-step')
+			? funcs.handleBtn(backBtn, true, 'button--hide')
+			: funcs.handleBtn(backBtn, false, 'button--hide')
+	})
 }
 
-function changeActualFormStep(formStep){
-	actualFormStep.classList.remove('show')
+function updateTabIndexs(actualStep, newStep){
+	const actualElements = actualStep.querySelectorAll('[tabIndex]')
+	const newElements = newStep.querySelectorAll('[tabIndex]')
 
-	updateTitleAndDesc(formStep.toString())
+	for (const actualEl of actualElements) {
+		actualEl.setAttribute('tabIndex', '-1')
+	}
 
-	const newStep = funcs.qs(`.form__step[data-step="${formStep}"]`)
-
-	if(!newStep) return
-
-	newStep.classList.add('show')
-
-	actualFormStep = newStep
-
-	// remove the backBtn if the previousElement isn't a step
-	!newStep.previousElementSibling.getAttribute('data-step')
-		? handleBtns(backBtn, true)
-		: handleBtns(backBtn, false)
+	for (const newElement of newElements) {
+		newElement.setAttribute('tabIndex', '1')
+	}
 }
 
 function validateForm(){
@@ -101,39 +121,31 @@ function validateForm(){
 	return errorFound
 }
 
-function throwError(input, msg){
-	updateError(input, msg)
-	input.classList.add('input--error')
-	return false
-}
-
 function validateInput(e){
 	const input = e.target || e
 	const value = input.value
 	const msg = invalidMessages[input.name]
 	const regex = funcs.getRegex(input.name)
 	const msgRequired = invalidMessages.required
+	const parent = input.parentElement
+	const parentClass = 'input--error'
 
-	if(!value) return throwError(input, msgRequired)
+	if(!value) return funcs.throwError({parent, parentClass, msg: msgRequired})
 
-	if(input.name === 'name' && funcs.characters(value) < 3) return throwError(input, 'Must be 3 or more characters!')
+	if(input.name === 'name' && funcs.characters(value) < 3) return funcs.throwError({parent, parentClass, msg: 'Must be 3 or more characters!'})
 
-	if(!regex.test(value)) return throwError(input, msg)
+	if(!regex.test(value)) return funcs.throwError({parent, parentClass, msg})
 
-	if(input.name === 'email' && funcs.verifyUsername(value) < 6) return throwError(input, 'Username must be 6 or more characters! (text before @)')
+	if(input.name === 'email' && funcs.verifyUsername(value) < 6) return funcs.throwError({parent, parentClass, msg:'Username must be 6 or more characters!'})
 
-	updateError(input)
-	input.classList.remove('input--error')
-	input.parentElement.querySelector('.form__input__error').classList.remove('show')
+	funcs.updateErrorEl(parent.querySelector('[data-error]'), '')
+	parent.classList.remove('input--error')
 	return true
 }
 
-function updateError(el, msg){
-	const inputError = el.parentElement.querySelector('.form__input__error')
-	inputError.classList.add('show')
-	inputError.textContent = msg || ''
-}
-
+// extracts the first number of a string
+// '123abc456' -> 123
+// '$20/yr' -> 20
 function extractNumber(string){
 	return Number(string?.split(/[^0-9]/).filter(Boolean)[0])
 }
@@ -147,7 +159,6 @@ function transformPrice(price, plus){
 }
 
 function updateTitleAndDesc(step){
-	console.log(step, 'from updateTitleAndDesc')
 	const { title, desc } = titleAndDesc.get(step)
 	formTitle.textContent = title
 	formDesc.textContent = desc
@@ -175,7 +186,7 @@ function updateCards(){
 	const freeMonthsEls = d.querySelectorAll('.card__free-months')
 
 	for (const freeMonth of freeMonthsEls) {
-		freeMonth.classList.toggle('show')
+		freeMonth.classList.toggle('freemonths--show')
 	}
 }
 
@@ -183,16 +194,15 @@ function updateIndicator(back = false){
 	// don't update if is the last
 	if(!back && !actualStepIndicator.nextElementSibling) return
 
-	actualStepIndicator.classList.remove('actual')
+	actualStepIndicator.classList.remove('indicator--actual')
 
-	if(back){
-		actualStepIndicator?.previousElementSibling?.classList.add('actual')
-		actualStepIndicator = actualStepIndicator?.previousElementSibling
-		return
-	}
+	const newStepIndicator = back
+		? actualStepIndicator.previousElementSibling
+		: actualStepIndicator.nextElementSibling
 
-	actualStepIndicator?.nextElementSibling?.classList.add('actual')
-	actualStepIndicator = actualStepIndicator?.nextElementSibling
+	newStepIndicator?.classList.add('indicator--actual')
+
+	actualStepIndicator = newStepIndicator
 }
 
 function handleCardsClick(card){
@@ -327,17 +337,18 @@ function updateNextButton(last){
 	}
 
 	nextBtn.textContent = nextBtnDefaultText
-	nextBtn.classList.remove('confirm')
+	nextBtn.classList.remove('button--confirm')
 }
 
 d.addEventListener('DOMContentLoaded', e => {
+
 	d.addEventListener('click', e =>{
 		if(e.target === cardBtn) updateCards()
 
 		if(e.target === changePlan) changeActualFormStep('2')
 
 		if(e.target === backBtn) {
-			changeActualFormStep(actualFormStep.dataset.step - 1)
+			changeActualFormStep((actualFormStep.dataset.step - 1).toString(), 'form--hide-backward')
 			updateIndicator(true)
 			updateNextButton()
 		}
@@ -360,6 +371,11 @@ d.addEventListener('DOMContentLoaded', e => {
 			handleAddonsClick(addon)
 		}
 	})
+
+	form.addEventListener('focus', e =>{
+		console.log(e.target)
+	}, true)
+
 
 	form.addEventListener('submit', e =>{
 		e.preventDefault()
@@ -395,8 +411,14 @@ d.addEventListener('DOMContentLoaded', e => {
 
 		}else if(actualFormStep.dataset.step === '4'){
 			changeActualFormStep('5')
-			backBtn.classList.add('hide')
-			nextBtn.classList.add('hide')
+			buttonsParent.classList.add('form__buttons--hide')
+		}
+	})
+
+	d.addEventListener('keydown', e =>{
+		if(e.key === 'Enter'){
+			if(e.target.classList.contains('form__card')) handleCardsClick(e.target)
+			if(e.target.classList.contains('form__addon')) handleAddonsClick(e.target)
 		}
 	})
 
