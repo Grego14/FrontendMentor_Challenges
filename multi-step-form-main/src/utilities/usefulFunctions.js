@@ -35,4 +35,25 @@ function firstLetter(string){
 	return arr.join('')
 }
 
-export { characters, verifyUsername, getRegex, addEvent, gebi, qs, qsa, firstLetter }
+function handleBtn(btn, hide, className){
+	hide ? btn.classList.add(className)
+		: btn.classList.remove(className)
+}
+
+function updateErrorEl(errorEl, msg){
+	errorEl.textContent = msg || ''
+}
+
+function throwError({parent, msg, parentClass}){
+	const errorEl = parent.querySelector('[data-error]')
+
+	// each error element must contain a data-error attribute
+	if(!errorEl) return
+
+	updateErrorEl(errorEl, msg)
+
+	parent.classList.add(parentClass)
+	return false
+}
+
+export { characters, verifyUsername, getRegex, addEvent, gebi, qs, qsa, firstLetter, handleBtn, updateErrorEl, throwError }
