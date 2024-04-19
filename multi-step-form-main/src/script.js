@@ -25,6 +25,13 @@ const nextBtn = funcs.gebi('next-btn')
 const stepIndicators = funcs.qsa('.form__step-indicator')
 let actualStepIndicator = funcs.qs('.form__step-indicator.indicator--actual')
 
+const formsValidation = {
+	formStep1: false,
+	formStep2: false,
+	formStep3: false,
+	formStep4: false
+}
+
 const userInfo = {
 	name: '',
 	email: '',
@@ -66,6 +73,21 @@ const titleAndDesc = new Map([
 	}]
 ])
 
+const prices = {
+	OS: {
+		monthly: 1,
+		yearly: 10
+	},
+	LS: {
+		monthly: 2,
+		yearly: 20
+	},
+	CP: {
+		monthly: 2,
+		yearly: 20
+	}
+}
+
 function changeActualFormStep(formStep, animationName = 'form--hide-forward'){
 	actualFormStep.classList.add(animationName)
 
@@ -88,7 +110,6 @@ function changeActualFormStep(formStep, animationName = 'form--hide-forward'){
 		updateTabIndexs(actualFormStep, newStep)
 		actualFormStep = newStep
 
-		// remove the backBtn if the previousElement isn't a step
 		!newStep.previousElementSibling.getAttribute('data-step')
 			? funcs.handleBtn(backBtn, true, 'button--hide')
 			: funcs.handleBtn(backBtn, false, 'button--hide')
@@ -144,7 +165,6 @@ function validateInput(e){
 }
 
 // extracts the first number of a string
-// '123abc456' -> 123
 // '$20/yr' -> 20
 function extractNumber(string){
 	return Number(string?.split(/[^0-9]/).filter(Boolean)[0])
@@ -178,7 +198,7 @@ function updateCardsPrices(price){
 	userInfo.planPrice = extractNumber(actualCard?.querySelector('.card__price').textContent)
 }
 
-function updateCards(){
+function updateCardBtn(){
 	updateCardsPrices(cardBtn.dataset.price)
 
 	cardBtn.classList.toggle('yearly')
@@ -190,17 +210,25 @@ function updateCards(){
 	}
 }
 
-function updateIndicator(back = false){
-	// don't update if is the last
+function updateIndicator(back = false, times = 1){
 	if(!back && !actualStepIndicator.nextElementSibling) return
 
+	let newStepIndicator = back
+	? actualStepIndicator.previousElementSibling
+	: actualStepIndicator.nextElementSibling
+
+	if(!newStepIndicator) return
+
+	if(times > 1){
+		for(let i = 1; i < times; i++){
+			newStepIndicator = back
+				? newStepIndicator.previousElementSibling
+				: newStepIndicator.nextElementSibling
+		}
+	}
+
 	actualStepIndicator.classList.remove('indicator--actual')
-
-	const newStepIndicator = back
-		? actualStepIndicator.previousElementSibling
-		: actualStepIndicator.nextElementSibling
-
-	newStepIndicator?.classList.add('indicator--actual')
+	newStepIndicator.classList.add('indicator--actual')
 
 	actualStepIndicator = newStepIndicator
 }
@@ -237,7 +265,6 @@ function handleAddonsClick(addon){
 function updateSelectedAddons(){
 	const selectedAddons = addons.filter(addon => addon.classList.contains('addon--selected'))
 
-	// reset before updating
 	userInfo.addons = []
 
 	for (const addon of selectedAddons) {
@@ -273,11 +300,8 @@ function updateSummary(){
 	totalPer.textContent = `Total (per ${userInfo.yearly ? 'year' : 'month'})`
 	totalPrice.textContent = transformPrice(userInfo.planPrice + userInfo.addonsPrice, true)
 
-	// get template and make a addon for each addon in userInfo.addons
 	const template = funcs.gebi('summary-addons-template').content
 
-	// reset the container, before adding new addons...
-	// prevents adding the same addons again
 	// i think it's easier to do this than iterate over each added addon and delete it.
 	addonsContainer.innerHTML = `
 		<template id='summary-addons-template'>
@@ -302,20 +326,6 @@ function updateSummary(){
 }
 
 function updateAddonsPrice(){
-	const prices = {
-		OS: {
-			monthly: 1,
-			yearly: 10
-		},
-		LS: {
-			monthly: 2,
-			yearly: 20
-		},
-		CP: {
-			monthly: 2,
-			yearly: 20
-		}
-	}
 
 	for (const addon of addons) {
 		const addonPrice = addon.querySelector('.addon__text__price')
@@ -332,29 +342,51 @@ const nextBtnDefaultText = nextBtn.textContent
 function updateNextButton(last){
 	if(last){
 		nextBtn.textContent = 'Confirm'
-		nextBtn.classList.add('confirm')
-		return true
+		nextBtn.classList.add('button--confirm')
+		return
 	}
 
 	nextBtn.textContent = nextBtnDefaultText
 	nextBtn.classList.remove('button--confirm')
 }
 
+function handleFormStepAnimation(formStep){
+	formStep.classList.add('form--shake')
+
+	formStep.addEventListener('animationend', e => {
+		formStep.classList.remove('form--shake')
+	})
+	return true
+}
+
+function handleFormStepSubmit({formStep, formStepAnimation, indicatorValue, nextBtnValue, indicatorTimes}){
+	changeActualFormStep(formStep, formStepAnimation)
+	updateIndicator(indicatorValue, indicatorTimes)
+	updateNextButton(nextBtnValue)
+}
+
 d.addEventListener('DOMContentLoaded', e => {
 
 	d.addEventListener('click', e =>{
-		if(e.target === cardBtn) updateCards()
+		if(e.target === cardBtn) updateCardBtn()
 
-		if(e.target === changePlan) changeActualFormStep('2')
+		if(e.target === changePlan)
+			handleFormStepSubmit({
+			formStep: '2', 
+			formStepAnimation: 'form--hide-backward', 
+			indicatorValue: true, 
+			indicatorTimes: 2})
 
 		if(e.target === backBtn) {
-			changeActualFormStep((actualFormStep.dataset.step - 1).toString(), 'form--hide-backward')
-			updateIndicator(true)
-			updateNextButton()
+			handleFormStepSubmit({
+				formStep: actualFormStep.dataset.step - 1,
+				formStepAnimation: 'form--hide-backward',
+				indicatorValue: true,
+			})
 		}
 
-		if(e.target.classList.contains('form__card') || e.target.matches('.form__card *')){
 
+		if(e.target.classList.contains('form__card') || e.target.matches('.form__card *')){
 			const card = e.target === e.target.closest('.form__card') 
 				? e.target
 				: e.target.closest('.form__card')
@@ -363,7 +395,6 @@ d.addEventListener('DOMContentLoaded', e => {
 		}
 
 		if(e.target.classList.contains('form__addon') || e.target.matches('.form__addon *')){
-
 			const addon = e.target === e.target.closest('.form__addon') 
 				? e.target 
 				: e.target.closest('.form__addon')
@@ -372,45 +403,38 @@ d.addEventListener('DOMContentLoaded', e => {
 		}
 	})
 
-	form.addEventListener('focus', e =>{
-		console.log(e.target)
-	}, true)
-
-
 	form.addEventListener('submit', e =>{
 		e.preventDefault()
 
-		if(actualFormStep.dataset.step === '1'){
+		const formStep = actualFormStep.dataset.step
 
-			if(validateForm()) return
+		if(formStep === '1'){
+
+			if(validateForm()) return handleFormStepAnimation(actualFormStep)
 
 			userInfo.name = form.name.value.trim()
 			userInfo.email = form.email.value.trim()
 			userInfo.phone = form.phone.value.trim()
 
-			changeActualFormStep('2')
-			updateIndicator()
-			updateNextButton()
-		}else if(actualFormStep.dataset.step === '2'){
+			handleFormStepSubmit({formStep: '2'})
 
-			if(!validatePlan()) return
+		}else if(formStep === '2'){
+
+			if(!validatePlan()) return handleFormStepAnimation(actualFormStep)
 
 			updateAddonsPrice()
-			changeActualFormStep('3')
-			updateIndicator()
-			updateNextButton()
-		}else if(actualFormStep.dataset.step === '3'){
+			handleFormStepSubmit({formStep: '3'})
 
-			if(updateSelectedAddons() < 1) return
+		}else if(formStep === '3'){
+
+			if(updateSelectedAddons() < 1) return handleFormStepAnimation(actualFormStep)
 
 			getSelectedAddonsPrice()
-			changeActualFormStep('4')
-			updateIndicator()
+			handleFormStepSubmit({formStep: '4', nextBtnValue: true})
 			updateSummary()
-			updateNextButton(true)
 
-		}else if(actualFormStep.dataset.step === '4'){
-			changeActualFormStep('5')
+		}else if(formStep === '4'){
+			handleFormStepSubmit({formStep: '5'})
 			buttonsParent.classList.add('form__buttons--hide')
 		}
 	})
