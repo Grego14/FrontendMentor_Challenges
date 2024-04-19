@@ -51,7 +51,7 @@
 			<section class='form__right-side'>
 				<h1 class='form__title' id='title'>Personal info</h1>
 				<p class='form__description' id='description'>Please provide your name, email address, and phone number.</p>
-				<section class='form__step form__step--1 form--show' data-step='1'>
+				<div class='form__step form__step--1 form--show' data-step='1'>
 					<div class='form__inputs'>
 						<div class='form__input__container'>
 							<label class='form__label' for='name'>Name</label>
@@ -72,9 +72,9 @@
 							<span class='form__input__error' data-error></span>
 						</div>
 					</div>
-				</section>
-				<section class='form__step form__step--2' data-step='2' aria-hidden='true'>
-					<section class='form__cards'>
+				</div>
+				<div class='form__step form__step--2' data-step='2' aria-hidden='true'>
+					<div class='form__cards'>
 						<div class='form__card' data-plan='arcade' tabIndex='-1'>
 							<img class='form__card__icon' src='./src/assets/images/icon-arcade.svg' alt=''>
 							<div class='form__card__text'>
@@ -99,14 +99,14 @@
 									<span class='card__free-months'>2 months free</span>
 							</div>
 						</div>
-					</section>
-					<section class='form__step__plan'>
+					</div>
+					<div class='form__step__plan'>
 						<div class='step__plan__price selected'>Monthly</div>
 						<button class='step__plan__button' id='button-price' type='button' data-price='monthly' tabIndex='-1'></button>
 						<div class='step__plan__price'>Yearly</div>
-					</section>
-				</section>
-				<section class='form__step form__step--3' data-step='3' aria-hidden='true'>
+					</div>
+				</div>
+				<div class='form__step form__step--3' data-step='3' aria-hidden='true'>
 					<div class='form__addons'>
 						<div class='form__addon' data-name='OS' tabIndex='-1'>
 							<div class='form__addon__left'>
@@ -145,14 +145,14 @@
 							<span class='addon__text__price'>+$2/mo</span>
 						</div>
 					</div>
-				</section>
-				<section class='form__step form__step--4' data-step='4' aria-hidden='true'>
+				</div>
+				<div class='form__step form__step--4' data-step='4' aria-hidden='true'>
 					<div class='form__summary'>
 						<section class='form__summary__plan'>
 							<div class='plan__content'>
 								<div class='plan__content-top'>
 										<div class='content-top__left'>
-											<h2 class='form__summary__title' id='plan-selected'></h2>
+											<h2 class='form__summary__title' id='plan-selected'>User plan</h2>
 											<a class='form__summary__change' href='#' id='change-plan' tabIndex='-1'>Change</a>
 										</div>
 										<div class='content-top__right'>
@@ -174,12 +174,12 @@
 							<span class='total__price' id='total-price'></span>
 						</div>
 					</div>
-				</section>
-				<section class='form__step form__step--5' data-step='5' aria-hidden='true'>
+				</div>
+				<div class='form__step form__step--5' data-step='5' aria-hidden='true'>
 					<img class='thank-icon' src='./src/assets/images/icon-thank-you.svg' alt=''>
 						<h2 class='thank-title'>Thank you!</h2>
 						<p class='thank-text'>Thanks for confirming your subscription! We hope you have fun using our platform. If you ever need support, please feel free to email us at support@loremgaming.com.</p>
-				</section>
+				</div>
 				<div class='form__buttons' id='buttons-container'>
 					<button class='form__button back button--hide' type='button' id='back-btn'>Go Back</button>
 					<button class='form__button next' type='submit' id='next-btn' tabIndex='2'>Next Step</button>
