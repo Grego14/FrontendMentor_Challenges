@@ -116,17 +116,25 @@
 
 .form__input,
 .form__button,
+.form__button.back,
+.step__plan__button,
+.form__card,
+.form__addon{
+	outline: 1px solid transparent;
+
+	&:focus {
+		outline-width: 3px;
+		outline-color: var(--purplish-blue);
+	}
+}
+
+.form__input,
+.form__button,
 .step__plan__button {
 	appearance: none;
 	border: none;
 	background: none;
 	cursor: pointer;
-	outline-width: 1px;
-	outline-style: solid;
-
-	&:focus {
-		outline-width: 2px;
-	}
 }
 
 .form__buttons {
@@ -158,7 +166,8 @@
 	transition: background-color 250ms ease;
 	margin-left: auto;
 
-	&:hover { 
+	&:hover,
+	&.button--confirm{ 
 		background-color: var(--purplish-blue);
 	}
 
@@ -166,24 +175,17 @@
 		background-color: var(--purplish-blue);
 		outline-color: var(--marine-blue);
 	}
-
-	&.button--confirm{
-		background-color: var(--purplish-blue);
-	}
 }
 
-.form__button.back {
-	width: max-content;
+.form__button.back{
 	font-size: inherit;
 	font-weight: 500;
 	transition: color 250ms ease;
-	outline: none;
 	color: var(--cool-gray);
 
 	&:hover,
 	&:focus{
 		color: var(--marine-blue);
-		outline: 2px solid var(--purplish-blue);
 	}
 }
 
@@ -258,6 +260,10 @@
 	&.form--hide-forward{
 		animation: move-forward 250ms ease;
 	}
+
+	&.form--shake{
+		animation: shake 250ms ease-in-out;
+	}
 }
 
 @keyframes move-backward{
@@ -279,6 +285,27 @@
 	to{
 		transform: translateX(125%);
 		opacity: 0;
+	}
+}
+
+@keyframes shake{
+	0%, 25%, 45%, 65%, 85%, 100%{
+		transform: translateX(0);
+	}
+	15%{
+		transform: translateX(-5px);
+	}
+	35%{
+		transform: translateX(5px);
+	}
+	55%{
+		transform: translateX(-5px);
+	}
+	75%{
+		transform: translateX(-5px);
+	}
+	95%{
+		transform: translateX(-5px);
 	}
 }
 
@@ -331,12 +358,12 @@
 		opacity: 1;
 	}
 
-	&:not(.input--error) .form__input:focus {
-		outline-color: var(--purplish-blue);
+	&.input--error .form__input{
+		outline-color: var(--strawberry);
 	}
 
-	&.input--error .form__input {
-		outline-color: var(--strawberry);
+	&:not(.input--error) .form__input:focus {
+		outline-color: var(--purplish-blue);
 	}
 }
 
@@ -353,7 +380,6 @@
 		font-weight: bold;
 		color: var(--cool-gray)
 	}
-
 }
 
 /* step 1 end */
@@ -666,11 +692,6 @@
 		--card-icon: 35px;
 
 		--form-width: 450px;
-	}
-
-	.form__right-side{
-		border-radius: 1rem;
-		padding: 2rem 2rem;
 	}
 }
 
