@@ -44,15 +44,15 @@ function updateErrorEl(errorEl, msg){
 	errorEl.textContent = msg || ''
 }
 
-function throwError({parent, msg, parentClass}){
+function throwError({parent, msg, parentClass, invalidEl}){
 	const errorEl = parent.querySelector('[data-error]')
 
-	// each error element must contain a data-error attribute
 	if(!errorEl) return
 
 	updateErrorEl(errorEl, msg)
 
 	parent.classList.add(parentClass)
+	invalidEl.setAttribute('aria-invalid', 'true')
 	return false
 }
 

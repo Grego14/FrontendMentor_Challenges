@@ -151,16 +151,17 @@ function validateInput(e){
 	const parent = input.parentElement
 	const parentClass = 'input--error'
 
-	if(!value) return funcs.throwError({parent, parentClass, msg: msgRequired})
+	if(!value) return funcs.throwError({parent, parentClass, msg: msgRequired, invalidEl: input})
 
-	if(input.name === 'name' && funcs.characters(value) < 3) return funcs.throwError({parent, parentClass, msg: 'Must be 3 or more characters!'})
+	if(input.name === 'name' && funcs.characters(value) < 3) return funcs.throwError({parent, parentClass, msg: 'Must be 3 or more characters!', invalidEl: input})
 
-	if(!regex.test(value)) return funcs.throwError({parent, parentClass, msg})
+	if(!regex.test(value)) return funcs.throwError({parent, parentClass, msg, invalidEl: input})
 
-	if(input.name === 'email' && funcs.verifyUsername(value) < 6) return funcs.throwError({parent, parentClass, msg:'Username must be 6 or more characters!'})
+	if(input.name === 'email' && funcs.verifyUsername(value) < 6) return funcs.throwError({parent, parentClass, msg:'Username must be 6 or more characters!', invalidEl: input})
 
 	funcs.updateErrorEl(parent.querySelector('[data-error]'), '')
 	parent.classList.remove('input--error')
+	input.setAttribute('aria-invalid', 'false')
 	return true
 }
 
