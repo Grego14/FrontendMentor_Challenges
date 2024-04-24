@@ -6,7 +6,7 @@ const qsa = s => d.querySelectorAll(s);
 const regexs = {
 	email: /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/i,
 	name: /^[a-zA-Z\s.'-]{3,}$/ ,
-	phone: /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/
+	phone: /^(\+\d{1,3}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/
 }
 
 // returns the length of characters in a string (no whitespaces)
@@ -27,6 +27,11 @@ function addEvent(element, event, handler){
 	element.addEventListener(event, handler)
 }
 
+// extracts the first number of a string, '$20/yr' -> 20
+function extractNumber(string){
+	return Number(string?.split(/[^0-9]/).filter(Boolean)[0])
+}
+
 function firstLetter(string){
 	const arr = string.split('')
 	const upperCasedLetter = arr[0].toUpperCase()
@@ -44,7 +49,7 @@ function updateErrorEl(errorEl, msg){
 	errorEl.textContent = msg || ''
 }
 
-function throwError({parent, msg, parentClass, invalidEl}){
+function throwError({parent, msg, parentClass, input}){
 	const errorEl = parent.querySelector('[data-error]')
 
 	if(!errorEl) return
@@ -52,8 +57,10 @@ function throwError({parent, msg, parentClass, invalidEl}){
 	updateErrorEl(errorEl, msg)
 
 	parent.classList.add(parentClass)
-	invalidEl.setAttribute('aria-invalid', 'true')
+  errorEl.setAttribute('aria-hidden', 'false')
+	input.setAttribute('aria-invalid', 'true')
+
 	return false
 }
 
-export { characters, verifyUsername, getRegex, addEvent, gebi, qs, qsa, firstLetter, handleBtn, updateErrorEl, throwError }
+export { characters, verifyUsername, getRegex, addEvent, gebi, qs, qsa, firstLetter, handleBtn, updateErrorEl, throwError, extractNumber }
