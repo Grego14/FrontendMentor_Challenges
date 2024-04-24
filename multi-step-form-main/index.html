@@ -2,193 +2,216 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="icon" type="image/png" sizes="32x32" href="./src/assets/images/favicon-32x32.png">
-	<link rel='stylesheet' href='./src/styles.css'>
-	<title>Frontend Mentor | Multi-step form</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="./src/assets/images/favicon-32x32.png">
+  <link rel='stylesheet' href='./src/styles.css'>
+  <title>Frontend Mentor | Multi-step form</title>
 </head>
 
 <body>
-	<main class='main'>
-		<form class='form' id='form' novalidate>
-			<aside class='form__sidebar'>
-				<picture>
-					<source srcset="./src/assets/images/bg-sidebar-mobile.svg" media='(max-width: 800px)'>
-					<img class='form__sidebar__img' src='./src/assets/images/bg-sidebar-desktop.svg' alt=''>
-				</picture>
-				<div class='form__steps'>
-					<div class='form__step-indicator indicator--actual' data-step='1'>
-						<span class='circle'>1</span>
-						<span class='form__step__text'>
-							<span class='form__step__text-top text--uppercase'>Step 1</span>
-							<span class='form__step__text-bottom text--uppercase'>Your info</span>
-						</span>
-					</div>
-					<div class='form__step-indicator' data-step='2'>
-						<span class='circle'>2</span>
-						<span class='form__step__text'>
-							<span class='form__step__text-top text--uppercase'>Step 2</span>
-							<span class='form__step__text-bottom text--uppercase'>Select plan</span>
-						</span>
-					</div>
-					<div class='form__step-indicator' data-step='3'>
-						<span class='circle'>3</span>
-						<span class='form__step__text'>
-							<span class='form__step__text-top text--uppercase'>Step 3</span>
-							<span class='form__step__text-bottom text--uppercase'>Add-ons</span>
-						</span>
-					</div>
-					<div class='form__step-indicator' data-step='4'>
-						<span class='circle'>4</span>
-						<span class='form__step__text'>
-							<span class='form__step__text-top text--uppercase'>Step 4</span>
-							<span class='form__step__text-bottom text--uppercase'>Summary</span>
-						</span>
-					</div>
-				</div>
-			</aside>
-			<section class='form__right-side'>
-				<h1 class='form__title' id='title'>Personal info</h1>
-				<p class='form__description' id='description'>Please provide your name, email address, and phone number.</p>
-				<div class='form__step form__step--1 form--show' data-step='1'>
-					<div class='form__inputs'>
-						<div class='form__input__container'>
-							<label class='form__label' for='name'>Name</label>
-							<input class='form__input' type='text' name='name' id='name' placeholder='e.g. Stephen King' required
-								autocomplete='off' tabIndex='1'>
-							<span class='form__input__error' data-error></span>
-						</div>
-						<div class='form__input__container'>
-							<label class='form__label' for='email'>Email Address</label>
-							<input class='form__input' type='email' name='email' id='email' placeholder='e.g. stephenking@lorem.com'
-								required autocomplete='off' tabIndex='1'>
-							<span class='form__input__error' data-error></span>
-						</div>
-						<div class='form__input__container'>
-							<label class='form__label' for='phone'>Phone Number</label>
-							<input class='form__input' type='tel' name='phone' id='phone' placeholder='e.g. +1 234 567 890' required
-								autocomplete='off' tabIndex='1'>
-							<span class='form__input__error' data-error></span>
-						</div>
-					</div>
-				</div>
-				<div class='form__step form__step--2' data-step='2' aria-hidden='true'>
-					<div class='form__cards'>
-						<div class='form__card' data-plan='arcade' tabIndex='-1'>
-							<img class='form__card__icon' src='./src/assets/images/icon-arcade.svg' alt=''>
-							<div class='form__card__text'>
-								<h2 class='card__plan'>Arcade</h2>
-								<span class='card__price'>$9/mo</span>
-									<span class='card__free-months'>2 months free</span>
-							</div>
-						</div>
-						<div class='form__card' data-plan='advanced' tabIndex='-1'>
-							<img class='form__card__icon' src='./src/assets/images/icon-advanced.svg' alt=''>
-							<div class='form__card__text'>
-								<h2 class='card__plan'>Advanced</h2>
-								<span class='card__price'>$12/mo</span>
-									<span class='card__free-months'>2 months free</span>
-							</div>
-						</div>
-						<div class='form__card' data-plan='pro' tabIndex='-1'>
-							<img class='form__card__icon' src='./src/assets/images/icon-pro.svg' alt=''>
-							<div class='form__card__text'>
-								<h2 class='card__plan'>Pro</h2>
-								<span class='card__price'>$15/mo</span>
-									<span class='card__free-months'>2 months free</span>
-							</div>
-						</div>
-					</div>
-					<div class='form__step__plan'>
-						<div class='step__plan__price selected'>Monthly</div>
-						<button class='step__plan__button' id='button-price' type='button' data-price='monthly' tabIndex='-1'></button>
-						<div class='step__plan__price'>Yearly</div>
-					</div>
-				</div>
-				<div class='form__step form__step--3' data-step='3' aria-hidden='true'>
-					<div class='form__addons'>
-						<div class='form__addon' data-name='OS' tabIndex='-1'>
-							<div class='form__addon__left'>
-								<span class='addon__icon'>
-									<img class='form__addon__check' src='./src/assets/images/icon-checkmark.svg' alt=''>
-								</span>
-								<div class='addon__text'>
-									<h2 class='addon__text__title'>Online service</h2>
-									<p class='addon__text__desc'>Access to multiplayer games</p>
-								</div>
-							</div>
-							<span class='addon__text__price'>+$1/mo</span>
-						</div>
-						<div class='form__addon' data-name='LS' tabIndex='-1'>
-							<div class='form__addon__left'>
-								<span class='addon__icon'>
-									<img class='form__addon__check' src='./src/assets/images/icon-checkmark.svg' alt=''>
-								</span>
-								<div class='addon__text'>
-									<h2 class='addon__text__title'>Larger storage</h2>
-									<p class='addon__text__desc'>Extra 1TB of cloud save</p>
-								</div>
-							</div>
-							<span class='addon__text__price'>+$2/mo</span>
-						</div>
-						<div class='form__addon' data-name='CP' tabIndex='-1'>
-							<div class='form__addon__left'>
-								<span class='addon__icon'>
-									<img class='form__addon__check' src='./src/assets/images/icon-checkmark.svg' alt=''>
-								</span>
-								<div class='addon__text'>
-									<h2 class='addon__text__title'>Customizable Profile</h2>
-									<p class='addon__text__desc'>Custom theme on your profile</p>
-								</div>
-							</div>
-							<span class='addon__text__price'>+$2/mo</span>
-						</div>
-					</div>
-				</div>
-				<div class='form__step form__step--4' data-step='4' aria-hidden='true'>
-					<div class='form__summary'>
-						<section class='form__summary__plan'>
-							<div class='plan__content'>
-								<div class='plan__content-top'>
-										<div class='content-top__left'>
-											<h2 class='form__summary__title' id='plan-selected'>User plan</h2>
-											<a class='form__summary__change' href='#' id='change-plan' tabIndex='-1'>Change</a>
-										</div>
-										<div class='content-top__right'>
-											<span id='summary-plan-price'></span>
-										</div>
-									</div>
-									<div class='form__summary__addons' id='summary-addons'>
-										<template id='summary-addons-template'>
-											<div class='summary__addon'>
-												<div class='addon__name' id='summary__addon__name'></div>
-												<div class='addon__price' id='summary__addon__price'></div>
-											</div>
-										</template>
-									</div>
-							</div>
-						</section>
-						<div class='form__summary__total'>
-							<span class='total__per' id='total-per'></span>
-							<span class='total__price' id='total-price'></span>
-						</div>
-					</div>
-				</div>
-				<div class='form__step form__step--5' data-step='5' aria-hidden='true'>
-					<img class='thank-icon' src='./src/assets/images/icon-thank-you.svg' alt=''>
-						<h2 class='thank-title'>Thank you!</h2>
-						<p class='thank-text'>Thanks for confirming your subscription! We hope you have fun using our platform. If you ever need support, please feel free to email us at support@loremgaming.com.</p>
-				</div>
-				<div class='form__buttons' id='buttons-container'>
-					<button class='form__button back button--hide' type='button' id='back-btn'>Go Back</button>
-					<button class='form__button next' type='submit' id='next-btn' tabIndex='2'>Next Step</button>
-				</div>
-			</section>
-		</form>
-	</main>
+  <main class='main'>
+    <form class='form' id='form' novalidate>
+      <aside class='form__sidebar'>
+        <picture>
+          <source srcset="./src/assets/images/bg-sidebar-mobile.svg" media='(max-width: 800px)'>
+          <img class='form__sidebar__img' src='./src/assets/images/bg-sidebar-desktop.svg' alt='' aria-hidden='true'>
+        </picture>
+        <div class='form__steps'>
+          <div class='form__step-indicator indicator--actual' data-step='1'>
+            <span class='circle'>1</span>
+            <span class='form__step__text'>
+              <span class='form__step__text-top text--uppercase'>Step 1</span>
+              <span class='form__step__text-bottom text--uppercase'>Your info</span>
+            </span>
+          </div>
+          <div class='form__step-indicator' data-step='2'>
+            <span class='circle'>2</span>
+            <span class='form__step__text'>
+              <span class='form__step__text-top text--uppercase'>Step 2</span>
+              <span class='form__step__text-bottom text--uppercase'>Select plan</span>
+            </span>
+          </div>
+          <div class='form__step-indicator' data-step='3'>
+            <span class='circle'>3</span>
+            <span class='form__step__text'>
+              <span class='form__step__text-top text--uppercase'>Step 3</span>
+              <span class='form__step__text-bottom text--uppercase'>Add-ons</span>
+            </span>
+          </div>
+          <div class='form__step-indicator' data-step='4'>
+            <span class='circle'>4</span>
+            <span class='form__step__text'>
+              <span class='form__step__text-top text--uppercase'>Step 4</span>
+              <span class='form__step__text-bottom text--uppercase'>Summary</span>
+            </span>
+          </div>
+        </div>
+      </aside>
+      <section class='form__right-side'>
+        <h1 class='form__title' id='title'>Personal info</h1>
+        <p class='form__description' id='description'>Please provide your name, email address, and phone number.</p>
+        <div class='form__step form__step--1 form--show' data-step='1'>
+          <div class='form__inputs'>
+            <div class='form__input__container'>
+              <label class='form__label' for='name'>Name</label>
+              <input class='form__input' type='text' name='name' id='name' placeholder='e.g. Stephen King' required
+                autocomplete='username' tabIndex='0' aria-describedby="name-format">
+              <div class='form__input__info' role='button' aria-label='Click to see info about the name'
+                aria-expanded='false' aria-controls='name-format' aria-hidden='true' tabIndex='-1'>
+                <img class='input__info__icon' src='./src/assets/images/question-mark.svg' alt='' aria-hidden='true' />
+                <p class='input__format' id='name-format' hidden>The name must be at least 3 characters, it may contain
+                  periods, hyphens or an apostrophe sign.</p>
+              </div>
+              <span class='form__input__error' data-error aria-hidden='true'></span>
+            </div>
+            <div class='form__input__container'>
+              <label class='form__label' for='email'>Email Address</label>
+              <input class='form__input' type='email' name='email' id='email' placeholder='e.g. stephenking@lorem.com'
+                required autocomplete='email' tabIndex='0' aria-describedby='email-format'>
+              <div class='form__input__info' role='button' aria-label='Click to see info about the email address'
+                aria-expanded='false' aria-controls='email-format' aria-hidden='true' tabIndex='-1'>
+                <img class='input__info__icon' src='./src/assets/images/question-mark.svg' alt='' aria-hidden='true' />
+                <p class='input__format' id='email-format' hidden>The email must contain a username of at least 6
+                  characters, an @ sign and a domain</p>
+              </div>
+              <span class='form__input__error' data-error aria-hidden='true'></span>
+            </div>
+            <div class='form__input__container'>
+              <label class='form__label' for='phone'>Phone Number</label>
+              <input class='form__input' type='tel' name='phone' id='phone' placeholder='e.g. +1 234 567 890' required
+                autocomplete='off' tabIndex='0' aria-describedby='phone-format'>
+              <div class='form__input__info' role='button' aria-label='Click to see info about the email address'
+                aria-expanded='false' aria-controls='phone-format' aria-hidden='true' tabIndex='-1'>
+                <img class='input__info__icon' src='./src/assets/images/question-mark.svg' alt='' aria-hidden='true' />
+                <p class='input__format' id='phone-format' hidden>The phone number must follow the following formats: an
+                  optional international prefix and a ten-digit number.</p>
+              </div>
+              <span class='form__input__error' data-error aria-hidden='true'></span>
+            </div>
+          </div>
+        </div>
+        <div class='form__step form__step--2' data-step='2' aria-hidden='true'>
+          <div class='form__cards'>
+            <div class='form__card' data-plan='arcade' tabIndex='-1'>
+              <img class='form__card__icon' src='./src/assets/images/icon-arcade.svg' alt='' aria-hidden='true'>
+              <div class='form__card__text'>
+                <h2 class='card__plan'>Arcade</h2>
+                <span class='card__price'>$9/mo</span>
+                <span class='card__free-months'>2 months free</span>
+              </div>
+            </div>
+            <div class='form__card' data-plan='advanced' tabIndex='-1'>
+              <img class='form__card__icon' src='./src/assets/images/icon-advanced.svg' alt='' aria-hidden='true'>
+              <div class='form__card__text'>
+                <h2 class='card__plan'>Advanced</h2>
+                <span class='card__price'>$12/mo</span>
+                <span class='card__free-months'>2 months free</span>
+              </div>
+            </div>
+            <div class='form__card' data-plan='pro' tabIndex='-1'>
+              <img class='form__card__icon' src='./src/assets/images/icon-pro.svg' alt='' aria-hidden='true'>
+              <div class='form__card__text'>
+                <h2 class='card__plan'>Pro</h2>
+                <span class='card__price'>$15/mo</span>
+                <span class='card__free-months'>2 months free</span>
+              </div>
+            </div>
+          </div>
+          <div class='form__step__plan'>
+            <div class='step__plan__price selected'>Monthly</div>
+            <button class='step__plan__button' id='button-price' type='button' data-price='monthly'
+              tabIndex='-1'></button>
+            <div class='step__plan__price'>Yearly</div>
+          </div>
+        </div>
+        <div class='form__step form__step--3' data-step='3' aria-hidden='true'>
+          <div class='form__addons'>
+            <div class='form__addon' data-name='OS' tabIndex='-1'>
+              <div class='form__addon__left'>
+                <span class='addon__icon'>
+                  <img class='form__addon__check' src='./src/assets/images/icon-checkmark.svg' alt=''
+                    aria-hidden='true'>
+                </span>
+                <div class='addon__text'>
+                  <h2 class='addon__text__title'>Online service</h2>
+                  <p class='addon__text__desc'>Access to multiplayer games</p>
+                </div>
+              </div>
+              <span class='addon__text__price'>+$1/mo</span>
+            </div>
+            <div class='form__addon' data-name='LS' tabIndex='-1'>
+              <div class='form__addon__left'>
+                <span class='addon__icon'>
+                  <img class='form__addon__check' src='./src/assets/images/icon-checkmark.svg' alt=''
+                    aria-hidden='true'>
+                </span>
+                <div class='addon__text'>
+                  <h2 class='addon__text__title'>Larger storage</h2>
+                  <p class='addon__text__desc'>Extra 1TB of cloud save</p>
+                </div>
+              </div>
+              <span class='addon__text__price'>+$2/mo</span>
+            </div>
+            <div class='form__addon' data-name='CP' tabIndex='-1'>
+              <div class='form__addon__left'>
+                <span class='addon__icon'>
+                  <img class='form__addon__check' src='./src/assets/images/icon-checkmark.svg' alt=''
+                    aria-hidden='true'>
+                </span>
+                <div class='addon__text'>
+                  <h2 class='addon__text__title'>Customizable Profile</h2>
+                  <p class='addon__text__desc'>Custom theme on your profile</p>
+                </div>
+              </div>
+              <span class='addon__text__price'>+$2/mo</span>
+            </div>
+          </div>
+        </div>
+        <div class='form__step form__step--4' data-step='4' aria-hidden='true'>
+          <div class='form__summary'>
+            <section class='form__summary__plan'>
+              <div class='plan__content'>
+                <div class='plan__content-top'>
+                  <div class='content-top__left'>
+                    <h2 class='form__summary__title' id='plan-selected'>User plan</h2>
+                    <a class='form__summary__change' href='#' id='change-plan' tabIndex='-1'>Change</a>
+                  </div>
+                  <div class='content-top__right'>
+                    <span id='summary-plan-price'></span>
+                  </div>
+                </div>
+                <div class='form__summary__addons' id='summary-addons'>
+                  <template id='summary-addons-template'>
+                    <div class='summary__addon'>
+                      <div class='addon__name' id='summary__addon__name'></div>
+                      <div class='addon__price' id='summary__addon__price'></div>
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </section>
+            <div class='form__summary__total'>
+              <span class='total__per' id='total-per'></span>
+              <span class='total__price' id='total-price'></span>
+            </div>
+          </div>
+        </div>
+        <div class='form__step form__step--5' data-step='5' aria-hidden='true'>
+          <img class='thank-icon' src='./src/assets/images/icon-thank-you.svg' alt='' aria-hidden='true'>
+          <h2 class='thank-title'>Thank you!</h2>
+          <p class='thank-text'>Thanks for confirming your subscription! We hope you have fun using our platform. If you
+            ever need support, please feel free to email us at support@loremgaming.com.</p>
+        </div>
+        <div class='form__buttons' id='buttons-container'>
+          <button class='form__button back button--hide' type='button' id='back-btn'>Go Back</button>
+          <button class='form__button next' type='submit' id='next-btn'>Next Step</button>
+        </div>
+      </section>
+    </form>
+  </main>
 
-	<script src='./src/script.js' type='module'></script>
+  <script src='./src/script.js' type='module'></script>
 </body>
 
 </html>
