@@ -1,36 +1,34 @@
-import * as funcs from './utilities/usefulFunctions.js'
+import { 
+	gebi, 
+	qs, 
+	qsa, 
+	firstLetter, 
+	handleBtn, 
+	updateErrorEl, 
+	throwError, 
+	characters, 
+	verifyUsername, 
+	getRegex, 
+	addEvent,
+  extractNumber
+} from './utilities/usefulFunctions.js'
 
-// shortcuts
 const d = document;
 
-const form = funcs.gebi('form')
-const formTitle = funcs.gebi('title')
-const formDesc = funcs.gebi('description')
+const form = gebi('form')
+let actualFormStep = qs('.form__step.form--show')
 
-let actualFormStep = funcs.qs('.form__step.form--show')
-
-const cardBtn = funcs.gebi('button-price')
-const cards = funcs.qsa('.form__card')
-const cardsError = funcs.gebi('cards-error')
+const cardBtn = gebi('button-price')
 let actualCard;
 
-const changePlan = funcs.gebi('change-plan')
+const addons = Array.from(qsa('.form__addon'))
 
-const addons = Array.from(funcs.qsa('.form__addon'))
+const backBtn = gebi('back-btn')
+const nextBtn = gebi('next-btn')
 
-const buttonsParent = funcs.gebi('buttons-container')
-const backBtn = funcs.gebi('back-btn')
-const nextBtn = funcs.gebi('next-btn')
+let actualStepIndicator = qs('.form__step-indicator.indicator--actual')
 
-const stepIndicators = funcs.qsa('.form__step-indicator')
-let actualStepIndicator = funcs.qs('.form__step-indicator.indicator--actual')
-
-const formsValidation = {
-	formStep1: false,
-	formStep2: false,
-	formStep3: false,
-	formStep4: false
-}
+const changePlan = gebi('change-plan')
 
 const userInfo = {
 	name: '',
@@ -73,47 +71,41 @@ const titleAndDesc = new Map([
 	}]
 ])
 
-const prices = {
-	OS: {
-		monthly: 1,
-		yearly: 10
-	},
-	LS: {
-		monthly: 2,
-		yearly: 20
-	},
-	CP: {
-		monthly: 2,
-		yearly: 20
-	}
+function calculatePrice(price){
+  return userInfo.yearly ? price * 10 : price / 10
+}
+
+function transformPrice(price, plus){
+	return `${plus ? '+' : ''}$${price}/${userInfo.yearly ? 'yr' : 'mo'}`
 }
 
 function changeActualFormStep(formStep, animationName = 'form--hide-forward'){
-	actualFormStep.classList.add(animationName)
+	actualFormStep.classList.toggle(animationName)
 
-	actualFormStep.addEventListener('animationend', e =>{
-		actualFormStep.classList.remove('form--show')
-		actualFormStep.classList.remove(animationName)
-		actualFormStep.setAttribute('aria-hidden', 'true')
-		actualFormStep.setAttribute('tabIndex', '-1')
+  actualFormStep.addEventListener('animationend', e => {
+    const newStep = qs(`.form__step[data-step="${formStep}"]`)
 
-		updateTitleAndDesc(formStep.toString())
+    if(!newStep) return
 
-		const newStep = funcs.qs(`.form__step[data-step="${formStep}"]`)
+    for (const [key, value] of d.querySelectorAll('.form__step').entries()){
+      if(value === newStep) continue
 
-		if(!newStep) return
+      value.classList.remove('form--show', animationName)
+      value.setAttribute('aria-hidden', 'true')
+    }
 
-		newStep.classList.add('form--show')
-		newStep.removeAttribute('aria-hidden')
-		newStep.removeAttribute('tabIndex')
+    newStep.classList.add('form--show')
+    newStep.removeAttribute('aria-hidden')
 
-		updateTabIndexs(actualFormStep, newStep)
-		actualFormStep = newStep
+    updateTitleAndDesc(formStep.toString())
+    updateTabIndexs(actualFormStep, newStep)
 
-		!newStep.previousElementSibling.getAttribute('data-step')
-			? funcs.handleBtn(backBtn, true, 'button--hide')
-			: funcs.handleBtn(backBtn, false, 'button--hide')
-	})
+    actualFormStep = newStep
+
+    !newStep.previousElementSibling.getAttribute('data-step')
+      ? handleBtn(backBtn, true, 'button--hide')
+      : handleBtn(backBtn, false, 'button--hide')
+  })
 }
 
 function updateTabIndexs(actualStep, newStep){
@@ -125,7 +117,7 @@ function updateTabIndexs(actualStep, newStep){
 	}
 
 	for (const newElement of newElements) {
-		newElement.setAttribute('tabIndex', '1')
+		newElement.setAttribute('tabIndex', '0')
 	}
 }
 
@@ -144,48 +136,74 @@ function validateForm(){
 
 function validateInput(e){
 	const input = e.target || e
-	const value = input.value
 	const msg = invalidMessages[input.name]
-	const regex = funcs.getRegex(input.name)
+	const regex = getRegex(input.name)
 	const msgRequired = invalidMessages.required
 	const parent = input.parentElement
-	const parentClass = 'input--error'
+	const errorClass = 'input--error'
 
-	if(!value) return funcs.throwError({parent, parentClass, msg: msgRequired, invalidEl: input})
+	if(!input.value) 
+		return throwError({parent, parentClass: errorClass, msg: msgRequired, input})
 
-	if(input.name === 'name' && funcs.characters(value) < 3) return funcs.throwError({parent, parentClass, msg: 'Must be 3 or more characters!', invalidEl: input})
+	if(input.name === 'name' && characters(input.value) < 3) 
+		return throwError({parent, parentClass: errorClass, msg: 'Must be 3 or more characters!', input})
 
-	if(!regex.test(value)) return funcs.throwError({parent, parentClass, msg, invalidEl: input})
+	if(!regex.test(input.value)) 
+		return throwError({parent, parentClass: errorClass, msg, input})
 
-	if(input.name === 'email' && funcs.verifyUsername(value) < 6) return funcs.throwError({parent, parentClass, msg:'Username must be 6 or more characters!', invalidEl: input})
+	if(input.name === 'email' && verifyUsername(input.value) < 6) 
+		return throwError({parent, parentClass: errorClass, msg:'Username must be 6 or more characters!', input})
 
-	funcs.updateErrorEl(parent.querySelector('[data-error]'), '')
+	const icon = parent.querySelector('.form__input__info')
+
+	updateErrorEl(parent.querySelector('[data-error]'), '')
 	parent.classList.remove('input--error')
 	input.setAttribute('aria-invalid', 'false')
+	icon.setAttribute('tabIndex', '-1')
+	icon.setAttribute('aria-hidden', 'false')
 	return true
 }
 
-// extracts the first number of a string
-// '$20/yr' -> 20
-function extractNumber(string){
-	return Number(string?.split(/[^0-9]/).filter(Boolean)[0])
+function handleIconFocus(e){
+	const icon = e.target.closest('.form__input__container').querySelector('.form__input__info')
+
+	if(e.target.parentElement.querySelector('.form__input').getAttribute('aria-invalid') === 'false') return
+
+	icon.setAttribute('tabIndex', '0')
 }
 
-function calculatePrice(price){
-  return userInfo.yearly ? price * 10 : price / 10
-}
+function handleIconClick(e){
 
-function transformPrice(price, plus){
-	return `${plus ? '+' : ''}$${price}/${userInfo.yearly ? 'yr' : 'mo'}`
+	const icon = e.composedPath().find(el => el.classList.contains('form__input__info'))
+
+	const inputFormat = icon.querySelector('.input__format')
+
+	inputFormat.getAttribute('hidden') === ''
+		? inputFormat.removeAttribute('hidden')
+		: inputFormat.setAttribute('hidden', '')
+
+	icon.getAttribute('aria-expanded') === 'true'
+		? icon.setAttribute('aria-expanded', 'false')
+		: icon.setAttribute('aria-expanded', 'true')
 }
 
 function updateTitleAndDesc(step){
+	const formTitle = gebi('title')
+	const formDesc = gebi('description')
+
 	const { title, desc } = titleAndDesc.get(step)
 	formTitle.textContent = title
 	formDesc.textContent = desc
+
+  if(step === '5'){
+    formTitle.hidden = true
+    formDesc.hidden = true
+  }
 }
 
 function updateCardsPrices(price){
+	const cards = qsa('.form__card')
+
 	cardBtn.dataset.price = price === 'yearly' ? 'monthly' : 'yearly'
 	userInfo.yearly = cardBtn.dataset.price === 'yearly' ? true : false
 
@@ -255,10 +273,6 @@ function validatePlan(){
 	return true
 }
 
-function handleInputBlur(e){
-	validateInput(e)
-}
-
 function handleAddonsClick(addon){
 	addon.classList.toggle('addon--selected')
 }
@@ -288,20 +302,19 @@ function getSelectedAddonsPrice(){
 	userInfo.addonsPrice = addonsPrice
 }
 
-// collect all data and updates ui
 function updateSummary(){
-	const addonsContainer = funcs.gebi('summary-addons')
-	const planPrice = funcs.gebi('summary-plan-price')
-	const selectedPlan = funcs.gebi('plan-selected')
-	const totalPer = funcs.gebi('total-per')
-	const totalPrice = funcs.gebi('total-price')
+	const addonsContainer = gebi('summary-addons')
+	const planPrice = gebi('summary-plan-price')
+	const selectedPlan = gebi('plan-selected')
+	const totalPer = gebi('total-per')
+	const totalPrice = gebi('total-price')
 
-	selectedPlan.textContent = `${funcs.firstLetter(userInfo.plan)} (${userInfo.yearly ? 'Yearly' : 'Monthly'})`
+	selectedPlan.textContent = `${firstLetter(userInfo.plan)} (${userInfo.yearly ? 'Yearly' : 'Monthly'})`
 	planPrice.textContent = transformPrice(userInfo.planPrice)
 	totalPer.textContent = `Total (per ${userInfo.yearly ? 'year' : 'month'})`
 	totalPrice.textContent = transformPrice(userInfo.planPrice + userInfo.addonsPrice, true)
 
-	const template = funcs.gebi('summary-addons-template').content
+	const template = gebi('summary-addons-template').content
 
 	// i think it's easier to do this than iterate over each added addon and delete it.
 	addonsContainer.innerHTML = `
@@ -326,8 +339,22 @@ function updateSummary(){
 	}
 }
 
-function updateAddonsPrice(){
+const prices = {
+	OS: {
+		monthly: 1,
+		yearly: 10
+	},
+	LS: {
+		monthly: 2,
+		yearly: 20
+	},
+	CP: {
+		monthly: 2,
+		yearly: 20
+	}
+}
 
+function updateAddonsPrice(){
 	for (const addon of addons) {
 		const addonPrice = addon.querySelector('.addon__text__price')
 		const newPrice = userInfo.yearly
@@ -351,55 +378,62 @@ function updateNextButton(last){
 	nextBtn.classList.remove('button--confirm')
 }
 
-function handleFormStepAnimation(formStep){
+function handleFormStepErrorAnimation(formStep){
 	formStep.classList.add('form--shake')
 
 	formStep.addEventListener('animationend', e => {
 		formStep.classList.remove('form--shake')
 	})
-	return true
 }
 
 function handleFormStepSubmit({formStep, formStepAnimation, indicatorValue, nextBtnValue, indicatorTimes}){
 	changeActualFormStep(formStep, formStepAnimation)
 	updateIndicator(indicatorValue, indicatorTimes)
 	updateNextButton(nextBtnValue)
+
+  d.activeElement.blur()
+}
+
+function handleInputBlur(e){
+	validateInput(e)
+
+  const icon = e.target.parentElement.querySelector('.form__input__info')
+
+	icon.setAttribute('tabIndex', '-1')
 }
 
 d.addEventListener('DOMContentLoaded', e => {
 
+	for (const icon of qsa('.form__input__info')) {
+		icon.addEventListener('click', handleIconClick)
+	}
+
 	d.addEventListener('click', e =>{
+    if(e.target === backBtn)
+      handleFormStepSubmit({
+        formStep: (actualFormStep.dataset.step - 1).toString(),
+        formStepAnimation: 'form--hide-backward',
+        indicatorValue: true
+      })
+
 		if(e.target === cardBtn) updateCardBtn()
 
-		if(e.target === changePlan)
-			handleFormStepSubmit({
-			formStep: '2', 
-			formStepAnimation: 'form--hide-backward', 
-			indicatorValue: true, 
-			indicatorTimes: 2})
-
-		if(e.target === backBtn) {
-			handleFormStepSubmit({
-				formStep: actualFormStep.dataset.step - 1,
-				formStepAnimation: 'form--hide-backward',
-				indicatorValue: true,
-			})
-		}
-
+		if(e.target === changePlan){
+      handleFormStepSubmit({
+        formStep: '2',
+        formStepAnimation: 'form--hide-backward', 
+        indicatorValue: true, 
+        indicatorTimes: 2})
+      d.querySelector('.form__card.card--selected').focus()
+    }
 
 		if(e.target.classList.contains('form__card') || e.target.matches('.form__card *')){
-			const card = e.target === e.target.closest('.form__card') 
-				? e.target
-				: e.target.closest('.form__card')
-
+			const card = e.composedPath().find(el => el.classList.contains('form__card'))
 			handleCardsClick(card)
 		}
 
 		if(e.target.classList.contains('form__addon') || e.target.matches('.form__addon *')){
-			const addon = e.target === e.target.closest('.form__addon') 
-				? e.target 
-				: e.target.closest('.form__addon')
-
+			const addon = e.composedPath().find(el => el.classList.contains('form__addon'))
 			handleAddonsClick(addon)
 		}
 	})
@@ -411,7 +445,7 @@ d.addEventListener('DOMContentLoaded', e => {
 
 		if(formStep === '1'){
 
-			if(validateForm()) return handleFormStepAnimation(actualFormStep)
+			if(validateForm()) return handleFormStepErrorAnimation(actualFormStep)
 
 			userInfo.name = form.name.value.trim()
 			userInfo.email = form.email.value.trim()
@@ -421,20 +455,22 @@ d.addEventListener('DOMContentLoaded', e => {
 
 		}else if(formStep === '2'){
 
-			if(!validatePlan()) return handleFormStepAnimation(actualFormStep)
+			if(!validatePlan()) return handleFormStepErrorAnimation(actualFormStep)
 
 			updateAddonsPrice()
 			handleFormStepSubmit({formStep: '3'})
 
 		}else if(formStep === '3'){
 
-			if(updateSelectedAddons() < 1) return handleFormStepAnimation(actualFormStep)
+			if(updateSelectedAddons() < 1) return handleFormStepErrorAnimation(actualFormStep)
 
 			getSelectedAddonsPrice()
 			handleFormStepSubmit({formStep: '4', nextBtnValue: true})
 			updateSummary()
 
 		}else if(formStep === '4'){
+			const buttonsParent = gebi('buttons-container')
+
 			handleFormStepSubmit({formStep: '5'})
 			buttonsParent.classList.add('form__buttons--hide')
 		}
@@ -444,13 +480,22 @@ d.addEventListener('DOMContentLoaded', e => {
 		if(e.key === 'Enter'){
 			if(e.target.classList.contains('form__card')) handleCardsClick(e.target)
 			if(e.target.classList.contains('form__addon')) handleAddonsClick(e.target)
+      if(e.target.classList.contains('form__input__info')) handleIconClick(e)
 		}
 	})
 
-	for (const [key, input] of Object.entries(form)) {
-		if(!input.classList.contains('form__input')) return
+  function handleInput(e){
+    validateInput(e)
+    handleIconFocus(e)
+  }
 
-		funcs.addEvent(input, 'blur', handleInputBlur)
-		funcs.addEvent(input, 'input', validateInput)
+	for (const [key, input] of Object.entries(form)) {
+		if(!input.classList.contains('form__input')) continue
+
+    if(input.value !== '') validateInput(input)
+
+		addEvent(input, 'input', handleInput)
+		addEvent(input, 'focus', handleIconFocus)
+		addEvent(input, 'blur', handleInputBlur)
 	}
 })
