@@ -122,10 +122,12 @@ function updateTabIndexs(actualStep, newStep){
 	const newElements = newStep.querySelectorAll('[tabIndex]')
 
 	for (const actualEl of actualElements) {
+    if(actualEl.getAttribute('data-update-ti') === 'false') continue
 		actualEl.setAttribute('tabIndex', '-1')
 	}
 
 	for (const newElement of newElements) {
+    if(newElement.getAttribute('data-update-ti') === 'false') continue
 		newElement.setAttribute('tabIndex', '0')
 	}
 }
@@ -167,6 +169,18 @@ function handleIconFocus(e){
 
 	icon.setAttribute('tabIndex', '0')
 }
+
+function handleIconBlur(e){
+	const icon = e.target
+
+	icon.setAttribute('tabIndex', '-1')
+
+  handleIconClick(e)
+}
+
+setInterval(() => {
+  console.log(d.activeElement)
+}, 1000);
 
 function handleIconClick(e){
 
@@ -475,7 +489,7 @@ d.addEventListener('DOMContentLoaded', e => {
     if(actualStepValidation){
       handleFormStepSubmit({
         formStep: Number(formStep) + 1,
-        nextBtnValue: actualStepValidation.VF?.options?.nextBtnValue || false,
+        nextBtnValue: actualStepSVF.VF?.options?.nextBtnValue || false,
       })
     }
 
@@ -510,4 +524,8 @@ d.addEventListener('DOMContentLoaded', e => {
 		addEvent(input, 'focus', handleIconFocus)
 		addEvent(input, 'blur', handleInputBlur)
 	}
+
+  for (const icon of d.querySelectorAll('.form__input__info')) {
+    addEvent(icon, 'blur', handleIconBlur)
+  }
 })
