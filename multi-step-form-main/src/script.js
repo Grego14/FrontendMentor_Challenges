@@ -26,6 +26,7 @@ const addons = Array.from(qsa('.form__addon'))
 const backBtn = gebi('back-btn')
 const nextBtn = gebi('next-btn')
 
+const stepsIndicators = qsa('.form__step-indicator')
 let actualStepIndicator = qs('.form__step-indicator.indicator--actual')
 
 const changePlan = gebi('change-plan')
@@ -79,24 +80,32 @@ function transformPrice(price, plus){
 	return `${plus ? '+' : ''}$${price}/${userInfo.yearly ? 'yr' : 'mo'}`
 }
 
-function changeActualFormStep(formStep, animationName = 'form--hide-forward'){
-	actualFormStep.classList.toggle(animationName)
+function changeActualFormStep(formStep, animationName){
+
+  const animation = animationName 
+    ? animationName 
+    : 'form--hide-forward'
+
+	actualFormStep.classList.add(animation)
 
   actualFormStep.addEventListener('animationend', e => {
     const newStep = qs(`.form__step[data-step="${formStep}"]`)
 
     if(!newStep) return
 
-    for (const [key, value] of d.querySelectorAll('.form__step').entries()){
-      if(value === newStep) continue
+    const indicatorStep = newStep.dataset.step
 
-      value.classList.remove('form--show', animationName)
-      value.setAttribute('aria-hidden', 'true')
+    for (const [key, step] of d.querySelectorAll('.form__step').entries()){
+      if(step === newStep) continue
+
+      step.classList.remove('form--show', animation)
+      step.setAttribute('aria-hidden', 'true')
     }
 
     newStep.classList.add('form--show')
     newStep.removeAttribute('aria-hidden')
 
+    updateIndicator(indicatorStep)
     updateTitleAndDesc(formStep.toString())
     updateTabIndexs(actualFormStep, newStep)
 
@@ -105,7 +114,7 @@ function changeActualFormStep(formStep, animationName = 'form--hide-forward'){
     !newStep.previousElementSibling.getAttribute('data-step')
       ? handleBtn(backBtn, true, 'button--hide')
       : handleBtn(backBtn, false, 'button--hide')
-  })
+  }, {once: true})
 }
 
 function updateTabIndexs(actualStep, newStep){
@@ -119,19 +128,6 @@ function updateTabIndexs(actualStep, newStep){
 	for (const newElement of newElements) {
 		newElement.setAttribute('tabIndex', '0')
 	}
-}
-
-function validateForm(){
-  let errorFound = false
-	for (const [key, input] of Object.entries(form)) {
-
-		if(!input.classList.contains('form__input')) continue
-
-		if(!validateInput(input)){
-			errorFound = true
-		}
-	}
-	return errorFound
 }
 
 function validateInput(e){
@@ -229,22 +225,10 @@ function updateCardBtn(){
 	}
 }
 
-function updateIndicator(back = false, times = 1){
-	if(!back && !actualStepIndicator.nextElementSibling) return
-
-	let newStepIndicator = back
-	? actualStepIndicator.previousElementSibling
-	: actualStepIndicator.nextElementSibling
+function updateIndicator(step){
+	const newStepIndicator = qs(`.form__step-indicator[data-step="${step}"]`)
 
 	if(!newStepIndicator) return
-
-	if(times > 1){
-		for(let i = 1; i < times; i++){
-			newStepIndicator = back
-				? newStepIndicator.previousElementSibling
-				: newStepIndicator.nextElementSibling
-		}
-	}
 
 	actualStepIndicator.classList.remove('indicator--actual')
 	newStepIndicator.classList.add('indicator--actual')
@@ -264,32 +248,8 @@ function handleCardsClick(card){
 	userInfo.planPrice = extractNumber(actualCard.querySelector('.card__price').textContent)
 }
 
-function validatePlan(){
-	const selectedCard = d.querySelector('.form__card.card--selected')
-
-	if(!selectedCard) return false
-
-	userInfo.plan = selectedCard.dataset.plan
-	return true
-}
-
 function handleAddonsClick(addon){
 	addon.classList.toggle('addon--selected')
-}
-
-function updateSelectedAddons(){
-	const selectedAddons = addons.filter(addon => addon.classList.contains('addon--selected'))
-
-	userInfo.addons = []
-
-	for (const addon of selectedAddons) {
-		const addonTitle = addon.querySelector('.addon__text__title')
-		const addonPrice = addon.querySelector('.addon__text__price')
-
-		userInfo.addons.push([addonTitle.textContent, addonPrice.textContent])
-	}
-
-	return selectedAddons.length
 }
 
 function getSelectedAddonsPrice(){
@@ -384,11 +344,12 @@ function handleFormStepErrorAnimation(formStep){
 	formStep.addEventListener('animationend', e => {
 		formStep.classList.remove('form--shake')
 	})
+
+  return false
 }
 
-function handleFormStepSubmit({formStep, formStepAnimation, indicatorValue, nextBtnValue, indicatorTimes}){
-	changeActualFormStep(formStep, formStepAnimation)
-	updateIndicator(indicatorValue, indicatorTimes)
+function handleFormStepSubmit({formStep, formStepAnimation, nextBtnValue}){
+	changeActualFormStep(formStep, formStepAnimation,)
 	updateNextButton(nextBtnValue)
 
   d.activeElement.blur()
@@ -402,28 +363,93 @@ function handleInputBlur(e){
 	icon.setAttribute('tabIndex', '-1')
 }
 
+const stepSubmitValidationFunctions = {
+  step1: {
+    validation: ()=>{
+      let validInputs = true
+
+      for (const [key, input] of Object.entries(form)) {
+
+        if(!input.classList.contains('form__input')) continue
+
+        if(!validateInput(input)){
+          validInputs = false
+        }
+      }
+
+      userInfo.name = form.name.value.trim()
+      userInfo.email = form.email.value.trim()
+      userInfo.phone = form.phone.value.trim()
+      
+      return validInputs
+    }
+  },
+  step2: {
+    validation: ()=>{
+      const selectedCard = d.querySelector('.form__card.card--selected')
+
+      if(!selectedCard) return false
+
+      userInfo.plan = selectedCard.dataset.plan
+      updateAddonsPrice()
+
+      return true
+    }
+  },
+  step3: {
+    validation: ()=>{
+      const selectedAddons = addons.filter(addon => addon.classList.contains('addon--selected'))
+
+      userInfo.addons = []
+
+      for (const addon of selectedAddons) {
+        const addonTitle = addon.querySelector('.addon__text__title')
+        const addonPrice = addon.querySelector('.addon__text__price')
+
+        userInfo.addons.push([addonTitle.textContent, addonPrice.textContent])
+      }
+
+      if(selectedAddons.length < 1) return false
+
+      getSelectedAddonsPrice()
+      updateSummary()
+
+      return true
+    },
+    options: {
+      nextBtnValue: true
+    }
+  },
+  step4: {
+   validation: ()=>{
+    if(stepSubmitValidationFunctions.step3.validation()) return true
+
+    return false
+    }
+  }
+}
+
+function getSVF(step){
+  return {VF: stepSubmitValidationFunctions[`step${step}`], step: Number(step)}
+}
+
 d.addEventListener('DOMContentLoaded', e => {
-
-	for (const icon of qsa('.form__input__info')) {
-		icon.addEventListener('click', handleIconClick)
-	}
-
 	d.addEventListener('click', e =>{
+
+    if(e.target.classList.contains('form__input__info')) handleIconClick(e)
+
     if(e.target === backBtn)
       handleFormStepSubmit({
         formStep: (actualFormStep.dataset.step - 1).toString(),
-        formStepAnimation: 'form--hide-backward',
-        indicatorValue: true
-      })
+        formStepAnimation: 'form--hide-backward'})
 
 		if(e.target === cardBtn) updateCardBtn()
 
 		if(e.target === changePlan){
       handleFormStepSubmit({
         formStep: '2',
-        formStepAnimation: 'form--hide-backward', 
-        indicatorValue: true, 
-        indicatorTimes: 2})
+        formStepAnimation: 'form--hide-backward'})
+
       d.querySelector('.form__card.card--selected').focus()
     }
 
@@ -441,39 +467,25 @@ d.addEventListener('DOMContentLoaded', e => {
 	form.addEventListener('submit', e =>{
 		e.preventDefault()
 
-		const formStep = actualFormStep.dataset.step
+    const formStep = actualFormStep.dataset.step
+    const actualStepSVF = getSVF(formStep)
 
-		if(formStep === '1'){
+    const actualStepValidation = actualStepSVF.VF.validation()
 
-			if(validateForm()) return handleFormStepErrorAnimation(actualFormStep)
+    if(actualStepValidation){
+      handleFormStepSubmit({
+        formStep: Number(formStep) + 1,
+        nextBtnValue: actualStepValidation.VF?.options?.nextBtnValue || false,
+      })
+    }
 
-			userInfo.name = form.name.value.trim()
-			userInfo.email = form.email.value.trim()
-			userInfo.phone = form.phone.value.trim()
+    if((Number(formStep) + 1) === 5){
+      const buttonsParent = gebi('buttons-container')
 
-			handleFormStepSubmit({formStep: '2'})
+      buttonsParent.classList.add('form__buttons--hide')
+    }
 
-		}else if(formStep === '2'){
-
-			if(!validatePlan()) return handleFormStepErrorAnimation(actualFormStep)
-
-			updateAddonsPrice()
-			handleFormStepSubmit({formStep: '3'})
-
-		}else if(formStep === '3'){
-
-			if(updateSelectedAddons() < 1) return handleFormStepErrorAnimation(actualFormStep)
-
-			getSelectedAddonsPrice()
-			handleFormStepSubmit({formStep: '4', nextBtnValue: true})
-			updateSummary()
-
-		}else if(formStep === '4'){
-			const buttonsParent = gebi('buttons-container')
-
-			handleFormStepSubmit({formStep: '5'})
-			buttonsParent.classList.add('form__buttons--hide')
-		}
+    if(!actualStepValidation) return handleFormStepErrorAnimation(actualFormStep)
 	})
 
 	d.addEventListener('keydown', e =>{
