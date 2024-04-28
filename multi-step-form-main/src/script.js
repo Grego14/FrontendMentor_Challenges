@@ -172,15 +172,14 @@ function handleIconFocus(e){
 
 function handleIconBlur(e){
 	const icon = e.target
+  const inputFormat = icon.querySelector('.input__format')
 
 	icon.setAttribute('tabIndex', '-1')
 
-  handleIconClick(e)
-}
+  inputFormat.setAttribute('hidden', '')
 
-setInterval(() => {
-  console.log(d.activeElement)
-}, 1000);
+  icon.setAttribute('aria-expanded', 'false')
+}
 
 function handleIconClick(e){
 
