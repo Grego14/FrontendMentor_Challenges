@@ -14,7 +14,7 @@
     <form class='form' id='form' novalidate>
       <aside class='form__sidebar'>
         <picture>
-          <source srcset="./src/assets/images/bg-sidebar-mobile.svg" media='(max-width: 800px)'>
+          <source srcset="./src/assets/images/bg-sidebar-mobile.svg" media='(max-width: 500px)'>
           <img class='form__sidebar__img' src='./src/assets/images/bg-sidebar-desktop.svg' alt='' aria-hidden='true'>
         </picture>
         <div class='form__steps'>
@@ -56,10 +56,10 @@
             <div class='form__input__container'>
               <label class='form__label' for='name'>Name</label>
               <input class='form__input' type='text' name='name' id='name' placeholder='e.g. Stephen King' required
-                autocomplete='username' tabIndex='0' aria-describedby="name-format">
+                autocomplete='username' tabindex='0' aria-describedby="name-format">
               <div class='form__input__info' role='button' aria-label='Click to see info about the name'
-                aria-expanded='false' aria-controls='name-format' aria-hidden='true' tabIndex='-1'>
-                <img class='input__info__icon' src='./src/assets/images/question-mark.svg' alt='' aria-hidden='true' />
+                aria-expanded='false' aria-controls='name-format' aria-hidden='true' tabindex='-1' data-update-ti='false'>
+                <img class='input__info__icon' src='./src/assets/images/question-mark.svg' alt='' aria-hidden='true'>
                 <p class='input__format' id='name-format' hidden>The name must be at least 3 characters, it may contain
                   periods, hyphens or an apostrophe sign.</p>
               </div>
@@ -68,10 +68,10 @@
             <div class='form__input__container'>
               <label class='form__label' for='email'>Email Address</label>
               <input class='form__input' type='email' name='email' id='email' placeholder='e.g. stephenking@lorem.com'
-                required autocomplete='email' tabIndex='0' aria-describedby='email-format'>
+                required autocomplete='email' tabindex='0' aria-describedby='email-format'>
               <div class='form__input__info' role='button' aria-label='Click to see info about the email address'
-                aria-expanded='false' aria-controls='email-format' aria-hidden='true' tabIndex='-1'>
-                <img class='input__info__icon' src='./src/assets/images/question-mark.svg' alt='' aria-hidden='true' />
+                aria-expanded='false' aria-controls='email-format' aria-hidden='true' tabindex='-1' data-update-ti='false'>
+                <img class='input__info__icon' src='./src/assets/images/question-mark.svg' alt='' aria-hidden='true'>
                 <p class='input__format' id='email-format' hidden>The email must contain a username of at least 6
                   characters, an @ sign and a domain</p>
               </div>
@@ -80,10 +80,10 @@
             <div class='form__input__container'>
               <label class='form__label' for='phone'>Phone Number</label>
               <input class='form__input' type='tel' name='phone' id='phone' placeholder='e.g. +1 234 567 890' required
-                autocomplete='tel' tabIndex='0' aria-describedby='phone-format'>
+                autocomplete='tel' tabindex='0' aria-describedby='phone-format'>
               <div class='form__input__info' role='button' aria-label='Click to see info about the email address'
-                aria-expanded='false' aria-controls='phone-format' aria-hidden='true' tabIndex='-1'>
-                <img class='input__info__icon' src='./src/assets/images/question-mark.svg' alt='' aria-hidden='true' />
+                aria-expanded='false' aria-controls='phone-format' aria-hidden='true' tabindex='-1' data-update-ti='false'>
+                <img class='input__info__icon' src='./src/assets/images/question-mark.svg' alt='' aria-hidden='true'>
                 <p class='input__format' id='phone-format' hidden>The phone number must follow the following formats: an
                   optional international prefix and a ten-digit number.</p>
               </div>
@@ -93,7 +93,7 @@
         </div>
         <div class='form__step form__step--2' data-step='2' aria-hidden='true'>
           <div class='form__cards'>
-            <div class='form__card' data-plan='arcade' tabIndex='-1'>
+            <div class='form__card' data-plan='arcade' tabindex='-1'>
               <img class='form__card__icon' src='./src/assets/images/icon-arcade.svg' alt='' aria-hidden='true'>
               <div class='form__card__text'>
                 <h2 class='card__plan'>Arcade</h2>
@@ -101,7 +101,7 @@
                 <span class='card__free-months'>2 months free</span>
               </div>
             </div>
-            <div class='form__card' data-plan='advanced' tabIndex='-1'>
+            <div class='form__card' data-plan='advanced' tabindex='-1'>
               <img class='form__card__icon' src='./src/assets/images/icon-advanced.svg' alt='' aria-hidden='true'>
               <div class='form__card__text'>
                 <h2 class='card__plan'>Advanced</h2>
@@ -109,7 +109,7 @@
                 <span class='card__free-months'>2 months free</span>
               </div>
             </div>
-            <div class='form__card' data-plan='pro' tabIndex='-1'>
+            <div class='form__card' data-plan='pro' tabindex='-1'>
               <img class='form__card__icon' src='./src/assets/images/icon-pro.svg' alt='' aria-hidden='true'>
               <div class='form__card__text'>
                 <h2 class='card__plan'>Pro</h2>
@@ -121,13 +121,13 @@
           <div class='form__step__plan'>
             <div class='step__plan__price selected'>Monthly</div>
             <button class='step__plan__button' id='button-price' type='button' data-price='monthly'
-              tabIndex='-1'></button>
+              tabindex='-1'></button>
             <div class='step__plan__price'>Yearly</div>
           </div>
         </div>
         <div class='form__step form__step--3' data-step='3' aria-hidden='true'>
           <div class='form__addons'>
-            <div class='form__addon' data-name='OS' tabIndex='-1'>
+            <div class='form__addon' data-name='OS' tabindex='-1'>
               <div class='form__addon__left'>
                 <span class='addon__icon'>
                   <img class='form__addon__check' src='./src/assets/images/icon-checkmark.svg' alt=''
@@ -140,7 +140,7 @@
               </div>
               <span class='addon__text__price'>+$1/mo</span>
             </div>
-            <div class='form__addon' data-name='LS' tabIndex='-1'>
+            <div class='form__addon' data-name='LS' tabindex='-1'>
               <div class='form__addon__left'>
                 <span class='addon__icon'>
                   <img class='form__addon__check' src='./src/assets/images/icon-checkmark.svg' alt=''
@@ -153,7 +153,7 @@
               </div>
               <span class='addon__text__price'>+$2/mo</span>
             </div>
-            <div class='form__addon' data-name='CP' tabIndex='-1'>
+            <div class='form__addon' data-name='CP' tabindex='-1'>
               <div class='form__addon__left'>
                 <span class='addon__icon'>
                   <img class='form__addon__check' src='./src/assets/images/icon-checkmark.svg' alt=''
@@ -175,7 +175,7 @@
                 <div class='plan__content-top'>
                   <div class='content-top__left'>
                     <h2 class='form__summary__title' id='plan-selected'>User plan</h2>
-                    <a class='form__summary__change' href='#' id='change-plan' tabIndex='-1'>Change</a>
+                    <a class='form__summary__change' href='#' id='change-plan' tabindex='-1'>Change</a>
                   </div>
                   <div class='content-top__right'>
                     <span id='summary-plan-price'></span>
