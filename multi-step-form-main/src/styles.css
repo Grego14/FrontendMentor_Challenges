@@ -50,26 +50,21 @@
   --alabaster: hsl(231, 100%, 99%);
   --white: hsl(0, 0%, 100%);
 
-  --fs-label: clamp(.85rem, .9rem + .2vw, .95rem);
+  --fs-label: .95rem;
+  --fs-title: 1.8rem;
   --fs-small: .85rem;
+  --animation-time: 250ms;
 
   font-family: 'Ubuntu', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   line-height: 1.5;
   color: var(--marine-blue);
 
-  --card-height: 10rem;
-  --card-width: 9.5rem;
-  --card-icon: 40px;
+  --form-right-width: 500px;
+  --form-right-height: 600px;
+  --form-right-separation: 4rem;
 
-  --form-width: 500px;
-
-  --animation-time: 250ms;
-
-  --input-icon-width: 20px;
-}
-
-.text--uppercase {
-  text-transform: uppercase;
+  --outline-color: unset;
+  --outline-width: unset;
 }
 
 .main {
@@ -82,17 +77,17 @@
 
 .form {
   display: flex;
-  gap: 4rem;
+  gap: var(--form-right-separation);
   background-color: var(--white);
   box-shadow: 0 0 15px 5px var(--magnolia);
   border-radius: 1rem;
-  padding: 1.5rem;
-  padding-right: 4rem;
+  padding: 1rem;
+  padding-right: var(--form-right-separation);
   overflow: hidden;
 }
 
 .form__title {
-  font-size: 1.8rem;
+  font-size: var(--fs-title);
   max-width: 100%;
 }
 
@@ -102,34 +97,42 @@
 
 .form__sidebar {
   position: relative;
+  z-index: 4;
 }
 
 .form__sidebar__img {
   min-height: 100%;
   max-width: 100%;
   vertical-align: middle;
+  object-fit: cover;
+  border-radius: .6rem;
 }
 
 .form__right-side {
-  display: flex;
-  flex-direction: column;
   padding: 2rem 0;
   position: relative;
-  min-width: var(--form-width);
+  min-width: var(--form-right-width);
+  max-width: var(--form-right-width);
+  min-height: var(--form-right-height);
+}
+
+.form__input,
+.form__addon,
+.form__card{
+  --outline-width: 2px;
 }
 
 .form__input,
 .form__button,
-.form__button.back,
 .step__plan__button,
 .form__card,
 .form__addon,
-.form__input__info {
+.form__input__info{
   outline: 1px solid transparent;
 
-  &:focus {
-    outline-width: 3px;
-    outline-color: var(--purplish-blue);
+  &:focus-visible {
+    outline-width: var(--outline-width, 3px);
+    outline-color: var(--outline-color, var(--purplish-blue));
   }
 }
 
@@ -158,6 +161,11 @@
   & .form__button.button--hide {
     display: none;
   }
+
+  & .form__button:disabled{
+    cursor: not-allowed;
+    opacity: .6;
+  }
 }
 
 .form__button.next {
@@ -168,17 +176,23 @@
   padding: 1rem 1.5rem;
   border-radius: .5rem;
   font-size: inherit;
-  transition: background-color 250ms ease;
+  transition: background-color 250ms ease,
+    opacity 250ms ease;
   margin-left: auto;
 
-  &:hover,
+  &:not(:disabled):hover,
   &.button--confirm {
     background-color: var(--purplish-blue);
   }
 
-  &:focus {
+  &.button--confirm:hover{
+    background-color: var(--pastel-blue);
+  }
+
+  &:focus-visible {
+    --outline-color: var(--marine-blue);
+
     background-color: var(--purplish-blue);
-    outline-color: var(--marine-blue);
   }
 }
 
@@ -198,7 +212,7 @@
   display: flex;
   flex-direction: column;
   position: absolute;
-  gap: 1rem;
+  gap: 2rem;
   top: 2.5rem;
   left: 2rem;
 }
@@ -208,15 +222,20 @@
   flex-direction: column;
 }
 
+.form__step__text-top,
+.form__step__text-bottom {
+  text-transform: uppercase;
+  font-size: var(--fs-small);
+}
+
 .form__step__text-top {
   color: var(--light-gray);
-  font-size: var(--fs-small);
 }
 
 .form__step__text-bottom {
   color: var(--white);
-  font-size: var(--fs-small);
   font-weight: bold;
+  letter-spacing: 1.5px;
 }
 
 .form__step-indicator {
@@ -241,6 +260,7 @@
 }
 
 /* forms-container */
+
 .form__step {
   display: flex;
   margin: 2rem 0;
@@ -252,18 +272,20 @@
   opacity: 0;
   z-index: -1;
   animation: unset;
+  pointer-events: none;
 
   &.form--show {
     opacity: 1;
-    z-index: 1;
+    z-index: 2;
+    pointer-events: auto;
   }
 
   &.form--hide-backward {
-    animation: move-backward var(--animation-time) ease;
+    animation: move-backward var(--animation-time) ease-in-out;
   }
 
   &.form--hide-forward {
-    animation: move-forward var(--animation-time) ease;
+    animation: move-forward var(--animation-time) ease-in-out;
   }
 
   &.form--shake {
@@ -319,7 +341,7 @@
   }
 
   75% {
-    transform: translateX(-5px);
+    transform: translateX(5px);
   }
 
   95% {
@@ -336,6 +358,8 @@
 /* step 1 */
 
 .form__inputs {
+  --input-icon-width: 20px;
+
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -348,6 +372,7 @@
   flex-direction: column;
   gap: .3rem;
   position: relative;
+  max-width: 100%;
 
   & .form__label {
     font-size: var(--fs-label);
@@ -384,15 +409,30 @@
   }
 
   &.input--error .form__input {
-    outline-color: var(--strawberry);
+    border-color: var(--strawberry);
   }
 
-  &:not(.input--error) .form__input:focus {
-    outline-color: var(--purplish-blue);
+  &.input--error .form__input:focus{
+    outline-color: var(--strawberry);
   }
 
   &.input--error:focus-within .form__input__info {
     opacity: 1;
+  }
+}
+
+.form__input {
+  border-radius: .5rem;
+  padding: 1rem 1rem;
+  font-weight: 500;
+  font-size: inherit;
+  color: inherit;
+  transition: border 250ms ease;
+  border: 1px solid var(--cool-gray);
+
+  &::placeholder {
+    font-weight: bold;
+    color: var(--cool-gray)
   }
 }
 
@@ -404,7 +444,7 @@
   position: absolute;
   right: -2rem;
   bottom: calc(50% - 22px);
-  z-index: 3;
+  z-index: 1;
 
   & .input__info__icon {
     height: inherit;
@@ -415,11 +455,7 @@
     position: absolute;
     top: 2.2rem;
     right: -1rem;
-    left: auto;
-    /*min-width: 400px;*/
-    min-width: max-content;
-    min-width: calc(max-content / 2);
-    text-wrap: balance;
+    min-width: 380px;
     font-size: var(--fs-label);
     font-weight: bold;
     background-color: var(--marine-blue);
@@ -438,21 +474,6 @@
     top: -.5rem;
     right: .9rem;
     transform: rotate(45deg);
-  }
-}
-
-.form__input {
-  border-radius: .5rem;
-  padding: .8rem 1rem;
-  font-weight: 500;
-  font-size: inherit;
-  color: inherit;
-  transition: border 250ms ease;
-  outline-color: var(--light-gray);
-
-  &::placeholder {
-    font-weight: bold;
-    color: var(--cool-gray)
   }
 }
 
@@ -477,9 +498,11 @@
 }
 
 .step__plan__button {
+  --outline-color: var(--marine-blue);
+
   margin-inline: 1.5rem;
-  min-width: 45px;
-  min-height: 20px;
+  min-width: 3rem;
+  min-height: 1.40rem;
   background-color: var(--marine-blue);
   border-radius: 1rem;
   position: relative;
@@ -503,9 +526,9 @@
   }
 
   &:hover,
-  &:focus {
+  &:focus-visible,
+  &.yearly{
     background-color: var(--purplish-blue);
-    outline: 3px solid var(--marine-blue);
   }
 }
 
@@ -520,8 +543,13 @@
 }
 
 .form__cards {
+  --card-height: 11rem;
+  --card-width: 9.5rem;
+  --card-icon: 40px;
+  --card-gap: 1.5rem;
+
   display: flex;
-  gap: 1.5rem;
+  gap: var(--card-gap);
   min-width: 100%;
   justify-content: center;
 
@@ -533,13 +561,19 @@
     padding: 1rem;
     justify-content: space-between;
     min-width: var(--card-width);
+
+    /* without the .5rem there will be a gap at the sides*/
+    min-width: calc(100% / 3 - var(--card-gap) + .5rem);
+
+    max-width: var(--card-width);
     cursor: pointer;
-    transition: border 150ms ease-in-out;
     user-select: none;
-    min-height: calc(var(--card-height) + 1rem);
+    min-height: var(--card-height);
+    transition: border 250ms ease,
+    background-color 250ms ease;
 
     &.card--selected {
-      border: 1px solid var(--purplish-blue);
+      border-color: var(--purplish-blue);
       background-color: var(--alabaster);
     }
 
@@ -589,22 +623,28 @@
   gap: 1rem;
 
   & .form__addon {
-    border: 1px solid var(--purplish-blue);
+    border: 1px solid var(--cool-gray);
     border-radius: .5rem;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 1rem 1.5rem;
-    transition: background-color 250ms ease;
+    transition: background-color 250ms ease,
+      border 250ms ease;
 
     &.addon--selected {
-      background-color: var(--magnolia);
+      background-color: var(--alabaster);
+      border: 1px solid var(--purplish-blue);
     }
 
     &.addon--selected .addon__icon {
       background-color: var(--purplish-blue);
-      border: 1px solid var(--purplish-blue);
+      border-color: var(--purplish-blue);
+    }
+
+    &:hover{
+      border-color: var(--purplish-blue);
     }
   }
 }
@@ -672,7 +712,7 @@
   }
 
   & .form__summary__title {
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 500;
   }
 
@@ -714,7 +754,7 @@
     padding: 2rem;
 
     & .total__price {
-      font-size: 1.2rem;
+      font-size: 1.5rem;
       font-weight: bold;
       color: var(--purplish-blue);
     }
@@ -754,69 +794,157 @@
 
 @media screen and (max-width: 950px) {
   :root {
+    --form-right-width: 450px;
+  }
+
+  .form__cards{
     --card-width: 8rem;
     --card-height: 9rem;
     --card-icon: 35px;
-
-    --form-width: 450px;
   }
 }
 
 /* styles for mobile/tablet */
 
+@media screen and (max-width: 880px) {
+  :root{
+    --form-right-width: 400px;
+    --form-right-separation: 3.2rem;
+  }
+
+  .form__cards{
+    --card-icon: 30px;
+    --card-gap: 1rem;
+  }
+}
+
 @media screen and (max-width: 800px) {
-  /*:root{*/
-  /*--card-width: 8rem;*/
-  /*--card-height: 9rem;*/
-  /*--card-icon: 35px;*/
+  :root{
 
-  /*--form-width: 450px;*/
-  /*}*/
+    --form-right-width: 400px;
+    --form-right-separation: 2.5rem;
 
-  .form {
+    --fs-label: .9rem;
+    --fs-small: .8rem;
+    --fs-title: 1.6rem;
+
+    font-size: 15px;
+  }
+
+  .form{
+    gap: var(--form-right-separation);
+    padding-right: var(--form-right-separation);
+  }
+}
+
+@media screen and (max-width: 700px) {
+  :root{
+
+    --form-right-width: 400px;
+    --form-right-separation: 2.5rem;
+
+    --fs-label: .95rem;
+    --fs-small: .85rem;
+    --fs-title: 1.8rem;
+
+    font-size: 16px;
+  }
+
+  .form{
     flex-direction: column;
     padding: 0;
+    min-width: 100vw;
+    min-height: 100vh;
+    border-radius: 0;
+    background-color: unset;
+  }
+
+  .form__sidebar{
     position: relative;
-    min-width: var(--form-width);
+    left: 50%;
+    min-width: 100%;
+    transform: translateX(-50%);
   }
 
-  .form__right-side {
-    padding-bottom: 1rem;
+  .form__right-side{
+    --form-right-width: calc(400px + 4rem);
+
     position: absolute;
-    background-color: var(--white);
-    min-width: 90%;
-    top: 50%;
     left: 50%;
-    transform: translate(-50%);
+    top: 12%;
+    transform: translateX(-50%);
+    z-index: 4;
+    background-color: var(--white);
+    box-shadow: 0 0 10px 5px var(--magnolia);
+    border-radius: 1rem;
+    padding: 2rem;
   }
 
-  .form__steps {
-    flex-direction: row;
-    left: 50%;
-    transform: translate(-50%);
+  .form__step{
+    min-width: calc(100% - 4rem);
+    max-width: calc(100% - 4rem);
+  }
 
-    & .form__step__text {
+  .form__sidebar__img{
+    position: absolute;
+    min-width: 80%;
+    border-radius: 0;
+    border-bottom-left-radius: .6rem;
+    border-bottom-right-radius: .6rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .form__steps{
+    flex-direction: row;
+    gap: 1rem;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+
+    & .form__step__text{
       display: none;
     }
   }
 
-  .form__cards {
-    flex-direction: column;
-    gap: 1rem;
-    max-width: 100%;
+  .form__buttons{
+    bottom: -25%;
+    min-width: 85vw;
+    transform: translateX(10%);
+    background-color: var(--white);
+    padding: 1rem;
+    border-radius: 1rem;
+  }
 
-    & .form__card {
+  .form__cards{
+    --card-icon: 50px;
+    flex-direction: column;
+
+    & .form__card{
+      min-width: 100%;
       flex-direction: row;
+      min-height: min-content;
+      gap: 1.5rem;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    & .card__plan{
+      font-size: 1.2rem;
+    }
+
+    & .card__price{
+      font-size: 1rem;
     }
   }
 
-  & .form__step {
-    max-width: 100%;
-    min-width: min-content;
+  .form__step--5{
+    & .thank-text{
+      max-width: 90%;
+    }
   }
 
-  .form__sidebar__img {
-    min-width: 100%;
-    vertical-align: middle;
+  .form__input__info{
+    right: 1rem;
   }
 }
