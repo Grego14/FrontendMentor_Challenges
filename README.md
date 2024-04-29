@@ -8,11 +8,11 @@
 
 #### Faq Accordion [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/faq-accordion-main) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/faq-accordion-main/)
 
-#### Article Preview [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/.learning_paths/javascript-fundamentals/article-preview-component-master) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/.learning_paths/javascript-fundamentals/article-preview-component-master/)
+#### Article Preview [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/javascript-fundamentals/article-preview-component-master) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/.learning_paths/javascript-fundamentals/article-preview-component-master/)
 
-#### Time Tracking Dashboard [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/.learning_paths/javascript-fundamentals/time-tracking-dashboard-main) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/.learning_paths/javascript-fundamentals/time-tracking-dashboard-main/)
+#### Time Tracking Dashboard [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/javascript-fundamentals/time-tracking-dashboard-main) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/.learning_paths/javascript-fundamentals/time-tracking-dashboard-main/)
 
-#### Tip Calculator App [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/.learning_paths/javascript-fundamentals/tip-calculator-app-main) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/.learning_paths/javascript-fundamentals/tip-calculator-app-main/)
+#### Tip Calculator App [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/javascript-fundamentals/tip-calculator-app-main) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/.learning_paths/javascript-fundamentals/tip-calculator-app-main/)
 
 #### Blog Card [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/blog-preview-card-main) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/blog-preview-card-main/)
 
