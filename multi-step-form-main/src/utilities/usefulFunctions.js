@@ -49,16 +49,26 @@ function updateErrorEl(errorEl, msg){
 	errorEl.textContent = msg || ''
 }
 
+let lastUpdatedDataError;
+
+// we don't want to update the errorEl in 500px or less
+// because we hide the [data-error] in 470px width
+const isMobile = window.matchMedia('(max-width: 500px)').matches
+
 function throwError({parent, msg, parentClass, input}){
 	const errorEl = parent.querySelector('[data-error]')
 
 	if(!errorEl) return
 
-	updateErrorEl(errorEl, msg)
+  if(lastUpdatedDataError && lastUpdatedDataError.textContent === msg) return
+  lastUpdatedDataError = errorEl
 
-	parent.classList.add(parentClass)
-  errorEl.setAttribute('aria-hidden', 'false')
-	input.setAttribute('aria-invalid', 'true')
+  parent.classList.add(parentClass)
+  input.setAttribute('aria-invalid', 'true')
+
+  if(isMobile) return
+
+	updateErrorEl(errorEl, msg)
 
 	return false
 }
