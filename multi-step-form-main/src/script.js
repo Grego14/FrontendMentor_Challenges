@@ -107,7 +107,6 @@ function changeActualFormStep(formStep, animationName){
 
     updateIndicator(indicatorStep)
     updateTitleAndDesc(formStep.toString())
-    updateTabIndexs(actualFormStep, newStep)
 
     actualFormStep = newStep
 
@@ -115,21 +114,6 @@ function changeActualFormStep(formStep, animationName){
       ? handleBtn(backBtn, true, 'button--hide')
       : handleBtn(backBtn, false, 'button--hide')
   }, {once: true})
-}
-
-function updateTabIndexs(actualStep, newStep){
-	const actualElements = actualStep.querySelectorAll('[tabIndex]')
-	const newElements = newStep.querySelectorAll('[tabIndex]')
-
-	for (const actualEl of actualElements) {
-    if(actualEl.getAttribute('data-update-ti') === 'false') continue
-		actualEl.setAttribute('tabIndex', '-1')
-	}
-
-	for (const newElement of newElements) {
-    if(newElement.getAttribute('data-update-ti') === 'false') continue
-		newElement.setAttribute('tabIndex', '0')
-	}
 }
 
 function validateInput(e){
@@ -158,7 +142,6 @@ function validateInput(e){
 	parent.classList.remove('input--error')
 	input.setAttribute('aria-invalid', 'false')
 	icon.setAttribute('tabIndex', '-1')
-	icon.setAttribute('aria-hidden', 'false')
 	return true
 }
 
@@ -213,6 +196,8 @@ function updateTitleAndDesc(step){
 function updateCardsPrices(price){
 	const cards = qsa('.form__card')
 
+  cardBtn.setAttribute('aria-label', `Change to ${cardBtn.dataset.price} plan`)
+
 	cardBtn.dataset.price = price === 'yearly' ? 'monthly' : 'yearly'
 	userInfo.yearly = cardBtn.dataset.price === 'yearly' ? true : false
 
@@ -257,12 +242,16 @@ function handleCardsClick(card){
 		card.classList.add('card--selected')
 	}
 
+  card.setAttribute('aria-checked', card.classList.contains('card--selected') ? 'true' : 'false')
+  actualCard?.setAttribute('aria-checked', !actualCard.classList.contains('card--selected') ? 'false' : 'true')
+
 	actualCard = card 
 	userInfo.planPrice = extractNumber(actualCard.querySelector('.card__price').textContent)
 }
 
 function handleAddonsClick(addon){
 	addon.classList.toggle('addon--selected')
+  addon.setAttribute('aria-checked', addon.classList.contains('addon--selected') ? 'true' : 'false')
 }
 
 function getSelectedAddonsPrice(){
@@ -361,11 +350,13 @@ function handleFormStepErrorAnimation(formStep){
   return false
 }
 
-function handleFormStepSubmit({formStep, formStepAnimation, nextBtnValue}){
+function handleFormStepSubmit({formStep, formStepAnimation, nextBtnValue, blur = true}){
 	changeActualFormStep(formStep, formStepAnimation,)
 	updateNextButton(nextBtnValue)
 
-  d.activeElement.blur()
+  if(blur){
+    d.activeElement.blur()
+  }
 }
 
 function handleInputBlur(e){
@@ -447,6 +438,11 @@ function getSVF(step){
 }
 
 d.addEventListener('DOMContentLoaded', e => {
+
+  d.addEventListener('touchstart', e =>{
+    if(e.target.classList.contains('form__input__info')) handleIconClick(e)
+  })
+
 	d.addEventListener('click', e =>{
 
     if(e.target.classList.contains('form__input__info')) handleIconClick(e)
@@ -461,7 +457,8 @@ d.addEventListener('DOMContentLoaded', e => {
 		if(e.target === changePlan){
       handleFormStepSubmit({
         formStep: '2',
-        formStepAnimation: 'form--hide-backward'})
+        formStepAnimation: 'form--hide-backward',
+        blur: false})
 
       d.querySelector('.form__card.card--selected').focus()
     }
