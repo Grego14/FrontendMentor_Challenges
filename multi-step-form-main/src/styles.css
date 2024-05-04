@@ -1004,7 +1004,6 @@ input{
   }
 
   .form__sidebar__img{
-    min-width: 100vw;
     min-width: 100%;
     left: 0;
     transform: translateX(0);
@@ -1020,7 +1019,8 @@ input{
     --padding-left-right: 1.5rem;
   }
 
-  .form__input__error{
+  .form__input__error,
+  .form__input__info{
     display: none;
   }
 

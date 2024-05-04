@@ -439,10 +439,6 @@ function getSVF(step){
 
 d.addEventListener('DOMContentLoaded', e => {
 
-  d.addEventListener('touchstart', e =>{
-    if(e.target.classList.contains('form__input__info')) handleIconClick(e)
-  })
-
 	d.addEventListener('click', e =>{
 
     if(e.target.classList.contains('form__input__info')) handleIconClick(e)
