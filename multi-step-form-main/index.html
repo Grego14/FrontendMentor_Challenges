@@ -14,8 +14,9 @@
     <form class='form' id='form' novalidate>
       <aside class='form__sidebar' aria-hidden='true'>
         <picture>
-          <source srcset="./src/assets/images/bg-sidebar-mobile.svg" media='(max-width: 650px)'>
-          <img class='form__sidebar__img' src='./src/assets/images/bg-sidebar-desktop.svg' alt='' aria-hidden='true'>
+          <source srcset="./src/assets/images/bg-sidebar-mobile.svg" media='(max-width: 650px)' width='450' height='200'>
+          <source srcset="./src/assets/images/bg-sidebar-desktop.svg" media='(min-width: 651px)' width='300' height='600'>
+          <img class='form__sidebar__img' src='' alt='' aria-hidden='true' width='300' height='600'>
         </picture>
         <div class='form__steps-indicators'>
           <div class='form__step-indicator indicator--actual' data-step='1'>
@@ -57,36 +58,18 @@
               <label class='form__label' for='name'>Name</label>
               <input class='form__input' type='text' name='name' id='name' placeholder='e.g. Stephen King' required
                 autocomplete='username' aria-describedby="name-format">
-              <div class='form__input__info' role='button' aria-label='Click to see info about the name'
-                aria-expanded='false' aria-controls='name-format' tabindex='-1'>
-                <img class='input__info__icon' src='./src/assets/images/question-mark.svg' alt='' aria-hidden='true'>
-                <p class='input__format' id='name-format' hidden>The name must be at least 3 characters, it may contain
-                  periods, hyphens or an apostrophe sign.</p>
-              </div>
               <span class='form__input__error' data-error aria-hidden='true'></span>
             </div>
             <div class='form__input__container'>
               <label class='form__label' for='email'>Email Address</label>
               <input class='form__input' type='email' name='email' id='email' placeholder='e.g. stephenking@lorem.com'
                 required autocomplete='email' aria-describedby='email-format'>
-              <div class='form__input__info' role='button' aria-label='Click to see info about the email address'
-                aria-expanded='false' aria-controls='email-format' tabindex='-1'>
-                <img class='input__info__icon' src='./src/assets/images/question-mark.svg' alt='' aria-hidden='true'>
-                <p class='input__format' id='email-format' hidden>The email must contain a username of at least 6
-                  characters, an @ sign and a domain</p>
-              </div>
               <span class='form__input__error' data-error aria-hidden='true'></span>
             </div>
             <div class='form__input__container'>
               <label class='form__label' for='phone'>Phone Number</label>
               <input class='form__input' type='tel' name='phone' id='phone' placeholder='e.g. +1 234 567 890' required
                 autocomplete='tel' aria-describedby='phone-format'>
-              <div class='form__input__info' role='button' aria-label='Click to see info about the phone number'
-                aria-expanded='false' aria-controls='phone-format' tabindex='-1'>
-                <img class='input__info__icon' src='./src/assets/images/question-mark.svg' alt='' aria-hidden='true'>
-                <p class='input__format' id='phone-format' hidden>The phone number must follow the following formats: an
-                  optional international prefix and a ten-digit number.</p>
-              </div>
               <span class='form__input__error' data-error aria-hidden='true'></span>
             </div>
           </div>
@@ -130,7 +113,7 @@
               <div class='form__addon__left'>
                 <span class='addon__icon'>
                   <img class='form__addon__check' src='./src/assets/images/icon-checkmark.svg' alt=''
-                    aria-hidden='true'>
+                    aria-hidden='true' width='12' height='9'>
                 </span>
                 <div class='addon__text'>
                   <h2 class='addon__text__title' id='addon1'>Online service</h2>
@@ -143,7 +126,7 @@
               <div class='form__addon__left'>
                 <span class='addon__icon'>
                   <img class='form__addon__check' src='./src/assets/images/icon-checkmark.svg' alt=''
-                    aria-hidden='true'>
+                    aria-hidden='true' width='12' height='9'>
                 </span>
                 <div class='addon__text'>
                   <h2 class='addon__text__title' id='addon2'>Larger storage</h2>
@@ -156,7 +139,7 @@
               <div class='form__addon__left'>
                 <span class='addon__icon'>
                   <img class='form__addon__check' src='./src/assets/images/icon-checkmark.svg' alt=''
-                    aria-hidden='true'>
+                    aria-hidden='true' width='12' height='9'>
                 </span>
                 <div class='addon__text'>
                   <h2 class='addon__text__title' id='addon3'>Customizable Profile</h2>
@@ -197,16 +180,16 @@
           </div>
         </div>
         <div class='form__step form__step--5' data-step='5' aria-hidden='true'>
-          <img class='thank-icon' src='./src/assets/images/icon-thank-you.svg' alt='' aria-hidden='true'>
+          <img class='thank-icon' src='./src/assets/images/icon-thank-you.svg' alt='' aria-hidden='true' width='80' height='80'>
           <h2 class='thank-title'>Thank you!</h2>
           <p class='thank-text'>Thanks for confirming your subscription! We hope you have fun using our platform. If you
             ever need support, please feel free to email us at support@loremgaming.com.</p>
         </div>
+      </section>
         <div class='form__buttons' id='buttons-container'>
           <button class='form__button back button--hide' type='button' id='back-btn'>Go Back</button>
           <button class='form__button next' type='submit' id='next-btn'>Next Step</button>
         </div>
-      </section>
     </form>
   </main>
 
