@@ -31,7 +31,9 @@ Users should be able to:
 
 ### Screenshot
 
-![](/screenshots/multi-step-form.webp)
+![Desktop](/screenshots/multi-step-form.webp)
+![Tablet](/screenshots/multi-step-form-tablet.webp)
+![Mobile](/screenshots/multi-step-form-mobile.webp)
 
 ### Links
 
