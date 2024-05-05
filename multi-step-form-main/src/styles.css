@@ -70,7 +70,7 @@ input{
   --fs-small: .9rem;
   --animation-time: 250ms;
 
-  --form-right-padding: 4rem;
+  --form-right-padding: 6rem;
 
   font-family: 'Ubuntu', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   line-height: 1.5;
@@ -89,37 +89,19 @@ input{
 }
 
 .form {
-  display: flex;
-  gap: var(--form-right-padding);
+  column-gap: var(--form-right-padding);
   background-color: var(--white);
   box-shadow: 0 0 15px 5px var(--magnolia);
   border-radius: 1rem;
   padding: 1rem;
   padding-right: var(--form-right-padding);
+  display: grid;
+  grid-template-areas:
+    "sidebar form"
+    "sidebar  buttons";
+  grid-template-columns: max-content 1fr;
+  grid-template-rows: max-content 67px;
   overflow: hidden;
-}
-
-.form__title {
-  font-size: var(--fs-title);
-}
-
-.form__description {
-  color: var(--cool-gray);
-  font-size: var(--fs-desc);
-  margin-bottom: var(--description-margin);
-}
-
-.form__sidebar {
-  position: relative;
-  z-index: 4;
-}
-
-.form__sidebar__img {
-  min-height: 100%;
-  max-width: 100%;
-  vertical-align: middle;
-  object-fit: cover;
-  border-radius: .6rem;
 }
 
 .form__right-side {
@@ -129,16 +111,10 @@ input{
   --padding-top-bottom: 2rem;
   --padding-left-right: 0;
 
-  --form-right-width: 500px;
-  --form-right-height: 550px;
-
-  --description-margin: 2rem;
-
+  grid-area: form;
   padding: var(--padding-top-bottom) var(--padding-left-right);
   position: relative;
-  min-width: var(--form-right-width);
-  max-width: var(--form-right-width);
-  min-height: var(--form-right-height);
+  min-width: 450px;
 }
 
 .form__input,
@@ -151,8 +127,7 @@ input{
 .form__button,
 .step__plan__button,
 .form__card,
-.form__addon,
-.form__input__info{
+.form__addon{
   outline: 1px solid transparent;
 
   &:focus-visible {
@@ -170,70 +145,12 @@ input{
   cursor: pointer;
 }
 
-.form__buttons {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: absolute;
-  bottom: 2rem;
-  right: 0;
-  min-width: 100%;
-
-  &.form__buttons--hide {
-    display: none;
-  }
-
-  & .form__button.button--hide {
-    display: none;
-  }
-}
-
-.form__button.next {
-  background-color: var(--marine-blue);
-  color: var(--white);
-  font-weight: 500;
-  min-width: 120px;
-  padding: 1rem 1.5rem;
-  border-radius: .5rem;
-  font-size: inherit;
-  transition: background-color 250ms ease,
-    opacity 250ms ease;
-  margin-left: auto;
-
-  &:hover,
-  &.button--confirm,
-  &:focus-visible{
-    background-color: var(--purplish-blue);
-  }
-
-  &.button--confirm:hover,
-  &.button--confirm:focus-visible{
-    background-color: var(--pastel-blue);
-  }
-
-  &:focus-visible {
-    --outline-color: var(--marine-blue);
-  }
-}
-
-.form__button.back {
-  font-size: inherit;
-  font-weight: 500;
-  transition: color 250ms ease;
-  color: var(--cool-gray);
-
-  &:hover,
-  &:focus-visible {
-    color: var(--marine-blue);
-  }
-}
-
 .form__steps-indicators {
   display: flex;
   flex-direction: column;
   position: absolute;
   gap: 1.5rem;
-  top: 2.5rem;
+  top: 1.5rem;
   left: 2rem;
 }
 
@@ -262,6 +179,7 @@ input{
   display: flex;
   align-items: center;
   gap: 1rem;
+  font-weight: bold;
 
   &.indicator--actual .circle {
     background-color: var(--light-blue);
@@ -277,6 +195,31 @@ input{
   padding: .35rem .8em;
   transition: background-color 250ms ease-in-out;
   user-select: none;
+}
+
+.form__title {
+  font-size: var(--fs-title);
+}
+
+.form__description {
+  color: var(--cool-gray);
+  font-size: var(--fs-desc);
+  margin-bottom: 2rem;
+}
+
+.form__sidebar {
+  position: relative;
+  z-index: 4;
+  grid-area: sidebar;
+}
+
+.form__sidebar__img {
+  aspect-ratio: 4 / 1;
+  min-height: 100%;
+  max-width: 100%;
+  vertical-align: middle;
+  object-fit: cover;
+  border-radius: .6rem;
 }
 
 .form__step {
@@ -300,14 +243,13 @@ input{
   &[aria-hidden='true'] {
     p,
     h2,
-    span{
+    span,
+    div{
       pointer-events: none;
     }
   }
 
   &.form--show {
-    --actual-form-height: 100%;
-
     opacity: 1;
     z-index: 2;
     pointer-events: auto;
@@ -391,8 +333,7 @@ input{
 /* step 1 */
 
 .form__inputs {
-  --input-icon-width: 20px;
-  --fs-label: .8rem;
+  --fs-label: .95rem;
 
   display: flex;
   flex-direction: column;
@@ -423,9 +364,20 @@ input{
   &.input--error .form__input:focus-visible{
     outline-color: var(--strawberry);
   }
+}
 
-  &.input--error:focus-within .form__input__info {
-    opacity: 1;
+.form__input {
+  border-radius: .3rem;
+  padding: 1rem 1rem;
+  font-weight: 500;
+  font-size: inherit;
+  color: inherit;
+  transition: border 250ms ease;
+  border: 1px solid var(--cool-gray);
+
+  &::placeholder {
+    font-weight: bold;
+    color: var(--cool-gray)
   }
 }
 
@@ -455,38 +407,6 @@ input{
   opacity: 0;
 }
 
-.form__input {
-  border-radius: .3rem;
-  padding: 1rem 1rem;
-  font-weight: 500;
-  font-size: inherit;
-  color: inherit;
-  transition: border 250ms ease;
-  border: 1px solid var(--cool-gray);
-
-  &::placeholder {
-    font-weight: bold;
-    color: var(--cool-gray)
-  }
-}
-
-.form__input__info {
-  height: var(--input-icon-width);
-  width: var(--input-icon-width);
-  transition: opacity 250ms ease;
-  opacity: 0;
-  position: absolute;
-  right: -2rem;
-  bottom: calc(50% - 22px);
-  z-index: 1;
-}
-
-.input__info__icon {
-  height: inherit;
-  width: inherit;
-  pointer-events: none;
-}
-
 .input__format {
   --info-width: 21rem;
 
@@ -514,6 +434,65 @@ input{
   transform: rotate(45deg);
 }
 
+.form__buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-self: flex-end;
+  grid-area: buttons;
+  min-width: 100%;
+  margin-bottom: 1rem;
+
+  &.form__buttons--hide {
+    display: none;
+  }
+
+  & .form__button.button--hide {
+    display: none;
+  }
+}
+
+.form__button.next {
+  background-color: var(--marine-blue);
+  color: var(--white);
+  font-weight: 500;
+  min-width: 120px;
+  padding: 1rem 1.5rem;
+  border-radius: .5rem;
+  font-size: inherit;
+  transition: background-color 250ms ease,
+    opacity 250ms ease;
+  margin-left: auto;
+
+  &:hover,
+  &.button--confirm,
+  &:focus-visible{
+    background-color: var(--purplish-blue);
+  }
+
+  &.button--confirm:hover,
+  &.button--confirm:focus-visible{
+    background-color: var(--pastel-blue);
+  }
+
+  &:focus-visible {
+    --outline-color: var(--marine-blue);
+  }
+}
+
+.form__button.back {
+  font-size: inherit;
+  font-weight: 500;
+  transition: color 250ms ease;
+  color: var(--cool-gray);
+  padding: 1rem 0;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--marine-blue);
+  }
+}
+
 /* step 1 end */
 
 /* step 2 */
@@ -526,7 +505,7 @@ input{
   & .form__step__plan {
     background-color: var(--alabaster);
     min-width: 100%;
-    padding: 1rem 0;
+    padding: 1rem;
     border-radius: .5rem;
     display: flex;
     align-items: center;
@@ -584,6 +563,7 @@ input{
   --card-width: 9.5rem;
   --card-icon: 40px;
   --card-gap: 1.5rem;
+  --card-extra-space: calc(var(--card-gap) / 3);
 
   display: flex;
   gap: var(--card-gap);
@@ -597,12 +577,10 @@ input{
     border-radius: .5rem;
     padding: 1rem;
     justify-content: space-between;
-    min-width: var(--card-width);
 
-    /* without the .5rem there will be a gap at the sides*/
-    min-width: calc(100% / 3 - var(--card-gap) + .5rem);
+    /* without the card-extra-space there will be a gap at the sides*/
+    min-width: calc(100% / 3 - var(--card-gap) + var(--card-extra-space));
 
-    max-width: var(--card-width);
     cursor: pointer;
     user-select: none;
     min-height: var(--card-height);
@@ -636,7 +614,6 @@ input{
 
   & .card__price {
     color: var(--cool-gray);
-    font-size: var(--fs-label);
   }
 }
 
@@ -673,6 +650,7 @@ input{
   transition: background-color 250ms ease,
     border 250ms ease;
   user-select: none;
+  font-size: var(--fs-small);
 
   &.addon--selected {
     background-color: var(--alabaster);
@@ -691,7 +669,6 @@ input{
 
 .addon__text__price {
   color: var(--purplish-blue);
-  font-size: var(--fs-label);
 }
 
 .form__addon__left {
@@ -720,7 +697,7 @@ input{
 }
 
 .addon__text__desc {
-  font-size: var(--fs-label);
+  font-size: var(--fs-small);
   color: var(--cool-gray);
   white-space: nowrap;
 }
@@ -730,78 +707,79 @@ input{
 /* step 4 */
 
 .form__summary {
+  --fs-total: 1.5rem;
   min-width: 100%;
+}
 
-  & .form__summary__plan {
-    background-color: var(--alabaster);
-    border-radius: .5rem;
-    padding: 2rem;
+.form__summary__plan {
+  background-color: var(--alabaster);
+  border-radius: .5rem;
+  padding: 2rem;
+}
+
+.plan__content-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--light-gray);
+  padding-bottom: 1.5rem;
+
+}
+
+.content-top__right {
+  font-weight: bold;
+}
+
+.form__summary__title {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.form__summary__change {
+  color: var(--cool-gray);
+  transition: color 250ms ease;
+
+  &:hover,
+  &:focus {
+    color: var(--purplish-blue);
   }
+}
 
-  & .plan__content-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--light-gray);
-    padding-bottom: 1.5rem;
+.form__summary__addons {
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
+  margin-top: 1.5rem;
+}
 
-    & .content-top__right {
-      font-weight: bold;
-    }
-  }
+.summary__addon {
+  display: flex;
+  justify-content: space-between;
+}
 
-  & .form__summary__title {
-    font-size: 1.2rem;
-    font-weight: 500;
-  }
+.addon__name {
+  color: var(--cool-gray)
+}
 
-  & .form__summary__change {
-    color: var(--cool-gray);
-    transition: color 250ms ease;
-    font-size: var(--fs-label);
+.addon__price {
+  font-size: var(--fs-small)
+}
 
-    &:hover,
-    &:focus {
-      color: var(--purplish-blue);
-    }
-  }
+.form__summary__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+}
 
-  & .form__summary__addons {
-    display: flex;
-    flex-direction: column;
-    gap: .8rem;
-    margin-top: 1.5rem;
-  }
+.total__price {
+  font-size: var(--fs-total);
+  font-weight: bold;
+  color: var(--purplish-blue);
+}
 
-  & .summary__addon {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  & .addon__name {
-    color: var(--cool-gray)
-  }
-
-  & .addon__price {
-    font-size: var(--fs-label)
-  }
-
-  & .form__summary__total {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 2rem;
-
-    & .total__price {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: var(--purplish-blue);
-    }
-
-    & .total__per {
-      color: var(--cool-gray);
-    }
-  }
+.total__per {
+  color: var(--cool-gray);
 }
 
 /* step 4 end */
@@ -814,6 +792,8 @@ input{
   text-align: center;
   justify-content: center;
   gap: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
 
   & .thank-icon {
     margin-bottom: 1rem;
@@ -831,27 +811,26 @@ input{
 
 /* step 5 end */
 
-@media screen and (max-width: 950px) {
-  .form__right-side{
-    --form-right-width: 450px;
-  }
-
-  .form__cards{
-    --card-width: 8rem;
-    --card-height: 10rem;
-    --card-icon: 35px;
+@media screen and (max-width: 1024px){
+  :root{
+    --form-right-padding: 4rem;
   }
 }
 
-/* styles for mobile/tablet */
-
-@media screen and (max-width: 850px) {
+@media screen and (max-width: 950px) {
   :root{
-    --form-right-padding: 3.2rem;
+    --form-right-padding: 3rem;
   }
+}
 
-  .form__right-side{
-    --form-right-width: 400px;
+@media screen and (max-width: 900px) {
+  :root{
+    --form-right-padding: 2rem;
+
+    --fs-small: .9rem;
+    --fs-title: 1.6rem;
+
+    font-size: 15px;
   }
 
   .form__cards{
@@ -859,40 +838,57 @@ input{
   }
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 850px) {
   :root{
-    --form-right-padding: 2.5rem;
+    --form-right-padding: 2rem;
+  }
 
-    --fs-small: .8rem;
-    --fs-title: 1.6rem;
+  .form__right-side{
+    min-width: 400px;
+  }
 
-    font-size: 15px;
+  .form__sidebar{
+    max-width: 220px;
+  }
+
+  .form__cards{
+    --card-height: 10rem;
+    --card-icon: 35px;
   }
 }
 
 @media screen and (max-width: 750px) {
   .form__right-side{
-    --form-right-width: 350px;
+    min-width: 380px;
+  }
+
+  .card__free-months{
+    font-size: .8rem;
   }
 }
 
 @media screen and (max-width: 700px) {
-  :root{
-    --form-right-padding: 2rem;
+  .form__right-side{
+    min-width: 350px;
+    max-width: 350px;
   }
 
-  .form__sidebar{
-    max-width: 250px;
+  .form__cards{
+    --card-gap: .5rem;
   }
 }
 
 @media screen and (max-width: 650px) {
   :root{
-    font-size: 16px;
+    font-size: 15px;
   }
 
   .form{
-    flex-direction: column;
+    grid-template-areas:
+      "sidebar sidebar"
+      "buttons buttons";
+    grid-template-columns: 1fr;
+    grid-template-rows: 600px 1fr;
     padding: 0;
     min-width: 100vw;
     min-height: 100vh;
@@ -901,16 +897,27 @@ input{
   }
 
   .form__sidebar{
-    position: relative;
     left: 50%;
     min-width: 100%;
     transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    max-height: 200px;
+  }
+
+  .form__sidebar__img{
+    width: 100%;
+    max-height: 200px;
+    border-radius: 0;
+    border-bottom-left-radius: .6rem;
+    border-bottom-right-radius: .6rem;
   }
 
   .form__right-side{
     --padding-top-bottom: 2rem;
     --padding-left-right: 2rem;
-    --form-right-width: 75%;
+
+    --fs-title: 1.6rem;
 
     position: absolute;
     left: 50%;
@@ -920,6 +927,8 @@ input{
     background-color: var(--white);
     box-shadow: 0 0 10px 5px var(--magnolia);
     border-radius: 1rem;
+    min-width: 90%;
+    min-height: 450px;
   }
 
   .form__step{
@@ -927,17 +936,6 @@ input{
 
     min-width: calc(100% - var(--form-step-separation));
     max-width: calc(100% - var(--form-step-separation));
-    top: initial;
-  }
-
-  .form__sidebar__img{
-    position: absolute;
-    min-width: 80%;
-    border-radius: 0;
-    border-bottom-left-radius: .6rem;
-    border-bottom-right-radius: .6rem;
-    left: 50%;
-    transform: translateX(-50%);
   }
 
   .form__steps-indicators{
@@ -956,51 +954,37 @@ input{
     padding: 1rem;
   }
 
-  .form__addon__left{
-    gap: .5rem
-  }
-
   .form__buttons{
-    bottom: -25%;
-    min-width: 75%;
-    left: 0;
+    margin: 0;
     background-color: var(--white);
-    padding: 1rem;
-    border-radius: 1rem;
     box-shadow: 0 0 10px 5px var(--magnolia);
+    padding: 1rem 2rem;
+    min-width: 100%;
+    margin: 0 auto;
   }
 
   .form__cards{
-    --card-icon: 50px;
-    flex-direction: column;
-
-    & .form__card{
-      min-width: 100%;
-      flex-direction: row;
-      min-height: min-content;
-      gap: 1.5rem;
-      justify-content: flex-start;
-      align-items: center;
-    }
+    --card-icon: 45px;
+    --card-gap: 1.5rem;
   }
 
   .form__step--5{
     top: 50%;
-    transform: translateY(-60%);
+    transform: translateY(-50%);
 
     & .thank-text{
       max-width: 80%;
     }
   }
-
-  .form__input__info{
-    right: 1rem;
-  }
 }
 
 @media screen and (max-width: 470px) {
-  :root{
-    --fs-label: .78rem;
+  .form__right-side{
+    --padding-left-right: 1rem;
+  }
+
+  .form__buttons{
+    padding: 1rem;
   }
 
   .form__sidebar__img{
@@ -1010,25 +994,52 @@ input{
     border-radius: 0;
   }
 
-  .form__right-side{
-    min-width: 90%;
-    max-height: min-content;
+  .form__description{
+    margin-bottom: 1rem;
   }
 
-  .form__right-side:has(.form__step--3.form--show){
-    --padding-left-right: 1.5rem;
+  .form__right-side:has(.form__step--2.form--show .step__plan__button.yearly){
+    min-height: 500px;
   }
 
-  .form__input__error,
-  .form__input__info{
+  .form__step--2{
+    gap: 1rem;
+  }
+
+  .form__cards{
+    --card-gap: 1rem;
+
+    flex-direction: column;
+
+    & .form__card{
+      --card-height: max-content;
+
+      flex-direction: row;
+      justify-content: flex-start;
+      gap: 1rem;
+      padding: .6rem;
+
+      min-width: 100%;
+    }
+  }
+
+  .form__input__error{
     display: none;
   }
+}
 
-  .form__buttons{
-    bottom: -35%;
-    min-width: 100vw;
-    left: -5%;
-    border-radius: 0;
+@media screen and (max-width: 400px){
+  :root{
+    --fs-small: .8rem;
+  }
+
+  .form__summary{
+    --fs-total: 1.2rem;
+  }
+
+  .form__right-side{
+    --fs-title: 1.6rem;
+    --fs-desc: 1rem;
   }
 
   .form__addon{
@@ -1036,11 +1047,14 @@ input{
 
     padding: 1rem .5rem;
   }
-}
 
-@media screen and (max-width: 400px){
-  :root{
-    --fs-label: .7rem;
+  .form__addon__left{
+    gap: .5rem;
+  }
+
+  .form__cards{
+    --card-icon: 40px;
+    --card-gap: .5rem;
   }
 
   .addon__text__title{
