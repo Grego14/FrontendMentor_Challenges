@@ -136,47 +136,10 @@ function validateInput(e){
 	if(input.name === 'email' && verifyUsername(input.value) < 6) 
 		return throwError({parent, parentClass: errorClass, msg:'Username must be 6 or more characters!', input})
 
-	const icon = parent.querySelector('.form__input__info')
-
 	updateErrorEl(parent.querySelector('[data-error]'), '')
 	parent.classList.remove('input--error')
 	input.setAttribute('aria-invalid', 'false')
-	icon.setAttribute('tabIndex', '-1')
 	return true
-}
-
-function handleIconFocus(e){
-	const icon = e.target.closest('.form__input__container').querySelector('.form__input__info')
-
-	if(e.target.parentElement.querySelector('.form__input').getAttribute('aria-invalid') === 'false') return
-
-	icon.setAttribute('tabIndex', '0')
-}
-
-function handleIconBlur(e){
-	const icon = e.target
-  const inputFormat = icon.querySelector('.input__format')
-
-	icon.setAttribute('tabIndex', '-1')
-
-  inputFormat.setAttribute('hidden', '')
-
-  icon.setAttribute('aria-expanded', 'false')
-}
-
-function handleIconClick(e){
-
-	const icon = e.composedPath().find(el => el.classList.contains('form__input__info'))
-
-	const inputFormat = icon.querySelector('.input__format')
-
-	inputFormat.getAttribute('hidden') === ''
-		? inputFormat.removeAttribute('hidden')
-		: inputFormat.setAttribute('hidden', '')
-
-	icon.getAttribute('aria-expanded') === 'true'
-		? icon.setAttribute('aria-expanded', 'false')
-		: icon.setAttribute('aria-expanded', 'true')
 }
 
 function updateTitleAndDesc(step){
@@ -359,14 +322,6 @@ function handleFormStepSubmit({formStep, formStepAnimation, nextBtnValue, blur =
   }
 }
 
-function handleInputBlur(e){
-	validateInput(e)
-
-  const icon = e.target.parentElement.querySelector('.form__input__info')
-
-	icon.setAttribute('tabIndex', '-1')
-}
-
 const stepSubmitValidationFunctions = {
   step1: {
     validation: ()=>{
@@ -441,8 +396,6 @@ d.addEventListener('DOMContentLoaded', e => {
 
 	d.addEventListener('click', e =>{
 
-    if(e.target.classList.contains('form__input__info')) handleIconClick(e)
-
     if(e.target === backBtn)
       handleFormStepSubmit({
         formStep: (actualFormStep.dataset.step - 1).toString(),
@@ -498,26 +451,15 @@ d.addEventListener('DOMContentLoaded', e => {
 		if(e.key === 'Enter'){
 			if(e.target.classList.contains('form__card')) handleCardsClick(e.target)
 			if(e.target.classList.contains('form__addon')) handleAddonsClick(e.target)
-      if(e.target.classList.contains('form__input__info')) handleIconClick(e)
 		}
 	})
-
-  function handleInput(e){
-    validateInput(e)
-    handleIconFocus(e)
-  }
 
 	for (const [key, input] of Object.entries(form)) {
 		if(!input.classList.contains('form__input')) continue
 
     if(input.value !== '') validateInput(input)
 
-		addEvent(input, 'input', handleInput)
-		addEvent(input, 'focus', handleIconFocus)
-		addEvent(input, 'blur', handleInputBlur)
+		addEvent(input, 'input', validateInput)
+		addEvent(input, 'blur', validateInput)
 	}
-
-  for (const icon of d.querySelectorAll('.form__input__info')) {
-    addEvent(icon, 'blur', handleIconBlur)
-  }
 })
