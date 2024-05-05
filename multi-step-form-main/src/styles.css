@@ -988,9 +988,6 @@ input{
   }
 
   .form__sidebar__img{
-    min-width: 100%;
-    left: 0;
-    transform: translateX(0);
     border-radius: 0;
   }
 
