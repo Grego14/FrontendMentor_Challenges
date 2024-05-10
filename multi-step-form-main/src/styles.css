@@ -84,7 +84,7 @@ input {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--alabaster);
+  background-color: var(--magnolia);
   min-height: 100dvh;
 }
 
