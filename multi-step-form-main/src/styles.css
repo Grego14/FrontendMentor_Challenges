@@ -28,29 +28,29 @@
   font-display: swap;
 }
 
-body, 
-main, 
-form, 
+body,
+main,
+form,
 aside,
-img, 
-div, 
+img,
+div,
 span,
 section,
 h1,
 p,
 label,
-input, 
+input,
 h2,
 button,
 button::after,
-label::after{
+label::after {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
 }
 
 button,
-input{
+input {
   font-family: inherit;
 }
 
@@ -68,7 +68,7 @@ input{
   --white: hsl(0, 0%, 100%);
 
   --fs-small: .9rem;
-  --animation-time: 250ms;
+  --transition-time: 250ms;
 
   --form-right-padding: 6rem;
 
@@ -85,7 +85,7 @@ input{
   align-items: center;
   justify-content: center;
   background-color: var(--alabaster);
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .form {
@@ -111,15 +111,20 @@ input{
   --padding-top-bottom: 2rem;
   --padding-left-right: 0;
 
+  --right-side-height: min-content;
+
   grid-area: form;
   padding: var(--padding-top-bottom) var(--padding-left-right);
   position: relative;
   min-width: 450px;
+  max-width: 450px;
+  min-height: var(--right-side-height);
+  transition: min-height 100ms ease;
 }
 
 .form__input,
 .form__addon,
-.form__card{
+.form__card {
   --outline-width: 2px;
 }
 
@@ -127,7 +132,7 @@ input{
 .form__button,
 .step__plan__button,
 .form__card,
-.form__addon{
+.form__addon {
   outline: 1px solid transparent;
 
   &:focus-visible {
@@ -193,7 +198,7 @@ input{
   border: 1px solid var(--white);
   border-radius: 50%;
   padding: .35rem .8em;
-  transition: background-color 250ms ease-in-out;
+  transition: background-color var(--transition-time) ease-in-out;
   user-select: none;
 }
 
@@ -223,28 +228,32 @@ input{
 }
 
 .form__step {
+  --animation-time: 250ms;
+
   display: flex;
   max-width: 100%;
   min-width: 100%;
-  transition: opacity 250ms ease;
   position: absolute;
   opacity: 0;
   z-index: -1;
-  animation: unset;
+  transition: transform var(--animation-time) ease-in,
+    opacity var(--animation-time) ease;
 
   &[aria-hidden='true'] {
+
     *[tabindex],
     input,
-    button{
+    button {
       visibility: hidden;
     }
   }
 
   &[aria-hidden='true'] {
+
     p,
     h2,
     span,
-    div{
+    div {
       pointer-events: none;
     }
   }
@@ -256,39 +265,38 @@ input{
   }
 
   &.form--hide-backward {
-    animation: move-backward var(--animation-time) ease-in-out;
+    transform: translateX(-125%);
   }
 
   &.form--hide-forward {
-    animation: move-forward var(--animation-time) ease-in-out;
+    transform: translateX(125%);
+  }
+
+  &[data-position='left'] {
+    transform: translateX(-200%);
+  }
+
+  &[data-position='right'] {
+    transform: translateX(200%);
+  }
+
+  &.form--slow-transition {
+    transition-duration: calc(var(--animation-time) * 1.5);
+    transition-timing-function: ease-in-out;
   }
 
   &.form--shake {
-    animation: shake var(--animation-time) ease-in-out;
+    animation: shake var(--transition-time) ease-in-out;
   }
 }
 
-@keyframes move-backward {
-  from {
+.form--show[data-position='actual'] {
+  &:not(.form__step--5) {
     transform: translateX(0);
-    opacity: 1;
   }
 
-  to {
-    transform: translateX(-125%);
-    opacity: 0;
-  }
-}
-
-@keyframes move-forward {
-  from {
-    transform: translateX(0);
-    opacity: 1;
-  }
-
-  to {
-    transform: translateX(125%);
-    opacity: 0;
+  &.form__step--5 {
+    transform: translateX(0) translateY(-50%);
   }
 }
 
@@ -324,12 +332,6 @@ input{
   }
 }
 
-@media (prefers-reduced-motion) {
-  :root {
-    --animation-time: 0;
-  }
-}
-
 /* step 1 */
 
 .form__inputs {
@@ -361,7 +363,7 @@ input{
     border-color: var(--strawberry);
   }
 
-  &.input--error .form__input:focus-visible{
+  &.input--error .form__input:focus-visible {
     outline-color: var(--strawberry);
   }
 }
@@ -372,7 +374,7 @@ input{
   font-weight: 500;
   font-size: inherit;
   color: inherit;
-  transition: border 250ms ease;
+  transition: border var(--transition-time) ease;
   border: 1px solid var(--cool-gray);
 
   &::placeholder {
@@ -386,13 +388,13 @@ input{
   max-width: max-content;
   position: relative;
 
- &::after {
-  content: '*';
-  display: none;
-  color: var(--strawberry);
-  position: absolute;
-  top: 0;
-  right: -.8rem;
+  &::after {
+    content: '*';
+    display: none;
+    color: var(--strawberry);
+    position: absolute;
+    top: 0;
+    right: -.8rem;
   }
 }
 
@@ -403,7 +405,7 @@ input{
   top: 0;
   right: 0;
   font-size: var(--fs-label);
-  transition: opacity 250ms ease-in-out;
+  transition: opacity var(--transition-time) ease-in-out;
   opacity: 0;
 }
 
@@ -460,18 +462,18 @@ input{
   padding: 1rem 1.5rem;
   border-radius: .5rem;
   font-size: inherit;
-  transition: background-color 250ms ease,
-    opacity 250ms ease;
+  transition: background-color var(--transition-time) ease,
+    opacity var(--transition-time) ease;
   margin-left: auto;
 
   &:hover,
   &.button--confirm,
-  &:focus-visible{
+  &:focus-visible {
     background-color: var(--purplish-blue);
   }
 
   &.button--confirm:hover,
-  &.button--confirm:focus-visible{
+  &.button--confirm:focus-visible {
     background-color: var(--pastel-blue);
   }
 
@@ -483,7 +485,7 @@ input{
 .form__button.back {
   font-size: inherit;
   font-weight: 500;
-  transition: color 250ms ease;
+  transition: color var(--transition-time) ease;
   color: var(--cool-gray);
   padding: 1rem 0;
 
@@ -524,7 +526,7 @@ input{
   position: relative;
   display: flex;
   align-items: center;
-  transition: background-color 250ms ease;
+  transition: background-color var(--transition-time) ease;
 
   &::after {
     content: '';
@@ -534,7 +536,7 @@ input{
     background-color: var(--white);
     left: .3rem;
     border-radius: 50%;
-    transition: left 250ms ease;
+    transition: left var(--transition-time) ease;
   }
 
   &.yearly::after {
@@ -543,7 +545,7 @@ input{
 
   &:hover,
   &:focus-visible,
-  &.yearly{
+  &.yearly {
     background-color: var(--purplish-blue);
   }
 }
@@ -551,7 +553,7 @@ input{
 .step__plan__price {
   color: var(--cool-gray);
   font-weight: 500;
-  transition: color 250ms ease;
+  transition: color var(--transition-time) ease;
 
   &.selected {
     color: inherit;
@@ -560,46 +562,47 @@ input{
 
 .form__cards {
   --card-height: 11rem;
-  --card-width: 9.5rem;
   --card-icon: 40px;
   --card-gap: 1.5rem;
   --card-extra-space: calc(var(--card-gap) / 3);
 
+  /* without the card-extra-space there will be a gap at the sides*/
+  --card-width: calc(100% / 3 - var(--card-gap) + var(--card-extra-space));
+
   display: flex;
   gap: var(--card-gap);
   min-width: 100%;
+  min-height: calc(var(--card-width) * 3);
   justify-content: center;
-
-  & .form__card {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--light-gray);
-    border-radius: .5rem;
-    padding: 1rem;
-    justify-content: space-between;
-
-    /* without the card-extra-space there will be a gap at the sides*/
-    min-width: calc(100% / 3 - var(--card-gap) + var(--card-extra-space));
-
-    cursor: pointer;
-    user-select: none;
-    min-height: var(--card-height);
-    transition: border 250ms ease,
-    background-color 250ms ease;
-
-    &.card--selected {
-      border-color: var(--purplish-blue);
-      background-color: var(--alabaster);
-    }
-
-    &:hover {
-      border-color: var(--purplish-blue);
-    }
-  }
 
   & .form__card__icon {
     width: var(--card-icon);
     height: var(--card-icon);
+  }
+}
+
+.form__card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--light-gray);
+  border-radius: .5rem;
+  padding: 1rem;
+  justify-content: space-between;
+
+  cursor: pointer;
+  user-select: none;
+  min-width: var(--card-width);
+  min-height: var(--card-height);
+  transition: border var(--transition-time) ease,
+    background-color var(--transition-time) ease;
+
+  &.card--selected {
+    border-color: var(--purplish-blue);
+    background-color: var(--alabaster);
+  }
+
+  &:hover {
+    border-color: var(--purplish-blue);
   }
 }
 
@@ -638,8 +641,6 @@ input{
 }
 
 .form__addon {
-  --check-icon: 20px;
-
   border: 1px solid var(--cool-gray);
   border-radius: .5rem;
   cursor: pointer;
@@ -647,10 +648,9 @@ input{
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.5rem;
-  transition: background-color 250ms ease,
-    border 250ms ease;
+  transition: background-color var(--transition-time) ease,
+    border var(--transition-time) ease;
   user-select: none;
-  font-size: var(--fs-small);
 
   &.addon--selected {
     background-color: var(--alabaster);
@@ -662,7 +662,7 @@ input{
     border-color: var(--purplish-blue);
   }
 
-  &:hover{
+  &:hover {
     border-color: var(--purplish-blue);
   }
 }
@@ -681,11 +681,12 @@ input{
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: var(--check-icon);
-  min-height: var(--check-icon);
+  min-width: 20px;
+  min-height: 20px;
   border: 1px solid var(--cool-gray);
   border-radius: .3rem;
-  transition: background-color 250ms ease;
+  transition: background-color var(--transition-time) ease;
+  aspect-ratio: 1 / 1;
 }
 
 .addon__text {
@@ -721,9 +722,6 @@ input{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--light-gray);
-  padding-bottom: 1.5rem;
-
 }
 
 .content-top__right {
@@ -737,7 +735,7 @@ input{
 
 .form__summary__change {
   color: var(--cool-gray);
-  transition: color 250ms ease;
+  transition: color var(--transition-time) ease;
 
   &:hover,
   &:focus {
@@ -750,6 +748,8 @@ input{
   flex-direction: column;
   gap: .8rem;
   margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--light-gray);
 }
 
 .summary__addon {
@@ -784,6 +784,33 @@ input{
 
 /* step 4 end */
 
+@media (hover: none) {
+
+  .form__button.next:hover,
+  .form__button.next.button--confirm:hover,
+  .form__button.back:hover,
+  .step__plan__button:hover,
+  .form__card:hover,
+  .form__addon:hover,
+  .form__summary__change:hover {
+    opacity: .9;
+  }
+}
+
+@media (prefers-reduced-motion) {
+  :root {
+    --transition-time: 0;
+  }
+
+  .form__right-side{
+    transition-duration: 0;
+  }
+
+  .form__step {
+    --transition-time: 0;
+  }
+}
+
 /* step 5 */
 
 .form__step--5 {
@@ -811,79 +838,81 @@ input{
 
 /* step 5 end */
 
-@media screen and (max-width: 1024px){
-  :root{
+@media screen and (max-width: 1024px) {
+  :root {
     --form-right-padding: 4rem;
   }
 }
 
 @media screen and (max-width: 950px) {
-  :root{
+  :root {
     --form-right-padding: 3rem;
   }
 }
 
 @media screen and (max-width: 900px) {
-  :root{
+  :root {
     --form-right-padding: 2rem;
-
-    --fs-small: .9rem;
-    --fs-title: 1.6rem;
+    --fs-small: .85rem;
 
     font-size: 15px;
   }
 
-  .form__cards{
+  .form__right-side {
+    --fs-title: 1.6rem;
+  }
+
+  .form__cards {
     --card-gap: 1rem;
   }
 }
 
 @media screen and (max-width: 850px) {
-  :root{
+  :root {
     --form-right-padding: 2rem;
   }
 
-  .form__right-side{
+  .form__right-side {
     min-width: 400px;
   }
 
-  .form__sidebar{
-    max-width: 220px;
+  .form__sidebar {
+    max-width: 250px;
   }
 
-  .form__cards{
+  .form__cards {
     --card-height: 10rem;
     --card-icon: 35px;
   }
 }
 
 @media screen and (max-width: 750px) {
-  .form__right-side{
+  .form__right-side {
     min-width: 380px;
   }
 
-  .card__free-months{
+  .card__free-months {
     font-size: .8rem;
   }
 }
 
 @media screen and (max-width: 700px) {
-  .form__right-side{
+  .form__right-side {
     min-width: 350px;
     max-width: 350px;
   }
 
-  .form__cards{
+  .form__cards {
     --card-gap: .5rem;
   }
 }
 
 @media screen and (max-width: 650px) {
-  :root{
+  :root {
     font-size: 15px;
   }
 
-  .form{
+  .form {
     grid-template-areas:
       "sidebar sidebar"
       "buttons buttons";
@@ -896,7 +925,7 @@ input{
     background-color: unset;
   }
 
-  .form__sidebar{
+  .form__sidebar {
     left: 50%;
     min-width: 100%;
     transform: translateX(-50%);
@@ -905,7 +934,7 @@ input{
     max-height: 200px;
   }
 
-  .form__sidebar__img{
+  .form__sidebar__img {
     width: 100%;
     max-height: 200px;
     border-radius: 0;
@@ -913,11 +942,11 @@ input{
     border-bottom-right-radius: .6rem;
   }
 
-  .form__right-side{
+  .form__right-side {
     --padding-top-bottom: 2rem;
     --padding-left-right: 2rem;
 
-    --fs-title: 1.6rem;
+    --fs-title: 1.8rem;
 
     position: absolute;
     left: 50%;
@@ -929,32 +958,33 @@ input{
     border-radius: 1rem;
     min-width: 90%;
     min-height: 450px;
+    overflow: hidden;
   }
 
-  .form__step{
+  .form__step {
     --form-step-separation: calc(var(--padding-left-right) * 2);
 
     min-width: calc(100% - var(--form-step-separation));
     max-width: calc(100% - var(--form-step-separation));
   }
 
-  .form__steps-indicators{
+  .form__steps-indicators {
     flex-direction: row;
     gap: 1rem;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
 
-    & .form__step__text{
+    & .form__step__text {
       display: none;
     }
   }
 
-  .form__addon{
+  .form__addon {
     padding: 1rem;
   }
 
-  .form__buttons{
+  .form__buttons {
     margin: 0;
     background-color: var(--white);
     box-shadow: 0 0 10px 5px var(--magnolia);
@@ -963,98 +993,115 @@ input{
     margin: 0 auto;
   }
 
-  .form__cards{
+  .form__cards {
     --card-icon: 45px;
     --card-gap: 1.5rem;
   }
 
-  .form__step--5{
+  .form__step--5 {
     top: 50%;
     transform: translateY(-50%);
 
-    & .thank-text{
+    & .thank-text {
       max-width: 80%;
     }
+  }
+
+  /* prevents overflow when the user selects 3 addons */
+  .form__right-side:has(.form--show.form__step--4) {
+    min-height: 480px;
   }
 }
 
 @media screen and (max-width: 470px) {
-  .form__right-side{
+  .form__right-side {
     --padding-left-right: 1rem;
   }
 
-  .form__buttons{
+  .form__buttons {
     padding: 1rem;
   }
 
-  .form__sidebar__img{
+  .form__sidebar__img {
     border-radius: 0;
   }
 
-  .form__description{
+  .form__description {
     margin-bottom: 1rem;
   }
 
-  .form__right-side:has(.form__step--2.form--show .step__plan__button.yearly){
+  .form__right-side:has(.form--show.form__step--2 .step__plan__button.yearly) {
     min-height: 500px;
   }
 
-  .form__step--2{
+  .form__step--2 {
     gap: 1rem;
   }
 
-  .form__cards{
+  .form__cards {
     --card-gap: 1rem;
+    --card-height: calc(100% / 3 - var(--card-gap) + var(--card-extra-space));
 
     flex-direction: column;
 
-    & .form__card{
-      --card-height: max-content;
-
+    & .form__card {
       flex-direction: row;
       justify-content: flex-start;
+      align-items: center;
       gap: 1rem;
       padding: .6rem;
 
-      min-width: 100%;
+      min-height: var(--card-height);
     }
   }
 
-  .form__input__error{
+  .form__input__error {
     display: none;
   }
 }
 
-@media screen and (max-width: 400px){
-  :root{
+@media screen and (max-width: 400px) {
+  :root {
     --fs-small: .8rem;
   }
 
-  .form__summary{
+  .form__summary {
     --fs-total: 1.2rem;
   }
 
-  .form__right-side{
+  .form__right-side {
     --fs-title: 1.6rem;
     --fs-desc: 1rem;
   }
 
-  .form__addon{
-    --check-icon: 16px;
-
+  .form__addon {
     padding: 1rem .5rem;
   }
 
-  .form__addon__left{
+  .form__addon *{
+    min-width: fit-content
+  }
+
+  .form__addon__left {
     gap: .5rem;
   }
 
-  .form__cards{
+  .form__cards {
     --card-icon: 40px;
     --card-gap: .5rem;
   }
+}
 
-  .addon__text__title{
+@media only screen and (max-width: 350px){
+  .form__summary__title{
+    font-size: .95rem;
+  }
+
+  .form__summary__plan{
+    padding: 1.5rem 1rem;
+  }
+
+  .content-top__right{
     font-size: var(--fs-small);
   }
 }
