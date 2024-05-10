@@ -80,32 +80,35 @@ function transformPrice(price, plus){
 	return `${plus ? '+' : ''}$${price}/${userInfo.yearly ? 'yr' : 'mo'}`
 }
 
-function changeActualFormStep(formStep, animationName){
+function changeActualFormStep(formStep, animationBackward){
 
-  const animation = animationName 
-    ? animationName 
-    : 'form--hide-forward'
+  const transition = animationBackward
+  ? 'left'
+  : 'right'
 
-	actualFormStep.classList.add(animation)
+  const newStep = qs(`.form__step[data-step="${formStep}"]`)
 
-  actualFormStep.addEventListener('animationend', e => {
-    const newStep = qs(`.form__step[data-step="${formStep}"]`)
+  if(!newStep) return
 
-    if(!newStep) return
+  newStep.setAttribute('data-position', 'actual')
+  newStep.classList.add('form--slow-transition')
 
-    const indicatorStep = newStep.dataset.step
+	actualFormStep.setAttribute('data-position', transition)
 
-    for (const [key, step] of d.querySelectorAll('.form__step').entries()){
-      if(step === newStep) continue
-
-      step.classList.remove('form--show', animation)
-      step.setAttribute('aria-hidden', 'true')
-    }
+  actualFormStep.addEventListener('transitionend', e => {
 
     newStep.classList.add('form--show')
     newStep.removeAttribute('aria-hidden')
+    newStep.classList.remove('form--slow-transition')
 
-    updateIndicator(indicatorStep)
+    for (const [key, step] of d.querySelectorAll('.form__step').entries()){
+      if(step === newStep || step.getAttribute('aria-hidden') || !step.classList.contains('form--show')) continue
+
+      step.setAttribute('aria-hidden', 'true')
+      step.classList.remove('form--show')
+    }
+
+    updateIndicator(newStep.dataset.step)
     updateTitleAndDesc(formStep.toString())
 
     actualFormStep = newStep
@@ -314,7 +317,7 @@ function handleFormStepErrorAnimation(formStep){
 }
 
 function handleFormStepSubmit({formStep, formStepAnimation, nextBtnValue, blur = true}){
-	changeActualFormStep(formStep, formStepAnimation,)
+	changeActualFormStep(formStep, formStepAnimation)
 	updateNextButton(nextBtnValue)
 
   if(blur){
@@ -336,9 +339,11 @@ const stepSubmitValidationFunctions = {
         }
       }
 
-      userInfo.name = form.name.value.trim()
-      userInfo.email = form.email.value.trim()
-      userInfo.phone = form.phone.value.trim()
+      if(validInputs){
+        userInfo.name = form.name.value.trim()
+        userInfo.email = form.email.value.trim()
+        userInfo.phone = form.phone.value.trim()
+      }
       
       return validInputs
     }
@@ -399,14 +404,18 @@ d.addEventListener('DOMContentLoaded', e => {
     if(e.target === backBtn)
       handleFormStepSubmit({
         formStep: (actualFormStep.dataset.step - 1).toString(),
-        formStepAnimation: 'form--hide-backward'})
+        formStepAnimation: true})
 
 		if(e.target === cardBtn) updateCardBtn()
 
 		if(e.target === changePlan){
+      // this prevents the 3rd formStep from coming from the right after 
+      // clicking on the nextBtn after having changed the plan.
+      actualFormStep.previousElementSibling.setAttribute('data-position', 'left')
+
       handleFormStepSubmit({
         formStep: '2',
-        formStepAnimation: 'form--hide-backward',
+        formStepAnimation: true,
         blur: false})
 
       d.querySelector('.form__card.card--selected').focus()
