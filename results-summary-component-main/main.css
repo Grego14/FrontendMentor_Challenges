@@ -304,7 +304,7 @@ button {
     grid-template-areas:
       "result summary";
     grid-template-columns: 1fr 1fr;
-    min-width: 80%;
+    min-width: 45rem;
     max-height: 80%;
     background-color: var(--white);
     box-shadow: 0 0 1rem var(--pale-blue);
