@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+  <link rel='stylesheet' href='./styles.css' type='text/css' />
+  <title>Frontend Mentor | Rock, Paper, Scissors</title>
+
+
+  <!--You Picked-->
+  <!--The House Picked-->
+
+  <!--You Win-->
+  <!--You Lose-->
+
+  <!--Play Again-->
+</head>
+
+<body>
+  <main class='main'>
+    <section class='game'>
+      <header class='game__header'>
+        <h1 aria-describedby='game-image'>
+          <img class='game__image' src='./assets/images/logo.svg' alt='Rock, Paper, Scissors' width='150' height='100'
+            data-gameimage='rps' id='game-image' />
+        </h1>
+        <div class='game__score'>
+          <span class='game__score__text'>score</span>
+          <span class='game__score__value' id='game-score'>12</span>
+        </div>
+      </header>
+      <div class='game__content'>
+        <img class='game__background' src='./assets/images/bg-triangle.svg' width='250' height='200'
+          data-background='rps' aria-hidden='true'/>
+        <template id='game-template'>
+          <div class='game__option' data-gradient=''>
+            <div class='game__option__background'>
+              <img class='game__option__image' id='image' />
+            </div>
+          </div>
+        </template>
+      </div>
+      <button class='game__rules game__button'>rules</button>
+      <div class='game__rules-overlay'>
+        <h2 class='rules__title'>Rules</h2>
+        <img class='rules__image' src='./assets/images/image-rules.svg' alt='paper beats rock, rock beats scissors, scissors beats paper' width='300' height='200'/>
+        <button class='rules__button' aria-label='close rules'>
+          <img clas='rules__button__image' src='./assets/images/icon-close.svg' alt='close rules' aria-hidden='true'/>
+        </button>
+      </div>
+    </section>
+  </main>
+  <script src='./script.js'></script>
+</body>
+</html>

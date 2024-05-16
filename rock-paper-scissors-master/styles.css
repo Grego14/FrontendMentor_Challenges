@@ -1,0 +1,204 @@
+@font-face{
+  font-family: 'Barlow Semi Condensed';
+  src: local('Barlow Semi Condensed'),
+    url('./assets/fonts/BarlowSemiCondensed-SemiBold.woff2') format('woff2'),
+    url('./assets/fonts/BarlowSemiCondensed-SemiBold.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+}
+
+@font-face{
+  font-family: 'Barlow Semi Condensed';
+  src: local('Barlow Semi Condensed'),
+    url('./assets/fonts/BarlowSemiCondensed-Bold.woff2') format('woff2'),
+    url('./assets/fonts/BarlowSemiCondensed-Bold.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  font-weight: bold;
+}
+
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-size: inherit;
+  font-family: inherit;
+}
+
+:root{
+  --scissors-gradient-from: hsl(39, 89%, 49%);
+  --scissors-gradient-to: hsl(40, 84%, 53%);
+
+  --paper-gradient-from: hsl(230, 89%, 62%);
+  --paper-gradient-to: hsl(230, 89%, 65%);
+
+  --rock-gradient-from: hsl(349, 71%, 52%);
+  --rock-gradient-to: hsl(349, 70%, 56%);
+  
+  --lizard-gradient-from: hsl(261, 73%, 60%);
+  --lizard-gradient-to: hsl(261, 72%, 63%);
+
+  --cyan-from: hsl(189, 59%, 53%);
+  --cyan-to: hsl(189, 58%, 57%);
+
+  --dark-text-color: hsl(229, 25%, 31%);
+  --score-text-color: hsl(229, 64%, 46%);
+  --header-outline-color: hsl(217, 16%, 45%);
+
+  --radial-gradient-from: hsl(214, 47%, 23%);
+  --radial-gradient-to: hsl(237, 49%, 15%);
+
+  font-family: 'Barlow Semi Condensed', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.5;
+  font-size: 16px;
+  text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+body{
+  background-color: #eee;
+  background-color: var(--radial-gradient-from);
+  background-image: radial-gradient(var(--radial-gradient-from), var(--radial-gradient-to));
+  background-image: -webkit-radial-gradient(var(--radial-gradient-from), var(--radial-gradient-to));
+  background-image: -moz-radial-gradient(var(--radial-gradient-from), var(--radial-gradient-to));
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button{
+  appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.main{
+  min-height: 100lvh;
+}
+
+.game{
+  display: grid;
+  grid-template-areas:
+    "score"
+    "content"
+    "rules";
+  grid-template-rows: max-content 30rem max-content;
+  min-height: 100lvh;
+  color: var(--dark-text-color);
+}
+
+.game > *{
+  margin: 2rem;
+}
+
+.game__header{
+  border: 4px solid var(--header-outline-color);
+  border-radius: .5rem;
+  display: flex;
+  justify-content: space-between;
+  grid-area: score;
+}
+
+.game__image{
+  min-width: 9rem;
+  padding: 1.5rem;
+}
+
+.game__score{
+  --score-size: 5rem;
+  --score-margin: 1rem;
+  --fs-score-text: .8rem;
+  --fs-score-value: 2.5rem;
+
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: .3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  margin: var(--score-margin);
+  height: var(--score-size);
+  width: var(--score-size);
+}
+
+.game__score__text{
+  font-size: var(--fs-score-text);
+  text-transform: uppercase;
+  color: var(--score-text-color);
+  letter-spacing: .05rem;
+}
+
+.game__score__value{
+  font-size: var(--fs-score-value);
+  font-weight: bold;
+}
+
+.game__content{
+  position: relative;
+  grid-area: content;
+}
+
+.game__background{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.game__rules{
+  grid-area: rules;
+  text-transform: uppercase;
+  letter-spacing: .1rem;
+  color: white;
+  max-width: max-content;
+  margin: 0 auto;
+  border: 1px solid white;
+  padding: .8rem 3rem;
+  border-radius: .5rem;
+}
+
+.game__rules-overlay{
+  --fs-rules-text: 2rem;
+
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background-color: white;
+  text-align: center;
+  min-height: 100lvh;
+  min-width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: none;
+
+  &.game__rules--show{
+    display: initial
+  }
+}
+
+.rules__title{
+  font-size: var(--fs-rules-text);
+  text-transform: uppercase;
+  position: absolute;
+  top: 10%;
+}
+
+.rules__image{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.rules__button{
+  position: absolute;
+  bottom: 10%;
+}
