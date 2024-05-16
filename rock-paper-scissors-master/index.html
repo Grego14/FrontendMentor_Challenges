@@ -31,9 +31,9 @@
           <span class='game__score__value' id='game-score'>12</span>
         </div>
       </header>
-      <div class='game__content'>
+      <div class='game__content' id='game-content'>
         <img class='game__background' src='./assets/images/bg-triangle.svg' width='250' height='200'
-          data-background='rps' aria-hidden='true'/>
+          id='game-background' aria-hidden='true' />
         <template id='game-template'>
           <div class='game__option' data-gradient=''>
             <div class='game__option__background'>
@@ -42,16 +42,18 @@
           </div>
         </template>
       </div>
-      <button class='game__rules game__button'>rules</button>
-      <div class='game__rules-overlay'>
+      <button class='game__rules game__button' id='game-rules'>rules</button>
+      <div class='game__rules-overlay' id='game-rules-overlay'>
         <h2 class='rules__title'>Rules</h2>
-        <img class='rules__image' src='./assets/images/image-rules.svg' alt='paper beats rock, rock beats scissors, scissors beats paper' width='300' height='200'/>
-        <button class='rules__button' aria-label='close rules'>
-          <img clas='rules__button__image' src='./assets/images/icon-close.svg' alt='close rules' aria-hidden='true'/>
+        <img class='rules__image' src='./assets/images/image-rules.svg'
+          alt='paper beats rock, rock beats scissors, scissors beats paper' width='300' height='200' id='rules-text'/>
+        <button class='rules__button' aria-label='close rules' id='close-rules'>
+          <img clas='rules__button__image' src='./assets/images/icon-close.svg' alt='close rules' aria-hidden='true' />
         </button>
       </div>
     </section>
   </main>
   <script src='./script.js'></script>
 </body>
+
 </html>
