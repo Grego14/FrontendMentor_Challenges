@@ -1,4 +1,4 @@
-@font-face{
+@font-face {
   font-family: 'Barlow Semi Condensed';
   src: local('Barlow Semi Condensed'),
     url('./assets/fonts/BarlowSemiCondensed-SemiBold.woff2') format('woff2'),
@@ -8,7 +8,7 @@
   font-weight: 600;
 }
 
-@font-face{
+@font-face {
   font-family: 'Barlow Semi Condensed';
   src: local('Barlow Semi Condensed'),
     url('./assets/fonts/BarlowSemiCondensed-Bold.woff2') format('woff2'),
@@ -18,7 +18,7 @@
   font-weight: bold;
 }
 
-*{
+* {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -26,21 +26,21 @@
   font-family: inherit;
 }
 
-:root{
-  --scissors-gradient-from: hsl(39, 89%, 49%);
-  --scissors-gradient-to: hsl(40, 84%, 53%);
+:root {
+  --scissors-gradient-from: hsl(40, 84%, 53%);
+  --scissors-gradient-to: hsl(39, 89%, 49%);
 
-  --paper-gradient-from: hsl(230, 89%, 62%);
-  --paper-gradient-to: hsl(230, 89%, 65%);
+  --paper-gradient-from: hsl(230, 89%, 65%);
+  --paper-gradient-to: hsl(230, 89%, 62%);
 
-  --rock-gradient-from: hsl(349, 71%, 52%);
-  --rock-gradient-to: hsl(349, 70%, 56%);
-  
-  --lizard-gradient-from: hsl(261, 73%, 60%);
-  --lizard-gradient-to: hsl(261, 72%, 63%);
+  --rock-gradient-from: hsl(349, 70%, 56%);
+  --rock-gradient-to: hsl(349, 71%, 52%);
 
-  --cyan-from: hsl(189, 59%, 53%);
-  --cyan-to: hsl(189, 58%, 57%);
+  --lizard-gradient-from: hsl(261, 72%, 63%);
+  --lizard-gradient-to: hsl(261, 73%, 60%);
+
+  --spock-gradient-from: hsl(189, 58%, 57%);
+  --spock-gradient-to: hsl(189, 59%, 53%);
 
   --dark-text-color: hsl(229, 25%, 31%);
   --score-text-color: hsl(229, 64%, 46%);
@@ -57,7 +57,7 @@
   -webkit-font-smoothing: antialiased;
 }
 
-body{
+body {
   background-color: #eee;
   background-color: var(--radial-gradient-from);
   background-image: radial-gradient(var(--radial-gradient-from), var(--radial-gradient-to));
@@ -71,22 +71,22 @@ img {
   display: block;
 }
 
-button{
+button {
   appearance: none;
   background: none;
   border: none;
   cursor: pointer;
 }
 
-[aria-hidden='true']{
+[aria-hidden='true'] {
   pointer-events: none;
 }
 
-.main{
+.main {
   min-height: 100lvh;
 }
 
-.game{
+.game {
   --background-image-height: 13.75rem;
   --background-image-width: 15.625rem;
 
@@ -94,17 +94,17 @@ button{
   grid-template-areas:
     "score"
     "content"
-    "rules";
+    "rulesBtn";
   grid-template-rows: max-content 30rem max-content;
   min-height: 100lvh;
   color: var(--dark-text-color);
 }
 
-.game > *{
+.game>* {
   margin: 2rem;
 }
 
-.game__header{
+.game__header {
   border: 4px solid var(--header-outline-color);
   border-radius: .5rem;
   display: flex;
@@ -112,12 +112,19 @@ button{
   grid-area: score;
 }
 
-.game__image{
-  min-width: 9rem;
+.game__image {
+  min-width: 7rem;
+  max-width: 10rem;
   padding: 1.5rem;
+  opacity: 0;
+  transition: opacity 250ms ease-in;
+
+  &.game__image--loaded {
+    opacity: 1;
+  }
 }
 
-.game__score{
+.game__score {
   --score-size: 5rem;
   --score-margin: 1rem;
   --fs-score-text: .8rem;
@@ -136,32 +143,32 @@ button{
   width: var(--score-size);
 }
 
-.game__score__text{
+.game__score__text {
   font-size: var(--fs-score-text);
   text-transform: uppercase;
   color: var(--score-text-color);
   letter-spacing: .05rem;
 }
 
-.game__score__value{
+.game__score__value {
   font-size: var(--fs-score-value);
   font-weight: bold;
 }
 
-.game__content{
+.game__content {
   grid-area: content;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.game__options{
+.game__options {
   position: relative;
   min-height: var(--background-image-height);
   min-width: var(--background-image-width);
 }
 
-.game__option{
+.game__option {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -172,31 +179,160 @@ button{
   transition: scale 250ms, opacity 250ms;
   opacity: 0;
   scale: 0.5;
+  transition-delay: initial;
+  z-index: 2;
 
-  &.game__option--show{
+  &.game__option--show {
     opacity: 1;
     scale: 1;
   }
 
-  &.game__option--hide{
+  &.game__option--hide {
     visibility: hidden;
     pointer-events: none;
   }
-  
-  &.game__option--show.game__option--selected{
+
+  &.game__option--selected,
+  &.game__option--house {
+    pointer-events: none;
+  }
+
+  &.game__option--rock {
+    background-image: linear-gradient(var(--rock-gradient-from), var(--rock-gradient-to));
+  }
+
+  &.game__option--paper {
+    background-image: linear-gradient(var(--paper-gradient-from), var(--paper-gradient-to));
+  }
+
+  &.game__option--scissors {
+    background-image: linear-gradient(var(--scissors-gradient-from), var(--scissors-gradient-to));
+  }
+
+  &.game__option--lizard {
+    background-image: linear-gradient(var(--lizard-gradient-from), var(--lizard-gradient-to));
+  }
+
+  &.game__option--spock {
+    background-image: linear-gradient(var(--spock-gradient-from), var(--spock-gradient-to));
+  }
+
+  &.game__option--selected {
     transition: transform 250ms;
-    transform: translateX(-15%);
+    transform: translate(-25%, -40%);
+  }
+
+  &.game__option--house {
+    transition: opacity 500ms ease-in;
+    transform: translate(115%, -40%);
   }
 }
 
-@media (any-hover: hover){
-  .game__option:hover{
-    cursor: pointer;
-    scale: 1.05;
+.game__option--house::after,
+.game__option--selected::after{
+  color: white;
+  bottom: -40%;
+  font-size: 1rem;
+  text-wrap: nowrap;
+  font-weight: bold;
+  position: absolute;
+  text-transform: uppercase;
+  letter-spacing: .1rem;
+}
+
+.game__option--selected::after{
+  content: 'you picked';
+}
+
+.game__option--house::after{
+  content: 'the house picked';
+  right: 0;
+}
+
+.game:not(.game__content--rpsls) .game__option {
+  &.game__option--rock {
+    transform: translate(50%, 90%);
+
+    &.game__option--start:not(.game__option--house, .game__option--selected) {
+      transition-delay: 500ms;
+    }
+  }
+
+  &.game__option--paper {
+    transform: translate(-30%, -40%);
+  }
+
+  &.game__option--scissors {
+    transform: translate(120%, -40%);
+
+    &.game__option--start:not(.game__option--house, .game__option--selected) {
+      transition-delay: 250ms;
+    }
   }
 }
 
-.game__option__background{
+.game__content--rpsls .game__option--rock:not(.game__option--selected, .game__option--house) {
+  transform: translate(150%, 170%);
+
+  &.game__option--start:not(.game__option--house, .game__option--selected) {
+    transition-delay: 500ms;
+  }
+}
+
+.game__content--rpsls .game__option--paper:not(.game__option--selected, .game__option--house) {
+  transform: translate(200%, 30%);
+
+  &.game__option--start:not(.game__option--house, .game__option--selected) {
+    transition-delay: 250ms;
+  }
+}
+
+.game__content--rpsls .game__option--scissors:not(.game__option--selected, .game__option--house) {
+  transform: translate(85%, -40%);
+
+  &.game__option--start:not(.game__option--house, .game__option--selected) {
+    transition-delay: 0ms;
+  }
+}
+
+.game__content--rpsls .game__option--lizard:not(.game__option--selected, .game__option--house) {
+  transform: translate(-40%, 30%);
+
+  &.game__option--start:not(.game__option--house, .game__option--selected) {
+    transition-delay: 1s;
+  }
+}
+
+.game__content--rpsls .game__option--spock:not(.game__option--selected, .game__option--house) {
+  transform: translate(5%, 170%);
+
+  &.game__option--start:not(.game__option--house, .game__option--selected) {
+    transition-delay: 750ms;
+  }
+}
+
+.game__content--rpsls {
+  & .game__option:not(.game__option--selected, .game__option--house) {
+    min-width: 6rem;
+    min-height: 6rem;
+  }
+
+  & .game__image {
+    max-width: 8rem;
+  }
+
+  & .game__option:not(.game__option--selected, .game__option--house) .game__option__image {
+    width: 2.5rem;
+    height: 2.8rem;
+  }
+
+  & .game__option:not(.game__option--selected, .game__option--house) .game__option__background {
+    min-height: 4.5rem;
+    min-width: 4.5rem;
+  }
+}
+
+.game__option__background {
   background-color: white;
   min-width: 6.25rem;
   min-height: 6.25rem;
@@ -207,47 +343,52 @@ button{
   pointer-events: none;
 }
 
-.game__option__image{
-  transition: opacity 1s ease;
+.game__option__image {
+  transition: opacity 750ms ease-in, width 250ms ease-in, height 250ms ease-in;
   opacity: 0;
 
-  &.image--show{
+  &.image--show {
     opacity: 1;
   }
 }
 
-:nth-child(1 of .game__option){
-  transform: translate(-30%, -40%);
-  background-image: linear-gradient(var(--paper-gradient-to), var(--paper-gradient-from));
+.game__option--house-selecting {
+  position: absolute;
+  background-color: var(--radial-gradient-to);
+  min-width: 6.25rem;
+  min-height: 6.25rem;
+  border-radius: 50%;
+  z-index: 1;
+  transform: translate(115%, -40%);
+  right: 42%;
 }
 
-:nth-child(2 of .game__option){
-  transform: translate(120%, -40%);
-  background-image: linear-gradient(var(--scissors-gradient-to), var(--scissors-gradient-from));
+@media (any-hover: hover) {
+  .game__option:hover {
+    cursor: pointer;
+    scale: 1.05;
+  }
 }
 
-:nth-child(3 of .game__option){
-  transform: translate(50%, 90%);
-  background-image: linear-gradient(var(--rock-gradient-to), var(--rock-gradient-from));
-}
-
-/*.game__content--rpsls{*/
-
-/*}*/
-
-.game__background{
+.game__background {
   position: absolute;
   left: 50%;
   transform: translate(-50%);
   max-height: var(--background-image-height);
+  opacity: 0;
+  transition: opacity 250ms ease-in;
 
-  &.game__background--hide{
+  &.game__background--hide {
     visibility: hidden;
+  }
+
+  &.game__background--show {
+    opacity: 1;
   }
 }
 
-.game__rules{
-  grid-area: rules;
+.game__rules-btn {
+  grid-area: rulesBtn;
   text-transform: uppercase;
   letter-spacing: .1rem;
   color: white;
@@ -258,40 +399,44 @@ button{
   border-radius: .5rem;
 }
 
-.game__rules-overlay{
+.game__rules-overlay {
   --fs-rules-text: 2rem;
 
+  display: flex;
+  align-items: center;
+  flex-direction: column;
   background-color: white;
   text-align: center;
   min-height: 100lvh;
   min-width: 100vw;
   position: fixed;
+  transition: opacity 250ms ease-in;
   top: 0;
   left: 0;
-  display: none;
   margin: 0;
+  z-index: -1;
+  opacity: 0;
 
-  &.game__rules--show{
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+  &.game__rules--show {
+    opacity: 1;
+    z-index: 3;
   }
 }
 
-.rules__title{
+.rules__title {
   font-size: var(--fs-rules-text);
   text-transform: uppercase;
   position: absolute;
   top: 10%;
 }
 
-.rules__image{
+.rules__image {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
 }
 
-.rules__button{
+.rules__button {
   position: absolute;
   bottom: 10%;
 }
