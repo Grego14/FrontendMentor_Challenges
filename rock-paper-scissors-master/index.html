@@ -32,21 +32,23 @@
         </div>
       </header>
       <div class='game__content' id='game-content'>
-        <img class='game__background' src='./assets/images/bg-triangle.svg' width='250' height='200'
-          id='game-background' aria-hidden='true' />
-        <template id='game-template'>
-          <div class='game__option' data-gradient=''>
-            <div class='game__option__background'>
-              <img class='game__option__image' id='image' />
+        <div class='game__options' id='game-options'>
+          <img class='game__background' src='./assets/images/bg-triangle.svg' width='250' height='200'
+            id='game-background' aria-hidden='true' />
+          <template id='game-template'>
+            <div class='game__option' data-gradient='' tabindex='0' id='name'>
+              <div class='game__option__background'>
+                <img class='game__option__image' id='image' aria-hidden='true' width='50' height='50' />
+              </div>
             </div>
-          </div>
-        </template>
+          </template>
+        </div>
       </div>
       <button class='game__rules game__button' id='game-rules'>rules</button>
       <div class='game__rules-overlay' id='game-rules-overlay'>
         <h2 class='rules__title'>Rules</h2>
         <img class='rules__image' src='./assets/images/image-rules.svg'
-          alt='paper beats rock, rock beats scissors, scissors beats paper' width='300' height='200' id='rules-text'/>
+          alt='paper beats rock, rock beats scissors, scissors beats paper' width='300' height='200' id='rules-text' />
         <button class='rules__button' aria-label='close rules' id='close-rules'>
           <img clas='rules__button__image' src='./assets/images/icon-close.svg' alt='close rules' aria-hidden='true' />
         </button>
