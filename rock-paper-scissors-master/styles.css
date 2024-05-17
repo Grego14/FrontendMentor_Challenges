@@ -87,6 +87,9 @@ button{
 }
 
 .game{
+  --background-image-height: 13.75rem;
+  --background-image-width: 15.625rem;
+
   display: grid;
   grid-template-areas:
     "score"
@@ -146,15 +149,101 @@ button{
 }
 
 .game__content{
-  position: relative;
   grid-area: content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+.game__options{
+  position: relative;
+  min-height: var(--background-image-height);
+  min-width: var(--background-image-width);
+}
+
+.game__option{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  border-radius: 50%;
+  min-width: 8rem;
+  min-height: 8rem;
+  transition: scale 250ms, opacity 250ms;
+  opacity: 0;
+  scale: 0.5;
+
+  &.game__option--show{
+    opacity: 1;
+    scale: 1;
+  }
+
+  &.game__option--hide{
+    visibility: hidden;
+    pointer-events: none;
+  }
+  
+  &.game__option--show.game__option--selected{
+    transition: transform 250ms;
+    transform: translateX(-15%);
+  }
+}
+
+@media (any-hover: hover){
+  .game__option:hover{
+    cursor: pointer;
+    scale: 1.05;
+  }
+}
+
+.game__option__background{
+  background-color: white;
+  min-width: 6.25rem;
+  min-height: 6.25rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.game__option__image{
+  transition: opacity 1s ease;
+  opacity: 0;
+
+  &.image--show{
+    opacity: 1;
+  }
+}
+
+:nth-child(1 of .game__option){
+  transform: translate(-30%, -40%);
+  background-image: linear-gradient(var(--paper-gradient-to), var(--paper-gradient-from));
+}
+
+:nth-child(2 of .game__option){
+  transform: translate(120%, -40%);
+  background-image: linear-gradient(var(--scissors-gradient-to), var(--scissors-gradient-from));
+}
+
+:nth-child(3 of .game__option){
+  transform: translate(50%, 90%);
+  background-image: linear-gradient(var(--rock-gradient-to), var(--rock-gradient-from));
+}
+
+/*.game__content--rpsls{*/
+
+/*}*/
 
 .game__background{
   position: absolute;
-  top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%);
+  max-height: var(--background-image-height);
+
+  &.game__background--hide{
+    visibility: hidden;
+  }
 }
 
 .game__rules{
