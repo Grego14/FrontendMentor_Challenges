@@ -8,7 +8,6 @@
   <link rel='stylesheet' href='./styles.css' type='text/css' />
   <title>Frontend Mentor | Rock, Paper, Scissors</title>
 
-
   <!--You Picked-->
   <!--The House Picked-->
 
@@ -20,11 +19,10 @@
 
 <body>
   <main class='main'>
-    <section class='game'>
+    <section class='game' id='game'>
       <header class='game__header'>
         <h1 aria-describedby='game-image'>
-          <img class='game__image' src='./assets/images/logo.svg' alt='Rock, Paper, Scissors' width='150' height='100'
-            data-gameimage='rps' id='game-image' />
+          <img class='game__image' src='' alt='Rock, Paper, Scissors' width='150' height='100' id='game-image' />
         </h1>
         <div class='game__score'>
           <span class='game__score__text'>score</span>
@@ -33,18 +31,18 @@
       </header>
       <div class='game__content' id='game-content'>
         <div class='game__options' id='game-options'>
-          <img class='game__background' src='./assets/images/bg-triangle.svg' width='250' height='200'
+          <img class='game__background' src='' width='250' height='200'
             id='game-background' aria-hidden='true' />
           <template id='game-template'>
-            <div class='game__option' data-gradient='' tabindex='0' id='name'>
+            <div class='game__option' tabindex='0' id='name'>
               <div class='game__option__background'>
-                <img class='game__option__image' id='image' aria-hidden='true' width='50' height='50' />
+                <img class='game__option__image' src='' id='image' aria-hidden='true' width='50' height='50'/>
               </div>
             </div>
           </template>
         </div>
       </div>
-      <button class='game__rules game__button' id='game-rules'>rules</button>
+      <button class='game__rules-btn game__button' id='game-rules'>rules</button>
       <div class='game__rules-overlay' id='game-rules-overlay'>
         <h2 class='rules__title'>Rules</h2>
         <img class='rules__image' src='./assets/images/image-rules.svg'
