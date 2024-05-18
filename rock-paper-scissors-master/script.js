@@ -7,15 +7,17 @@ d.addEventListener('DOMContentLoaded', async e => {
   const gameElement = d.getElementById('game')
   const template = d.getElementById('game-template').content
   const fragment = d.createDocumentFragment()
-  let score = storage.getItem('score') || 12
+  const sounds = {
+    lose: new Audio(),
+    win: new Audio()
+  }
 
-  const gameImageElement = d.getElementById('game-image')
-  const gameImageAlt = storage.getItem('game-mode') === 'rps'
-    ? 'Rock, paper, scissors'
-    : 'Rock, paper, scissors, lizard, spock'
+  if(!storage.getItem('game-mode')) storage.setItem('game-mode', 'rps') 
+  if(!storage.getItem('score')) storage.setItem('score', 12) 
 
-  // the orden of each option is important
-  // as we are using nth-child to position them;
+  let score = storage.getItem('score')
+  const gameMode = storage.getItem('game-mode')
+
   const options = new Map([
     ['paper', {name: 'paper', image: './assets/images/icon-paper.svg', gradient: 'game__option--paper'}],
     ['scissors', {name: 'scissors', image: './assets/images/icon-scissors.svg', gradient: 'game__option--scissors'}],
@@ -23,8 +25,13 @@ d.addEventListener('DOMContentLoaded', async e => {
   ])
 
   const images = {
-    triangle: {main: './assets/images/bg-triangle.svg', rules: './assets/images/image-rules.svg', title: './assets/images/logo.svg'},
-    pentagon: {main: './assets/images/bg-pentagon.svg', rules: './assets/images/image-rules-bonus.svg', title: './assets/images/logo-bonus.svg'}
+    rps: {main: './assets/images/bg-triangle.svg', rules: './assets/images/image-rules.svg', title: './assets/images/logo.svg'},
+    rpsls: {main: './assets/images/bg-pentagon.svg', rules: './assets/images/image-rules-bonus.svg', title: './assets/images/logo-bonus.svg'}
+  }
+
+  const soundsUrls = {
+    win: './assets/sounds/win-sound.mp3',
+    lose: './assets/sounds/lose-sound.mp3'
   }
 
   const rules = {
@@ -33,50 +40,65 @@ d.addEventListener('DOMContentLoaded', async e => {
     scissors beats lizard, lizard beats paper, paper beats spock, spock beats rock, rock beats scissors`
   }
 
-  if(!storage.getItem('game-mode')) storage.setItem('game-mode', 'rps') 
-  if(!storage.getItem('score')) storage.setItem('score', score) 
+  const gameImageElement = d.getElementById('game-image')
+  const gameImageAlt = gameMode === 'rps' 
+    ? 'Rock, paper, scissors'
+    : 'Rock, paper, scissors, lizard, spock'
+  const gameImageUrl = images[gameMode].title
 
-  const gameImageUrl = storage.getItem('game-mode') === 'rps'
-    ? images.triangle.title
-    : images.pentagon.title
-
-  gameImageElement.src = await fetch(gameImageUrl).then(res => res.url)
-  gameImageElement.setAttribute('alt', gameImageAlt)
-
-  gameImageElement.addEventListener('load', e => {
+  preloadSource(gameImageUrl, gameImageElement, (src) =>{
     gameImageElement.classList.add('game__image--loaded')
-  }, {once: true})
+    gameImageElement.setAttribute('alt', gameImageAlt)
+  })
 
   const gameBackgroundElement = d.getElementById('game-background')
   const rulesText = d.getElementById('rules-text')
   const gameContent = d.getElementById('game-content')
 
-  const backgroundImageUrl = storage.getItem('game-mode') === 'rps'
-  ? images.triangle.main
-  : images.pentagon.main
+  const backgroundImageUrl = images[gameMode].main
 
-  gameBackgroundElement.src = await fetch(backgroundImageUrl).then(res => res.url)
+  preloadSource(soundsUrls.win, sounds.win, (src) =>{
+    sounds.win.src = src
+  })
 
-  gameBackgroundElement.addEventListener('load', e => {
-    gameBackgroundElement.classList.add('game__background--show')
-  }, {once: true})
+  preloadSource(soundsUrls.lose, sounds.lose, (src) =>{
+    sounds.lose.src = src
+  })
 
-  if(storage.getItem('game-mode') === 'rps'){
+  function preloadSource(url, source, callback){
+    source.src = url
 
-    rulesText.setAttribute('alt', rules.rps)
-    rulesText.setAttribute('src', images.triangle.rules)
-
-  }else if(storage.getItem('game-mode') === 'rpsls'){
-
-    rulesText.setAttribute('alt', rules.rpsls)
-    rulesText.setAttribute('src', images.pentagon.rules)
-    gameElement.classList.add('game__content--rpsls')
-
-    options.set('lizard', {name: 'lizard', image: './assets/images/icon-lizard.svg', gradient: 'game__option--lizard'})
-    options.set('spock', {name: 'spock', image: './assets/images/icon-spock.svg', gradient: 'game__option--spock'})
+    source.addEventListener('load', () =>{
+      callback(source.src)
+    }, {once: true})
   }
 
-  function createOption({name, image, label, gradient, customClass, customAnimation}){
+  preloadSource(backgroundImageUrl, gameBackgroundElement, (src) =>{
+    gameBackgroundElement.classList.add('game__background--show')
+  })
+
+  rulesText.setAttribute('alt', rules[gameMode])
+  rulesText.setAttribute('src', images[gameMode].rules)
+
+  if(gameMode === 'rpsls') {
+    gameElement.classList.add('game__content--rpsls')
+
+    // reorganize the options, and their tabindexes.
+    options.clear()
+
+    options.set('scissors', {name: 'scissors', image: './assets/images/icon-scissors.svg', gradient: 'game__option--scissors'})
+    options.set('paper', {name: 'paper', image: './assets/images/icon-paper.svg', gradient: 'game__option--paper'})
+    options.set('rock' ,{name: 'rock', image: './assets/images/icon-rock.svg', gradient: 'game__option--rock'})
+    options.set('spock', {name: 'spock', image: './assets/images/icon-spock.svg', gradient: 'game__option--spock'})
+    options.set('lizard', {name: 'lizard', image: './assets/images/icon-lizard.svg', gradient: 'game__option--lizard'})
+  }
+
+  const gameResult = d.getElementById('game-result')
+  const gameResultText = d.getElementById('game-result-text')
+  const gameScore = d.getElementById('game-score')
+  setScore(score)
+
+  function createOption({name, image, label, gradient, customClass}){
     const clone = template.cloneNode(true)
     const cloneImg = clone.getElementById('image')
     const cloneOption = clone.getElementById('name')
@@ -85,24 +107,16 @@ d.addEventListener('DOMContentLoaded', async e => {
     cloneOption.removeAttribute('id')
 
     cloneOption.classList.add(gradient)
+    cloneOption.setAttribute('data-option', name)
 
     if(customClass) cloneOption.classList.add(customClass)
-    if(customAnimation) {
-
-      cloneOption.classList.add(customAnimation)
-
-      cloneOption.addEventListener('animationend', e => {
-        cloneOption.classList.add('game__option--show', 'game__option--start')
-
-        cloneOption.classList.remove(customAnimation)
-      }, {once: true})
-    }
 
     setTimeout(() => {
       cloneOption.classList.add('game__option--show', 'game__option--start')
     }, 500);
 
     cloneOption.addEventListener('transitionend', e => {
+      cloneOption.classList.remove('game__option--start')
       cloneImg.classList.add('image--show')
     }, {once: true})
 
@@ -130,7 +144,23 @@ d.addEventListener('DOMContentLoaded', async e => {
   const closeRulesBtn = d.getElementById('close-rules')
   const gameRulesOverlay = d.getElementById('game-rules-overlay')
 
-  function handleRulesBtnClick(e){ gameRulesOverlay.classList.toggle('game__rules--show') }
+  function handleRulesBtnClick(e){ 
+    gameRulesOverlay.classList.toggle('game__rules--show') 
+    gameRulesOverlay.setAttribute('aria-hidden', gameRulesOverlay.getAttribute('aria-hidden') === 'true' ? 'false' : 'true') 
+  }
+
+  function handleOptionsText(){
+    const textElement = d.getElementById('options-text')
+
+    textElement.classList.add('options__text--show')
+    textElement.setAttribute('aria-hidden', textElement.getAttribute('aria-hidden') === 'true' ? 'false' : 'true')
+  }
+
+  const playAgainBtn = d.getElementById('button-play')
+  const modeBtn = d.getElementById('button-mode')
+
+  modeBtn.textContent = gameMode === 'rps' ? 'Lizard + Spock' : 'Normal mode'
+  modeBtn.dataset.mode = gameMode === 'rps' ? 'rpsls' : 'rps'
 
   function handleOptionsOnClick(clickedOption){
     const domOptions = d.querySelectorAll('.game__option')
@@ -138,6 +168,7 @@ d.addEventListener('DOMContentLoaded', async e => {
 
       if(domOpt === clickedOption) continue
 
+      clickedOption.classList.remove('game__option--start')
       domOpt.classList.remove('game__option--show', 'game__option--start')
 
       domOpt.addEventListener('transitionend', e => {
@@ -148,9 +179,11 @@ d.addEventListener('DOMContentLoaded', async e => {
 
       clickedOption.classList.add('game__option--selected')
     }
-
+    handleOptionsText()
     handleHouseOption()
   }
+
+  let houseOpt;
 
   function handleHouseOption(){
     const bg = d.createElement('div')
@@ -160,16 +193,20 @@ d.addEventListener('DOMContentLoaded', async e => {
 
     const name = getRandomOption()
 
-    const houseOpt = createOption({
+    houseOpt = createOption({
       name: name, 
       image: `./assets/images/icon-${name}.svg`,
       label: `The house selects ${name}`,
       gradient: `game__option--${name}`,
-      customClass: 'game__option--house'
+      customClass: 'game__option--house',
     })
 
     houseOpt.addEventListener('transitionend', e =>{
       gameOptions.removeChild(bg)
+
+      gameResult.setAttribute('aria-hidden', 'false')
+      gameResult.classList.add('game__result--show')
+      handleScore({target: d.querySelector('.game__option--selected')})
     }, {once: true})
 
     gameOptions.append(houseOpt)
@@ -183,10 +220,73 @@ d.addEventListener('DOMContentLoaded', async e => {
     return opts[Math.floor(Math.random() * opts.length)]
   }
 
+  function updateScore(){ gameScore.textContent = score }
+
+  function setScore(newScore){
+    score = newScore
+    storage.setItem('score', score)
+
+    updateScore()
+  }
+
+  function updateGameResult(text){
+    gameResultText.textContent = text
+  }
+
+  function handleScore(e){
+    const userSelected = e.target.dataset.option
+    const houseSelected = houseOpt.dataset.option 
+
+    if(userSelected === houseSelected) return updateGameResult('Draw')
+
+    if((userSelected === 'paper' && houseSelected === 'rock')
+      || (userSelected === 'rock' && houseSelected === 'scissors')
+      || (userSelected === 'scissors' && houseSelected === 'paper')
+      || (userSelected === 'rock' && houseSelected === 'lizard')
+      || (userSelected === 'lizard' && houseSelected === 'spock')
+      || (userSelected === 'spock' && houseSelected === 'scissors')
+      || (userSelected === 'scissors' && houseSelected === 'lizard')
+      || (userSelected === 'lizard' && houseSelected === 'paper')
+      || (userSelected === 'paper' && houseSelected === 'spock')
+      || (userSelected === 'spock' && houseSelected === 'rock')
+    ) {
+      setScore(Number(score) + 1)
+      sounds.win.play()
+      return updateGameResult('You win')
+    }
+
+    sounds.lose.play()
+    setScore(Number(score) - 1)
+    return updateGameResult('You lose')
+  }
+
+  function handleModeBtn(e){
+    if(gameMode === e.target.dataset.mode) return
+
+    w.localStorage.setItem('game-mode', e.target.dataset.mode)
+
+    e.target.dataset.mode = e.target.dataset.mode === 'rps' ? 'rpsls' : 'rps'
+
+    w.location.reload()
+  }
+
+  function handlePlayBtn(e){ w.location.reload() }
+  
+  function updateOptionsLabels(e){
+    e.target.setAttribute('aria-label', `You picked ${e.target.dataset.option}`)
+    houseOpt.setAttribute('aria-label', `The house picked ${houseOpt.dataset.option}`)
+  }
+
   d.addEventListener('click', e => {
     if(e.target === rulesBtn) handleRulesBtnClick(e)
     if(e.target === closeRulesBtn) handleRulesBtnClick(e)
 
-    if(e.target.matches('.game__option')) handleOptionsOnClick(e.target)
+    if(e.target === modeBtn) handleModeBtn(e)
+    if(e.target === playAgainBtn) handlePlayBtn(e)
+
+    if(e.target.matches('.game__option')) {
+      handleOptionsOnClick(e.target)
+      updateOptionsLabels(e)
+    }
   })
 })
