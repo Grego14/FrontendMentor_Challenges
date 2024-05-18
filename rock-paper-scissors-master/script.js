@@ -252,11 +252,13 @@ d.addEventListener('DOMContentLoaded', async e => {
     ) {
       setScore(Number(score) + 1)
       sounds.win.play()
+      e.target.classList.add('game__option--winner')
       return updateGameResult('You win')
     }
 
     sounds.lose.play()
     setScore(Number(score) - 1)
+    houseOpt.classList.add('game__option--winner')
     return updateGameResult('You lose')
   }
 
