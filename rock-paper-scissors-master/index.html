@@ -40,15 +40,24 @@
               </div>
             </div>
           </template>
+          <div class='game__option__text' id='options-text' aria-hidden='true'>
+            <div class='option__text--selected option__text'>you picked</div>
+            <div class='option__text--house option__text'>the house picked</div>
+          </div>
+        </div>
+        <div class='game__result' id='game-result' aria-hidden='true'>
+          <h2 class='game__result__text' id='game-result-text'>YOU WIN</h2>
+          <button class='game__result__button game__button' id='button-play'>play again</button>
+          <button class='game__result__button game__button' id='button-mode' data-mode='rps'></button>
         </div>
       </div>
-      <button class='game__rules-btn game__button' id='game-rules'>rules</button>
-      <div class='game__rules-overlay' id='game-rules-overlay'>
+      <button class='game__rules-btn game__button' id='game-rules' aria-controls='game-rules-overlay'>rules</button>
+      <div class='game__rules-overlay' id='game-rules-overlay' aria-hidden='true'>
         <h2 class='rules__title'>Rules</h2>
         <img class='rules__image' src='./assets/images/image-rules.svg'
           alt='paper beats rock, rock beats scissors, scissors beats paper' width='300' height='200' id='rules-text' />
         <button class='rules__button' aria-label='close rules' id='close-rules'>
-          <img clas='rules__button__image' src='./assets/images/icon-close.svg' alt='close rules' aria-hidden='true' />
+          <img class='rules__button__image' src='./assets/images/icon-close.svg' alt='close rules' aria-hidden='true' />
         </button>
       </div>
     </section>
