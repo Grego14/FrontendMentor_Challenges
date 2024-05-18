@@ -78,7 +78,8 @@ button {
   cursor: pointer;
 }
 
-[aria-hidden='true'] {
+[aria-hidden='true'] *,
+.rules__button__image{
   pointer-events: none;
 }
 
@@ -160,6 +161,7 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 .game__options {
@@ -219,95 +221,102 @@ button {
 
   &.game__option--selected {
     transition: transform 250ms;
-    transform: translate(-25%, -40%);
+    transform: translate(-25%, -60%);
   }
 
   &.game__option--house {
     transition: opacity 500ms ease-in;
-    transform: translate(115%, -40%);
+    transform: translate(115%, -60%);
+    scale: 1;
   }
 }
 
-.game__option--house::after,
-.game__option--selected::after{
+.game__option__text{
+  opacity: 0;
+
+  &.options__text--show{
+    opacity: 1;
+  }
+}
+
+.option__text{
   color: white;
-  bottom: -40%;
-  font-size: 1rem;
+  top: 35%;
+  font-size: .9rem;
   text-wrap: nowrap;
-  font-weight: bold;
   position: absolute;
   text-transform: uppercase;
-  letter-spacing: .1rem;
+  letter-spacing: .12rem;
+  font-weight: bold;
 }
 
-.game__option--selected::after{
-  content: 'you picked';
+.option__text--selected{
+  left: -5%;
 }
 
-.game__option--house::after{
-  content: 'the house picked';
-  right: 0;
+.option__text--house{
+  right: -10%;
 }
 
-.game:not(.game__content--rpsls) .game__option {
-  &.game__option--rock {
+.game:not(.game__content--rpsls) {
+  & .game__option--rock:not(.game__option--selected, .game__option--house) {
     transform: translate(50%, 90%);
 
-    &.game__option--start:not(.game__option--house, .game__option--selected) {
+    &.game__option--start {
       transition-delay: 500ms;
     }
   }
 
-  &.game__option--paper {
+  & .game__option--paper:not(.game__option--selected, .game__option--house) {
     transform: translate(-30%, -40%);
   }
 
-  &.game__option--scissors {
+  & .game__option--scissors:not(.game__option--selected, .game__option--house) {
     transform: translate(120%, -40%);
 
-    &.game__option--start:not(.game__option--house, .game__option--selected) {
+    &.game__option--start {
       transition-delay: 250ms;
     }
   }
 }
 
-.game__content--rpsls .game__option--rock:not(.game__option--selected, .game__option--house) {
-  transform: translate(150%, 170%);
+.game__content--rpsls {
+  & .game__option--rock:not(.game__option--selected, .game__option--house){
+    transform: translate(150%, 170%);
 
-  &.game__option--start:not(.game__option--house, .game__option--selected) {
-    transition-delay: 500ms;
+    &.game__option--start {
+      transition-delay: 500ms;
+    }
   }
-}
 
-.game__content--rpsls .game__option--paper:not(.game__option--selected, .game__option--house) {
-  transform: translate(200%, 30%);
+  & .game__option--paper:not(.game__option--selected, .game__option--house) {
+    transform: translate(200%, 30%);
 
-  &.game__option--start:not(.game__option--house, .game__option--selected) {
-    transition-delay: 250ms;
+    &.game__option--start {
+      transition-delay: 250ms;
+    }
   }
-}
 
-.game__content--rpsls .game__option--scissors:not(.game__option--selected, .game__option--house) {
-  transform: translate(85%, -40%);
+  & .game__option--scissors:not(.game__option--selected, .game__option--house) {
+    transform: translate(85%, -40%);
 
-  &.game__option--start:not(.game__option--house, .game__option--selected) {
-    transition-delay: 0ms;
+    &.game__option--start {
+      transition-delay: 0ms;
+    }
   }
-}
+  & .game__option--lizard:not(.game__option--selected, .game__option--house) {
+    transform: translate(-40%, 30%);
 
-.game__content--rpsls .game__option--lizard:not(.game__option--selected, .game__option--house) {
-  transform: translate(-40%, 30%);
-
-  &.game__option--start:not(.game__option--house, .game__option--selected) {
-    transition-delay: 1s;
+    &.game__option--start {
+      transition-delay: 1s;
+    }
   }
-}
+  .game__option--spock:not(.game__option--selected, .game__option--house) {
+    transform: translate(5%, 170%);
 
-.game__content--rpsls .game__option--spock:not(.game__option--selected, .game__option--house) {
-  transform: translate(5%, 170%);
-
-  &.game__option--start:not(.game__option--house, .game__option--selected) {
-    transition-delay: 750ms;
+    &.game__option--start {
+      transition-delay: 750ms;
+    }
   }
 }
 
@@ -359,7 +368,7 @@ button {
   min-height: 6.25rem;
   border-radius: 50%;
   z-index: 1;
-  transform: translate(115%, -40%);
+  transform: translate(115%, -60%);
   right: 42%;
 }
 
@@ -367,6 +376,17 @@ button {
   .game__option:hover {
     cursor: pointer;
     scale: 1.05;
+  }
+
+  .game__result__button:hover {
+    background-color: var(--dark-text-color);
+    color: white;
+    border: 1px solid white;
+  }
+
+  .game__rules-btn:hover {
+    background-color: white;
+    color: var(--dark-text-color)
   }
 }
 
@@ -377,6 +397,7 @@ button {
   max-height: var(--background-image-height);
   opacity: 0;
   transition: opacity 250ms ease-in;
+  user-select: none;
 
   &.game__background--hide {
     visibility: hidden;
@@ -387,16 +408,55 @@ button {
   }
 }
 
+.game__result{
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 250ms ease-in;
+
+  &.game__result--show{
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+.game__result__button,
+.game__rules-btn{
+  text-transform: uppercase;
+  transition: color 250ms ease-in, background-color 250ms ease-in;
+  border-radius: .5rem;
+  letter-spacing: .1rem;
+}
+
+.game__result__button + .game__result__button{
+  margin-top: .5rem;
+}
+
+.game__result__text{
+  font-size: 4rem;
+  color: white;
+  text-transform: uppercase;
+}
+
+.game__result__button{
+  color: var(--dark-text-color);
+  background-color: white;
+  font-size: 1.2rem;
+  min-width: 14rem;
+  min-height: 3rem;
+}
+
 .game__rules-btn {
   grid-area: rulesBtn;
-  text-transform: uppercase;
-  letter-spacing: .1rem;
   color: white;
-  max-width: max-content;
-  margin: 0 auto;
+  margin: 2rem auto;
   border: 1px solid white;
   padding: .8rem 3rem;
-  border-radius: .5rem;
 }
 
 .game__rules-overlay {
@@ -410,7 +470,6 @@ button {
   min-height: 100lvh;
   min-width: 100vw;
   position: fixed;
-  transition: opacity 250ms ease-in;
   top: 0;
   left: 0;
   margin: 0;
