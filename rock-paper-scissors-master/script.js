@@ -7,16 +7,18 @@ d.addEventListener('DOMContentLoaded', async e => {
   const gameElement = d.getElementById('game')
   const template = d.getElementById('game-template').content
   const fragment = d.createDocumentFragment()
-  const sounds = {
-    lose: new Audio(),
-    win: new Audio()
-  }
+  const gameOptions = d.getElementById('game-options')
 
   if(!storage.getItem('game-mode')) storage.setItem('game-mode', 'rps') 
   if(!storage.getItem('score')) storage.setItem('score', 12) 
 
   let score = storage.getItem('score')
   const gameMode = storage.getItem('game-mode')
+
+  const sounds = {
+    lose: new Audio(),
+    win: new Audio()
+  }
 
   const options = new Map([
     ['paper', {name: 'paper', image: './assets/images/icon-paper.svg', gradient: 'game__option--paper'}],
@@ -89,8 +91,8 @@ d.addEventListener('DOMContentLoaded', async e => {
     options.set('scissors', {name: 'scissors', image: './assets/images/icon-scissors.svg', gradient: 'game__option--scissors'})
     options.set('paper', {name: 'paper', image: './assets/images/icon-paper.svg', gradient: 'game__option--paper'})
     options.set('rock' ,{name: 'rock', image: './assets/images/icon-rock.svg', gradient: 'game__option--rock'})
-    options.set('spock', {name: 'spock', image: './assets/images/icon-spock.svg', gradient: 'game__option--spock'})
     options.set('lizard', {name: 'lizard', image: './assets/images/icon-lizard.svg', gradient: 'game__option--lizard'})
+    options.set('spock', {name: 'spock', image: './assets/images/icon-spock.svg', gradient: 'game__option--spock'})
   }
 
   const gameResult = d.getElementById('game-result')
@@ -126,34 +128,38 @@ d.addEventListener('DOMContentLoaded', async e => {
     return cloneOption
   }
 
-  for (const [key, option] of options) {
-    const opt = createOption({
-      name: option.name,
-      label: `Select ${option.name}`,
-      image: option.image,
-      gradient: option.gradient
-    })
-
-    fragment.append(opt)
-  }
-
-  const gameOptions = d.getElementById('game-options')
-  gameOptions.append(fragment)
+  // prevent adding the options if the background is not loaded yet
+  gameBackgroundElement.addEventListener('load', () =>{
+    for (const [key, option] of options) {
+      const opt = createOption({
+        name: option.name,
+        label: `Select ${option.name}`,
+        image: option.image,
+        gradient: option.gradient
+      })
+      fragment.append(opt)
+    }
+    gameOptions.append(fragment)
+  }, {once: true})
 
   const rulesBtn = d.getElementById('game-rules')
   const closeRulesBtn = d.getElementById('close-rules')
   const gameRulesOverlay = d.getElementById('game-rules-overlay')
 
   function handleRulesBtnClick(e){ 
+    gameElement.classList.toggle('game__rules-desktop-overlay--show')
     gameRulesOverlay.classList.toggle('game__rules--show') 
     gameRulesOverlay.setAttribute('aria-hidden', gameRulesOverlay.getAttribute('aria-hidden') === 'true' ? 'false' : 'true') 
+    rulesBtn.classList.toggle('game__rules--clicked')
   }
 
   function handleOptionsText(){
-    const textElement = d.getElementById('options-text')
+    const textElements = d.querySelectorAll('.option__text')
 
-    textElement.classList.add('options__text--show')
-    textElement.setAttribute('aria-hidden', textElement.getAttribute('aria-hidden') === 'true' ? 'false' : 'true')
+    for (const textEl of textElements) {
+      textEl.classList.add('option__text--show')
+      textEl.setAttribute('aria-hidden', textEl.getAttribute('aria-hidden') === 'true' ? 'false' : 'true')
+    }
   }
 
   const playAgainBtn = d.getElementById('button-play')
@@ -163,6 +169,9 @@ d.addEventListener('DOMContentLoaded', async e => {
   modeBtn.dataset.mode = gameMode === 'rps' ? 'rpsls' : 'rps'
 
   function handleOptionsOnClick(clickedOption){
+    clickedOption.setAttribute('id', 'selected-option')
+    gameElement.classList.add('game__content--user-select')
+
     const domOptions = d.querySelectorAll('.game__option')
     for (const domOpt of domOptions) {
 
@@ -170,6 +179,10 @@ d.addEventListener('DOMContentLoaded', async e => {
 
       clickedOption.classList.remove('game__option--start')
       domOpt.classList.remove('game__option--show', 'game__option--start')
+
+      if(!domOpt.classList.contains('game__option--selected') || !domOpt.classList.contains('game__option--house')){
+        domOpt.removeAttribute('tabindex')
+      }
 
       domOpt.addEventListener('transitionend', e => {
         if(e.propertyName === 'opacity') domOpt.classList.add('game__option--hide')
@@ -189,8 +202,6 @@ d.addEventListener('DOMContentLoaded', async e => {
     const bg = d.createElement('div')
     bg.classList.add('game__option--house-selecting')
 
-    gameOptions.append(bg)
-
     const name = getRandomOption()
 
     houseOpt = createOption({
@@ -201,15 +212,28 @@ d.addEventListener('DOMContentLoaded', async e => {
       customClass: 'game__option--house',
     })
 
+    const houseOptContainer = d.createElement('div')
+    houseOptContainer.classList.add('game__option__container', 'option__container--house')
+    const selectedOptContainer = d.createElement('div')
+    selectedOptContainer.classList.add('game__option__container', 'option__container--selected')
+
+    houseOptContainer.append(houseOpt, bg)
+    selectedOptContainer.append(d.getElementById('selected-option'))
+
     houseOpt.addEventListener('transitionend', e =>{
-      gameOptions.removeChild(bg)
+      houseOptContainer.removeChild(bg)
 
       gameResult.setAttribute('aria-hidden', 'false')
       gameResult.classList.add('game__result--show')
+
+      d.activeElement.blur()
+      gameResultText.focus()
+
       handleScore({target: d.querySelector('.game__option--selected')})
     }, {once: true})
 
-    gameOptions.append(houseOpt)
+    gameOptions.append(selectedOptContainer)
+    gameOptions.append(houseOptContainer)
   }
 
   function getRandomOption(){
@@ -253,12 +277,14 @@ d.addEventListener('DOMContentLoaded', async e => {
       setScore(Number(score) + 1)
       sounds.win.play()
       e.target.classList.add('game__option--winner')
+      gameOptions.classList.add(`options__winner--${d.querySelector('.game__option--winner').dataset.option}`)
       return updateGameResult('You win')
     }
 
     sounds.lose.play()
     setScore(Number(score) - 1)
     houseOpt.classList.add('game__option--winner')
+    gameOptions.classList.add(`options__winner--${d.querySelector('.game__option--winner').dataset.option}`)
     return updateGameResult('You lose')
   }
 
@@ -282,11 +308,19 @@ d.addEventListener('DOMContentLoaded', async e => {
   d.addEventListener('click', e => {
     if(e.target === rulesBtn) handleRulesBtnClick(e)
     if(e.target === closeRulesBtn) handleRulesBtnClick(e)
+    if(e.target.matches('#desktop-overlay') && gameElement.classList.contains('game__rules-desktop-overlay--show')) handleRulesBtnClick(e)
 
     if(e.target === modeBtn) handleModeBtn(e)
     if(e.target === playAgainBtn) handlePlayBtn(e)
 
     if(e.target.matches('.game__option')) {
+      handleOptionsOnClick(e.target)
+      updateOptionsLabels(e)
+    }
+  })
+
+  d.addEventListener('keydown', e =>{
+    if(e.key === 'Enter' && e.target.matches('.game__option:not(.game__option--selected, .game__option--house)')){
       handleOptionsOnClick(e.target)
       updateOptionsLabels(e)
     }
