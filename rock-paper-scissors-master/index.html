@@ -6,22 +6,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
   <link rel='stylesheet' href='./styles.css' type='text/css' />
+  <link rel='stylesheet' href='./styles-desktop.css' type='text/css' media='(min-width: 40rem)' />
+  <link rel="preload" href='./assets/fonts/BarlowSemiCondensed-Bold.woff2' as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href='./assets/fonts/BarlowSemiCondensed-SemiBold.woff2' as="font" type="font/woff2" crossorigin>
   <title>Frontend Mentor | Rock, Paper, Scissors</title>
-
-  <!--You Picked-->
-  <!--The House Picked-->
-
-  <!--You Win-->
-  <!--You Lose-->
-
-  <!--Play Again-->
 </head>
 
 <body>
   <main class='main'>
     <section class='game' id='game'>
       <header class='game__header'>
-        <h1 aria-describedby='game-image'>
+        <h1 class='game__title' aria-describedby='game-image'>
           <img class='game__image' src='' alt='Rock, Paper, Scissors' width='150' height='100' id='game-image' />
         </h1>
         <div class='game__score'>
@@ -31,27 +26,23 @@
       </header>
       <div class='game__content' id='game-content'>
         <div class='game__options' id='game-options'>
-          <img class='game__background' src='' width='250' height='200'
-            id='game-background' aria-hidden='true' />
+          <img class='game__background' src='' width='250' height='200' id='game-background' aria-hidden='true' />
           <template id='game-template'>
             <div class='game__option' tabindex='0' id='name'>
               <div class='game__option__background'>
-                <img class='game__option__image' src='' id='image' aria-hidden='true' width='50' height='50'/>
+                <img class='game__option__image' src='' id='image' aria-hidden='true' width='50' height='50' />
               </div>
             </div>
           </template>
-          <div class='game__option__text' id='options-text' aria-hidden='true'>
-            <div class='option__text--selected option__text'>you picked</div>
-            <div class='option__text--house option__text'>the house picked</div>
+          <div class='game__result' id='game-result' aria-hidden='true'>
+            <h2 class='game__result__text' id='game-result-text'>YOU WIN</h2>
+            <button class='game__result__button game__button' id='button-play' type='button'>play again</button>
+            <button class='game__result__button game__button' id='button-mode' type='button' data-mode='rps'></button>
           </div>
         </div>
-        <div class='game__result' id='game-result' aria-hidden='true'>
-          <h2 class='game__result__text' id='game-result-text'>YOU WIN</h2>
-          <button class='game__result__button game__button' id='button-play'>play again</button>
-          <button class='game__result__button game__button' id='button-mode' data-mode='rps'></button>
-        </div>
+        <button class='game__rules-btn game__button' id='game-rules' aria-controls='game-rules-overlay'>rules</button>
       </div>
-      <button class='game__rules-btn game__button' id='game-rules' aria-controls='game-rules-overlay'>rules</button>
+      <div class='game__rules-desktop-overlay' id='desktop-overlay' aria-hidden='true'></div>
       <div class='game__rules-overlay' id='game-rules-overlay' aria-hidden='true'>
         <h2 class='rules__title'>Rules</h2>
         <img class='rules__image' src='./assets/images/image-rules.svg'
