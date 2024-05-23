@@ -1,0 +1,213 @@
+.game__rules-desktop-overlay--show .game__rules-desktop-overlay {
+  display: block;
+  min-width: 100vw;
+  min-height: 100vh;
+  position: fixed;
+  background-color: black;
+  pointer-events: auto;
+  margin: 0;
+  opacity: .5;
+  z-index: 90;
+}
+
+.game__result {
+  bottom: calc(-120% + var(--option-width) / 1.5);
+}
+
+.game__rules-overlay {
+  min-height: 28rem;
+  min-width: 25rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: .5rem;
+}
+
+.rules__title {
+  left: 2rem;
+  top: 5%;
+}
+
+.rules__button {
+  bottom: initial;
+  right: 2rem;
+  top: 8%;
+}
+
+.rules__image {
+  top: 55%;
+}
+
+@media screen and (min-width: 40rem) {
+  .game:not(.game__content--user-select, .game__content--rpsls) .game__options{
+    --option-width: clamp(6rem, 6rem + 8vw, 8rem);
+    --option-height: clamp(6rem, 6rem + 8vw, 8rem);
+    top: 25%;
+  }
+
+  .option__container--selected::after,
+  .option__container--house::after{
+    bottom: initial;
+    top: -30%;
+  }
+
+  .game__content--rpsls{
+    --background-image-height: 11.75rem;
+    --background-image-width: 13.625rem;
+
+    & .game__options{
+      --option-width: clamp(6rem, 6rem + 8vw, 8rem);
+      --option-height: clamp(6rem, 6rem + 8vw, 8rem);
+    }
+  }
+
+  .option__container--selected{
+    left: -35%;
+  }
+
+  .option__container--house{
+    right: -35%;
+  }
+
+  .game__content--rpsls{
+    --header-max-height: 10rem;
+
+    & .game__header{
+      --image-width: 7rem;
+      --score-width: 7rem;
+      --score-height: 6rem;
+    }
+  }
+}
+
+@media screen and (min-width: 57.5rem){
+  .game__result {
+    bottom: calc(-120% + var(--option-width));
+  }
+
+  .game__content--rpsls:not(.game__content--user-select){
+    --background-image-height: 13.75rem;
+    --background-image-width: 15.625rem;
+  }
+
+  .game__content--rpsls .game__options{
+    --option-width: clamp(8rem, 8rem + 8vw, 10rem);
+    --option-height: clamp(8rem, 8rem + 8vw, 10rem);
+  }
+}
+
+@media screen and (min-width: 64rem){
+
+  .game:not(.game__content--user-select, .game__content--rpsls){
+    --option-width: clamp(10rem, 10rem + 8vw, 14rem);
+    --option-height: clamp(10rem, 10rem + 8vw, 14rem);
+  }
+
+  .game__content--user-select .game__options,
+  .game__content--rpsls.game__content--user-select .game__options{
+    --option-width: clamp(8rem, 8rem + 8vw, 16rem);
+    --option-height: clamp(8rem, 8rem + 8vw, 16rem);
+  }
+
+  .option__container--selected{
+    left: calc(-35% - var(--background-image-width));
+  }
+
+  .option__container--house{
+    right: calc(-35% - var(--background-image-width));
+  }
+
+  .game{
+    --header-max-height: 10rem;
+  }
+
+  .game__header {
+    min-width: calc(90% - 20vw);
+    --image-width: 10rem;
+  }
+
+  .game__rules-btn{
+    left: initial;
+    transform: unset;
+    right: 2rem;
+  }
+
+  .game__content--user-select .game__options{
+    top: 25%;
+  }
+
+  .game__result{
+    bottom: 5%;
+  }
+}
+
+@media screen and (min-width: 80rem){
+  .game__rules-overlay{
+    --fs-rules-text: 4rem;
+    min-width: 40rem;
+    min-height: 40rem;
+  }
+
+  .rules__image{
+    min-width: 30rem;
+    min-height: 30rem;
+    object-fit: contain;
+  }
+
+  .rules__title{
+    top: 2%;
+  }
+
+  .rules__button{
+    top: 6%;
+  }
+
+  .rules__button__image{
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .game{
+    --header-max-height: 12rem;
+  }
+
+  .game__header{
+    min-width: calc(90% - 20vw);
+    --score-width: 9rem;
+    --score-height: 8rem;
+
+    --fs-score-text: clamp(1rem, 1rem + 1vw, 1.5rem);
+    --fs-score-value: clamp(3rem, 3rem + 2.5vw, 5rem);
+  }
+
+  .game__content--rpsls .game__header{
+    --image-width: 8rem;
+  }
+
+  .game__result__button{
+    font-size: 1.5rem;
+    min-height: 3.5rem;
+  }
+
+  .game__content--user-select .game__options{
+    --option-width: clamp(10rem, 10rem + 10vw, 20rem);
+    --option-height: clamp(10rem, 10rem + 10vw, 20rem);
+  }
+
+  .option__container--selected{
+    left: calc(-35% - var(--background-image-width) * 1.5);
+  }
+
+  .option__container--house{
+    right: calc(-35% - var(--background-image-width) * 1.5);
+  }
+
+  .option__container--house::after,
+  .option__container--selected::after{
+    --option-text-size: clamp(.8rem, .8rem + 1vw, 1.8rem);
+  }
+
+  .game__rules-btn{
+    --rules-btn-text-size: clamp(2rem, 2rem + .5vw, 4rem);
+  }
+}
