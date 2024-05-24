@@ -20,4 +20,6 @@
 
 #### Results summary **|** [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/results-summary-component-main) **|** [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/results-summary-component-main/)
 
+#### Rock, paper, scissors **|** [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/rock-paper-scissors-master) **|** [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/rock-paper-scissors-master/)
+
 ***Frontent Mentor Profile*** ➡️ [@Grego14](https://www.frontendmentor.io/profile/Grego14)
