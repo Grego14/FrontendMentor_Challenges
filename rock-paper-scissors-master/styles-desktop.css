@@ -195,11 +195,11 @@
   }
 
   .option__container--selected{
-    left: calc(-35% - var(--background-image-width) * 1.5);
+    left: calc(-35% - var(--background-image-width));
   }
 
   .option__container--house{
-    right: calc(-35% - var(--background-image-width) * 1.5);
+    right: calc(-35% - var(--background-image-width));
   }
 
   .option__container--house::after,
