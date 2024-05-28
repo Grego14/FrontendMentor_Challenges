@@ -49,7 +49,13 @@ body {
 }
 
 body,
-main {
+html {
+  overflow: hidden;
+}
+
+body,
+main,
+.game {
   min-height: 100lvh;
 }
 
@@ -68,14 +74,21 @@ button {
   font-size: inherit;
 }
 
-[aria-hidden='true'] *,
-.rules__button__image,
-.game__option--selected,
+[aria-hidden='true']:not(img) {
+  pointer-events: none;
+  visibility: hidden;
+}
+
+/* prevents clicking on these elements... 
+ * this is how avoid verifying targets in the JavaScript code */
 .game__option--house,
-.game__option__background,
+.game__option--selected,
+.rules__button__image,
 .game__rules-desktop-overlay,
-.game__rules-desktop-overlay--show .game__button,
-.game__rules-desktop-overlay--show .game__option {
+.game__rules-overlay .game__button,
+.game__rules-overlay .game__option,
+.game__option,
+.game__option__background {
   pointer-events: none;
 }
 
@@ -87,93 +100,9 @@ button {
 .game {
   --background-image-height: 9.75rem;
   --background-image-width: 11.625rem;
-  --header-max-height: 8rem;
+  --header-max-height: 6rem;
+  --header-margin-top: 1rem;
 
-  display: grid;
-  grid-template-areas:
-    "score"
-    "content";
-  grid-template-rows: max-content calc(100lvh - var(--header-max-height) - 2rem);
-  color: var(--dark-text-color);
-}
-
-.game__header {
-  --header-outline-color: hsl(217, 16%, 45%);
-
-  --score-width: 6rem;
-  --score-height: 5rem;
-  --fs-score-text: clamp(.8rem, .8rem + 1vw, 1.2rem);
-  --fs-score-value: clamp(2.5rem, 2.5rem + 1.5vw, 4rem);
-
-  --image-width: 6rem;
-
-  border: 4px solid var(--header-outline-color);
-  border-radius: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  grid-area: score;
-  min-width: 90%;
-  z-index: 30;
-  max-height: var(--header-max-height);
-  min-height: var(--header-max-height);
-  margin-top: 2rem;
-  margin-inline: auto;
-  padding: 1rem;
-}
-
-.game__title {
-  display: flex;
-  align-items: center;
-}
-
-.game__image {
-  min-width: clamp(var(--image-width), var(--image-width) + 2.5vw, var(--image-width) * 1.5);
-  max-width: calc(var(--image-width) * 1.5);
-  padding: 1.5rem 1rem;
-  opacity: 0;
-  transition: opacity var(--transition-time) ease-in;
-
-  &.game__image--loaded {
-    opacity: 1;
-  }
-}
-
-.game__score {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  border-radius: .5rem;
-  line-height: 1;
-  width: clamp(var(--score-width), var(--score-width) + 2.5vw, var(--score-width) * 2);
-  height: clamp(var(--score-height), var(--score-height) + 2.5vw, var(--score-height) * 2);
-  max-height: calc(var(--score-height) * 2);
-  margin-inline: .5rem;
-}
-
-.game__score__text {
-  font-size: var(--fs-score-text);
-  text-transform: uppercase;
-  color: var(--score-text-color);
-  letter-spacing: .2rem;
-}
-
-.game__score__value {
-  font-size: var(--fs-score-value);
-  font-weight: bold;
-  margin-top: .3rem;
-}
-
-.game__content {
-  grid-area: content;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.game__options {
   --scissors-gradient-from: hsl(40, 84%, 53%);
   --scissors-gradient-to: hsl(39, 89%, 49%);
   --scissors-bg: hsl(39, 89%, 39%);
@@ -194,8 +123,140 @@ button {
   --spock-gradient-to: hsl(189, 59%, 53%);
   --spock-bg: hsl(189, 59%, 43%);
 
-  --option-width: clamp(6rem, 6rem + 8vw, 8rem);
-  --option-height: clamp(6rem, 6rem + 8vw, 8rem);
+  display: grid;
+  grid-template-areas:
+    "score"
+    "content";
+  grid-template-rows: calc(var(--header-max-height) * 1.2 + var(--header-margin-top)) calc(100lvh - var(--header-max-height) * 1.2 - var(--header-margin-top));
+  color: var(--dark-text-color);
+}
+
+.game__header {
+  --header-outline-color: hsl(217, 16%, 45%);
+
+  --score-width: calc(var(--header-max-height) / 1.3);
+  --score-height: calc(var(--header-max-height) / 1.5);
+  --fs-score-text: .6rem;
+  --fs-score-value: 1.8rem;
+
+  --image-width: calc(var(--header-max-height) / 1.5);
+
+  border: 4px solid var(--header-outline-color);
+  border-radius: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  grid-area: score;
+  min-width: 90%;
+  z-index: 60;
+  min-height: clamp(var(--header-max-height), var(--header-max-height) + 2.5vh, var(--header-max-height) * 1.2);
+  max-height: calc(var(--header-max-height) * 1.2);
+  margin-top: var(--header-margin-top);
+  margin-inline: auto;
+  padding-inline: .5rem;
+}
+
+.game__title {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  flex-grow: 1;
+}
+
+.game__image {
+  width: clamp(var(--image-width), var(--image-width) + 2.5vw, var(--image-width) * 1.5);
+  opacity: 0;
+  transition: opacity var(--transition-time) ease-in;
+
+  &.game__image--loaded {
+    opacity: 1;
+  }
+}
+
+.game__score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: .5rem;
+  line-height: 1;
+  width: clamp(var(--score-width), var(--score-width) + 2.5vw, var(--score-width) * 1.2);
+  height: clamp(var(--score-height), var(--score-height) + 2.5vw, var(--score-height) * 1.2);
+  max-height: calc(var(--score-height) * 2);
+  margin-inline: .5rem;
+}
+
+.game__score__text {
+  font-size: clamp(var(--fs-score-text), var(--fs-score-text) + 1vw, var(--fs-score-text) * 2);
+  text-transform: uppercase;
+  color: var(--score-text-color);
+  letter-spacing: .2rem;
+}
+
+.game__score__value {
+  font-size: clamp(var(--fs-score-value), var(--fs-score-value) + 1vw, var(--fs-score-value) * 2);
+  font-weight: bold;
+  margin-top: .3rem;
+}
+
+.game__content__container {
+  grid-area: content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.game__content {
+  position: relative;
+  min-width: 100%;
+  min-height: 100%;
+  padding: 1.5rem 2rem;
+  padding-bottom: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.game__content--user-select .game__options {
+  --option-size-min: 6rem;
+}
+
+.game__content>* {
+  flex: 1 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.game__options__container {
+  flex-grow: 1.5;
+}
+
+.game__rules-btn__container {
+  flex-basis: 10%;
+  flex-grow: 0;
+}
+
+.game__options__container,
+.game__result__container,
+.game__rules-btn__container {
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.game:not(.game__content--user-select) .game__result__container {
+  max-height: 0px;
+  border: none;
+}
+
+.game__options {
+  --option-size-min: 6rem;
+  --option-size-sum: 6vw;
+
+  --option-width: clamp(var(--option-size-min), var(--option-size-min) + var(--option-size-sum), calc(var(--option-size-min) * 2));
+  --option-height: clamp(var(--option-size-min), var(--option-size-min) + var(--option-size-sum), calc(var(--option-size-min) * 2));
 
   --play-again-color: unset;
 
@@ -205,82 +266,70 @@ button {
   --winner-box-shadow-2: hsla(229, 25%, 31%, .6);
   --winner-box-shadow-3: hsla(229, 25%, 31%, .4);
 
-  --winner-bs-width-1: calc(var(--option-width) / 5.8);
-  --winner-bs-width-2: calc(var(--option-width) / 2.8);
-  --winner-bs-width-3: calc(var(--option-width) / 1.8);
+  --winner-bs-width-1: calc(var(--option-width) / 6);
+  --winner-bs-width-2: calc(var(--option-width) / 3);
+  --winner-bs-width-3: calc(var(--option-width) / 2);
 
-  min-width: clamp(var(--background-image-width), var(--background-image-width) + 5vw, var(--background-image-width) * 1.5);
-  min-height: clamp(var(--background-image-height), var(--background-image-height) + 5vw, var(--background-image-height) * 1.5);
+  --options-multiplier-w: 2;
+  --options-multiplier-h: 1.5;
+
+  --options-width: calc(var(--option-size-min) * var(--options-multiplier-w));
+  --options-height: calc(var(--option-size-min) * var(--options-multiplier-h));
+
+  min-width: calc(var(--options-width) + var(--option-size-sum));
+  min-height: calc(var(--options-height) + var(--option-size-sum));
+
   position: relative;
-  top: 25%;
 }
 
-.game__content--rpsls {
-  --background-image-height: 9.75rem;
-  --background-image-width: 11.625rem;
-
-  & .game__options{
-    --option-width: clamp(4rem, 4rem + 8vw, 6rem);
-    --option-height: clamp(4rem, 4rem + 8vw, 6rem);
-    top: 20%;
-  }
-
-  &.game__content--user-select .game__options{
-    --option-width: clamp(6rem, 6rem + 8vw, 8rem);
-    --option-height: clamp(6rem, 6rem + 8vw, 8rem);
-  }
-
-  & .game__header{
-    --image-width: 5rem;
-  }
-}
-
-.game__content--user-select .game__options{
-  top: 15%;
-}
-
-.game__options.options__winner--rock {
+.game.options__winner--rock {
   --play-again-color: var(--rock-gradient-from);
 }
 
-.game__options.options__winner--paper {
+.game.options__winner--paper {
   --play-again-color: var(--paper-gradient-from);
 }
 
-.game__options.options__winner--scissors {
+.game.options__winner--scissors {
   --play-again-color: var(--scissors-gradient-from);
 }
 
-.game__options.options__winner--lizard {
+.game.options__winner--lizard {
   --play-again-color: var(--lizard-gradient-from);
 }
 
-.game__options.options__winner--spock {
+.game.options__winner--spock {
   --play-again-color: var(--spock-gradient-from);
 }
 
-.game__option {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  z-index: 50;
-  left: calc(50% - var(--option-width) / 2);
-  top: calc(50% - var(--option-height) / 2);
+.game__option__container {
+  position: absolute;
   min-width: var(--option-width);
   min-height: var(--option-height);
-  overflow: hidden;
-  opacity: 0;
-  scale: 0;
-  position: absolute;
-  transition: box-shadow var(--transition-time) ease-in;
+  left: calc(50% - var(--option-width) / 2);
+  top: calc(50% - var(--option-height) / 2);
+  border-radius: 50%;
+  z-index: 50;
+  opacity: 1;
+  transition: opacity calc(var(--option-opacity-time) * 2) ease-in,
+    scale calc(var(--transition-time) / 1.5) ease-in,
+    box-shadow calc(var(--transition-time) / 1.5) ease-in;
 
-  &.game__option--show {
+  &.game__option--show.game__option--house {
+    transition: scale calc(var(--transition-time) * 2) ease-in,
+      opacity calc(var(--option-opacity-time) * 2) ease-in;
+  }
+
+  &.game__option--loaded.game__option--show:not(.game__option--hide) {
+    box-shadow: 0 0 .5rem var(--option-shadow);
+  }
+
+  &.game__option--show .game__option {
     opacity: 1;
     scale: 1;
   }
 
-  &.game__option--start {
+  &.game__option--start .game__option {
     transition: opacity var(--option-opacity-time) ease-in,
       transform var(--transition-time) ease-in,
       scale var(--transition-time) ease-in;
@@ -289,7 +338,44 @@ button {
   &.game__option--hide {
     visibility: hidden;
     pointer-events: none;
+    opacity: 0;
   }
+
+  &.game__option--winner::after {
+    opacity: 1;
+  }
+
+  &:not(.game__option--winner) {
+    z-index: 60;
+  }
+}
+
+.game__option__container::after {
+  content: '';
+  position: absolute;
+  min-width: 100%;
+  min-height: 100%;
+  border-radius: 50%;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity var(--transition-time) ease-in-out, transform var(--transition-time) ease-in-out;
+  box-shadow: 0 0 0 var(--winner-bs-width-1) var(--winner-box-shadow-1),
+    0 0 0 var(--winner-bs-width-2) var(--winner-box-shadow-2),
+    0 0 .5rem var(--winner-bs-width-3) var(--winner-box-shadow-3);
+}
+
+.game__option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  position: absolute;
+  border-radius: 50%;
+  transition: transform var(--transition-time) ease-in-out;
+  opacity: 0;
+  scale: 0;
 
   &::after {
     content: '';
@@ -300,14 +386,6 @@ button {
     min-width: 100%;
     border-radius: 50%;
   }
-
-  &.game__option--winner {
-    transition: box-shadow 500ms ease-in;
-    box-shadow: 0 0 0 var(--winner-bs-width-1) var(--winner-box-shadow-1),
-      0 0 0 var(--winner-bs-width-2) var(--winner-box-shadow-2),
-      0 0 .5rem var(--winner-bs-width-3) var(--winner-box-shadow-3);
-    z-index: 45; /* avoid box-shadow overflow with the looser */
-  }
 }
 
 .game__option--house-selecting {
@@ -316,145 +394,14 @@ button {
   min-width: var(--option-width);
   min-height: var(--option-height);
   border-radius: 50%;
-  z-index: 5;
+  z-index: -1;
 }
 
-.game__option--rock {
-  background-color: var(--rock-bg);
-}
-
-.game__option--rock::after {
-  background-image: linear-gradient(var(--rock-gradient-from), var(--rock-gradient-to));
-  background-image: -webkit-linear-gradient(var(--rock-gradient-from), var(--rock-gradient-to));
-  background-image: -moz-linear-gradient(var(--rock-gradient-from), var(--rock-gradient-to));
-}
-
-.game__option--rock:hover {
-  box-shadow: 0 0 1rem var(--rock-gradient-to);
-}
-
-.game__option--paper {
-  background-color: var(--paper-bg);
-}
-
-.game__option--paper::after {
-  background-image: linear-gradient(var(--paper-gradient-from), var(--paper-gradient-to));
-  background-image: -webkit-linear-gradient(var(--paper-gradient-from), var(--paper-gradient-to));
-  background-image: -moz-linear-gradient(var(--paper-gradient-from), var(--paper-gradient-to));
-}
-
-.game__option--paper:hover {
-  box-shadow: 0 0 .5rem var(--paper-gradient-to);
-}
-
-.game__option--scissors {
-  background-color: var(--scissors-bg);
-}
-
-.game__option--scissors::after {
-  background-image: linear-gradient(var(--scissors-gradient-from), var(--scissors-gradient-to));
-  background-image: -webkit-linear-gradient(var(--scissors-gradient-from), var(--scissors-gradient-to));
-  background-image: -moz-linear-gradient(var(--scissors-gradient-from), var(--scissors-gradient-to));
-}
-
-.game__option--scissors:hover {
-  box-shadow: 0 0 .5rem var(--scissors-gradient-to);
-}
-
-.game__option--spock {
-  background-color: var(--spock-bg);
-}
-
-.game__option--spock::after {
-  background-image: linear-gradient(var(--spock-gradient-from), var(--spock-gradient-to));
-  background-image: -webkit-linear-gradient(var(--spock-gradient-from), var(--spock-gradient-to));
-  background-image: -moz-linear-gradient(var(--spock-gradient-from), var(--spock-gradient-to));
-}
-
-.game__option--spock:hover {
-  box-shadow: 0 0 .5rem var(--spock-gradient-to);
-}
-
-.game__option--lizard {
-  background-color: var(--lizard-bg);
-}
-
-.game__option--lizard::after {
-  background-image: linear-gradient(var(--lizard-gradient-from), var(--lizard-gradient-to));
-  background-image: -webkit-linear-gradient(var(--lizard-gradient-from), var(--lizard-gradient-to));
-  background-image: -moz-linear-gradient(var(--lizard-gradient-from), var(--lizard-gradient-to));
-}
-
-.game__option--lizard:hover {
-  box-shadow: 0 0 .5rem var(--lizard-gradient-to);
-}
-
-.game:not(.game__content--rpsls) {
-  & .game__option--paper:not(.game__option--selected, .game__option--house, .game__option--hide) {
-    transform: translate(-70%, -60%);
-  }
-
-  & .game__option--scissors:not(.game__option--selected, .game__option--house, .game__option--hide) {
-    transform: translate(70%, -60%);
-  }
-
-  & .game__option--rock:not(.game__option--selected, .game__option--house, .game__option--hide) {
-    transform: translate(0%, 50%);
-  }
-}
-
-.game__content--rpsls {
-  & .game__option--scissors:not(.game__option--selected, .game__option--house, .game__option--hide) {
-    transform: translate(0%, -80%);
-  }
-
-  & .game__option--paper:not(.game__option--selected, .game__option--house, .game__option--hide) {
-    transform: translate(100%, -25%);
-  }
-
-  & .game__option--rock:not(.game__option--selected, .game__option--house, .game__option--hide) {
-    transform: translate(60%, 100%);
-  }
-
-  & .game__option--lizard:not(.game__option--selected, .game__option--house, .game__option--hide) {
-    transform: translate(-60%, 100%);
-  }
-
-  & .game__option--spock:not(.game__option--selected, .game__option--house, .game__option--hide) {
-    transform: translate(-100%, -25%);
-  }
-}
-
-.game__option__container {
-  min-height: var(--option-height);
-  min-width: var(--option-width);
-  max-width: var(--option-width);
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: inline-block;
-}
-
-.game__option__container {
-  transform: unset;
-  top: 10%;
-}
-
-.option__container--selected {
-  left: -25%;
-}
-
-.option__container--house {
-  left: unset;
-  right: -25%;
-}
-
-.option__container--selected::after,
-.option__container--house::after {
+.game__option__text {
   --option-text-size: clamp(.6rem, .6rem + 1vw, 1.5rem);
-  content: '';
+
   position: absolute;
+  z-index: 50;
   color: white;
   text-transform: uppercase;
   letter-spacing: 0.12rem;
@@ -466,12 +413,130 @@ button {
   font-size: var(--option-text-size);
 }
 
-.option__container--selected::after {
-  content: 'you picked';
+.game__option--rock {
+  --option-shadow: var(--rock-bg);
+
+  & .game__option {
+    background-color: var(--rock-bg);
+  }
 }
 
-.option__container--house::after {
-  content: 'the house picked';
+.game__option--rock .game__option::after {
+  background-image: linear-gradient(var(--rock-gradient-from), var(--rock-gradient-to));
+  background-image: -webkit-linear-gradient(var(--rock-gradient-from), var(--rock-gradient-to));
+  background-image: -moz-linear-gradient(var(--rock-gradient-from), var(--rock-gradient-to));
+}
+
+.game__option--paper {
+  --option-shadow: var(--paper-bg);
+
+  & .game__option {
+    background-color: var(--paper-bg);
+  }
+}
+
+.game__option--paper .game__option::after {
+  background-image: linear-gradient(var(--paper-gradient-from), var(--paper-gradient-to));
+  background-image: -webkit-linear-gradient(var(--paper-gradient-from), var(--paper-gradient-to));
+  background-image: -moz-linear-gradient(var(--paper-gradient-from), var(--paper-gradient-to));
+}
+
+.game__option--scissors {
+  --option-shadow: var(--scissors-bg);
+
+  & .game__option {
+    background-color: var(--scissors-bg);
+  }
+}
+
+.game__option--scissors .game__option::after {
+  background-image: linear-gradient(var(--scissors-gradient-from), var(--scissors-gradient-to));
+  background-image: -webkit-linear-gradient(var(--scissors-gradient-from), var(--scissors-gradient-to));
+  background-image: -moz-linear-gradient(var(--scissors-gradient-from), var(--scissors-gradient-to));
+}
+
+.game__option--spock {
+  --option-shadow: var(--spock-bg);
+
+  & .game__option {
+    background-color: var(--spock-bg);
+  }
+}
+
+.game__option--spock .game__option::after {
+  background-image: linear-gradient(var(--spock-gradient-from), var(--spock-gradient-to));
+  background-image: -webkit-linear-gradient(var(--spock-gradient-from), var(--spock-gradient-to));
+  background-image: -moz-linear-gradient(var(--spock-gradient-from), var(--spock-gradient-to));
+}
+
+.game__option--lizard {
+  --option-shadow: var(--lizard-bg);
+
+  & .game__option {
+    background-color: var(--lizard-bg);
+  }
+}
+
+.game__option--lizard .game__option::after {
+  background-image: linear-gradient(var(--lizard-gradient-from), var(--lizard-gradient-to));
+  background-image: -webkit-linear-gradient(var(--lizard-gradient-from), var(--lizard-gradient-to));
+  background-image: -moz-linear-gradient(var(--lizard-gradient-from), var(--lizard-gradient-to));
+}
+
+.game {
+  & .game__option--paper:not(.game__option--selected, .game__option--house, .game__option--hide) {
+    transform: translate(-70%, -70%);
+  }
+
+  & .game__option--scissors:not(.game__option--selected, .game__option--house, .game__option--hide) {
+    transform: translate(70%, -70%);
+  }
+
+  & .game__option--rock:not(.game__option--selected, .game__option--house, .game__option--hide) {
+    transform: translateY(50%);
+  }
+}
+
+.game__content--rpsls {
+  &:not(.game__content--user-select) .game__options {
+    --option-size-min: 4rem;
+    --option-size-sum: 4vw;
+    --options-multiplier-w: 2.5;
+    --options-multiplier-h: 2;
+  }
+
+  & .game__option--scissors:not(.game__option--selected, .game__option--house, .game__option--hide) {
+    transform: translate(0%, -90%);
+  }
+
+  & .game__option--paper:not(.game__option--selected, .game__option--house, .game__option--hide) {
+    transform: translate(100%, -25%);
+  }
+
+  & .game__option--rock:not(.game__option--selected, .game__option--house, .game__option--hide) {
+    transform: translate(60%, 90%);
+  }
+
+  & .game__option--lizard:not(.game__option--selected, .game__option--house, .game__option--hide) {
+    transform: translate(-60%, 90%);
+  }
+
+  & .game__option--spock:not(.game__option--selected, .game__option--house, .game__option--hide) {
+    transform: translate(-100%, -25%);
+  }
+}
+
+.game__option--selected,
+.game__option--house {
+  top: unset;
+}
+
+.game__option--selected {
+  transform: translateX(calc(-60% - 5vw));
+}
+
+.game__option--house {
+  transform: translateX(calc(60% + 5vw));
 }
 
 .game__option__background,
@@ -520,7 +585,7 @@ button {
     cursor: pointer;
   }
 
-  .game__options:not(.options__winner--rock, .options__winner--paper, .options__winner--scissors,
+  .game:not(.options__winner--rock, .options__winner--paper, .options__winner--scissors,
     .options__winner--lizard, .options__winner--spock) .game__result__button:hover {
     color: white;
     background-color: var(--dark-text-color);
@@ -535,12 +600,16 @@ button {
     background-color: white;
     color: var(--dark-text-color)
   }
-}
 
+  .game__option__container.game__option--show:not(.game__option--selected, .game__option--house, .game__option--start):hover {
+    scale: 1.05;
+    box-shadow: 0 0 1.5rem var(--option-shadow);
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
   :root {
-    --transition-time: 0ms;
+    --transition-time: 0.01ms;
   }
 }
 
@@ -553,7 +622,6 @@ button {
   min-height: 100%;
   min-width: 100%;
   transition: opacity var(--transition-time) ease-in;
-  object-fit: contain;
 
   &.game__background--hide {
     visibility: hidden;
@@ -565,23 +633,26 @@ button {
 }
 
 .game__result {
-  position: absolute;
-  bottom: -120%;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   visibility: hidden;
   opacity: 0;
   transition: opacity var(--transition-time) ease-in;
-  z-index: 50;
+  z-index: 60;
+  text-align: center;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 
-  &.game__result--show {
+  &[aria-hidden='false'] {
     visibility: visible;
     opacity: 1;
   }
+}
+
+.result__buttons {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
 }
 
 .game__result__button,
@@ -593,38 +664,35 @@ button {
   letter-spacing: .1rem;
 }
 
-.game__result__button+.game__result__button {
-  margin-top: .5rem;
-}
-
 .game__result__text {
-  font-size: clamp(3rem, 3rem + 1vw, 3.5rem);
+  --result-text-fs: 1.8rem;
+  font-size: clamp(var(--result-text-fs), var(--result-text-fs) + 1.5vw, var(--result-text-fs) * 1.5);
   color: white;
   text-transform: uppercase;
+  line-height: 1;
+  margin-bottom: .5rem;
 }
 
 .game__result__button {
+  --result-button-fs: .9rem;
   color: var(--dark-text-color);
   background-color: white;
-  font-size: 1.2rem;
-  min-width: 14rem;
-  min-height: 3rem;
+  font-size: clamp(var(--result-button-fs), var(--result-button-fs) + 1vw, var(--result-button-fs) * 1.5);
+  flex: 1 1 2rem;
+  padding-inline: 1rem;
+  border: 1px solid transparent;
 }
 
 .game__rules-btn {
   --rules-btn-text-size: clamp(1rem, 1rem + .5vw, 1.5rem);
 
-  position: absolute;
   color: white;
   border: 1px solid white;
   padding: .5rem 2rem;
   font-size: var(--rules-btn-text-size);
-  left: 50%;
-  bottom: 0;
-  transform: translate(-50%);
-  margin-bottom: 2rem;
   font-weight: 600;
   z-index: 60;
+  margin-bottom: .5rem;
 
   &.game__rules--clicked {
     background-color: white;
@@ -645,7 +713,6 @@ button {
   position: fixed;
   top: 0;
   left: 0;
-  margin: 0;
   z-index: -1;
   opacity: 0;
 
@@ -659,18 +726,31 @@ button {
   font-size: var(--fs-rules-text);
   text-transform: uppercase;
   position: absolute;
-  top: 10%;
+  top: 5%;
 }
 
 .rules__image {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+  min-width: 10rem;
+  max-width: 75%;
+  opacity: 0;
+  visibility: hidden;
+
+  &.rules__image--show{
+    opacity: 1;
+    visibility: visible;
+  }
 }
 
 .rules__button {
   position: absolute;
-  bottom: 10%;
+  bottom: 5%;
+}
+
+.rules__button__image {
+  min-width: 2rem;
 }
 
 .game__rules-desktop-overlay {
@@ -678,18 +758,49 @@ button {
   display: none;
 }
 
-@media screen and (min-width: 25rem) {
-  .option__text {
-    --fs-option-text: .9rem;
+@media screen and (min-height: 40rem) and (min-width: 40rem) {
+  .game__options__container {
+    flex-grow: 1.5;
   }
 
-  .game__content--user-select .game__options,
-  .game__content--rpsls.game__content--user-select .game__options{
-    --option-width: clamp(6rem, 6rem + 8vw, 10rem);
-    --option-height: clamp(6rem, 6rem + 8vw, 10rem);
+  .game {
+    grid-template-areas:
+      "score"
+      "content";
   }
 
-  .game__content--user-select .game__options{
-    top: 10%;
+  .game__result__button {
+    --result-button-fs: .8rem;
+  }
+
+  .rules__button {
+    bottom: 5%;
+  }
+}
+
+@media screen and (min-width: 30rem) {
+  .game__content--user-select .game__options {
+    --option-size-min: 8rem;
+  }
+
+  .game__content--rpsls:not(.game__content--user-select) .game__options {
+    --option-size-min: 6rem;
+    --option-size-sum: 5vw;
+  }
+}
+
+@media screen and (max-height: 30rem) {
+  .game__result {
+    flex-direction: row;
+    gap: .5rem;
+  }
+
+  .game__result__button{
+    padding-inline: .5rem
+  }
+
+  .game__content {
+    padding: 1.5rem;
+    padding-bottom: 0;
   }
 }
