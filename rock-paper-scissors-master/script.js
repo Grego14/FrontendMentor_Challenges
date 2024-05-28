@@ -13,11 +13,18 @@ d.addEventListener('DOMContentLoaded', async e => {
   if(!storage.getItem('score')) storage.setItem('score', 12) 
 
   let score = storage.getItem('score')
-  const gameMode = storage.getItem('game-mode')
+  let gameMode = storage.getItem('game-mode')
 
   const sounds = {
     lose: new Audio(),
     win: new Audio()
+  }
+
+  const backgrounds = {
+    rps: new Image(),
+    rpsls: new Image(),
+    rules_rps: new Image(),
+    rules_rpsls: new Image()
   }
 
   const options = new Map([
@@ -48,16 +55,37 @@ d.addEventListener('DOMContentLoaded', async e => {
     : 'Rock, paper, scissors, lizard, spock'
   const gameImageUrl = images[gameMode].title
 
+  const gameBackgroundElement = d.getElementById('game-background')
+
+  const rulesImage = d.getElementById('rules-image-text')
+  const gameContent = d.getElementById('game-content')
+
+  function preloadSource(url, source, callback){
+    source.src = url
+
+    if(callback){
+      source.addEventListener('load', () =>{
+        callback(source.src)
+      }, {once: true})
+    }
+  }
+
   preloadSource(gameImageUrl, gameImageElement, (src) =>{
     gameImageElement.classList.add('game__image--loaded')
     gameImageElement.setAttribute('alt', gameImageAlt)
   })
 
-  const gameBackgroundElement = d.getElementById('game-background')
-  const rulesText = d.getElementById('rules-text')
-  const gameContent = d.getElementById('game-content')
+  function updateBackgroundImage(){
+    gameBackgroundElement.src = backgrounds[gameMode].src
 
-  const backgroundImageUrl = images[gameMode].main
+    gameBackgroundElement.classList.add('game__background--show')
+  }
+
+  function updateRulesImage(){
+    rulesImage.src = backgrounds[`rules_${gameMode}`].src
+
+    rulesImage.classList.add('rules__image--show')
+  }
 
   preloadSource(soundsUrls.win, sounds.win, (src) =>{
     sounds.win.src = src
@@ -67,33 +95,43 @@ d.addEventListener('DOMContentLoaded', async e => {
     sounds.lose.src = src
   })
 
-  function preloadSource(url, source, callback){
-    source.src = url
+  preloadSource(images.rps.main, backgrounds.rps)
+  preloadSource(images.rpsls.main, backgrounds.rpsls)
 
-    source.addEventListener('load', () =>{
-      callback(source.src)
-    }, {once: true})
-  }
+  updateBackgroundImage()
 
-  preloadSource(backgroundImageUrl, gameBackgroundElement, (src) =>{
-    gameBackgroundElement.classList.add('game__background--show')
-  })
+  preloadSource(images.rps.rules, backgrounds.rules_rps)
+  preloadSource(images.rpsls.rules, backgrounds.rules_rpsls)
 
-  rulesText.setAttribute('alt', rules[gameMode])
-  rulesText.setAttribute('src', images[gameMode].rules)
+  updateRulesImage()
 
-  if(gameMode === 'rpsls') {
-    gameElement.classList.add('game__content--rpsls')
+  rulesImage.setAttribute('alt', rules[gameMode])
+  rulesImage.setAttribute('src', images[gameMode].rules)
 
-    // reorganize the options, and their tabindexes.
+  function updateOptions(){
+    if(gameMode === 'rpsls') {
+      gameElement.classList.add('game__content--rpsls')
+
+      options.clear()
+
+      options.set('scissors', {name: 'scissors', image: './assets/images/icon-scissors.svg', gradient: 'game__option--scissors'})
+      options.set('paper', {name: 'paper', image: './assets/images/icon-paper.svg', gradient: 'game__option--paper'})
+      options.set('rock' ,{name: 'rock', image: './assets/images/icon-rock.svg', gradient: 'game__option--rock'})
+      options.set('lizard', {name: 'lizard', image: './assets/images/icon-lizard.svg', gradient: 'game__option--lizard'})
+      options.set('spock', {name: 'spock', image: './assets/images/icon-spock.svg', gradient: 'game__option--spock'})
+      return options
+    }
+
+    gameElement.classList.remove('game__content--rpsls')
+
     options.clear()
 
-    options.set('scissors', {name: 'scissors', image: './assets/images/icon-scissors.svg', gradient: 'game__option--scissors'})
     options.set('paper', {name: 'paper', image: './assets/images/icon-paper.svg', gradient: 'game__option--paper'})
+    options.set('scissors', {name: 'scissors', image: './assets/images/icon-scissors.svg', gradient: 'game__option--scissors'})
     options.set('rock' ,{name: 'rock', image: './assets/images/icon-rock.svg', gradient: 'game__option--rock'})
-    options.set('lizard', {name: 'lizard', image: './assets/images/icon-lizard.svg', gradient: 'game__option--lizard'})
-    options.set('spock', {name: 'spock', image: './assets/images/icon-spock.svg', gradient: 'game__option--spock'})
   }
+
+  updateOptions()
 
   const gameResult = d.getElementById('game-result')
   const gameResultText = d.getElementById('game-result-text')
@@ -103,33 +141,35 @@ d.addEventListener('DOMContentLoaded', async e => {
   function createOption({name, image, label, gradient, customClass}){
     const clone = template.cloneNode(true)
     const cloneImg = clone.getElementById('image')
-    const cloneOption = clone.getElementById('name')
+    const cloneOption = clone.getElementById('option')
+    const cloneOptionContainer = clone.getElementById('container')
 
     cloneImg.removeAttribute('id')
     cloneOption.removeAttribute('id')
+    cloneOptionContainer.removeAttribute('id')
 
-    cloneOption.classList.add(gradient)
-    cloneOption.setAttribute('data-option', name)
+    cloneOptionContainer.classList.add(gradient)
+    cloneOptionContainer.setAttribute('data-option', name)
 
-    if(customClass) cloneOption.classList.add(customClass)
+    if(customClass) cloneOptionContainer.classList.add(customClass)
 
     setTimeout(() => {
-      cloneOption.classList.add('game__option--show', 'game__option--start')
+      cloneOptionContainer.classList.add('game__option--show', 'game__option--start')
     }, 500);
 
-    cloneOption.addEventListener('transitionend', e => {
-      cloneOption.classList.remove('game__option--start')
+    cloneOptionContainer.addEventListener('transitionend', e => {
+      cloneOptionContainer.classList.remove('game__option--start')
+      cloneOptionContainer.classList.add('game__option--loaded')
       cloneImg.classList.add('image--show')
     }, {once: true})
 
     cloneImg.setAttribute('src', image)
-    cloneOption.setAttribute('aria-label', `${label}`)
+    cloneOptionContainer.setAttribute('aria-label', `${label}`)
 
-    return cloneOption
+    return cloneOptionContainer
   }
 
-  // prevent adding the options if the background is not loaded yet
-  gameBackgroundElement.addEventListener('load', () =>{
+  function createOptions(){
     for (const [key, option] of options) {
       const opt = createOption({
         name: option.name,
@@ -140,6 +180,11 @@ d.addEventListener('DOMContentLoaded', async e => {
       fragment.append(opt)
     }
     gameOptions.append(fragment)
+  }
+
+  // prevent adding the options if the background is not loaded yet
+  gameBackgroundElement.addEventListener('load', () =>{
+    createOptions()
   }, {once: true})
 
   const rulesBtn = d.getElementById('game-rules')
@@ -147,59 +192,109 @@ d.addEventListener('DOMContentLoaded', async e => {
   const gameRulesOverlay = d.getElementById('game-rules-overlay')
 
   function handleRulesBtnClick(e){ 
-    gameElement.classList.toggle('game__rules-desktop-overlay--show')
+    gameElement.classList.toggle('game__rules-overlay--show')
     gameRulesOverlay.classList.toggle('game__rules--show') 
     gameRulesOverlay.setAttribute('aria-hidden', gameRulesOverlay.getAttribute('aria-hidden') === 'true' ? 'false' : 'true') 
     rulesBtn.classList.toggle('game__rules--clicked')
   }
 
-  function handleOptionsText(){
-    const textElements = d.querySelectorAll('.option__text')
+  function handleOptionsText(remove){
+    const houseOptText = d.createElement('div')
+    const selectedOptText = d.createElement('div')
 
-    for (const textEl of textElements) {
-      textEl.classList.add('option__text--show')
-      textEl.setAttribute('aria-hidden', textEl.getAttribute('aria-hidden') === 'true' ? 'false' : 'true')
-    }
+    houseOptText.classList.add('game__option__text--house', 'game__option__text')
+    selectedOptText.classList.add('game__option__text--selected', 'game__option__text')
+
+    houseOptText.textContent = 'the house picked'
+    selectedOptText.textContent = 'you picked'
+
+    d.getElementById('selected-option').append(selectedOptText)
+    d.getElementById('house-option').append(houseOptText)
   }
 
   const playAgainBtn = d.getElementById('button-play')
   const modeBtn = d.getElementById('button-mode')
 
-  modeBtn.textContent = gameMode === 'rps' ? 'Lizard + Spock' : 'Normal mode'
-  modeBtn.dataset.mode = gameMode === 'rps' ? 'rpsls' : 'rps'
+
+  function updateModeBtn(){
+    modeBtn.textContent = gameMode === 'rps' ? 'Lizard + Spock' : 'Normal mode'
+    modeBtn.dataset.mode = gameMode === 'rps' ? 'rpsls' : 'rps'
+  }
+
+  updateModeBtn()
+
+  function removeOptions(callback){
+    for (const domOpt of d.querySelectorAll('.game__option__container')) {
+
+      if(callback) callback(domOpt)
+
+      gameOptions.removeChild(domOpt)
+    }
+  }
+
+  // reset some content before playing again 
+  function handleGameElement(){
+    gameElement.classList.remove('game__content--user-select')
+    gameBackgroundElement.classList.remove('game__background--hide')
+
+    if(gameElement.classList.value.match(/options__winner--.*$/)?.[0]) 
+    gameElement.classList.remove(gameElement.classList.value?.match(/options__winner--.*$/)[0])
+  }
+
+  function handlePlayAgainBtn(){
+
+    handleGameResults()
+    handleGameElement()
+
+    removeOptions()
+
+    createOptions()
+  }
+
+  function handleModeBtn(e){
+    w.localStorage.setItem('game-mode', e.target.dataset.mode)
+    e.target.dataset.mode = e.target.dataset.mode === 'rps' ? 'rpsls' : 'rps'
+
+    gameMode = storage.getItem('game-mode')
+
+    updateModeBtn()
+
+    handleGameResults()
+    handleGameElement()
+
+    updateBackgroundImage()
+    updateRulesImage()
+
+    removeOptions()
+
+    updateOptions()
+    createOptions()
+  }
 
   function handleOptionsOnClick(clickedOption){
     clickedOption.setAttribute('id', 'selected-option')
     gameElement.classList.add('game__content--user-select')
 
-    const domOptions = d.querySelectorAll('.game__option')
-    for (const domOpt of domOptions) {
+    clickedOption.classList.add('game__option--start')
+
+    for (const domOpt of d.querySelectorAll('.game__option__container')) {
 
       if(domOpt === clickedOption) continue
 
-      clickedOption.classList.remove('game__option--start')
-      domOpt.classList.remove('game__option--show', 'game__option--start')
-
-      if(!domOpt.classList.contains('game__option--selected') || !domOpt.classList.contains('game__option--house')){
-        domOpt.removeAttribute('tabindex')
-      }
-
-      domOpt.addEventListener('transitionend', e => {
-        if(e.propertyName === 'opacity') domOpt.classList.add('game__option--hide')
-      }, {once: true})
-
-      gameBackgroundElement.classList.add('game__background--hide')
-
-      clickedOption.classList.add('game__option--selected')
+      gameOptions.removeChild(domOpt)
     }
-    handleOptionsText()
+
+    gameBackgroundElement.classList.add('game__background--hide')
+    clickedOption.classList.add('game__option--selected')
+
     handleHouseOption()
+    handleOptionsText()
   }
 
   let houseOpt;
+  const bg = d.createElement('div')
 
   function handleHouseOption(){
-    const bg = d.createElement('div')
     bg.classList.add('game__option--house-selecting')
 
     const name = getRandomOption()
@@ -212,28 +307,30 @@ d.addEventListener('DOMContentLoaded', async e => {
       customClass: 'game__option--house',
     })
 
-    const houseOptContainer = d.createElement('div')
-    houseOptContainer.classList.add('game__option__container', 'option__container--house')
-    const selectedOptContainer = d.createElement('div')
-    selectedOptContainer.classList.add('game__option__container', 'option__container--selected')
+    houseOpt.setAttribute('id', 'house-option')
 
-    houseOptContainer.append(houseOpt, bg)
-    selectedOptContainer.append(d.getElementById('selected-option'))
+    houseOpt.append(bg)
 
+    handleHouseOptTransitionEnd()
+
+    gameOptions.append(houseOpt)
+  }
+
+  function handleGameResults(){
+    gameResult.setAttribute('aria-hidden', gameResult.getAttribute('aria-hidden') === 'true' ? 'false' : 'true')
+  }
+
+  function handleHouseOptTransitionEnd(){
     houseOpt.addEventListener('transitionend', e =>{
-      houseOptContainer.removeChild(bg)
+      houseOpt.removeChild(bg)
 
-      gameResult.setAttribute('aria-hidden', 'false')
-      gameResult.classList.add('game__result--show')
+      handleGameResults()
 
       d.activeElement.blur()
       gameResultText.focus()
 
-      handleScore({target: d.querySelector('.game__option--selected')})
+      handleScore(d.querySelector('.game__option--selected'))
     }, {once: true})
-
-    gameOptions.append(selectedOptContainer)
-    gameOptions.append(houseOptContainer)
   }
 
   function getRandomOption(){
@@ -257,8 +354,8 @@ d.addEventListener('DOMContentLoaded', async e => {
     gameResultText.textContent = text
   }
 
-  function handleScore(e){
-    const userSelected = e.target.dataset.option
+  function handleScore(selectedOpt){
+    const userSelected = selectedOpt.dataset.option
     const houseSelected = houseOpt.dataset.option 
 
     if(userSelected === houseSelected) return updateGameResult('Draw')
@@ -276,30 +373,18 @@ d.addEventListener('DOMContentLoaded', async e => {
     ) {
       setScore(Number(score) + 1)
       sounds.win.play()
-      e.target.classList.add('game__option--winner')
-      gameOptions.classList.add(`options__winner--${d.querySelector('.game__option--winner').dataset.option}`)
+      selectedOpt.classList.add('game__option--winner')
+      gameElement.classList.add(`options__winner--${d.querySelector('.game__option--winner').dataset.option}`)
       return updateGameResult('You win')
     }
 
     sounds.lose.play()
     setScore(Number(score) - 1)
     houseOpt.classList.add('game__option--winner')
-    gameOptions.classList.add(`options__winner--${d.querySelector('.game__option--winner').dataset.option}`)
+    gameElement.classList.add(`options__winner--${d.querySelector('.game__option--winner').dataset.option}`)
     return updateGameResult('You lose')
   }
 
-  function handleModeBtn(e){
-    if(gameMode === e.target.dataset.mode) return
-
-    w.localStorage.setItem('game-mode', e.target.dataset.mode)
-
-    e.target.dataset.mode = e.target.dataset.mode === 'rps' ? 'rpsls' : 'rps'
-
-    w.location.reload()
-  }
-
-  function handlePlayBtn(e){ w.location.reload() }
-  
   function updateOptionsLabels(e){
     e.target.setAttribute('aria-label', `You picked ${e.target.dataset.option}`)
     houseOpt.setAttribute('aria-label', `The house picked ${houseOpt.dataset.option}`)
@@ -308,12 +393,12 @@ d.addEventListener('DOMContentLoaded', async e => {
   d.addEventListener('click', e => {
     if(e.target === rulesBtn) handleRulesBtnClick(e)
     if(e.target === closeRulesBtn) handleRulesBtnClick(e)
-    if(e.target.matches('#desktop-overlay') && gameElement.classList.contains('game__rules-desktop-overlay--show')) handleRulesBtnClick(e)
+    if(e.target.matches('#desktop-overlay') && gameElement.classList.contains('game__rules-overlay--show')) handleRulesBtnClick(e)
 
     if(e.target === modeBtn) handleModeBtn(e)
-    if(e.target === playAgainBtn) handlePlayBtn(e)
+    if(e.target === playAgainBtn) handlePlayAgainBtn(e)
 
-    if(e.target.matches('.game__option')) {
+    if(e.target.matches('.game__option__container')) {
       handleOptionsOnClick(e.target)
       updateOptionsLabels(e)
     }
