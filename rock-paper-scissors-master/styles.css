@@ -708,7 +708,7 @@ button {
   flex-direction: column;
   background-color: white;
   text-align: center;
-  min-height: 100lvh;
+  min-height: 100dvh;
   min-width: 100vw;
   position: fixed;
   top: 0;
