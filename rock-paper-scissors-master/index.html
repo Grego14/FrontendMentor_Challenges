@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name='keywords' content='Rock, Paper, Scissors'/>
+  <meta name='description' content='Rock, Paper, Scissors Game'/>
   <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
   <link rel='stylesheet' href='./styles.css' type='text/css' />
   <link rel='stylesheet' href='./styles-desktop.css' type='text/css' media='(min-width: 60rem)' />
@@ -32,7 +33,7 @@
               <img class='game__background' src='' width='250' height='200' id='game-background' alt=''
                 aria-hidden='true' />
               <template id='game-template'>
-                <div class='game__option__container' id='container' tabindex='0'>
+                <div class='game__option__container' id='container' tabindex='0' role='option' aria-selected='false'>
                   <div class='game__option' id='option'>
                     <div class='game__option__background'>
                       <img class='game__option__image' src='' id='image' alt='' aria-hidden='true' width='50'
@@ -66,7 +67,7 @@
           alt='paper beats rock, rock beats scissors, scissors beats paper' width='300' height='200'
           id='rules-image-text' />
         <button class='rules__button' aria-label='close rules' id='close-rules'>
-          <img class='rules__button__image' src='./assets/images/icon-close.svg' alt='' aria-hidden='true' />
+          <img class='rules__button__image' src='./assets/images/icon-close.svg' alt='' aria-hidden='true' width='32' height='32' />
         </button>
       </div>
     </section>
