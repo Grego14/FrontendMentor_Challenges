@@ -84,13 +84,9 @@ d.addEventListener('DOMContentLoaded', async e => {
     if(alt) element.setAttribute('alt', alt)
   }
 
-  preloadSource(soundsUrls.win, sounds.win, (src) =>{
-    sounds.win.src = src
-  })
+  preloadSource(soundsUrls.win, sounds.win)
 
-  preloadSource(soundsUrls.lose, sounds.lose, (src) =>{
-    sounds.lose.src = src
-  })
+  preloadSource(soundsUrls.lose, sounds.lose)
 
   preloadSource(images.rps.main, backgrounds.rps)
   preloadSource(images.rpsls.main, backgrounds.rpsls)
