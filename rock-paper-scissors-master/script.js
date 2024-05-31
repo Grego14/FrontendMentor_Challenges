@@ -24,7 +24,9 @@ d.addEventListener('DOMContentLoaded', async e => {
     rps: new Image(),
     rpsls: new Image(),
     rules_rps: new Image(),
-    rules_rpsls: new Image()
+    rules_rpsls: new Image(),
+    title_rps: new Image(),
+    title_rpsls: new Image()
   }
 
   const options = new Map([
@@ -75,16 +77,11 @@ d.addEventListener('DOMContentLoaded', async e => {
     gameImageElement.setAttribute('alt', gameImageAlt)
   })
 
-  function updateBackgroundImage(){
-    gameBackgroundElement.src = backgrounds[gameMode].src
+  function updateImage(element, src, {className, alt}){
+    element.src = src
 
-    gameBackgroundElement.classList.add('game__background--show')
-  }
-
-  function updateRulesImage(){
-    rulesImage.src = backgrounds[`rules_${gameMode}`].src
-
-    rulesImage.classList.add('rules__image--show')
+    if(className) element.classList.add(className)
+    if(alt) element.setAttribute('alt', alt)
   }
 
   preloadSource(soundsUrls.win, sounds.win, (src) =>{
@@ -98,15 +95,17 @@ d.addEventListener('DOMContentLoaded', async e => {
   preloadSource(images.rps.main, backgrounds.rps)
   preloadSource(images.rpsls.main, backgrounds.rpsls)
 
-  updateBackgroundImage()
+  updateImage(gameBackgroundElement, backgrounds[gameMode].src, { className: 'game__background--show' })
 
   preloadSource(images.rps.rules, backgrounds.rules_rps)
   preloadSource(images.rpsls.rules, backgrounds.rules_rpsls)
 
-  updateRulesImage()
+  updateImage(rulesImage, backgrounds[`rules_${gameMode}`].src, { className: 'rules__image--show', alt: rules[gameMode]})
 
-  rulesImage.setAttribute('alt', rules[gameMode])
-  rulesImage.setAttribute('src', images[gameMode].rules)
+  preloadSource(images.rps.title, backgrounds.title_rps)
+  preloadSource(images.rpsls.title, backgrounds.title_rpsls)
+
+  updateImage(gameImageElement, backgrounds[`title_${gameMode}`].src, { className: 'game__image--show' })
 
   function updateOptions(){
     if(gameMode === 'rpsls') {
@@ -119,6 +118,7 @@ d.addEventListener('DOMContentLoaded', async e => {
       options.set('rock' ,{name: 'rock', image: './assets/images/icon-rock.svg', gradient: 'game__option--rock'})
       options.set('lizard', {name: 'lizard', image: './assets/images/icon-lizard.svg', gradient: 'game__option--lizard'})
       options.set('spock', {name: 'spock', image: './assets/images/icon-spock.svg', gradient: 'game__option--spock'})
+
       return options
     }
 
@@ -137,6 +137,19 @@ d.addEventListener('DOMContentLoaded', async e => {
   const gameResultText = d.getElementById('game-result-text')
   const gameScore = d.getElementById('game-score')
   setScore(score)
+
+  function changeMode(){
+    gameMode = storage.getItem('game-mode')
+
+    updateImage(gameBackgroundElement, backgrounds[gameMode].src, 'game__background--show')
+    updateImage(rulesImage, backgrounds[`rules_${gameMode}`].src, 'rules__image--show')
+    updateImage(gameImageElement, backgrounds[`title_${gameMode}`].src, 'game__image--show')
+
+    handleGameResults()
+    handleGameElement()
+
+    removeOptions()
+  }
 
   function createOption({name, image, label, gradient, customClass}){
     const clone = template.cloneNode(true)
@@ -243,12 +256,7 @@ d.addEventListener('DOMContentLoaded', async e => {
   }
 
   function handlePlayAgainBtn(){
-
-    handleGameResults()
-    handleGameElement()
-
-    removeOptions()
-
+    changeMode()
     createOptions()
   }
 
@@ -256,17 +264,9 @@ d.addEventListener('DOMContentLoaded', async e => {
     w.localStorage.setItem('game-mode', e.target.dataset.mode)
     e.target.dataset.mode = e.target.dataset.mode === 'rps' ? 'rpsls' : 'rps'
 
-    gameMode = storage.getItem('game-mode')
+    changeMode()
 
     updateModeBtn()
-
-    handleGameResults()
-    handleGameElement()
-
-    updateBackgroundImage()
-    updateRulesImage()
-
-    removeOptions()
 
     updateOptions()
     createOptions()
@@ -274,6 +274,8 @@ d.addEventListener('DOMContentLoaded', async e => {
 
   function handleOptionsOnClick(clickedOption){
     clickedOption.setAttribute('id', 'selected-option')
+    clickedOption.setAttribute('aria-selected', clickedOption.getAttribute('aria-selected') === 'true' ? 'false' : 'true')
+
     gameElement.classList.add('game__content--user-select')
 
     clickedOption.classList.add('game__option--start')
@@ -407,7 +409,7 @@ d.addEventListener('DOMContentLoaded', async e => {
   })
 
   d.addEventListener('keydown', e =>{
-    if(e.key === 'Enter' && e.target.matches('.game__option:not(.game__option--selected, .game__option--house)')){
+    if(e.key === 'Enter' && e.target.matches('.game__option__container:not(.game__option--selected, .game__option--house)')){
       handleOptionsOnClick(e.target)
       updateOptionsLabels(e)
     }
