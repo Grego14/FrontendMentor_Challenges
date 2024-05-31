@@ -1,5 +1,9 @@
+.game{
+  --header-margin-top: 2rem;
+}
+
 .game__header{
-  min-width: calc(100% - 30vw);
+  min-width: calc(100% - 40vw);
 }
 
 .game__content--user-select .game__options {

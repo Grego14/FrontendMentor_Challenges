@@ -45,9 +45,9 @@
 
 body {
   background-color: var(--radial-gradient-from);
-  background-image: radial-gradient(var(--radial-gradient-from), var(--radial-gradient-to));
   background-image: -webkit-radial-gradient(var(--radial-gradient-from), var(--radial-gradient-to));
   background-image: -moz-radial-gradient(var(--radial-gradient-from), var(--radial-gradient-to));
+  background-image: radial-gradient(var(--radial-gradient-from), var(--radial-gradient-to));
 }
 
 body,
