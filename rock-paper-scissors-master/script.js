@@ -239,6 +239,7 @@ d.addEventListener('DOMContentLoaded', async e => {
 
     if(gameElement.classList.value.match(/options__winner--.*$/)?.[0]) 
     gameElement.classList.remove(gameElement.classList.value?.match(/options__winner--.*$/)[0])
+    gameElement.classList.remove('game__content--house-selected')
   }
 
   function handlePlayAgainBtn(){
@@ -323,6 +324,7 @@ d.addEventListener('DOMContentLoaded', async e => {
   function handleHouseOptTransitionEnd(){
     houseOpt.addEventListener('transitionend', e =>{
       houseOpt.removeChild(bg)
+      gameElement.classList.add('game__content--house-selected')
 
       handleGameResults()
 
