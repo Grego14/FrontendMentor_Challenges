@@ -1,55 +1,35 @@
-.game__options{
-  --options-width: 14rem;
-  --options-height: 12rem;
-
-  --option-width: clamp(6rem, 6rem + 8vw, 12rem);
-  --option-height: clamp(6rem, 6rem + 8vw, 12rem);
+.game__header{
+  min-width: calc(100% - 30vw);
 }
 
-.game__content--user-select .game__options{
-  --options-width: 16rem;
+.game__content--user-select .game__options {
+  --options-multiplier-w: 3;
+  --option-multiplier: 1.5;
+  --option-size-min: 10rem;
 }
 
-@media screen and (min-width: 53.75rem) {
-  .game__header{
-    min-width: calc(100% - 30vw);
-  }
+.game__options__container {
+  flex-grow: 2;
 }
 
-@media screen and (min-height: 35rem) {
-  .game__rules-overlay--show .game__rules-desktop-overlay {
-    display: block;
-    min-width: 100vw;
-    min-height: 100vh;
-    position: fixed;
-    background-color: black;
-    pointer-events: auto;
-    margin: 0;
-    opacity: .5;
-    z-index: 90;
-  }
+.game__content--user-select .game__option--selected,
+.game__content--user-select .game__option--house {
+  top: initial;
+  bottom: 0;
+}
 
-  .game__rules-overlay {
-    min-height: 28rem;
-    min-width: 25rem;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: .5rem;
-  }
+.game__content--house-selected .game__option--selected {
+  transform: translateX(calc(-60% - 15vw));
+}
 
-  .rules__title {
-    left: 2rem;
-    top: 5%;
-  }
+.game__content--house-selected .game__option--house {
+  transform: translateX(calc(60% + 15vw));
+}
 
-  .rules__button {
-    bottom: initial;
-    right: 2rem;
-    top: 8%;
-  }
+.game__result {
+  transform: translate(0, -120%);
+}
 
-  .rules__image {
-    top: 55%;
-  }
+.game__rules-btn {
+  margin-left: auto;
 }
