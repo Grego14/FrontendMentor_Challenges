@@ -4,9 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name='keywords' content='Rock, Paper, Scissors'/>
   <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
   <link rel='stylesheet' href='./styles.css' type='text/css' />
-  <link rel='stylesheet' href='./styles-desktop.css' type='text/css' media='(min-width: 64rem)' />
+  <link rel='stylesheet' href='./styles-desktop.css' type='text/css' media='(min-width: 60rem)' />
   <link rel="preload" href='./assets/fonts/BarlowSemiCondensed-Bold.woff2' as="font" type="font/woff2" crossorigin>
   <link rel="preload" href='./assets/fonts/BarlowSemiCondensed-SemiBold.woff2' as="font" type="font/woff2" crossorigin>
   <title>Frontend Mentor | Rock, Paper, Scissors</title>
@@ -28,12 +29,14 @@
         <div class='game__content' id='game-content'>
           <div class='game__options__container game__container'>
             <div class='game__options' id='game-options'>
-              <img class='game__background' src='' width='250' height='200' id='game-background' alt='' aria-hidden='true' />
+              <img class='game__background' src='' width='250' height='200' id='game-background' alt=''
+                aria-hidden='true' />
               <template id='game-template'>
                 <div class='game__option__container' id='container' tabindex='0'>
                   <div class='game__option' id='option'>
                     <div class='game__option__background'>
-                      <img class='game__option__image' src='' id='image' alt='' aria-hidden='true' width='50' height='50' />
+                      <img class='game__option__image' src='' id='image' alt='' aria-hidden='true' width='50'
+                        height='50' />
                     </div>
                   </div>
                 </div>
@@ -60,7 +63,8 @@
       <div class='game__rules-overlay' id='game-rules-overlay' aria-hidden='true'>
         <h2 class='rules__title'>Rules</h2>
         <img class='rules__image' src='./assets/images/image-rules.svg'
-          alt='paper beats rock, rock beats scissors, scissors beats paper' width='300' height='200' id='rules-image-text' />
+          alt='paper beats rock, rock beats scissors, scissors beats paper' width='300' height='200'
+          id='rules-image-text' />
         <button class='rules__button' aria-label='close rules' id='close-rules'>
           <img class='rules__button__image' src='./assets/images/icon-close.svg' alt='' aria-hidden='true' />
         </button>
