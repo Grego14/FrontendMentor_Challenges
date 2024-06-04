@@ -22,4 +22,6 @@
 
 #### Rock, paper, scissors **|** [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/rock-paper-scissors-master) **|** [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/rock-paper-scissors-master/)
 
+#### Social Links Profile **|** [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/social-links-profile-main) **|** [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/social-links-profile-main/)
+
 ***Frontent Mentor Profile*** ➡️ [@Grego14](https://www.frontendmentor.io/profile/Grego14)
