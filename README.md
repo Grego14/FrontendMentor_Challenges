@@ -24,4 +24,6 @@
 
 #### Social Links Profile **|** [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/social-links-profile-main) **|** [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/social-links-profile-main/)
 
+#### Newsletter sign-up [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/javascript-fundamentals/newsletter-sign-up-with-success-message-main) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/javascript-fundamentals/newsletter-sign-up-with-success-message-main/)
+
 ***Frontent Mentor Profile*** ➡️ [@Grego14](https://www.frontendmentor.io/profile/Grego14)
