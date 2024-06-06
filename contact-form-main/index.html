@@ -17,17 +17,19 @@
     <form novalidate class='form'>
       <h1 class='form__title'>Contact Us</h1>
       <div class='form__info'>
-        <div class='form__input__container'>
-          <label for='name' class='form__label form__required'>First Name</label>
-          <input type='text' name='name' id='name' class='form__input' required autocomplete='given-name'>
-          <span class='form__error' aria-live='polite'></span>
+        <div class="form__inputs__inline">
+          <div class='form__input__container input__container--name'>
+            <label for='name' class='form__label form__required'>First Name</label>
+            <input type='text' name='name' id='name' class='form__input' required autocomplete='given-name'>
+            <span class='form__error' aria-live='polite'></span>
+          </div>
+          <div class='form__input__container input__container--name'>
+            <label for='last-name' class='form__label form__required'>Last Name</label>
+            <input type='text' name='last-name' id='last-name' class='form__input' required autocomplete='family-name'>
+            <span class='form__error' aria-live='polite'></span>
+          </div>
         </div>
-        <div class='form__input__container'>
-          <label for='last-name' class='form__label form__required'>Last Name</label>
-          <input type='text' name='last-name' id='last-name' class='form__input' required autocomplete='family-name'>
-          <span class='form__error' aria-live='polite'></span>
-        </div>
-        <div class='form__input__container'>
+        <div class='form__input__container input__container--email'>
           <label for='email' class='form__label form__required'>Email Adress</label>
           <input type='email' name='email' id='email' class='form__input' required minlength='8' maxlength='256'
             autocomplete='email'>
@@ -35,25 +37,28 @@
         </div>
         <fieldset class='form__query'>
           <legend class='form__query__legend form__required'>Query Type</legend>
-          <div class='form__input__container input__container--query'>
-            <input type='radio' name='enquiry' id='enquiry' class='form__input form__input--radio' value='enquiry'>
-            <label for='enquiry' class='form__label form__label--query'>General Enquiry</label>
-          </div>
-          <div class='form__input__container input__container--query'>
-            <input type='radio' name='support' id='support' class='form__input form__input--radio' value='support'>
-            <label for='support' class='form__label form__label--query'>Support Request</label>
+          <div class='form__inputs__inline'>
+            <label for='enquiry' class='form__label form__label--query' tabindex='0' aria-checked='false'>
+              <input type='radio' name='query-item' id='enquiry' class='form__input' value='enquiry'>
+              <span class='form__label__text'>General Enquiry</span>
+            </label>
+            <label for='support' class='form__label form__label--query' tabindex='0' aria-checked='false'>
+              <input type='radio' name='query-item' id='support' class='form__input' value='support'>
+              <span class='form__label__text'>Support Request</span>
+            </label>
           </div>
           <span class='form__error' aria-live='polite'></span>
         </fieldset>
         <div class='form__input__container input__container--textarea'>
-          <label for='message'>Message</label>
-          <textarea name='message' id='message' required cols='100' rows='6' minlength='50' maxlength='300'></textarea>
+          <label for='message' class='form__label form__required'>Message</label>
+          <textarea class='form__textarea' name='message' id='message' required cols='100' rows='3' minlength='50'
+            maxlength='300'></textarea>
+          <span class='form__error' aria-live='polite'></span>
         </div>
-        <span class='form__error' aria-live='polite'></span>
       </div>
       <div class='form__info form__info--send'>
-        <div class='form__input__container'>
-          <input type='checkbox' name='consent' id='consent' class='form__consent'>
+        <div class='form__input__container input__container--consent'>
+          <input type='checkbox' name='consent' id='consent' class='form__input form__consent'>
           <label for='consent' class='form__label form__label--consent'>I consent to being contacted by the team</label>
           <span class='form__error' aria-live='polite'></span>
         </div>
