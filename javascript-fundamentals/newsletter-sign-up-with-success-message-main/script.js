@@ -10,7 +10,7 @@ function emailUsername(string){
 }
 
 function handleErrors(value){
-	return emailUsername(value).length < 6 || emailUsername(value).length > 64 || !regex.test(value) || value.length > 254
+	return emailUsername(value).length < 6 || emailUsername(value).length > 64 || !regex.test(value) || value.length > 256
 }
 
 d.addEventListener('input', e =>{
@@ -20,9 +20,13 @@ d.addEventListener('input', e =>{
 
 	if(handleErrors(email[1])){
 		formError.classList.add('show')
+		formError.setAttribute('aria-hidden', 'false')
+    form.email.setAttribute('aria-invalid', 'true')
 		form.classList.add('error')
 	}else{ 
 		formError.classList.remove('show')
+		formError.setAttribute('aria-hidden', 'true')
+    form.email.setAttribute('aria-invalid', 'false')
 		form.classList.remove('error')
 	}
 
@@ -45,13 +49,12 @@ form.addEventListener('submit', function(e){
 
 		form.classList.add('success')
 		successCard.classList.add('show')
+		successCard.setAttribute('aria-hidden', 'false')
 	}
 
 	successCard.querySelector('.form__button').addEventListener('click', e =>{
 		successCard.classList.remove('show')
+		successCard.setAttribute('aria-hidden', 'true')
 		form.classList.remove('success')
-		this.email.setAttribute('disabled', '')
-		this.button.setAttribute('disabled', '')
-		this.button.value = 'Confirm your subscription!'
 	})
 })
