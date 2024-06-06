@@ -44,7 +44,6 @@
   height: 100vh;
   background-color: var(--charcoal-grey);
   padding: 2rem;
-  overflow: hidden;
 }
 
 .form {
