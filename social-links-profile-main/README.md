@@ -22,7 +22,8 @@ Users should be able to:
 
 ### Screenshot
 
-![]()
+![](/screenshots/social-links-desktop.png)
+![](/screenshots/social-links-mobile.png)
 
 ### Links
 
