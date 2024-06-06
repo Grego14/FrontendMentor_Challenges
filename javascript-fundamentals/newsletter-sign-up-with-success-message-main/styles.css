@@ -41,7 +41,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: 100dvh;
   background-color: var(--charcoal-grey);
   padding: 2rem;
 }
@@ -53,8 +53,8 @@
   min-height: 34rem;
   max-width: 60rem;
   transition: opacity 0.25s ease-in,
-    max-height 0.25s ease-in;
-  overflow: hidden;
+    max-height .25s ease-in;
+  /*overflow: hidden;*/
 }
 
 .form__left-section,
@@ -181,7 +181,7 @@
   background-color: color-mix(in srgb, var(--tomato-color) 10%, white)
 }
 
-.form__button {
+.form__button:not(hidden) {
   appearance: none;
   border: none;
   cursor: pointer;
@@ -196,9 +196,9 @@
 
 
 .subscribe {
+  position: absolute;
   opacity: 0;
   visibility: hidden;
-  max-width: 0;
   background-color: var(--white);
   transition: opacity 250ms ease-in;
 }
@@ -251,6 +251,10 @@
     min-width: 100vw;
     min-height: 100dvh;
     border-radius: 0;
+  }
+
+  .form.success{
+    overflow: hidden;
   }
 
   .form__right-section {

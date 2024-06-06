@@ -52,7 +52,12 @@ form.addEventListener('submit', function(e){
 		successCard.setAttribute('aria-hidden', 'false')
 	}
 
+  const dismissBtn = successCard.querySelector('.form__button')
+
+  dismissBtn.removeAttribute('hidden')
+
 	successCard.querySelector('.form__button').addEventListener('click', e =>{
+    dismissBtn.setAttribute('hidden', '')
 		successCard.classList.remove('show')
 		successCard.setAttribute('aria-hidden', 'true')
 		form.classList.remove('success')
