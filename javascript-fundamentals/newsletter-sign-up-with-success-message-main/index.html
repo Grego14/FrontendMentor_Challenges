@@ -2,66 +2,87 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
-	<title>Frontend Mentor | Newsletter sign-up form with success message</title>
-	<link rel="stylesheet" href="./styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name='description' content='Newsletter sign-up form'>
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+  <title>Frontend Mentor | Newsletter sign-up form with success message</title>
+  <link rel="stylesheet" href="./styles.css">
 </head>
 
 <body>
-	<main class='main'>
-		<form class='form' novalidate id='form'>
-			<section class='form__left-section'>
-				<h1 class='form__title'>Stay updated!</h1>
-				<p class='form__text'>Join 60,000+ product managers receiving monthly updates on:</p>
-				<ul class='form__list'>
-					<li class='form__list__item'>
-							<span class='list__item-icon'>
-								<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21"><g fill="none"><circle cx="10.5" cy="10.5" r="10.5" fill="#FF6155"/><path stroke="#FFF" stroke-width="2" d="M6 11.381 8.735 14 15 8"/></g></svg>
-							</span>
-							Product discovery and building what matters
-						</li>
-					<li class='form__list__item'>
-							<span class='list__item-icon'>
-								<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21"><g fill="none"><circle cx="10.5" cy="10.5" r="10.5" fill="#FF6155"/><path stroke="#FFF" stroke-width="2" d="M6 11.381 8.735 14 15 8"/></g></svg>
-							</span>
-							Measuring to ensure updates are a success
-						</li>
-					<li class='form__list__item'>
-							<span class='list__item-icon'>
-								<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21"><g fill="none"><circle cx="10.5" cy="10.5" r="10.5" fill="#FF6155"/><path stroke="#FFF" stroke-width="2" d="M6 11.381 8.735 14 15 8"/></g></svg>
-							</span>
-							And much more!
-						</li>
-				</ul>
-				<div class='form__email-container'>
-					<div class='form__text'>
-						<label class='form__label' for='email'>Email address</label>
-						<span class='form__error' id='form-error'>Valid email required</span>
-					</div>
-					<input class='form__input' type="email" name="email" placeholder='email@company.com' autocomplete='off'>
-					<input class='form__button' type="submit" name='button' value='Subscribe to monthly newsletter'>
-				</div>
-			</section>
-			<section class='form__right-section'>
-				<picture>
-					<source class='form__image-mobile form__image' srcset='./assets/images/illustration-sign-up-mobile.svg' media="(max-width: 600px)" />
-					<img class='form__image-desktop form__image' src='./assets/images/illustration-sign-up-desktop.svg' alt='' />
-				</picture>
-			</section>
-		</form>
-		<section class='subscribe-success' id='success-card'>
-			<div class='subscribe-success__container'>
-				<img class='form__image--success' src='./assets/images/icon-success.svg' alt='' />
-				<h2 class='form__title form__title--success'>Thanks for subscribing!</h2>
-				<p class='form__text form__text--success'>A confirmation email has been sent to<span id='email-output'></span>. Please open it and click the button inside to confirm your subscription.</p>
-				<button class='form__button form__button--success'>Dismiss message</button>
-			</div>
-		</section>
-	</main>
+  <main class='main'>
+    <form class='form' novalidate id='form'>
+      <div class='form__left-section'>
+        <h1 class='form__title'>Stay updated!</h1>
+        <p class='form__text'>Join 60,000+ product managers receiving monthly updates on:</p>
+        <ul class='form__list'>
+          <li class='form__list__item'>
+            <span class='list__item-icon'>
+              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
+                <g fill="none">
+                  <circle cx="10.5" cy="10.5" r="10.5" fill="#FF6155" />
+                  <path stroke="#FFF" stroke-width="2" d="M6 11.381 8.735 14 15 8" />
+                </g>
+              </svg>
+            </span>
+            Product discovery and building what matters
+          </li>
+          <li class='form__list__item'>
+            <span class='list__item-icon'>
+              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
+                <g fill="none">
+                  <circle cx="10.5" cy="10.5" r="10.5" fill="#FF6155" />
+                  <path stroke="#FFF" stroke-width="2" d="M6 11.381 8.735 14 15 8" />
+                </g>
+              </svg>
+            </span>
+            Measuring to ensure updates are a success
+          </li>
+          <li class='form__list__item'>
+            <span class='list__item-icon'>
+              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
+                <g fill="none">
+                  <circle cx="10.5" cy="10.5" r="10.5" fill="#FF6155" />
+                  <path stroke="#FFF" stroke-width="2" d="M6 11.381 8.735 14 15 8" />
+                </g>
+              </svg>
+            </span>
+            And much more!
+          </li>
+        </ul>
+        <div class='form__email-container'>
+          <div class='form__text'>
+            <label class='form__label' for='email'>Email address</label>
+            <span class='form__error' id='form-error' aria-hidden='true' aria-live='polite'>Valid email required</span>
+          </div>
+          <input class='form__input' type="email" name="email" id='email' placeholder='email@company.com'
+            autocomplete='email' required aria-invalid='false' aria-errormessage='form-error'>
+          <button class='form__button' type='submit' name='button'>Subscribe to monthly newsletter</button>
+        </div>
+      </div>
+      <div class='form__right-section'>
+        <picture>
+          <source class='form__image-mobile form__image' srcset='./assets/images/illustration-sign-up-mobile.svg'
+            media="(max-width: 50rem)">
+          <img class='form__image-desktop form__image' src='./assets/images/illustration-sign-up-desktop.svg' alt=''
+            aria-hidden='true' width='300'>
+        </picture>
+      </div>
+    </form>
+    <div class='subscribe' id='success-card' aria-hidden='true'>
+      <div class='subscribe__content'>
+        <img class='form__image--success' src='./assets/images/icon-success.svg' alt='' aria-hidden='true'>
+        <h2 class='form__title form__title--success'>Thanks for subscribing!</h2>
+        <p class='form__text form__text--success'>A confirmation email has been sent to<span id='email-output'
+            class='subscribe__email'></span>.
+          Please open it and click the button inside to confirm your subscription.</p>
+      </div>
+      <button class='form__button form__button--success'>Dismiss message</button>
+    </div>
+  </main>
 
-	<script src='./script.js'></script>
+  <script src='./script.js'></script>
 </body>
 
 </html>
