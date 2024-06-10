@@ -58,6 +58,7 @@ main {
   justify-content: center;
   background-color: var(--color-green-200);
   color: var(--color-grey-900);
+  padding: 1rem;
 }
 
 :root {
@@ -71,33 +72,32 @@ main {
 
   --margin-small: 1rem;
   --margin-medium: 1.5rem;
+  --padding-small: var(--margin-small);
+  --padding-medium: var(--margin-medium);
 
-  -webkit-text-size-adjust: none;
-  text-size-adjust: none;
+  --fs-label: .9rem;
+  --fs-error: .85rem;
+
+  --transition-time: .25s;
+
   line-height: 1.5;
   font-family: 'Karla', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-size: 16px;
-}
 
-.form__input[type='radio']:checked {
-  background: url('./assets/images/icon-radio-selected.svg') no-repeat center;
-}
-
-.form__label--query:has(.form__input:checked) {
-  background-color: var(--color-green-200);
-  border-color: var(--color-green-600);
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
 }
 
 .form {
-  max-width: 50rem;
+  --form-width: 17rem;
+  --form-padding: 1.5rem;
+  --input-height: 3rem;
+
   background-color: var(--color-white);
   border-radius: 1rem;
-  padding: 3rem;
-}
-
-.form__inputs {
-  display: flex;
-  flex-wrap: wrap;
+  padding: var(--form-padding);
+  min-width: 100%;
+  max-width: var(--form-width);
 }
 
 .form__input__container:not(.input__container--consent) {
@@ -105,24 +105,15 @@ main {
   flex-direction: column;
 }
 
-.input__container--name {
-  flex: 1 1;
-}
-
 .form__info,
-.form__submit,
-.form__info--send,
 .input__container--textarea {
   margin-top: var(--margin-medium);
 }
 
-.input__container--email {
-  min-width: 100%;
-}
-
 .input__container--email,
-.form__query {
-  margin-top: var(--margin-small);
+.form__query,
+.input__container--name+.input__container--name {
+  margin-top: var(--margin-medium);
 }
 
 .form__input,
@@ -135,43 +126,24 @@ main {
   }
 }
 
-.form__textarea,
-.form__label--query {
-  padding: 1rem;
+.form__textarea {
+  padding: var(--padding-small);
 }
 
 .form__input[type='text'],
 .form__input[type='email'] {
-  min-height: 3rem;
+  min-height: var(--input-height);
   padding-inline: 1rem;
 }
 
-.form__label,
-.form__query__legend {
-  cursor: pointer;
-  user-select: none;
-
-  &:not(.form__label--consent) {
-    margin-bottom: .3rem;
-  }
+.form__input[type='radio'],
+.form__input[type='checkbox'] {
+  min-width: 18px;
+  min-height: 18px;
 }
 
-.form__label.form__required::after {
-  content: '*';
-  color: var(--color-grey-500);
-  margin-left: .5rem;
-}
-
-.form__inputs__inline {
-  display: flex;
-  gap: 1rem;
-}
-
-.form__label--query {
-  flex: 1 1;
-  display: flex;
-  align-items: center;
-  gap: .5rem;
+.form__input[type='radio'] {
+  border-radius: 50%;
 }
 
 .form__input[type='radio']:checked,
@@ -179,24 +151,75 @@ main {
   border-color: transparent;
 }
 
-.form__input[type='radio'],
-.form__input[type='checkbox'] {
-  width: 20px;
-  height: 20px;
+.form__label,
+.form__legend {
+  cursor: pointer;
+  user-select: none;
+}
+
+.form__label:not(.form__label--consent, .form__label + .form__label),
+.form__legend {
+  margin-bottom: .5rem;
+}
+
+.form__label,
+.form__legend {
+  font-size: var(--fs-label);
+}
+
+.form__required::after {
+  content: '*';
+  color: var(--color-green-600);
+  margin-left: .3rem;
+}
+
+.form__label--query {
+  display: flex;
+  align-items: center;
+  gap: var(--margin-small);
+  max-height: var(--input-height);
+  min-height: var(--input-height);
+  padding-inline: var(--padding-small);
+  transition: background-color var(--transition-time) ease-in,
+    opacity var(--transition-time) ease-in;
 }
 
 .form__input[type='radio'] {
-  border-radius: 50%;
+  background: url('./assets/images/icon-radio-selected.svg') no-repeat center/0%;
+
+  &:checked {
+    background-size: 100%
+  }
+}
+
+.form__label--query:has(.form__input:checked) {
+  background-color: var(--color-green-200);
+  border-color: var(--color-green-600);
 }
 
 .input__container--consent {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  margin: var(--margin-medium) 0;
+}
+
+.form__controls {
+  min-width: 100%;
+}
+
+.form__controls--consent {
+  display: flex;
+  align-items: center;
   gap: .5rem;
 }
 
-.form__input[type='checkbox']:checked {
-  background: url('./assets/images/icon-checkbox-check.svg') no-repeat center;
+.form__input[type='checkbox'] {
+  background: url('./assets/images/icon-checkbox-check.svg') no-repeat center/0%;
+
+  &:checked {
+    background-size: 100%
+  }
 }
 
 .form__submit {
@@ -206,13 +229,164 @@ main {
   min-width: 100%;
   border-radius: .5rem;
   min-height: 3rem;
+  transition: background-color var(--transition-time) ease-in;
 }
 
-/* TODO - solve problem when :focus the radio inputs */
-/* TODO - implement mobile layout */
-/* TODO - adjust font sizes */
-/* TODO - add transitions */
-/* TODO - read about aria-errormessage and use it */
-/* TODO - refactor the CSS code and improve legibility */
-/* TODO - improve accessibility */
-/* TODO - use JavaScript code to validate the form */
+[data-error] .form__textarea,
+[data-error] .form__input:not([type='checkbox'], [type='radio']) {
+  border-color: var(--color-red);
+}
+
+[data-error] .form__input:not([type='checkbox'], [type='radio']):focus-visible {
+  outline: 2px solid var(--color-red);
+}
+
+.form__error {
+  color: var(--color-red);
+  margin-top: .5rem;
+  font-size: var(--fs-error);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity var(--transition-time) ease-in;
+
+  &:not([aria-hidden]) {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+.form__error:not(.form__error--consent) {
+  display: block;
+}
+
+@media (any-hover: hover) {
+  .form__label--query:not(:has(.form__input:checked)):hover {
+    opacity: .6;
+  }
+
+  .form__submit:hover {
+    background-color: var(--color-grey-900);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-time: 0.01s;
+  }
+}
+
+.notification {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity var(--transition-time) ease-in;
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-grey-900);
+  color: var(--color-white);
+  z-index: 1000;
+  min-width: 15rem;
+  border-radius: .5rem;
+  padding: var(--padding-small);
+  text-align: center;
+  text-wrap: balance;
+
+  &[aria-hidden] {
+    opacity: 0;
+    visibility: hidden
+  }
+}
+
+.notification__title {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  margin-bottom: .5rem;
+}
+
+.notification__message {
+  font-size: .9rem;
+}
+
+@media screen and (min-width: 40rem) {
+  .form {
+    --form-width: 38rem;
+    min-width: var(--form-width);
+  }
+
+  .form__controls:not(.form__controls--consent) {
+    display: flex;
+    align-items: center;
+    gap: var(--margin-small);
+    min-width: 100%;
+  }
+
+  .form__controls .form__input__container,
+  .form__controls .form__label.form__label--query {
+    margin: 0;
+    flex: 1 1;
+  }
+
+  .notification {
+    min-width: 25rem;
+    padding: var(--padding-medium);
+  }
+}
+
+@media screen and (max-height: 50rem) and (min-width: 40rem) {
+  :root {
+    --margin-small: .5rem;
+    --margin-medium: 1rem;
+    --fs-label: .85rem;
+    --fs-error: .8rem;
+  }
+
+  .form {
+    --input-height: 2.5rem;
+  }
+
+  .form__error {
+    margin-top: .3rem;
+  }
+
+  .form__label:not(.form__label--consent, .form__label + .form__label, .form__label--query),
+  .form__legend {
+    margin-bottom: .3rem;
+  }
+}
+
+/* new layout when window height is 720px and is not mobile width */
+
+@media screen and (max-height: 45rem) and (min-width: 40rem) {
+  .form__info {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--margin-small);
+  }
+
+  .form__info>* {
+    flex: 1 1;
+  }
+
+  .form__textarea {
+    max-width: calc(var(--form-width) - var(--form-padding) * 2);
+  }
+
+  .input__container--email,
+  .form__query,
+  .form__info,
+  .input__container--textarea {
+    margin-top: .5rem;
+  }
+
+  .input__container--consent {
+    margin: .5rem 0;
+  }
+
+  .form__label--query {
+    min-width: fit-content;
+    font-size: .7rem;
+  }
+}
