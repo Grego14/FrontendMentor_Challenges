@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Advice generator">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+  <title>Frontend Mentor | Advice generator app</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+
+<body>
+
+  <main>
+    <section class='advice'>
+      <div class='advice__text'>
+        <h1 class='advice__title' id='advice-title' aria-hidden='true'>Advice #<span id='advice-id'></span></h1>
+        <q class='advice__quote' id='advice-quote' aria-live='polite'
+            aria-hidden='true'>Here will be an advice but you won't see it
+            unless you read the HTML markup.</q>
+      </div>
+      <div class='advice__image-container'>
+        <picture>
+          <source srcset="./assets/images/pattern-divider-desktop.svg" media="(min-width: 30rem)">
+          <img class='advice__image' src="./assets/images/pattern-divider-mobile.svg" alt="" aria-hidden='true'
+            width='300'>
+        </picture>
+      </div>
+      <button class='advice__button' id='advice-button' aria-label='Touch to get
+          a new advice!' disabled>
+        <img src="./assets/images/icon-dice.svg" alt="" width='30' aria-hidden='true'>
+      </button>
+    </section>
+  </main>
+  <script src='./script.js'></script>
+</body>
+
+</html>
