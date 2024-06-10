@@ -28,4 +28,6 @@
 
 #### Contact Form [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/contact-form-main) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/contact-form-main/)
 
+#### Advice Generator [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/advice-generator-app-main) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/advice-generator-app-main/)
+
 ***Frontent Mentor Profile*** ➡️ [@Grego14](https://www.frontendmentor.io/profile/Grego14)
