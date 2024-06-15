@@ -1,0 +1,100 @@
+:root{
+  --lily-white-50: #effafc;
+  --lily-white-100: #e2f4f8;
+  --lily-white-200: #b5e1ec;
+  --lily-white-300: #81cbdf;
+  --lily-white-400: #47abc9;
+  --lily-white-500: #2b8faf;
+  --lily-white-600: #277493;
+  --lily-white-700: #265f78;
+  --lily-white-800: #264f64;
+  --lily-white-900: #244355;
+  --lily-white-950: #132a39;
+
+  --padding-small: .5rem;
+  --padding-large: 1rem;
+  --padding-xlarge: 1.2rem;
+  --padding-xxlarge: 1.5rem;
+
+  --margin-small: var(--padding-small);
+  --margin-large: var(--padding-large);
+  --margin-xlarge: var(--padding-xlarge);
+  --margin-xxlarge: var(--padding-xxlarge);
+
+  --fs-small: .85rem;
+  --fs-normal: 1rem;
+  --fs-large: 1.125rem;
+  --fs-xlarge: 1.2rem;
+
+  --time: .25s;
+
+  font-size: 16px;
+  color: var(--lily-white-950);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.fm-body{
+  min-height: 100dvh;
+}
+
+.fm-header{
+  background-color: var(--lily-white-200);
+  padding: var(--padding-xlarge) 0 0;
+}
+
+.fm-header__title{
+  font-size: 1.5rem;
+  text-align: center;
+  margin: 0;
+}
+
+.fm-header__title span{
+  position: relative;
+  z-index: 1;
+  line-height: 1.5;
+}
+
+.fm-header__title span::before{
+  content: '';
+  background-color: var(--lily-white-300);
+  width: 0;
+  height: 100%;
+  left: -5%;
+  position: absolute;
+  transition: width 1s ease-in;
+  transform: skew(.1turn);
+  z-index: -1;
+}
+
+.fm-header__title span.fm-header__title--transition::before{
+  width: 110%;
+}
+
+.fm-navigation{
+  background-color: var(--lily-white-900);
+  color: var(--lily-white-50);
+}
+
+.fm-navigation-links{
+  display: flex;
+  justify-content: space-around;
+  gap: 1rem;
+  list-style-type: none;
+  padding: 0;
+}
+
+.fm-links__item{
+  min-height: 3rem;
+  display: flex;
+  align-items: center;
+}
+
+.fm-links__item a{
+  color: inherit;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.fm-icon{
+  vertical-align: middle;
+}
