@@ -17,7 +17,7 @@ function getData(jsonFile) {
 }
 
 async function printChallenges() {
-  const challenges = await getData('/challenges.json')
+  const challenges = await getData('../../challenges.json')
   const fragment = d.createDocumentFragment()
   const challengesContainer = d.getElementById('fm-challenges')
 
@@ -42,7 +42,7 @@ async function printChallenges() {
 
     cloneName.textContent = obj.name.replace(/-/g, ' ').replace('_', '-')
     cloneStatus.textContent = challengeStatus
-    updateChallengeImage(cloneImage, obj)
+    cloneImage.setAttribute('src', obj.screenshot)
 
     clone.querySelector('.fm-challenge__image-container').append(cloneImage),
     clone.querySelector('.fm-challenge__info').append(cloneName, cloneStatus)
@@ -51,16 +51,6 @@ async function printChallenges() {
   })
 
   challengesContainer.append(fragment)
-}
-
-function updateChallengeImage(image, obj){
-  const noMobile = w.matchMedia('(max-width: 40rem)')
-
-  if(noMobile.matches){
-    return image.setAttribute('src', obj['desktop-screenshot'])
-  }
-
-  image.setAttribute('src', obj['mobile-screenshot'])
 }
 
 printChallenges()

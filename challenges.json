@@ -2,91 +2,76 @@
   "0": {
     "name": "qr-code-component",
     "status": "2",
-    "mobile-screenshot": "/screenshots/qr-code-mobile.webp",
-    "desktop-screenshot": "/screenshots/qr-code-desktop.webp"
+    "screenshot": ""
   },
   "1": {
     "name": "3-column",
     "status": "2",
-    "mobile-screenshot": "/screenshots/3-column-mobile.webp",
-    "desktop-screenshot": "/screenshots/3-column-desktop.webp"
+    "screenshot": "/screenshots/3-column.webp"
   },
   "2": {
     "name": "product-card",
     "status": "2",
-    "mobile-screenshot": "/screenshots/product-card-mobile.webp",
-    "desktop-screenshot": "/screenshots/product-card-desktop.webp"
+    "screenshot": ""
   },
   "3": {
     "name": "faq-accordion",
     "status": "2",
-    "mobile-screenshot": "/screenshots/faq-accordion-mobile.webp",
-    "desktop-screenshot": "/screenshots/faq-accordion-desktop.webp"
+    "screenshot": ""
   },
   "4": {
     "name": "article",
     "status": "2",
-    "mobile-screenshot": "/screenshots/article-mobile.webp",
-    "desktop-screenshot": "/screenshots/article-desktop.webp"
+    "screenshot": ""
   },
   "5": {
     "name": "time-tracking-dashboard",
     "status": "2",
-    "mobile-screenshot": "/screenshots/time-tracking-mobile.webp",
-    "desktop-screenshot": "/screenshots/time-tracking-desktop.webp"
+    "screenshot": ""
   },
   "6": {
     "name": "tip-calculator-app",
     "status": "3",
-    "mobile-screenshot": "/screenshots/tip-calculator-mobile.webp",
-    "desktop-screenshot": "/screenshots/tip-calculator-desktop.webp"
+    "screenshot": ""
   },
   "7": {
     "name": "blog-card",
     "status": "3",
-    "mobile-screenshot": "/screenshots/blog-mobile.webp",
-    "desktop-screenshot": ""
+    "screenshot": ""
   },
   "8": {
     "name": "multi-step-form",
     "status": "3",
-    "mobile-screenshot": "/screenshots/multi-step-mobile.webp",
-    "desktop-screenshot": ""
+    "screenshot": ""
   },
   "9": {
     "name": "results-summary",
     "status": "2",
-    "mobile-screenshot": "/screenshots/results-summary-mobile.webp",
-    "desktop-screenshot": "/screenshots/results-summary-desktop.webp"
+    "screenshot": ""
   },
   "10": {
     "name": "rock-paper-scissors",
     "status": "2",
-    "mobile-screenshot": "/screenshots/rps-mobile.webp",
-    "desktop-screenshot": "/screenshots/rps-desktop.webp"
+    "screenshot": ""
   },
   "11": {
     "name": "social-links-profile",
     "status": "2",
-    "mobile-screenshot": "/screenshots/social-links-mobile.webp",
-    "desktop-screenshot": "/screenshots/social-links-desktop.webp"
+    "screenshot": ""
   },
   "12": {
     "name": "newsletter-sign_up",
     "status": "2",
-    "mobile-screenshot": "/screenshots/newsletter-sign_up-mobile.webp",
-    "desktop-screenshot": "/screenshots/newsletter-sign_up-desktop.webp"
+    "screenshot": ""
   },
   "13": {
     "name": "contact-form",
     "status": "2",
-    "mobile-screenshot": "/screenshots/contact-form-mobile.webp",
-    "desktop-screenshot": "/screenshots/contact-form-desktop.webp"
+    "screenshot": ""
   },
   "14": {
     "name": "advice-generator",
     "status": "2",
-    "mobile-screenshot": "/screenshots/advice-generator-mobile.webp",
-    "desktop-screenshot": "/screenshots/advice-generator-desktop.webp"
+    "screenshot": ""
   }
 }
