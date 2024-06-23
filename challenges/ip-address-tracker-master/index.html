@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="IP Address Tracker">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+  <title>Frontend Mentor | IP Address Tracker</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./lib/leaflet.css">
+</head>
+
+<body>
+  <main class='main'>
+    <header class='header'>
+      <form action="#" class='form' role='search' id='form'>
+        <h1 class='form__title'>IP Address Tracker</h1>
+        <div class='form__input__container'>
+          <input type="search" name='q' aria-label='Search for any IP address
+              or domain' placeholder='Search for any IP address or domain' class='form__input' autocomplete='off'
+            required aria-errormessage='error-msg' aria-describedby='error-msg'>
+          <button type='submit' name='submit' class='form__button'
+            aria-label='Click to search the provided ip address or domain'>
+            <img src='./assets/images/icon-arrow.svg' alt='' aria-hidden='true' width='10' height='10'>
+          </button>
+        </div>
+      </form>
+    </header>
+    <section class='info__cards' aria-atomic='true' aria-live='polite' role='status' id='cards'>
+      <div class='info__card__item card__item--ip'>
+        <h2 class='card__item__title'>ip address</h2>
+        <div class='card__item__text' id='card-ip'></div>
+      </div>
+      <div class='info__card__item card__item--location'>
+        <h2 class='card__item__title'>location</h2>
+        <div class='card__item__text' id='card-location'></div>
+      </div>
+      <div class='info__card__item card__item--timezone'>
+        <h2 class='card__item__title'>timezone</h2>
+        <div class='card__item__text' id='card-timezone'></div>
+      </div>
+      <div class='info__card__item card__item--isp'>
+        <h2 class='card__item__title'>isp</h2>
+        <div class='card__item__text' id='card-isp'></div>
+      </div>
+    </section>
+    <div id='map' class='map' aria-label='Your location in the map is currently' role='status'></div>
+    <div id='error-msg' class='error' aria-live='polite' aria-atomic='true'>
+      <div class='error__code' id='error-code'>Error code</div>
+      <div class='error__text' id='error-text'>Error text</div>
+    </div>
+  </main>
+  <script src='./script.js' type='module'></script>
+</body>
+
+</html>

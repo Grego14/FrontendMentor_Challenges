@@ -1,0 +1,273 @@
+@font-face {
+  font-family: 'Rubik';
+  src: local('Rubik');
+  src: url('./assets/fonts/Rubik-Regular.woff2') format('woff2'),
+    url('./assets/fonts/Rubik-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: local('Rubik Medium');
+  src: url('./assets/fonts/Rubik-Medium.woff2') format('woff2'),
+    url('./assets/fonts/Rubik-Medium.ttf') format('truetype');
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: local('Rubik Bold');
+  src: url('./assets/fonts/Rubik-Bold.woff2') format('woff2'),
+    url('./assets/fonts/Rubik-Bold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+main,
+body {
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+img {
+  vertical-align: middle;
+}
+
+:root {
+  --color-vd-gray: hsl(0, 0%, 17%);
+  --color-dark-gray: hsl(0, 0%, 59%);
+  --cards-zindex: 9998;
+  --error-zindex: 9999;
+
+  font-size: 16px;
+  line-height: 1.5;
+  font-family: 'Rubik', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: var(--color-dark-gray);
+
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
+input {
+  font-size: .8rem;
+}
+
+button,
+input {
+  appearance: none;
+  border: none;
+  background: none;
+}
+
+.form {
+  --separation: 1.5rem;
+}
+
+.form__title {
+  font-size: clamp(1.5rem, 1.5rem + 1vw, 2.25rem);
+  color: white;
+  margin-bottom: var(--separation);
+}
+
+.form__input__container {
+  --size: 3rem;
+
+  display: flex;
+  justify-content: center;
+  position: relative;
+  max-width: max-content;
+  margin-inline: auto;
+  padding-inline: var(--separation);
+}
+
+.form__input {
+  background-color: white;
+  padding-inline: 1rem;
+  padding-right: calc(1rem + var(--size));
+  border-radius: .8rem;
+  color: var(--color-vd-gray);
+  min-height: var(--size);
+  box-shadow: 0 5px .5rem #3A3D93;
+  max-width: 100%;
+  font-size: 1.125rem;
+  /* 18px */
+}
+
+.form__input::placeholder {
+  font-size: clamp(.6rem, .6rem + .5vw, 1.125rem);
+}
+
+.form__button {
+  background-color: var(--color-vd-gray);
+  border-top-right-radius: .8rem;
+  border-bottom-right-radius: .8rem;
+  cursor: pointer;
+  position: absolute;
+  right: var(--separation);
+  min-height: var(--size);
+  min-width: var(--size);
+}
+
+.header {
+  height: 40dvh;
+  background: url('./assets/images/pattern-bg-mobile.png') no-repeat center top/100%;
+  background-size: 100% 100%;
+  text-align: center;
+  padding-top: 1.5rem;
+}
+
+.map {
+  height: 60dvh;
+  max-width: 100%;
+}
+
+.info__cards {
+  --fs-title: .8rem;
+  --fs-text: 1.2rem;
+
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: .8rem;
+  position: absolute;
+  z-index: var(--cards-zindex);
+  top: calc(20% + 6vh);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1rem;
+  width: min(100%, 100% - 15vw);
+  max-width: 65rem;
+  gap: .6rem;
+  box-shadow: 0 .3rem .5rem var(--color-dark-gray);
+}
+
+.info__card__item {
+  text-align: center;
+  flex: 1 1;
+}
+
+.card__item__title {
+  text-transform: uppercase;
+  font-size: clamp(var(--fs-title), var(--fs-title) + .5vw, var(--fs-title) * 1.5);
+}
+
+.card__item__text {
+  color: var(--color-vd-gray);
+  font-size: clamp(var(--fs-text), var(--fs-text) + .5vw, var(--fs-text) * 1.3);
+  font-weight: bold;
+  min-height: 30px;
+}
+
+.error[aria-hidden],
+.info__cards[aria-hidden]{
+  visibility: hidden;
+  opacity: 0;
+}
+
+.error {
+  top: 40%;
+  left: 50%;
+  opacity: 1;
+  width: 100%;
+  height: 15rem;
+  display: flex;
+  position: fixed;
+  text-align: center;
+  visibility: visible;
+  border-radius: .5rem;
+  flex-direction: column;
+  justify-content: center;
+  background-color: white;
+  color: var(--color-vd-gray);
+  z-index: var(--error-zindex);
+  transform: translate(-50%, -50%);
+  transition: opacity var(--time) ease-in;
+  max-width: min(calc(100% - 20vw), 30rem);
+}
+
+.error__code {
+  font-size: 2rem;
+}
+
+@media screen and (min-width: 50rem) and (orientation: landscape) {
+  .header {
+    background: url('./assets/images/pattern-bg-desktop.png') no-repeat center top;
+    background-size: 100% 100%;
+  }
+
+  .form {
+    --separation: 1rem;
+  }
+
+  .info__cards {
+    flex-direction: row;
+    align-items: center;
+    top: 30%;
+  }
+
+  .info__card__item {
+    min-height: 8rem;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+    padding-inline: 1rem;
+    position: relative;
+  }
+
+  .info__card__item+.info__card__item::before {
+    content: '';
+    height: 6rem;
+    width: 1px;
+    background-color: var(--color-dark-gray);
+    position: absolute;
+    left: -1rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .card__item__title {
+    margin-bottom: .5rem;
+  }
+
+  .form__input__container {
+    max-width: 40rem;
+  }
+
+  .form__input {
+    min-width: 100%;
+  }
+}
+
+@media screen and (max-width: 50rem) and (max-height: 42rem) {
+  .info__cards {
+    --fs-title: .6rem;
+    --fs-text: .9rem;
+
+    padding: .5rem;
+    top: calc(20% + 10vh);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    place-items: center;
+  }
+
+  .error{
+    height: 10rem;
+    top: calc(35% + 10vh);
+  }
+
+  .header {
+    padding-top: 1rem;
+  }
+}
