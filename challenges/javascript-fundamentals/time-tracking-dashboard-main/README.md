@@ -29,7 +29,7 @@ Users should be able to:
 
 ### Links
 
-[Solution](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/.learning_paths/javascript-fundamentals/time-tracking-dashboard-main) [Live Site](https://grego14.github.io/FrontendMentor_Challenges/.learning_paths/javascript-fundamentals/time-tracking-dashboard-main/)
+[Solution](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/javascript-fundamentals/time-tracking-dashboard-main) [Live Site](https://grego14.github.io/FrontendMentor_Challenges/challenges/javascript-fundamentals/time-tracking-dashboard-main/)
 
 ## My process
 

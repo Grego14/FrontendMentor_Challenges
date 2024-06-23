@@ -32,7 +32,7 @@ Users should be able to:
 
 ### Links
 
-[Solution](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/faq-accordion-main) | [Live Site](https://grego14.github.io/FrontendMentor_Challenges/faq-accordion-main/)
+[Solution](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/faq-accordion-main) | [Live Site](https://grego14.github.io/FrontendMentor_Challenges/challenges/faq-accordion-main/)
 
 ## My process
 

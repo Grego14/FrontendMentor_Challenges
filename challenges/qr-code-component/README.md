@@ -6,11 +6,11 @@ This is a solution to the [QR code component challenge on Frontend Mentor](https
 
 ### Screenshot
 
-![](../screenshots/qr-code-screenshot.webp)
+![](/screenshots/qr-code-screenshot.webp)
 
 ### Links
 
-[Solution](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/qr-code-component) | [Live Site](https://grego14.github.io/FrontendMentor_Challenges/qr-code-component/)
+[Solution](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/qr-code-component) | [Live Site](https://grego14.github.io/FrontendMentor_Challenges/challenges/qr-code-component/)
 
 ## My process
 

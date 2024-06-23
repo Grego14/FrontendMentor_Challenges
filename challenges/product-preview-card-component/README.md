@@ -15,11 +15,11 @@ This is a solution to the [Product preview card component challenge on Frontend 
 
 ### Screenshot
 
-![](../screenshots/product-card-screenshot.webp)
+![](/screenshots/product-card-screenshot.webp)
 
 ### Links
 
-[Solution](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/product-preview-card-component) | [Live Site URL](https://grego14.github.io/FrontendMentor_Challenges/product-preview-card-component/)
+[Solution](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/product-preview-card-component) | [Live Site URL](https://grego14.github.io/FrontendMentor_Challenges/challenges/product-preview-card-component/)
 
 ## My process
 

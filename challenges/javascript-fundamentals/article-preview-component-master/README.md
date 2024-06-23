@@ -24,7 +24,7 @@ Users should be able to:
 
 ### Links
 
-[Solution](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/.learning_paths/javascript-fundamentals) [Live Site](https://grego14.github.io/FrontendMentor_Challenges/.learning_paths/javascript-fundamentals/article-preview-component-master/)
+[Solution](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/javascript-fundamentals) [Live Site](https://grego14.github.io/FrontendMentor_Challenges/challenges/javascript-fundamentals/article-preview-component-master/)
 
 ## My process
 

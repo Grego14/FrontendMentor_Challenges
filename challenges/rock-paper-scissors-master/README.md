@@ -32,7 +32,7 @@ Users should be able to:
 
 ### Links
 
-[Solution](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/rock-paper-scissors-master) [Live Site](https://grego14.github.io/FrontendMentor_Challenges/rock-paper-scissors-master/)
+[Solution](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/rock-paper-scissors-master) [Live Site](https://grego14.github.io/FrontendMentor_Challenges/challenges/rock-paper-scissors-master/)
 
 ## My process
 

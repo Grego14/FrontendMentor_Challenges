@@ -27,7 +27,7 @@ Users should be able to:
 
 ### Links
 
-[Solution](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/social-links-profile-main) [Live Site](https://grego14.github.io/FrontendMentor_Challenges/social-links-profile-main/)
+[Solution](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/social-links-profile-main) [Live Site](https://grego14.github.io/FrontendMentor_Challenges/challenges/social-links-profile-main/)
 
 ## My process
 

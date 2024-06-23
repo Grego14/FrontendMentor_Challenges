@@ -31,11 +31,11 @@ Users should be able to:
 
 ### Screenshot
 
-![](../../../screenshots/newsletter-sign-up.webp)
+![](/screenshots/newsletter-sign-up.webp)
 
 ### Links
 
-[Solution](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/.learning_paths/javascript-fundamentals/newsletter-sign-up-with-success-message-main) [Live Site](https://grego14.github.io/FrontendMentor_Challenges/.learning_paths/javascript-fundamentals/newsletter-sign-up-with-success-message-main/)
+[Solution](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/javascript-fundamentals/newsletter-sign-up-with-success-message-main) [Live Site](https://grego14.github.io/FrontendMentor_Challenges/challenges/javascript-fundamentals/newsletter-sign-up-with-success-message-main/)
 
 ## My process
 

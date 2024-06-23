@@ -20,7 +20,7 @@ This is a solution to the [3-column preview card component challenge on Frontend
 
 ### Links
 
-[Solution](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/3-column-preview-card-component) | [Live Site](https://grego14.github.io/FrontendMentor_Challenges/3-column-preview-card-component/)
+[Solution](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/3-column-preview-card-component) | [Live Site](https://grego14.github.io/FrontendMentor_Challenges/challenges/3-column-preview-card-component/)
 
 ## My process
 

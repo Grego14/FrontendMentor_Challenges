@@ -32,7 +32,7 @@ Users should be able to:
 
 ### Links
 
-[**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/advice-generator-app-main) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/advice-generator-app-main/)
+[**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/advice-generator-app-main) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/challenges/advice-generator-app-main/)
 
 ## My process
 

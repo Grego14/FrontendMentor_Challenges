@@ -10,7 +10,7 @@ This is a solution to the [Blog preview card](https://www.frontendmentor.io/chal
 
 ### Links
 
-[Solution](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/blog-preview-card-main) | [Live Site](https://grego14.github.io/FrontendMentor_Challenges/blog-preview-card-main/)
+[Solution](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/blog-preview-card-main) | [Live Site](https://grego14.github.io/FrontendMentor_Challenges/challenges/blog-preview-card-main/)
 
 ## My process
 

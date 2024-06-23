@@ -31,7 +31,7 @@ Users should be able to:
 
 ### Links
 
-[Solution](https://github.com/Grego14/Frontend-Mentor/tree/main/results-summary-component-main) [Live site](https://grego14.github.io/FrontendMentor_Challenges/results-summary-component-main/)
+[Solution](https://github.com/Grego14/Frontend-Mentor/tree/main/challenges/results-summary-component-main) [Live site](https://grego14.github.io/FrontendMentor_Challenges/challenges/results-summary-component-main/)
 
 ## My process
 
