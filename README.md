@@ -2,9 +2,9 @@
 
 #### QR code [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/qr-code-component) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/challenges/qr-code-component/)
 
-#### 3-column [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/3-column-preview-card-component-main) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/challenges/3-column-preview-card-component/)
+#### 3-column [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/3-column-preview-card-component) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/challenges/3-column-preview-card-component/)
 
-#### Product card [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/product-preview-card-component-main) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/challenges/product-preview-card-component/)
+#### Product card [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/product-preview-card-component) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/challenges/product-preview-card-component/)
 
 #### Faq Accordion [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/faq-accordion-main) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/challenges/faq-accordion-main/)
 
