@@ -1,77 +1,138 @@
 {
-  "0": {
+   "0": {
     "name": "qr-code-component",
-    "status": "2",
-    "screenshot": ""
+    "status": 1,
+    "screenshot": "",
+    "difficulty": 1,
+    "stack": ["HTML", "CSS", "API", "JSON"],
+    "description": "My first challenge in the FrontendMentor Website.",
+    "repo": "https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/qr-code-component",
+    "livesite": "https://grego14.github.io/FrontendMentor_Challenges/challenges/qr-code-component/"
   },
   "1": {
     "name": "3-column",
-    "status": "2",
-    "screenshot": "/screenshots/3-column.webp"
+    "status": 1,
+    "screenshot": "/screenshots/3-column.webp",
+    "difficulty": 1,
+    "stack": ["HTML", "CSS"],
+    "repo": "https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/3-column-preview-card-component",
+    "livesite": "https://grego14.github.io/FrontendMentor_Challenges/challenges/3-column-preview-card-component/"
   },
   "2": {
     "name": "product-card",
-    "status": "2",
-    "screenshot": ""
+    "status": 1,
+    "screenshot": "",
+    "difficulty": 1,
+    "stack": ["HTML", "CSS"],
+    "repo": "https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/product-preview-card-component",
+    "livesite": "https://grego14.github.io/FrontendMentor_Challenges/challenges/product-preview-card-component/"
   },
   "3": {
     "name": "faq-accordion",
-    "status": "2",
-    "screenshot": ""
+    "status": 1,
+    "screenshot": "",
+    "difficulty": 1,
+    "stack": ["HTML", "CSS", "JavaScript"],
+    "repo": "https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/faq-accordion-main",
+    "livesite": "https://grego14.github.io/FrontendMentor_Challenges/challenges/faq-accordion-main/"
   },
   "4": {
     "name": "article",
-    "status": "2",
-    "screenshot": ""
+    "status": 1,
+    "screenshot": "",
+    "difficulty": 1,
+    "stack": ["HTML", "CSS", "JavaScript"],
+    "repo": "https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/javascript-fundamentals/article-preview-component-master",
+    "livesite": "https://grego14.github.io/FrontendMentor_Challenges/challenges/javascript-fundamentals/article-preview-component-master/"
   },
   "5": {
     "name": "time-tracking-dashboard",
-    "status": "2",
-    "screenshot": ""
+    "status": 1,
+    "screenshot": "",
+    "difficulty": 2,
+    "stack": ["HTML", "CSS", "JavaScript", "json"],
+    "repo": "https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/javascript-fundamentals/time-tracking-dashboard-main",
+    "livesite": "https://grego14.github.io/FrontendMentor_Challenges/challenges/javascript-fundamentals/time-tracking-dashboard-main/"
   },
   "6": {
     "name": "tip-calculator-app",
-    "status": "3",
-    "screenshot": ""
+    "status": 3,
+    "screenshot": "",
+    "difficulty": 2,
+    "stack": ["HTML", "CSS", "JavaScript", "json"],
+    "repo": "https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/javascript-fundamentals/tip-calculator-app-main",
+    "livesite": "https://grego14.github.io/FrontendMentor_Challenges/challenges/javascript-fundamentals/tip-calculator-app-main/"
   },
   "7": {
     "name": "blog-card",
-    "status": "3",
-    "screenshot": ""
+    "status": 3,
+    "screenshot": "",
+    "difficulty": 1,
+    "stack": ["HTML", "CSS"],
+    "repo": "https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/blog-preview-card-main",
+    "livesite": "https://grego14.github.io/FrontendMentor_Challenges/challenges/blog-preview-card-main/"
   },
   "8": {
     "name": "multi-step-form",
-    "status": "3",
-    "screenshot": ""
+    "status": 3,
+    "screenshot": "",
+    "difficulty": 4,
+    "stack": ["HTML", "CSS", "JavaScript"],
+    "repo": "https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/multi-step-form-main",
+    "livesite": "https://grego14.github.io/FrontendMentor_Challenges/challenges/multi-step-form-main/"
   },
   "9": {
     "name": "results-summary",
-    "status": "2",
-    "screenshot": ""
+    "status": 1,
+    "screenshot": "",
+    "difficulty": 1,
+    "stack": ["HTML", "CSS", "JavaScript", "json"],
+    "repo": "https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/results-summary-component-main",
+    "livesite": "https://grego14.github.io/FrontendMentor_Challenges/challenges/results-summary-component-main/"
   },
   "10": {
     "name": "rock-paper-scissors",
-    "status": "2",
-    "screenshot": ""
+    "status": 1,
+    "screenshot": "",
+    "difficulty": 4,
+    "stack": ["HTML", "CSS", "JavaScript"],
+    "repo": "https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/rock-paper-scissors-master",
+    "livesite": "https://grego14.github.io/FrontendMentor_Challenges/challenges/rock-paper-scissors-master/"
   },
   "11": {
     "name": "social-links-profile",
-    "status": "2",
-    "screenshot": ""
+    "status": 1,
+    "screenshot": "",
+    "difficulty": 1,
+    "stack": ["HTML", "CSS"],
+    "repo": "https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/social-links-profile-main",
+    "livesite": "https://grego14.github.io/FrontendMentor_Challenges/challenges/social-links-profile-main/"
   },
   "12": {
     "name": "newsletter-sign_up",
-    "status": "2",
-    "screenshot": ""
+    "status": 1,
+    "screenshot": "",
+    "difficulty": 2,
+    "stack": ["HTML", "CSS", "JavaScript"],
+    "repo": "https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/javascript-fundamentals/newsletter-sign-up-with-success-message-main",
+    "livesite": "https://grego14.github.io/FrontendMentor_Challenges/challenges/javascript-fundamentals/newsletter-sign-up-with-success-message-main/"
   },
   "13": {
     "name": "contact-form",
-    "status": "2",
-    "screenshot": ""
+    "status": 1,
+    "screenshot": "",
+    "difficulty": 2,
+    "stack": ["HTML", "CSS", "JavaScript"],
+    "repo": "https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/contact-form-main",
+    "livesite": "https://grego14.github.io/FrontendMentor_Challenges/challenges/contact-form-main/"
   },
   "14": {
     "name": "advice-generator",
-    "status": "2",
-    "screenshot": ""
+    "status": 1,
+    "screenshot": "",
+    "difficulty": 2,
+    "stack": ["HTML", "CSS", "JavaScript", "API"],
+    "repo": "https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/advice-generator-app-main",
+    "livesite": "https://grego14.github.io/FrontendMentor_Challenges/challenges/advice-generator-app-main/"
   }
 }
