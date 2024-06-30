@@ -108,5 +108,6 @@
   "files": [
     "./src/main.ts",
     "./src/components/Challenge.ts"
-  ]
+  ],
+  "exclude": [ "./node_modules/" ]
 }
