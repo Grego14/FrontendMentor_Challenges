@@ -45,10 +45,16 @@
         <div class='card__item__text' id='card-isp'></div>
       </div>
     </section>
-    <div id='map' class='map' aria-label='Your location in the map is currently' role='status'></div>
-    <div id='error-msg' class='error' aria-live='polite' aria-atomic='true'>
-      <div class='error__code' id='error-code'>Error code</div>
-      <div class='error__text' id='error-text'>Error text</div>
+
+    <div id='map' class='map'></div>
+
+    <div id='error-msg' class='error' aria-live='polite' aria-atomic='true' aria-hidden='true'>
+      <div class='error__code' id='error-code'></div>
+      <div class='error__text' id='error-text'></div>
+      <button class='error__button' aria-label='Click to close the error
+          notification'>
+        <img src='./assets/images/close-icon.svg' alt='' aria-hidden='true' width='25' height='25'>
+      </button>
     </div>
   </main>
   <script src='./script.js' type='module'></script>

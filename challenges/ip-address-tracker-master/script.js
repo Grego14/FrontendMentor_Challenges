@@ -3,110 +3,168 @@ import './lib/leaflet.js'
 const d = document
 const L = window.L
 const errorNotification = d.getElementById('error-msg')
-const cardsEl = d.getElementById('cards')
+let map;
 
-let map
-let layers
+let userData = {}
 
-//const userData = {}
-
-const userData = {
-  "ip": "201.208.237.177",
-  "location": {
-    "country": "VE",
-    "region": "Miranda",
-    "city": "Chacao",
-    "lat": 10.49581,
-    "lng": -66.85367,
-    "postalCode": "",
-    "timezone": "-04:00",
-    "geonameId": 3645981
-  },
-  "as": {
-    "asn": 8048,
-    "name": "LACNIC-8048",
-    "route": "201.208.224.0/19",
-    "domain": "https://www.cantv.com.ve",
-    "type": "Cable/DSL/ISP"
-  },
-  "isp": "CANTV"
-}
-
-function getData(request, outputObject) {
-  return fetch(request)
+async function getData(request, outputObject) {
+  return await fetch(request)
     .then(res => res.json())
     .then(data => Object.assign(outputObject, data))
 }
 
-//function handleDataError(error) {
-//if(!error.code) return
+function handleApiError(data, notificationElement) {
+  if (data && data.code) return sendErrorNotification(notificationElement, data) 
+}
 
-//return new Error(`${error.code} ${error.messages}`)
-//}
+d.addEventListener('DOMContentLoaded', async () => {
+  await getData('https://geo.ipify.org/api/v2/country,city?apiKey=at_MXzrZpwhz3Tcth8fFn9JEGUTpwMT5', userData)
+    .then(data => handleApiError(data))
 
-d.addEventListener('DOMContentLoaded', async e => {
-  // can't use the catch method with the API
-  //await getData('https://geo.ipify.org/api/v2/country,city?apiKey=at_MXzrZpwhz3Tcth8fFn9JEGUTpwMT5', userData)
-  //.then(data => handleDataError(data))
+  map = handleMap(map, userData).map
+  setInfoCards({ data: userData })
 
-  updateInfoCards(userData)
-
-  let initMap = setMap(userData)
-  map = initMap.map
-  layers = initMap.layers 
-
-  d.addEventListener('submit', e => {
+  d.addEventListener('submit', async e => {
     e.preventDefault()
 
-    //if (e.target.querySelector('input').getAttribute('aria-invalid') === 'true') return
+    let input = e.target.querySelector('input')
+    input.value = input.value.trim()
 
-    updateInfoCards(userData, true)
+    handleInputError(input, validateInput(input.value))
+
+    if (input.getAttribute('aria-invalid') === 'true') {
+      return sendErrorNotification(errorNotification, 'Invalid IP or domain.')
+    }
+
+    // server-side validation
+    let validation = await apiValidation(input.value)
+
+    if (validation.error) return sendErrorNotification(errorNotification, validation.error)
+
+    userData = validation.data;
+
+    map = handleMap(map, userData, true).map
+    setInfoCards({ data: userData, remove: true })
 
     setTimeout(() => {
-      updateInfoCards(userData)
-    }, 2000)
+      setInfoCards({ data: userData })
+    }, 1000)
   })
 })
 
-function updateInfoCards(data, remove = false) {
-  setAnimatedUserText({
-    element: 'card-ip',
-    text: data.ip,
-    time: 1000,
-    remove
-  })
+function handleInputError(input, remove) {
 
-  setAnimatedUserText({
-    element: 'card-location',
-    text: `${data.location.region}, ${data.location.city} ${data.location.postalCode}`,
-    time: 1000,
-    remove
-  })
-
-  setAnimatedUserText({
-    element: 'card-timezone',
-    text: `UTC ${data.location.timezone}`,
-    time: 1000,
-    remove
-  })
-
-  setAnimatedUserText({
-    element: 'card-isp',
-    text: data.isp,
-    time: 1000,
-    remove
-  })
-}
-
-function setAnimatedUserText({ element, text, time = 250, remove = false }) {
-  let nTime = 0
-  let el = element
-
-  if (typeof element === 'string') {
-    el = d.getElementById(element)
+  if (remove) {
+    input.removeAttribute('aria-invalid')
+    input.removeAttribute('disabled')
+    return
   }
 
-  if (remove) return removeAnimatedUserText()
+  input.setAttribute('aria-invalid', 'true')
+  input.setAttribute('disabled', '')
+}
+
+function validateIp(value) {
+  if (value.length > 15) return false
+
+  // not 100% accurate, may cause errors
+  return /((25[0-5]?|24[0-9]?|2[0-9]?[0-9]?|[0-9][0-9]?[0-9]?)\.([0-9][0-9]?[0-9]?)\.([0-9][0-9]?[0-9]?)\.([0-9][0-9]?[0-9]?))/.test(value)
+}
+
+function validateDomain(value) {
+  return /^([A-Za-z0-9\_\-]+\.?)?([A-Za-z0-9\_\-]+\.?)([A-Za-z\_\-]+)$/.test(value)
+}
+
+function validateInput(value) {
+  let dots = value.split(/[^\.]/).filter(Boolean).length
+
+  if (!validateIp(value) && !validateDomain(value)) return false
+
+  // treat less than 3 dots as if it were a domain
+  if (dots < 3 && !validateDomain(value)) return false
+
+  if (dots === 3 && !validateIp(value)) return false
+
+  return true
+}
+
+function getCardText(data, element) {
+  let output = (() => {
+    switch (element) {
+      case 'card-ip':
+        return data.ip
+      case 'card-location':
+        if(data.location.region && data.location.city){
+          return `${data.location.region}, ${data.location.city} ${data.location.postalCode}`
+        }
+        return 'Unknown'
+      case 'card-timezone':
+        if(data.location.timezone){
+          return `UTC ${data.location.timezone}`
+        }
+        return 'Unknown'
+      case 'card-isp':
+        return data.isp || 'Unknown'
+      default: return ''
+    }
+  })()
+
+  return output
+}
+
+function setInfoCards({ data, remove }) {
+  let elements = ['card-ip', 'card-location', 'card-timezone', 'card-isp']
+
+  for (const el of elements) {
+    if (remove) {
+      removeAnimatedUserText(el)
+      continue;
+    }
+
+    setAnimatedUserText({
+      element: el,
+      text: getCardText(data, el)
+    })
+  }
+}
+
+function getElement(element) {
+  const el = typeof element === 'string'
+    ? document.getElementById(element)
+    : element
+
+  return el
+}
+
+function removeAnimatedUserText(element) {
+  let nTime = 0
+  let el = getElement(element)
+  let childrens = [...el.children];
+
+  for (const c of childrens) {
+
+    // remove the last element and update the childrens array
+    if (childrens.at(-1)) {
+      setTimeout(() => {
+
+        childrens.at(-1).remove()
+        childrens = [...el.children]
+
+      }, 1000 / childrens.length + nTime);
+    }
+
+    // make the animation faster
+    if (childrens.length > 10) {
+      nTime += 30; continue
+    }
+
+    nTime += 50
+  }
+}
+
+function setAnimatedUserText({ element, text }) {
+  let nTime = 0
+  let el = getElement(element)
 
   for (const n of text.split('')) {
     const span = d.createElement('span')
@@ -115,49 +173,29 @@ function setAnimatedUserText({ element, text, time = 250, remove = false }) {
 
     setTimeout(() => {
       el.append(span)
-    }, time / text.length + nTime)
+    }, 1000 / text.length + nTime)
 
+    // make the animation faster
     if (text.length > 10) {
       nTime += 30; continue
     }
 
     nTime += 50
   }
-
-  function removeAnimatedUserText() {
-    let childrens = [...el.children]
-
-    for (const c of childrens) {
-
-      // remove the last element and update the childrens array
-      if (childrens.at(-1)) {
-        setTimeout(() => {
-          childrens.at(-1).remove()
-          childrens = [...el.children]
-        }, time / childrens.length + nTime);
-      }
-
-      // if there are more than 10 elements make the animation faster
-      if (childrens.length > 10) {
-        nTime += 30; continue
-      }
-
-      nTime += 50
-    }
-  }
 }
 
-function setMap(data, update = false) {
+function handleMap(map, data, update = false) {
   const latNLng = [data.location.lat, data.location.lng]
+
   // view[0] prevents the circle and marker from 
   // being positioned below the cards on mobile devices
-  const view = [latNLng[0] + .005, latNLng[1]];
-  let c,m;
+  const view = latNLng[0] + .005;
+  let c, m;
 
-  (update)
-    ? map.setView(view, 14)
+  ; (update)
+    ? map.setView([view, latNLng[1]], 14)
     : map = L.map('map', {
-      center: view,
+      center: [view, latNLng[1]],
       zoom: 14,
       attributionControl: false,
       zoomControl: false,
@@ -185,52 +223,53 @@ function setMap(data, update = false) {
   let lGroup = L.layerGroup([m, c])
     .addTo(map)
 
-  return {map, layers: lGroup}
+  return { map, layers: lGroup }
 }
 
-// error -> {messages, code} || String
-function sendErrorNotification(notification, error){
+// error -> {messages, code} || String 
+function sendErrorNotification(notification, message) {
   const notificationText = notification.querySelector('.error__text')
+  const cardsEl = d.getElementById('cards')
 
   notification.removeAttribute('aria-hidden')
   cardsEl.setAttribute('aria-hidden', '')
 
-  notificationText.textContent = error
+  notificationText.textContent = message.error.code
+    ? message.error.code
+    : message
 
-  if(error.code){
-    notification.querySelector('.error__code').textContent = error.code
-    notificationText.textContent = error.messages
+  if (message.error.code) {
+    notification.querySelector('.error__code').textContent = message.error.code
   }
 
-  setTimeout(() =>{
+  function handleErrorBtnClick() {
     notification.setAttribute('aria-hidden', 'true');
     cardsEl.removeAttribute('aria-hidden')
 
-    ;[...notification.children].forEach(c => {
-        c.textContent = ''
-    });
-  }, 8000)
+    notification.querySelector('.error__button').removeEventListener('click', handleErrorBtnClick)
+  }
+
+  notification.querySelector('.error__button').addEventListener('click', handleErrorBtnClick)
 }
 
-// mejorar la accesibilidad a la hora de mostrarle a
-  // el usuario la notificacion de el error
-// hacer la funcion para validar la ip
+async function apiValidation(ipOrDomain) {
+  let output = {error: false, data: {}}
+  let request = 'ipAddress'
 
-sendErrorNotification(errorNotification, 'Theres an error, we don\'t know why!')
+  const DOTS = ipOrDomain.split(/[^\.]/).filter(Boolean).length;
 
-function validateDomain(domain) {
-  return /^[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+$/.test(domain)
+  if (DOTS < 3) {
+    request = 'domain'
+  }
+
+  await getData(`https://geo.ipify.org/api/v2/country,city?apiKey=at_MXzrZpwhz3Tcth8fFn9JEGUTpwMT5&${request}=${ipOrDomain}`, output.data)
+    .then(data => {
+
+      if(data.code){
+        output.error = data
+      }
+    })
+
+  // data object means theres an error
+  return output
 }
-
-//async function validateIp(ip) {
-//let output
-
-//// let the API validate the ip...
-//await getData(`https://geo.ipify.org/api/v2/country,city?apiKey=at_MXzrZpwhz3Tcth8fFn9JEGUTpwMT5&ipAddress=${ip}`, {})
-//.then(data => {
-//output = data.code ? true : false
-//})
-
-//return output
-//}
-

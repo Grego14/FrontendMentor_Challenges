@@ -68,6 +68,7 @@ input {
   appearance: none;
   border: none;
   background: none;
+  cursor: pointer;
 }
 
 .form {
@@ -101,7 +102,6 @@ input {
   box-shadow: 0 5px .5rem #3A3D93;
   max-width: 100%;
   font-size: 1.125rem;
-  /* 18px */
 }
 
 .form__input::placeholder {
@@ -171,8 +171,8 @@ input {
 
 .error[aria-hidden],
 .info__cards[aria-hidden]{
-  visibility: hidden;
   opacity: 0;
+  pointer-events: none;
 }
 
 .error {
@@ -192,12 +192,18 @@ input {
   color: var(--color-vd-gray);
   z-index: var(--error-zindex);
   transform: translate(-50%, -50%);
-  transition: opacity var(--time) ease-in;
+  transition: opacity .25s ease-in;
   max-width: min(calc(100% - 20vw), 30rem);
 }
 
 .error__code {
   font-size: 2rem;
+}
+
+.error__button{
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
 }
 
 @media screen and (min-width: 50rem) and (orientation: landscape) {
