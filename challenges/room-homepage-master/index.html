@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+  <title>Frontend Mentor | Room homepage</title>
+  <link rel='stylesheet' href='./styles.css'>
+</head>
+
+<body>
+  <header>
+    <h1 class='room__title' aria-label='room'>
+      <img src="./assets/images/logo.svg" alt="" aria-hidden='true' width='65' height='15'>
+    </h1>
+    <button class='room__menu' aria-label='expand menu' aria-controls='menu' id='menu-btn'>
+      <img src='./assets/images/icon-hamburger.svg' alt='' aria-hidden='true' width='20' height='20'>
+    </button>
+    <nav class='room__nav' aria-hidden='true'>
+      <ul class='room__list' id='menu' aria-expanded='false'>
+        <li><a href="#">home</a></li>
+        <li><a href="#">shop</a></li>
+        <li><a href="#">about</a></li>
+        <li><a href="#">contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <div class='room__container room__container--top'>
+      <div class='room__slider-buttons'>
+        <button class="room__slider-btn" id='slider-btn-left' aria-label='move slider to the left'>
+          <img src='./assets/images/icon-angle-left.svg' alt='' aria-hidden='true'>
+        </button>
+        <button class="room__slider-btn" id='slider-btn-right' aria-label='move slider to the right'>
+          <img src='./assets/images/icon-angle-right.svg' alt='' aria-hidden='true'>
+        </button>
+      </div>
+      <div class="room__section room__section--hero-image"></div>
+      <div class='room__slider'>
+        <div class='slider__sections' id='slider'>
+          <section class="slider__section">
+            <h2 class='room__subtitle'>Discover innovative ways to decorate</h2>
+            <p class='room__text'>We provide unmatched quality, comfort, and style for property owners across the
+              country.
+              Our experts combine
+              form and function in bringing your vision to life. Create a room in your own style with our collection
+              and
+              make your property a reflection of you and what you love.</p>
+          </section>
+          <section class="slider__section" aria-hidden='true'>
+            <h2 class='room__subtitle'>We are available all across the globe</h2>
+            <p class='room__text'>
+              With stores all over the world, it's easy for you to find furniture for your home or place of business.
+              Locally, we’re in most major cities throughout the country. Find the branch nearest you using our
+              store locator. Any questions? Don't hesitate to contact us today.
+            </p>
+          </section>
+          <section class="slider__section" aria-hidden='true'>
+            <h2 class='room__subtitle'>Manufactured with the best materials</h2>
+            <p class='room__text'>
+              Our modern furniture store provide a high level of quality. Our company has invested in advanced
+              technology
+              to ensure that every product is made as perfect and as consistent as possible. With three decades of
+              experience in this industry, we understand what customers want for their home and office.
+            </p>
+          </section>
+        </div>
+        <button class='room__shop-btn'>shop now
+          <img src='./assets/images/icon-arrow.svg' alt='' aria-hidden='true' width='40' height='12'>
+        </button>
+      </div>
+    </div>
+    <div class='room__container room__container--bottom'>
+      <div class="section__image section__image--dark" aria-hidden='true'></div>
+      <section class="room__section room__section--about">
+        <h2 class='room__subtitle room__subtitle--about'>About our furniture</h2>
+        <p class='room__text'>Our multifunctional collection blends design and function to suit your individual taste.
+          Make each room unique,
+          or pick a cohesive theme that best express your interests and what inspires you. Find the furniture pieces
+          you
+          need, from traditional to contemporary styles or anything in between. Product specialists are available to
+          help
+          you create your dream space.</p>
+      </section>
+      <div class="section__image section__image--light" aria-hidden='true'></div>
+    </div>
+  </main>
+  <script src='./script.js'></script>
+</body>
+
+</html>

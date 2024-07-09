@@ -1,0 +1,405 @@
+@font-face {
+  font-family: 'LeagueSpartan';
+  src: local('LeagueSpartan Medium');
+  src: url('./assets/fonts/LeagueSpartan-Medium.woff2') format('woff2'),
+     url('./assets/fonts/LeagueSpartan-Medium.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'LeagueSpartan';
+  src: local('LeagueSpartan SemiBold');
+  src: url('./assets/fonts/LeagueSpartan-SemiBold.woff2') format('woff2'),
+     url('./assets/fonts/LeagueSpartan-SemiBold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'LeagueSpartan';
+  src: local('LeagueSpartan Bold');
+  src: url('./assets/fonts/LeagueSpartan-Bold.woff2') format('woff2'),
+     url('./assets/fonts/LeagueSpartan-Bold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --dark-gray: hsl(0, 0%, 63%);
+  --black: hsl(0, 0%, 0%);
+  --white: hsl(0, 0%, 100%);
+  --very-dark-gray: hsl(0, 0%, 27%);
+
+  --fs-link: .9rem;
+  --fs-subtitle: 1.6rem;
+  --fs-about: 1.6rem;
+
+  --section-height: 22rem;
+  --menu-size: 25px;
+
+  /* use with margins/paddings */
+  --space-small: 1rem;
+  --space-medium: 1.5rem;
+  --space-large: 2rem;
+
+  --adjust-vw: 3vw;
+  --adjust-margin-padding: clamp(var(--space-small), var(--space-small) + var(--adjust-vw), var(--space-large));
+
+  line-height: 1.5;
+  font-size: 16px;
+  font-family: 'LeagueSpartan', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+html{
+
+}
+
+body{
+  font-size: .75rem;
+  color: var(--black);
+}
+
+img:not([class]) {
+  vertical-align: middle;
+}
+
+img[aria-hidden] {
+  pointer-events: none;
+}
+
+button {
+  appearance: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+main {
+  display: grid;
+  height: 100dvh;
+  grid-template-columns: 100vw;
+  max-height: 800px;
+}
+
+header {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  min-height: 6rem;
+  z-index: 100;
+}
+
+.room__container--top{
+  position: relative;
+}
+
+.room__nav {
+  position: absolute;
+  left: var(--space-small);
+  top: var(--space-large);
+  display: flex;
+  align-items: center;
+  gap: var(--space-small);
+}
+
+.room__nav--expanded{
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--white);
+  padding: var(--space-small);
+}
+
+.room__menu{
+  min-width: var(--menu-size);
+  min-height: var(--menu-size);
+  position: absolute;
+  left: var(--space-medium);
+  z-index: 120;
+}
+
+.room__list {
+  list-style: none;
+  display: flex;
+  width: 100%;
+  gap: var(--space-small);
+  justify-content: center;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.room__list[aria-expanded='true']{
+  visibility: visible;
+  opacity: 1;
+}
+
+.room__list li a {
+  position: relative;
+  color: var(--black);
+  text-decoration: none;
+  font-size: clamp(var(--fs-link), var(--fs-link) + 1vw, var(--fs-link) * 2);
+  font-weight: bold;
+}
+
+.room__list li a::after{
+  content: '';
+  width: 0;
+  height: 2px;
+  background-color: var(--white);
+  position: absolute;
+  bottom: -.5rem;
+  left: 50%;
+  transform: translate(-50%);
+  transition: width .25s ease-in-out;
+}
+
+.room__slider-buttons {
+  --btns-height: 60px;
+
+  width: max-content;
+  position: absolute;
+  top: calc(var(--section-height) - var(--btns-height));
+  right: 0;
+  display: flex;
+}
+
+.room__slider-btn {
+  padding: var(--space-small) var(--space-medium);
+  background-color: var(--black);
+  min-height: var(--btns-height);
+  transition: background-color .2s ease-in-out;
+}
+
+.room__slider {
+  padding: var(--adjust-margin-padding) 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+}
+
+.slider__sections {
+  display: flex;
+  overflow: hidden;
+  margin-bottom: var(--adjust-margin-padding);
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scroll-snap-align: center;
+  max-width: 100%;
+}
+
+.slider__section {
+  padding: 0 var(--adjust-margin-padding);
+  min-width: 100%;
+  opacity: 1;
+  transition: opacity .25s ease-in-out;
+}
+
+.slider__section[aria-hidden]{
+  opacity: 0;
+}
+
+.room__shop-btn {
+  margin-left: var(--adjust-margin-padding);
+  text-transform: uppercase;
+  letter-spacing: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  position: relative;
+}
+
+.room__shop-btn::after {
+  content: '';
+  width: 0;
+  height: 2px;
+  background-color: var(--black);
+  position: absolute;
+  bottom: -.5rem;
+  left: 50%;
+  transform: translate(-50%);
+  transition: width .25s ease-in-out;
+}
+
+.room__subtitle {
+  font-size: clamp(var(--fs-subtitle), var(--fs-subtitle) + 1vw , var(--fs-subtitle) * 1.5);
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.room__subtitle--about{
+  font-size: var(--fs-about);
+}
+
+.room__text{
+  font-size: 1.1rem;
+  color: var(--very-dark-gray);
+  font-weight: 500;
+  text-wrap: balance;
+}
+
+.room__section--hero-image {
+  background: url('./assets/images/mobile-image-hero-1.jpg') center/100% no-repeat;
+  background-size: 100% 100%;
+  height: var(--section-height);
+  position: relative;
+  z-index: -1;
+}
+
+.section__image--dark {
+  background: url('./assets/images/image-about-dark.jpg') center/100% no-repeat;
+}
+
+.section__image--light {
+  background: url('./assets/images/image-about-light.jpg') center/100% no-repeat;
+}
+
+.section__image {
+  aspect-ratio: 4 / 1;
+  max-width: 100%;
+  height: calc(var(--section-height) / 1.5 + 2vw);
+  background-size: 100% 100%;
+}
+
+.room__section--about {
+  padding: var(--space-large) var(--adjust-margin-padding);
+  background-color: var(--white);
+}
+
+@media (any-hover: hover){
+  .room__slider-btn:hover{
+    background-color: var(--very-dark-gray);
+  }
+
+  .room__list li:hover,
+  .room__shop-btn {
+    opacity: .9;
+  }
+
+  .room__list li:hover a::after {
+    width: 50%;
+  }
+
+  .room__shop-btn:hover::after{
+    width: 100%;
+  }
+
+  .room__shop-btn:hover img{
+    animation: arrowBounce .5s ease-in infinite;
+  }
+}
+
+@keyframes arrowBounce {
+  0%, 100%{
+    transform: translate(0) 
+  }
+
+  25% {
+    transform: translate(8px)
+  }
+}
+
+@media only screen and (min-width: 40rem){
+  :root{
+    --adjust-vw: 1.5vw;
+  }
+
+  .room__section--hero-image {
+    background-image: url('./assets/images/desktop-image-hero-1.jpg');
+  }
+
+  .section__image--dark {
+    background: url('./assets/images/image-about-dark.jpg') center/100% no-repeat;
+  }
+
+  .section__image--light {
+    background: url('./assets/images/image-about-light.jpg') center/100% no-repeat;
+  }
+
+  .section__image{
+    background-size: 100% 100%;
+  }
+}
+
+@media only screen and (min-width: 60rem){
+  :root{
+    --fs-subtitle: 1.8rem;
+    --adjust-vw: .5vw;
+  }
+
+  main {
+    grid-template-rows: minmax(calc(var(--section-height) * 1.2), 60dvh) minmax(calc(var(--section-height) / 1.5), 40dvh)
+  }
+
+  header{
+    max-width: 50%;
+    flex-direction: row;
+    gap: var(--space-large);
+    justify-content: flex-start;
+    padding-left: var(--space-large);
+  }
+
+  .room__nav{
+    position: initial;
+  }
+
+  .room__list li a{
+    color: var(--white);
+  }
+
+  .room__menu{
+    display: none;
+  }
+
+  .room__container {
+    display: flex;
+  }
+
+  .room__container > * {
+    flex: 1 1;
+  }
+
+  .room__slider-buttons{
+    right: unset;
+    left: 60%;
+    top: calc(100% - var(--btns-height));
+  }
+
+  .section__image{
+    max-width: 28%;
+    height: 100%;
+  }
+
+  .room__section--about{
+    padding: 0 var(--space-medium);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .room__section--hero-image{
+    max-width: 60%;
+    min-height: 100%;
+  }
+
+  .room__text{
+    font-size: .95rem;
+  }
+
+  .room__slider{
+    max-width: 40%;
+  }
+}
