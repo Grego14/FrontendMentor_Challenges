@@ -86,9 +86,8 @@ button {
 
 main {
   display: grid;
-  height: 100dvh;
+  min-height: 100dvh;
   grid-template-columns: 100vw;
-  max-height: 800px;
 }
 
 header {
@@ -103,6 +102,8 @@ header {
 }
 
 .room__container--top{
+  --hero-image-height: calc(var(--section-height) + 5vh);
+
   position: relative;
 }
 
@@ -136,7 +137,8 @@ header {
   list-style: none;
   display: flex;
   width: 100%;
-  gap: var(--space-small);
+  padding-left: var(--space-large);
+  gap: var(--adjust-margin-padding);
   justify-content: center;
   visibility: hidden;
   opacity: 0;
@@ -172,7 +174,7 @@ header {
 
   width: max-content;
   position: absolute;
-  top: calc(var(--section-height) - var(--btns-height));
+  top: calc(var(--hero-image-height) - var(--btns-height));
   right: 0;
   display: flex;
 }
@@ -254,7 +256,7 @@ header {
 .room__section--hero-image {
   background: url('./assets/images/mobile-image-hero-1.jpg') center/100% no-repeat;
   background-size: 100% 100%;
-  height: var(--section-height);
+  height: var(--hero-image-height);
   position: relative;
   z-index: -1;
 }
@@ -401,5 +403,11 @@ header {
 
   .room__slider{
     max-width: 40%;
+  }
+}
+
+@media only screen and (min-height: 60rem){
+  main{
+    grid-template-rows: 1fr 1fr
   }
 }

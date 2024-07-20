@@ -12,7 +12,10 @@ const icons = ['./assets/images/icon-hamburger.svg', './assets/images/icon-close
 
 // prevent scroll bugs when changing from landscape to portrait
 function updateScroll(){
-  sections.querySelector('.slider__section:not([aria-hidden])').scrollIntoView({inline: 'start'})
+  sections.scrollTo({
+    left: 0,
+    behavior: "smooth",
+  })
 }
 
 d.addEventListener('DOMContentLoaded', e => {
@@ -67,14 +70,19 @@ function slideSections({e, sectionsParent, nextBtn, prevBtn}){
   let sectionVisible = [...sectionsParent.children].find(section => !section.getAttribute('aria-hidden'))
 
   let sectionToScroll = (() =>{
-    if(e.target === nextBtn && sectionVisible) 
-      return sectionVisible.nextElementSibling ? sectionVisible.nextElementSibling : sectionsParent.firstElementChild
+
+    if(e.target === nextBtn && sectionVisible)
+      return sectionVisible.nextElementSibling 
+        ? sectionVisible.nextElementSibling 
+        : sectionsParent.firstElementChild
 
     if(e.target === prevBtn && sectionVisible)
-      return sectionVisible.previousElementSibling ? sectionVisible.previousElementSibling : sectionsParent.lastElementChild
+      return sectionVisible.previousElementSibling 
+        ? sectionVisible.previousElementSibling 
+        : sectionsParent.lastElementChild
   })()
 
   sectionVisible?.setAttribute('aria-hidden', 'true')
   sectionToScroll?.removeAttribute('aria-hidden')
-  sectionToScroll?.scrollIntoView({block: 'center'})
+  sectionToScroll?.scrollIntoView({block: 'nearest'})
 }
