@@ -30,4 +30,8 @@
 
 #### Advice Generator [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/advice-generator-app-main) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/challenges/advice-generator-app-main/)
 
+#### Ip Address Tracker [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/ip-address-tracker-master) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/challenges/ip-address-tracker-master/)
+
+#### Room Homepage [**Solution**](https://github.com/Grego14/FrontendMentor_Challenges/tree/main/challenges/room-homepage-master/) | [**Live site**](https://grego14.github.io/FrontendMentor_Challenges/challenges/room-homepage-master/)
+
 ***Frontent Mentor Profile*** ➡️ [@Grego14](https://www.frontendmentor.io/profile/Grego14)
