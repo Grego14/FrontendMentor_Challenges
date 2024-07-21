@@ -336,7 +336,7 @@ header {
   }
 }
 
-@media only screen and (min-width: 60rem){
+@media only screen and (min-width: 60rem) and (max-height: 60rem) {
   :root{
     --fs-subtitle: 1.8rem;
     --adjust-vw: .5vw;
@@ -403,11 +403,5 @@ header {
 
   .room__slider{
     max-width: 40%;
-  }
-}
-
-@media only screen and (min-height: 60rem){
-  main{
-    grid-template-rows: 1fr 1fr
   }
 }

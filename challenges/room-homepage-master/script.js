@@ -7,7 +7,7 @@ const sliderRight = d.getElementById('slider-btn-right')
 const nav = menu.closest('nav')
 const sections = d.getElementById('slider')
 
-const isDesktop = window.matchMedia('(min-width: 60rem)')
+const isDesktop = window.matchMedia('(min-width: 60rem) and (max-height: 60rem)')
 const icons = ['./assets/images/icon-hamburger.svg', './assets/images/icon-close.svg']
 
 // prevent scroll bugs when changing from landscape to portrait
