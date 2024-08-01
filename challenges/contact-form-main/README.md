@@ -62,5 +62,4 @@ I learned how to validate inputs using the ValidityState Web API.
 
 ## Author
 
-- Challenges Website - [FrotendMentor Challenges](https://grego14.github.io/FrontendMentor_Challenges/) *(Under construction)*
 - Frontend Mentor - [@Grego14](https://www.frontendmentor.io/profile/Grego14)

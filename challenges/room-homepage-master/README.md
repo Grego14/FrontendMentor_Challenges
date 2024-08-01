@@ -51,5 +51,4 @@ Improved my skills at creating layouts
 
 ## Author
 
-- Challenges Website - [FrotendMentor Challenges](https://grego14.github.io/FrontendMentor_Challenges/) *(Under construction)*
 - Frontend Mentor - [@Grego14](https://www.frontendmentor.io/profile/Grego14)
