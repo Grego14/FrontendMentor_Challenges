@@ -1,0 +1,143 @@
+.cart {
+  border-radius: .5rem;
+  padding: 1.5rem;
+  overflow-x: hidden;
+}
+
+.cart-content {
+  margin-top: 2rem;
+  min-height: calc(12rem + 3vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart__no-product,
+.cart__info,
+.cart__products {
+  min-width: 100%;
+  max-width: 100%;
+}
+
+.cart__info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cart__info__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart__info__price {
+  font-size: 1.8rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.cart__info__carbon-neutral {
+  background-color: var(--rose-100);
+  border-radius: .5rem;
+  font-size: .9rem;
+  padding: 1rem .5rem;
+  text-align: center;
+}
+
+/* tree icon */
+.cart__info__carbon-neutral img {
+  margin-right: .3rem;
+}
+
+.cart__no-product {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirm-order {
+  background-color: var(--red);
+  color: var(--rose-50);
+  border-radius: 3rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  min-height: 3.5rem;
+  transition: filter var(--fast-transition) ease-in-out;
+}
+
+.cart__no-product p,
+.cart__info__carbon-neutral {
+  font-size: var(--fsc-small);
+}
+
+.cart__no-product p {
+  font-weight: 600;
+}
+
+.cart-discount-text {
+  margin-inline: auto;
+  font-weight: 600;
+}
+
+@media (hover: hover) {
+  .confirm-order:hover {
+    filter: saturate(.75)
+  }
+
+  .confirm-order:hover:active {
+    filter: saturate(1.2)
+  }
+}
+
+@media only screen and (min-width: 30rem) {
+  .cart {
+    width: 50%;
+  }
+
+  .cart-content {
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  .cart__products {
+    min-width: 45%;
+    align-self: start;
+  }
+
+  .cart__info {
+    min-width: 45%;
+    position: relative;
+  }
+
+  .cart__info::before {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    left: -.5rem;
+    width: 1px;
+    height: 100%;
+    background-color: var(--rose-100);
+  }
+
+  .dark-theme .cart__info::before {
+    background-color: #673ab7;
+  }
+
+  .cart__info__carbon-neutral {
+    padding: .3rem;
+  }
+
+  .confirm-order {
+    min-height: 3rem;
+  }
+}
+
+@media only screen and (min-width: 64rem) {
+  .cart {
+    min-width: 20rem;
+  }
+}
