@@ -5,6 +5,7 @@ import react from '@vitejs/plugin-react-swc'
 export default defineConfig({
   plugins: [react()],
   build: {
-    cssMinify: 'lightningcss'
+    cssMinify: 'lightningcss',
+    root: '/FrontendMentor_Challenges/challenges/product-list-with-cart-main/'
   }
 })

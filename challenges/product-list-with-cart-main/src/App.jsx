@@ -177,7 +177,7 @@ export default function App() {
   useEffect(() => {
     //if (jsonLength) return
 
-    fetch('../data.json')
+    fetch('/data.json')
       .then(res => res.json())
       .then(data => {
         console.log('data fetched %o', data)
@@ -208,7 +208,7 @@ export default function App() {
         // cool effect
         setTimeout(() => {
           handleStates('productsFetched', true)
-        }, 1000)
+        }, 500)
       })
   }, [products.get /*jsonLength*/])
 
