@@ -1,14 +1,18 @@
 import { motion } from 'framer-motion'
-import { forwardRef, useEffect, useState, useRef } from 'react'
-import { ThemeContext } from '../../theme-context.jsx'
-import utils from '../../utils/utils.js'
-import Spinner from '../others/Spinner.jsx'
+import { forwardRef, useEffect, useRef, useState } from 'react'
+import {
+  extractId,
+  invalidUserInteraction,
+  matches
+} from '../../utils/utils.js'
+import Spinner from '../others/spinner/Spinner.jsx'
 import CartProduct from './CartProduct.jsx'
 import './Cart.css'
+import Skeleton from 'react-loading-skeleton'
 import usePointer from '../../hooks/usePointer.jsx'
 import ButtonWhoAppear from '../others/ButtonWhoAppear.jsx'
-import { TotalPrice } from '../../App.jsx'
-import Skeleton from 'react-loading-skeleton'
+import TotalPrice from '../others/totalprice/TotalPrice.jsx'
+import './DiscountInput.css'
 
 const Cart = forwardRef((props, ref) => {
   const {
@@ -26,12 +30,8 @@ const Cart = forwardRef((props, ref) => {
 
   const [isProductInCart, setIsProductInCart] = useState(false)
   const [transitionClass, setTransitionClass] = useState('')
-  const buttonsClasses = {
-    confirm: '.confirm-order'
-  }
 
-  const [isClicked, pointerHandlers] = usePointer(buttonsClasses.add)
-  const handleContextMenu = utils.preventContextMenu
+  const cartProductRemoveBtnClass = 'cart-product__button--remove'
 
   useEffect(() => {
     setVisible()
@@ -43,34 +43,29 @@ const Cart = forwardRef((props, ref) => {
 
   function handleRemoveProduct(e) {
     if (
-      utils.invalidUserInteraction(e) ||
-      !utils.matches(e.target, '.product-cart__button--remove')
+      invalidUserInteraction(e) ||
+      !matches(e.target, `.${cartProductRemoveBtnClass}`)
     )
       return
 
-    const id = utils.extractId(e)
+    const id = extractId(e)
 
     if (id !== 0 && !id) return
 
     removeProduct({ type: 'cart', id })
-    pointerHandlers.pointerUpCancel(e)
   }
 
   function handlePointerUpCancel(e) {
-    if (utils.invalidUserInteraction(e)) return
+    if (invalidUserInteraction(e)) return
 
     confirmOrder()
-    pointerHandlers.pointerUpCancel(e)
   }
 
   const confirmOrderProps = {
     className: 'confirm-order',
-    type: 'button',
-    onPointerDown: pointerHandlers.pointerDown,
     onPointerUp: handlePointerUpCancel,
     onPointerCancel: handlePointerUpCancel,
-    onContextMenu: handleContextMenu,
-    style: theme.cart.confirmBtn
+    onKeyDown: handlePointerUpCancel
   }
 
   const variants = {
@@ -99,13 +94,17 @@ const Cart = forwardRef((props, ref) => {
 
     productsProps: {
       handleRemoveProduct,
-      products
+      products,
+      buttonClass: cartProductRemoveBtnClass
     }
   }
 
   return (
-    <div className='cart' style={theme.cart} ref={ref}>
-      <h2 className='cart__title' style={{ color: theme.cart.title }}>
+    <div
+      className='cart'
+      ref={ref}
+      style={{ minHeight: `${50 * products.length + 400}px` }}>
+      <h2 className='cart__title'>
         Your Cart <span>({productsFetched && productsCount})</span>
       </h2>
 
@@ -117,14 +116,8 @@ const Cart = forwardRef((props, ref) => {
 export default Cart
 
 function CartContent(props) {
-  const {
-    productsFetched,
-    productsCount,
-    infoProps,
-    productsProps,
-    theme,
-    variants
-  } = props
+  const { productsFetched, productsCount, infoProps, productsProps, variants } =
+    props
 
   const [imageLoaded, setImageLoaded] = useState(false)
 
@@ -134,22 +127,22 @@ function CartContent(props) {
         productsCount > 0 ? (
           <>
             <CartProducts {...productsProps} />
-            <CartInfo {...{ ...infoProps, variants, theme }} />
+            <CartInfo {...{ ...infoProps, variants }} />
           </>
         ) : (
           <CartNoProduct
-            {...{ variants, productsCount, theme, imageLoaded, setImageLoaded }}
+            {...{ variants, productsCount, imageLoaded, setImageLoaded }}
           />
         )
       ) : (
-        <Spinner {...theme.spinner} {...theme.spinner.variants.cart} />
+        <Spinner isFor='cart' />
       )}
     </div>
   )
 }
 
 function DiscountInput(props) {
-  const { message, validCode, setValid, id, theme, isValid } = props
+  const { message, validCode, setValid, id, isValid } = props
   const [value, setValue] = useState(message)
   const [showDiscountInput, setShowDiscountInput] = useState(false)
 
@@ -160,12 +153,11 @@ function DiscountInput(props) {
   const [applyClicked, setApplyClicked] = useState(false)
 
   function handleOnChange(e) {
-    setValue(e.target.value)
-
     setIsTyping(true)
     clearTimeout(typingTimeout.current)
 
     typingTimeout.current = setTimeout(() => {
+      setValue(e.target.value)
       setIsTyping(false)
     }, 250)
 
@@ -173,21 +165,20 @@ function DiscountInput(props) {
   }
 
   function handleTextClick(e) {
+    if (invalidUserInteraction(e)) return
+
     setShowDiscountInput(true)
   }
 
   function handleApplyClick(e) {
     setApplyClicked(true)
 
-    setValid(() => {
-      return value === validCode
-    })
+    setValid(value === validCode)
   }
-  const clickedAndInvalid = applyClicked && !isValid
 
+  const clickedAndInvalid = applyClicked && !isValid
   const buttonProps = {
     onPointerUp: handleApplyClick,
-    ...(clickedAndInvalid && { disabled: true }),
     className: 'discount-input-button'
   }
 
@@ -196,9 +187,15 @@ function DiscountInput(props) {
       {!showDiscountInput && (
         <div className='discount-text'>
           Discount code?{' '}
-          <span className='discount-text-click' onPointerUp={handleTextClick}>
-            click here!
-          </span>
+          <ButtonWhoAppear
+            render='Click here!'
+            props={{
+              className: 'discount-text-click',
+              onPointerUp: handleTextClick,
+              onKeyDown: handleTextClick
+            }}
+            bounce={false}
+          />
         </div>
       )}
       {showDiscountInput && (
@@ -213,13 +210,7 @@ function DiscountInput(props) {
               'Discount Code'
             )}
             <input
-              style={{
-                ...theme.discountInput,
-                border: clickedAndInvalid
-                  ? '2px solid var(--red-contrast)'
-                  : '2px solid transparent'
-              }}
-              className='discount-input'
+              className={`discount-input${clickedAndInvalid ? ' invalid' : ''}`}
               type='text'
               placeholder={message}
               onChange={handleOnChange}
@@ -228,9 +219,12 @@ function DiscountInput(props) {
             />
           </label>
 
-          <ButtonWhoAppear props={buttonProps} show={true}>
-            Apply
-          </ButtonWhoAppear>
+          <ButtonWhoAppear
+            eventClassName='discount-input-button'
+            render='Apply'
+            props={buttonProps}
+            show={!clickedAndInvalid}
+          />
         </div>
       )}
     </>
@@ -238,21 +232,14 @@ function DiscountInput(props) {
 }
 
 function CartInfo(props) {
-  const {
-    totalPrice,
-    discount,
-    setDiscount,
-    confirmOrderProps,
-    theme,
-    cartVariants
-  } = props
+  const { totalPrice, discount, setDiscount, confirmOrderProps, cartVariants } =
+    props
 
   const discountInputProps = {
     message: 'Get -10% discount!',
     validCode: 'FrontendMentor',
     setValid: setDiscount,
     id: 'discount-code',
-    theme,
     isValid: discount
   }
 
@@ -264,16 +251,9 @@ function CartInfo(props) {
       variants={cartVariants}>
       <div className='cart__info__total'>
         <div>Order Total</div>
-        <TotalPrice
-          discount={discount}
-          price={totalPrice}
-          discountStyle={{ color: theme.totalPrice.cart.discount }}
-          totalStyle={{ color: theme.totalPrice.cart.price }}
-        />
+        <TotalPrice discount={discount} price={totalPrice} />
       </div>
-      <p
-        className='cart__info__carbon-neutral'
-        style={theme.cart.carbonNeutral}>
+      <p className='cart__info__carbon-neutral'>
         <img
           src='./assets/images/icon-carbon-neutral.svg'
           alt=''
@@ -284,22 +264,32 @@ function CartInfo(props) {
         This is a <b className='carbon-neutral'>carbon-neutral</b> delivery
       </p>
 
-      <ButtonWhoAppear props={confirmOrderProps}>Confirm Order</ButtonWhoAppear>
+      <ButtonWhoAppear
+        render='Confirm Order'
+        props={confirmOrderProps}
+        eventClassName='.confirm-order'
+        hoverEvents={false}
+        focusEvents={false}
+      />
 
       {!discount ? (
         <DiscountInput {...discountInputProps} />
       ) : (
-        <div className='cart-discount-text'>You have a -10% discount!</div>
+        <div className='discount-text'>-10% discount applied!</div>
       )}
     </motion.div>
   )
 }
 
-function CartProducts({ handleRemoveProduct, products }) {
+function CartProducts({ handleRemoveProduct, products, buttonClass }) {
   return (
     <div className='cart__products' onPointerUp={handleRemoveProduct}>
       {products.map(product => (
-        <CartProduct data={product} key={product.id} />
+        <CartProduct
+          data={product}
+          buttonClass={buttonClass}
+          key={product.id}
+        />
       ))}
     </div>
   )
@@ -308,7 +298,6 @@ function CartProducts({ handleRemoveProduct, products }) {
 function CartNoProduct({
   cartVariants,
   productsCount,
-  theme,
   imageLoaded,
   setImageLoaded
 }) {
@@ -320,7 +309,7 @@ function CartNoProduct({
     myImg.onload = () => {
       setTimeout(() => {
         setImageLoaded(true)
-      }, 200)
+      }, 150)
     }
   }, [imageLoaded, setImageLoaded])
 
@@ -345,9 +334,7 @@ function CartNoProduct({
         <Skeleton height={96} width={96} containerClassName='skeleton' />
       )}
 
-      <p style={{ color: theme.cart.noproduct }}>
-        Your added items will appear here
-      </p>
+      <p>Your added items will appear here</p>
     </motion.div>
   )
 }

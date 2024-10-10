@@ -1,0 +1,42 @@
+.toggle-theme {
+  z-index: 1200;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  transition: var(--color-transitions);
+  background-color: var(--red-contrast);
+}
+
+.toggle-theme img {
+  width: calc(30px + .5vw);
+  height: calc(30px + .5vw);
+}
+
+.dark-theme .toggle-theme {
+  background-color: var(--purple-heart);
+}
+
+.toggle-theme:focus-visible {
+  outline: 2px solid var(--rose-400);
+}
+
+.dark-theme .toggle-theme:focus-visible {
+  outline: 2px solid var(--rose-50);
+}
+
+@media only screen and (min-width: 30rem) {
+  .toggle-theme {
+    width: clamp(3rem, 3rem + .5vw, 4.5rem);
+    height: clamp(3rem, 3rem + .5vw, 4.5rem);
+    position: fixed;
+    right: var(--app-padding-clamp);
+    bottom: var(--app-padding-clamp);
+  }
+}
+
+@media only screen and (min-width: 64rem) {
+  .toggle-theme {
+    width: clamp(3rem, 3rem + 1.2vw, 6rem);
+    height: clamp(3rem, 3rem + 1.2vw, 6rem);
+  }
+}

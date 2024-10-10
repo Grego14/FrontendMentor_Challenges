@@ -1,22 +1,17 @@
-import { useState, useEffect, useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import OrderProduct from './OrderProduct.jsx'
 import './OrderModal.css'
 import { motion } from 'framer-motion'
-import { ThemeContext } from '../../theme-context.jsx'
-//import usePointer from '../../hooks/usePointer.jsx'
-import utils from '../../utils/utils.js'
-import { TotalPrice } from '../../App.jsx'
+import usePointer from '../../hooks/usePointer.jsx'
+import { getTotalPrice, getTotalProductPrice } from '../../utils/utils.js'
+import ButtonWhoAppear from '../others/ButtonWhoAppear.jsx'
+import TotalPrice from '../others/totalprice/TotalPrice.jsx'
 
 export default function OrderModal({ products, visible, newOrder, discount }) {
-  const { theme } = useContext(ThemeContext)
-  //const [isOnPointer, handlers] = usePointer('button')
+  const [isClicked, handlers] = usePointer('button')
 
-  const preventContextMenu = utils.preventContextMenu
-
-  const totalPrice = utils.getTotalPrice(
-    products.map(product =>
-      utils.getTotalProductPrice(product.price, product.count)
-    )
+  const totalPrice = getTotalPrice(
+    products.map(product => getTotalProductPrice(product.price, product.count))
   )
 
   const orderProducts = products.map(product => (
@@ -24,9 +19,6 @@ export default function OrderModal({ products, visible, newOrder, discount }) {
   ))
 
   const modalProps = {
-    style: {
-      ...theme.modal
-    },
     initial: {
       opacity: 0,
       scale: 0.5
@@ -44,6 +36,12 @@ export default function OrderModal({ products, visible, newOrder, discount }) {
     }
   }
 
+  const newOrderBtnProps = {
+    className: 'order-modal__button',
+    onPointerUp: newOrder,
+    onKeyDown: newOrder
+  }
+
   return (
     <motion.div
       className='modal-background'
@@ -59,32 +57,17 @@ export default function OrderModal({ products, visible, newOrder, discount }) {
         />
 
         <h2 className='order-modal__title'>Order Confirmed</h2>
-        <p className='order-modal__text' style={{ color: theme.modal.text }}>
-          We hope you enjoy your food!
-        </p>
+        <p className='order-modal__text'>We hope you enjoy your food!</p>
 
-        <div className='order-modal__info' style={{ ...theme.modal.info }}>
+        <div className='order-modal__info'>
           <div className='order-modal__products'>{orderProducts}</div>
           <div className='order-modal__total'>
-            <div className='total__text'>Order Total </div>
-            <TotalPrice
-              price={totalPrice}
-              discount={discount}
-              totalStyle={{ color: theme.totalPrice.modal.price }}
-              discountStyle={{ color: theme.totalPrice.modal.discount }}
-            />
+            <div className='total__text'>Order Total</div>
+            <TotalPrice price={totalPrice} discount={discount} isFor=' modal' />
           </div>
         </div>
 
-        <motion.button
-          className='order-modal__button'
-          type='button'
-          onPointerUp={newOrder}
-          onKeyDown={newOrder}
-          onContextMenu={preventContextMenu}
-          style={{ ...theme.modal.button }}>
-          Start New Order
-        </motion.button>
+        <ButtonWhoAppear render='Start New Order' props={newOrderBtnProps} />
       </motion.div>
     </motion.div>
   )

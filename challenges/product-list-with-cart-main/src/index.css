@@ -56,6 +56,16 @@
   --rose-500: hsl(12, 20%, 44%);
   --rose-900: hsl(14, 65%, 9%);
 
+  --app-bg: var(--rose-100);
+  --user-data-shadow: #888;
+
+  /* cart and modal-info border colors (dark mode) */
+  --cart-modal-border-color: #3C356A;
+
+  --dull-lavender: #AF8DEA;
+  --purple-heart: #673AB7;
+  --ebony-clay: #25213C;
+
   --fast-transition: .2s;
   --fast-transition-v2: .1s;
   --slow-transition: .3s;
@@ -72,6 +82,11 @@
     'Helvetica Neue', sans-serif;
   color: var(--rose-900);
   font-size: 14px;
+}
+
+:root.dark-theme {
+  --app-bg: #110F1E;
+  --user-data-shadow: #242040;
 }
 
 /* TAGS START */
@@ -96,11 +111,12 @@ img {
 @media only screen and (min-width: 64rem) {
   :root {
     --fs-small: .8rem;
+    font-size: 16px;
   }
 }
 
-@media only screen and (min-width: 72rem) {
+@media only screen and (min-width: 82rem) {
   :root {
-    font-size: 16px;
+    font-size: 18px;
   }
 }

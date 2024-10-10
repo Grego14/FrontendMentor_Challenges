@@ -1,0 +1,137 @@
+.discount-input-container {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.discount-input-button,
+.discount-input {
+  padding: .3rem .5rem;
+  border-radius: 6%;
+  font-weight: 600;
+  font-size: var(--fsc-small);
+  transition: var(--color-transitions);
+  border: 2px solid transparent;
+}
+
+.discount-input {
+  margin-top: .3rem;
+  background-color: var(--rose-300);
+  color: var(--rose-900);
+  border-color: var(--rose-400);
+  max-width: 100%;
+  /* prevent transition of the outline-color... */
+  transition-property: border-color, background-color, color;
+}
+
+.discount-input.invalid {
+  border-color: var(--red-contrast);
+}
+
+.dark-theme .discount-innput.invalid {
+  border-color: #FF501B;
+}
+
+.dark-theme .discount-input {
+  background-color: transparent;
+  color: var(--rose-50);
+  border-color: var(--dull-lavender);
+}
+
+/* temporal focus-visible */
+.discount-input-button:focus-visible,
+.discount-input:focus-visible {
+  outline: 2px solid var(--red-contrast);
+}
+
+.dark-theme .discount-input-button:focus-visible,
+.dark-theme .discount-input:focus-visible {
+  outline: 2px solid var(--dull-lavender);
+}
+
+.discount-input-label {
+  font-size: var(--fs-small);
+  font-weight: 600;
+  cursor: pointer;
+  max-width: 10rem;
+}
+
+.discount-input-button {
+  align-self: end;
+  min-width: 25%;
+  min-height: 2.15rem;
+
+  background-color: var(--red-contrast);
+  color: var(--rose-50);
+}
+
+.dark-theme .discount-input-button {
+  background-color: var(--purple-heart);
+  color: var(--rose-50);
+}
+
+.discount-input-button:disabled {
+  cursor: not-allowed;
+  filter: saturate(.3)
+}
+
+.discount-text {
+  text-align: center;
+  font-weight: 600;
+}
+
+.discount-text-click {
+  text-decoration: underline;
+  color: var(--rose-500);
+  cursor: pointer;
+  transition: opacity var(--fast-transition) ease-in-out;
+}
+
+.discount-text-click:focus-visible {
+  opacity: .6;
+  outline: 2px dotted var(--rose-300);
+}
+
+.dark-theme .discount-text-click:focus-visible {
+  outline: 2px dotted var(--dull-lavender);
+}
+
+.dark-theme .discount-text-click {
+  color: #af8dea;
+}
+
+.discount-error {
+  font-weight: bold;
+  color: var(--red-contrast);
+}
+
+.dark-theme .discount-error {
+  color: #FF501B
+}
+
+@media (hover: hover) {
+  .discount-text-click:hover {
+    opacity: .6;
+  }
+
+  .discount-input-button:hover:not(:disabled) {
+    background-color: var(--rose-100);
+    color: var(--red-contrast);
+    border-color: var(--rose-300);
+  }
+
+  .dark-theme .discount-input-button:hover:not(:disabled) {
+    background-color: transparent;
+    border-color: var(--purple-heart);
+    color: var(--dull-lavender);
+  }
+
+  .discount-input-button.clicked:hover {
+    color: green;
+  }
+
+  .dark-theme .discount-input-button.clicked:hover {
+    background-color: red;
+  }
+}

@@ -3,9 +3,15 @@ import './Product.css'
 import { motion } from 'framer-motion'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import { ThemeContext } from '../../theme-context.jsx'
-import utils from '../../utils/utils.js'
+import {
+  extractId,
+  matches,
+  preventContextMenu,
+  transformPrice,
+  invalidUserInteraction
+} from '../../utils/utils.js'
 import Section from '../others/Section.jsx'
-import Spinner from '../others/Spinner.jsx'
+import Spinner from '../others/spinner/Spinner.jsx'
 import * as ProductButton from './ProductButtons.jsx'
 import ProductImage from './ProductImage.jsx'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -28,15 +34,15 @@ export default function Products({
     }
 
     for (const [key, className] of Object.entries(buttonsClasses)) {
-      if (utils.matches(e.target, className)) return key
+      if (matches(e.target, className)) return key
     }
   }
 
   function handleProducts(e) {
-    if (utils.invalidUserInteraction(e)) return
+    if (invalidUserInteraction(e)) return
 
     const userAction = getUserAction(e)
-    const id = utils.extractId(e)
+    const id = extractId(e)
 
     if (!userAction) return
     if (id !== 0 && !id) return
@@ -96,7 +102,6 @@ export function Product({ data, onCart, theme, showTime }) {
   }, [imageLoaded])
 
   const buttonProps = {
-    theme,
     onCart,
     show
   }
@@ -178,11 +183,8 @@ export function Product({ data, onCart, theme, showTime }) {
               variants={productButtonsQuantityVariants}
               initial='hidden'
               animate={onCart ? 'show' : 'hidden'}
-              style={{
-                ...theme.products.quantityButtons
-              }}
               aria-hidden={onCart ? 'false' : 'true'}
-              onContextMenu={utils.preventContextMenu}>
+              onContextMenu={preventContextMenu}>
               <ProductButton.QuantityButton
                 buttonType='decrement'
                 {...buttonProps}
@@ -215,7 +217,7 @@ function ProductInfo(props) {
       <div
         className='product__category'
         style={{
-          color: theme.products.category
+          maxWidth: show ? '100%' : '45%'
         }}>
         {(show && category) || <Skeleton />}
       </div>
@@ -223,15 +225,16 @@ function ProductInfo(props) {
         className='product__name'
         // maxWidth here as need it to turn into 'auto' when the skeleton is removed
         // so we avoid text wraps on long product names...
-        style={{ color: theme.products.name, maxWidth: show ? 'auto' : '80%' }}>
+        style={{ maxWidth: show ? '100%' : '80%' }}>
         {(show && name) || <Skeleton />}
       </h2>
+
       <div
         className='product__price'
         style={{
-          color: theme.products.price.product
+          maxWidth: show ? '100%' : '45%'
         }}>
-        {(show && utils.transformPrice(price)) || <Skeleton />}
+        {(show && transformPrice(price)) || <Skeleton />}
       </div>
     </div>
   )

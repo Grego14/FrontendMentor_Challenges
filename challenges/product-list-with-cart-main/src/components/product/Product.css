@@ -1,10 +1,9 @@
 .products {
   --product-width: 14.5rem;
-  --product-height: 14.5rem;
 
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(var(--product-width), 1fr));
-  gap: 2rem;
+  gap: clamp(1rem, 1rem + .3vw, 2.2rem);
 }
 
 .products-title {
@@ -19,23 +18,32 @@
   font-size: var(--fsc-small);
 }
 
+.product__category {
+  color: var(--rose-500);
+}
+
+.dark-theme .product__category {
+  color: #A4A4A4;
+}
+
 .product__name {
-  font-size: 1.1em;
+  font-size: 1.1rem;
   font-weight: 600;
+}
+
+.product__price {
+  color: var(--red-contrast);
+}
+
+.dark-theme .product__price {
+  color: var(--dull-lavender);
 }
 
 .product__info {
   display: flex;
   flex-direction: column;
   gap: .3rem;
-}
-
-.product__category {
-  max-width: 45%;
-}
-
-.product__price {
-  max-width: 25%;
+  max-width: max-content;
 }
 
 .product__wrapper {
@@ -43,19 +51,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-}
-
-.product__image-wrapper {
-  border-radius: 1rem;
-  min-height: 14.5rem;
-  min-width: 20rem;
-  display: flex;
-  justify-content: center;
-}
-
-.product__image-wrapper:has(.no-image) {
-  display: flex;
-  align-items: center;
+  max-width: max-content;
 }
 
 .no-image {
@@ -68,15 +64,33 @@
   border-radius: .5rem;
   border: 2px solid transparent;
   transition: border-color var(--fast-transition) ease-in-out;
-  min-width: 100%;
-  object-fit: cover;
   user-select: none;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+
+  display: flex;
+  justify-content: center;
+  z-index: -1;
+  position: absolute;
+}
+
+.product__image--loaded {
+  z-index: initial;
+  position: initial;
+}
+
+.product--added .product__image {
+  border-color: var(--red-contrast);
+}
+
+.dark-theme .product--added .product__image {
+  border-color: var(--purple-heart);
 }
 
 .product__buttons {
   /* bottom must be half the height */
   bottom: 1.4rem;
-  width: 10rem;
   height: 2.8rem;
   border-radius: 5rem;
   color: black;
@@ -93,16 +107,58 @@
   justify-content: center;
   gap: .5rem;
   min-height: 100%;
-  width: calc(10rem + 1vw);
+  width: calc(9rem + 1.5vw);
   max-width: 12rem;
   border-radius: 5rem;
   border: 1px solid transparent;
   transition: var(--color-transitions);
+  pointer-events: none;
+}
+
+.product__button--add {
+  background-color: var(--rose-50);
+  border-color: var(--rose-500);
+}
+
+.product__button--add svg {
+  width: clamp(21px, 21px + .5vw, 40px);
+  height: clamp(20px, 20px + .5vw, 39px);
+}
+
+.product--show .product__button--add {
+  pointer-events: auto;
+}
+
+.product__button--add:focus-visible {
+  outline: 2px solid var(--red-contrast);
+}
+
+.product__button--add g[fill] {
+  fill: #C73B0F;
+}
+
+.dark-theme .product__button--add {
+  background-color: var(--rose-50);
+  border-color: var(--purple-heart);
+}
+
+.dark-theme .product__button--add:focus-visible {
+  outline: 2px solid var(--purple-heart);
+}
+
+.dark-theme .product__button--add g[fill] {
+  fill: var(--purple-heart);
 }
 
 .product__buttons__quantity {
   justify-content: space-evenly;
   transition: var(--color-transitions);
+  background-color: var(--red-contrast);
+  color: var(--rose-50);
+}
+
+.dark-theme .product__buttons__quantity {
+  background-color: var(--purple-heart);
 }
 
 .product:not(.product--added) .product__button--add,
@@ -148,5 +204,35 @@
   .product__button--quantity {
     width: 25px;
     height: 25px;
+  }
+}
+
+@media (hover: hover) {
+  .dark-theme .product__button--add:hover {
+    background-color: var(--rose-100);
+    border-color: var(--purple-heart);
+    color: var(--purple-heart);
+  }
+
+  .product__button--add:hover {
+    background-color: var(--rose-100);
+    border-color: var(--red-contrast);
+    color: var(--red-contrast);
+  }
+
+  .product__button--quantity:hover {
+    background-color: var(--rose-50)
+  }
+
+  .product__button--quantity:hover path[fill] {
+    fill: var(--red-contrast);
+  }
+
+  .dark-theme .product__button--quantity:hover {
+    background-color: var(--rose-50)
+  }
+
+  .dark-theme .product__button--quantity:hover path[fill] {
+    fill: var(--purple-heart);
   }
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
-export default function useFocus(initialValue) {
+// as focus doesn't bubble theres no need to pass a target
+export default function useFocus(initialValue = false) {
   const [onFocus, setOnFocus] = useState(initialValue)
 
   function focus(e) {

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import utils from '../utils/utils.js'
 
-export default function usePointer(targetClass, classToAdd = 'pointer-down') {
+export default function usePointer(targetClass, classToAdd = 'clicked') {
   const [isOnPointer, setIsOnPointer] = useState(false)
 
   if (!targetClass && document.querySelector(targetClass))
@@ -30,18 +30,12 @@ export default function usePointer(targetClass, classToAdd = 'pointer-down') {
       pointerUpCancel(e) {
         if (utils.invalidUserInteraction(e)) return
 
-        setIsOnPointer(() => {
-          const t = target(e)
+        const t = target(e)
+        if (!t) return
 
-          if (!t) return
-
-          if (t.hasPointerCapture(e.pointerId)) {
-            t.classList.remove(classToAdd)
-            t.releasePointerCapture(e.pointerId)
-          }
-
-          return false
-        })
+        t.classList.remove(classToAdd)
+        setIsOnPointer(false)
+        t.releasePointerCapture(e.pointerId)
       }
     }
   ]

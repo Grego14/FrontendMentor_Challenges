@@ -1,0 +1,142 @@
+/* UTILITY CLASSES START */
+
+.pos-absolute {
+  position: absolute;
+}
+
+.pos-relative {
+  position: relative;
+}
+
+/* UTILITY CLASSES END */
+
+/* APP START */
+
+.app {
+  --app-padding: 1rem;
+  --app-padding-clamp: clamp(var(--app-padding), var(--app-padding) + 1vw, var(--app-padding) * 3);
+  --app-gap: 3rem;
+  --app-gap-clamp: clamp(var(--app-gap), var(--app-gap) + 1vw, var(--app-gap) * 1.5);
+  --icon-fill: var(--rose-50);
+
+  background-color: var(--app-bg);
+  padding: var(--app-padding-clamp);
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-gap-clamp);
+  min-height: 100dvh;
+  transition: var(--color-transitions);
+  color: var(--rose-900);
+}
+
+.dark-theme .app {
+  color: var(--rose-50)
+}
+
+/* APP END */
+
+/* ToggleThemeButton (style only apply on mobile) */
+
+.app-section--toggle-theme {
+  display: flex;
+  align-items: center;
+  right: 1rem;
+}
+
+/* USER DATA START */
+
+.app-section--user-data {
+  --user-data-height: 5rem;
+
+  position: fixed;
+  display: flex;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  min-height: var(--user-data-height);
+  overflow: hidden;
+  box-shadow: 0 -2px 5px var(--user-data-shadow);
+}
+
+.app-section--user-data>* {
+  flex: 1 1;
+}
+
+.user-data-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  min-height: var(--user-data-height);
+  padding-inline: 1rem;
+  background-color: var(--rose-50);
+}
+
+.dark-theme .user-data-container {
+  background-color: var(--ebony-clay);
+}
+
+.user-data-container>* {
+  position: absolute;
+}
+
+.user-order {
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: .3rem
+}
+
+.user-order__products-count,
+.user-order__products-count {
+  color: var(--red-contrast);
+}
+
+.dark-theme .user-order__products-count,
+.dark-theme .user-order__total-price {
+  color: #C29FFF
+}
+
+.user-order>* {
+  min-width: 100%;
+
+  display: flex;
+  align-items: center;
+}
+
+.user-order__products-count,
+.user-order__total-price {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-left: .3rem;
+}
+
+.skeleton {
+  flex: 1;
+  z-index: 10;
+
+  /* solves height problem with the library */
+  line-height: 1;
+}
+
+/* 480px */
+@media only screen and (min-width: 30rem) {
+  .app-section--user-data {
+    width: calc(30% - var(--app-padding-clamp));
+  }
+}
+
+@media only screen and (min-width: 58.75rem) {
+  .app-section--products {
+    width: 70%;
+  }
+
+  .app {
+    --app-padding: 1.333rem;
+    --app-gap: 1.5rem;
+
+    flex-direction: row;
+  }
+}
