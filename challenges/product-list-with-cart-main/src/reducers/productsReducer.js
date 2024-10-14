@@ -30,17 +30,24 @@ export default function productsReducer(state, action) {
       if (!element) return state
 
       let count = element.count
+
+      let outOfStock = count >= element.quantity
+
+      // prevents unnecessary rendering
+      if (outOfStock && quantity !== 'decrement') return state
+
       quantity === 'increment' ? count++ : count--
+      outOfStock = count >= element.quantity
 
-      const elementProps = { ...element, count }
-      const { name, category } = elementProps
-
-      // compared to 0 because above the count is decremented
+      // compare to 0 because above we are decrementing no matter what
       // and if it was 1 now is 0
       if (quantity === 'decrement' && count === 0) {
-        elementProps.cart = false
-        elementProps.count = 1
+        element.cart = false
+        count = 1
+        outOfStock = false
       }
+
+      const elementProps = { ...element, count, outOfStock }
 
       map.set(id, elementProps)
       return map

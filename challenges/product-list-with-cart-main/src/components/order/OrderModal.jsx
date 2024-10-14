@@ -63,7 +63,7 @@ export default function OrderModal({ products, visible, newOrder, discount }) {
           <div className='order-modal__products'>{orderProducts}</div>
           <div className='order-modal__total'>
             <div className='total__text'>Order Total</div>
-            <TotalPrice price={totalPrice} discount={discount} isFor=' modal' />
+            <TotalPrice price={totalPrice} discount={discount} amount={20} />
           </div>
         </div>
 

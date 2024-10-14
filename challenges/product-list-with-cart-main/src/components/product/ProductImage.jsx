@@ -33,7 +33,7 @@ export default function ProductImage({
     const skeletonHeight = (() => {
       const myDevice = device.any()
 
-      if (myDevice === 'mobile') return 180
+      if (myDevice === 'mobile') return 200
 
       return 260
     })()

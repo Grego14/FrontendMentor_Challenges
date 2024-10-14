@@ -1,28 +1,13 @@
 import './TotalPrice.css'
-import utils from '../../../utils/utils.js'
+import { transformPrice } from '../../../utils/utils.js'
 
-export default function TotalPrice({
-  price,
-  discount,
-  totalClassName,
-  discountClassName,
-  totalStyle,
-  discountStyle,
-  amount,
-  isFor
-}) {
+export default function TotalPrice({ price, discount, amount }) {
   return (
-    <div className={`total-price-container${isFor ?? ''}`}>
-      <span
-        className={`price${totalClassName ? totalClassName : ''}`}
-        style={totalStyle}>
-        {utils.transformPrice(price)}
-      </span>
+    <div className='total-price-container'>
+      <span className='price'>{transformPrice(price)}</span>
       {discount && (
-        <span
-          className={`discount-price${discountClassName ? discountClassName : ''}`}
-          style={discountStyle}>
-          {utils.transformPrice(price - price / (amount || 10))}
+        <span className='discount-price'>
+          {transformPrice(price - price / (amount || 10))}
         </span>
       )}
     </div>

@@ -23,8 +23,12 @@ export default function App() {
   const userDevice = device.any()
 
   const storageProducts = storage.getItem('products-in-cart')
-    ? new Map(Object.values(JSON.parse(storage.getItem('products-in-cart'))))
+    ? parseMapFromStorage(storage.getItem('products-in-cart'))
     : new Map()
+
+  const storageStock = storage.getItem('stock-quantitys')
+    ? parseMapFromStorage(storage.getItem('stock-quantitys'))
+    : null
 
   const [products, dispatch] = useReducer(productsReducer, storageProducts)
   const productsInCart = [...products.values()].filter(product => product.cart)
@@ -73,6 +77,59 @@ export default function App() {
   }
 
   useEffect(() => {
+    fetch('/data.json')
+      .then(res => res.json())
+      .then(data => {
+        console.log('data fetched %o', data)
+        let idHandler = 0
+        const dataWithIds = new Map()
+
+        // fetch products... if they are in the storage they must be in the
+        // products Map.
+        for (const product of Object.values(data)) {
+          // if the product isn't in the storage we set default values
+          const productToAdd = products.get(idHandler) || {
+            ...product,
+            id: idHandler,
+            cart: false,
+            count: 1,
+            // initial will be used to manage ordering animations in the
+            // CartProduct component, it means the product was added from
+            // the localstorage when the page loads. If the user adds/removes
+            // a product, initial must be false so we avoid the delay.
+            initial: true
+          }
+
+          productToAdd.quantity =
+            storageStock?.get(idHandler) ?? Math.floor(Math.random() * 20 + 1)
+          productToAdd.outOfStock = productToAdd.count >= productToAdd.quantity
+
+          dataWithIds.set(idHandler, productToAdd)
+          idHandler++
+        }
+
+        if (!storage.getItem('stock-quantitys')) {
+          storage.setItem(
+            'stock-quantitys',
+            JSON.stringify(
+              [...dataWithIds.values()].map(product => [
+                product.id,
+                product.quantity
+              ])
+            )
+          )
+        }
+
+        dispatch({ type: 'fetch', products: dataWithIds })
+
+        // cool effect
+        setTimeout(() => {
+          handleStates('productsFetched', true)
+        }, 200)
+      })
+  }, [products.get, storageStock.get, storage.setItem, storage.getItem])
+
+  useEffect(() => {
     storage.setItem('discount', discount ? 'true' : '')
   }, [discount, storage.setItem])
 
@@ -108,42 +165,6 @@ export default function App() {
     })
   }, [products, productsInCart, storage.setItem])
 
-  useEffect(() => {
-    fetch('/data.json')
-      .then(res => res.json())
-      .then(data => {
-        console.log('data fetched %o', data)
-        //setJsonLength(data.length)
-        let idHandler = 0
-        const dataWithIds = new Map()
-
-        // fetch products... if they are in the storage they
-        // must be in the products Map.
-        for (const product of Object.values(data)) {
-          const productToAdd = products.get(idHandler) || {
-            ...product,
-            id: idHandler,
-            cart: false,
-            count: 1
-          }
-
-          // initial will be used to manage ordering animations in the
-          // CartProduct component, it means the product was added from
-          // the localstorage when the page loads. If the user adds/removes
-          // a product, initial must be false so we avoid the delay.
-          dataWithIds.set(idHandler, { ...productToAdd, initial: true })
-          idHandler++
-        }
-
-        dispatch({ type: 'fetch', products: dataWithIds })
-
-        // cool effect
-        setTimeout(() => {
-          handleStates('productsFetched', true)
-        }, 500)
-      })
-  }, [products.get])
-
   const scrollingElement = document.scrollingElement
   const productsFetched = componentStates.get('productsFetched')
 
@@ -151,7 +172,7 @@ export default function App() {
     ? scrollingElement.classList.add('no-scroll')
     : scrollingElement.classList.remove('no-scroll')
 
-  const themeClass = `${appTheme.theme.is}-theme`
+  const themeClass = `${appTheme.theme}-theme`
   const lastThemeClass =
     scrollingElement.classList.value.match(/[a-z]+\-theme/)?.[0]
 
@@ -326,24 +347,23 @@ function UserData(props) {
         duration: 0.5,
         ease: 'easeInOut'
       }}>
-      {props.productsFetched ? (
-        <motion.div
-          className='user-data-container'
-          initial='hidden'
-          animate='show'
-          transition={{
-            duration: 0.3
-          }}
-          variants={userDataContainerVariants}>
+      <motion.div
+        className='user-data-container'
+        initial='hidden'
+        animate='show'
+        transition={{
+          duration: 0.3
+        }}
+        variants={userDataContainerVariants}>
+        {props.productsFetched ? (
           <UserOrder {...userOrderProps} />
-
-          <Section isFor='toggle-theme'>
-            <ToggleThemeButton />
-          </Section>
-        </motion.div>
-      ) : (
-        <Spinner isFor='user-data' />
-      )}
+        ) : (
+          <Spinner isFor='user-data' />
+        )}
+        <Section isFor='toggle-theme'>
+          <ToggleThemeButton />
+        </Section>
+      </motion.div>
     </motion.section>
   )
 }
@@ -379,6 +399,7 @@ function UserOrder({ visible, productsCount, totalPrice, discount }) {
         <TotalPrice
           price={totalPrice}
           discount={discount}
+          amount={20}
           totalClassName=' user-order__total-price'
         />
       </div>
@@ -398,4 +419,8 @@ function SideContent({ products, discount, cart, modal }) {
       </Section>
     </>
   )
+}
+
+function parseMapFromStorage(mapInStorage) {
+  return new Map(Object.values(JSON.parse(mapInStorage)))
 }

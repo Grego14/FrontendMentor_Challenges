@@ -24,7 +24,6 @@ export default function Products({
 }) {
   let keyHandler = 1
   const outputElements = []
-  const { theme } = useContext(ThemeContext)
 
   function getUserAction(e) {
     const buttonsClasses = {
@@ -60,13 +59,7 @@ export default function Products({
 
   for (const product of Object.values(products)) {
     outputElements.push(
-      <Product
-        data={product}
-        onCart={product?.cart}
-        key={keyHandler}
-        theme={theme}
-        showTime={keyHandler * 100}
-      />
+      <Product data={product} onCart={product?.cart} key={keyHandler} />
     )
 
     keyHandler++
@@ -75,23 +68,23 @@ export default function Products({
   return (
     <Section isFor='products'>
       <h1 className='products-title'>Desserts</h1>
-      {cartVisible && productsFetched ? (
+      {cartVisible ? (
         <motion.div
           className='products'
           layout
           onPointerUp={handleProducts}
           onKeyDown={handleProducts}>
-          {outputElements}
+          {productsFetched && outputElements}
         </motion.div>
       ) : (
-        <Spinner {...theme.spinner} height='100dvh' />
+        <Spinner isFor='products' />
       )}
     </Section>
   )
 }
 
-export function Product({ data, onCart, theme, showTime }) {
-  const { name, price, image, category, id, count } = data
+export function Product({ data, onCart }) {
+  const { name, price, image, category, id, count, outOfStock } = data
   const [imageLoaded, setImageLoaded] = useState(false)
   const [show, setShow] = useState(false)
 
@@ -119,7 +112,6 @@ export function Product({ data, onCart, theme, showTime }) {
 
   const productImageProps = {
     images: image,
-    theme,
     onCart,
     setImageLoaded: imageLoad,
     handleClick: handleImageClick,
@@ -130,7 +122,7 @@ export function Product({ data, onCart, theme, showTime }) {
     name,
     category,
     price,
-    theme,
+    outOfStock,
     show
   }
 
@@ -168,11 +160,20 @@ export function Product({ data, onCart, theme, showTime }) {
         initial='hidden'
         whileInView='show'
         viewport={{ once: true }}
-        className={`product${onCart ? ' product--added' : ''}`}
+        className={`product${onCart ? ' product--added' : ''}${outOfStock ? ' product--out' : ''}`}
         id={`product-${id}`}>
         <ProductInfo {...productInfoProps} />
 
         <motion.div className='product__wrapper pos-relative'>
+          {outOfStock && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className='out-of-stock'>
+              Out of stock
+            </motion.div>
+          )}
+
           <ProductImage {...productImageProps} />
 
           <div className='product__buttons pos-relative'>
@@ -182,7 +183,7 @@ export function Product({ data, onCart, theme, showTime }) {
               className='product__buttons__quantity pos-absolute'
               variants={productButtonsQuantityVariants}
               initial='hidden'
-              animate={onCart ? 'show' : 'hidden'}
+              animate={show ? 'show' : 'hidden'}
               aria-hidden={onCart ? 'false' : 'true'}
               onContextMenu={preventContextMenu}>
               <ProductButton.QuantityButton
@@ -210,7 +211,7 @@ export function Product({ data, onCart, theme, showTime }) {
 }
 
 function ProductInfo(props) {
-  const { theme, category, name, price, show } = props
+  const { category, name, price, show } = props
 
   return (
     <div className='product__info'>

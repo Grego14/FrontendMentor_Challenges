@@ -12,7 +12,7 @@ import Skeleton from 'react-loading-skeleton'
 import usePointer from '../../hooks/usePointer.jsx'
 import ButtonWhoAppear from '../others/ButtonWhoAppear.jsx'
 import TotalPrice from '../others/totalprice/TotalPrice.jsx'
-import './DiscountInput.css'
+import DiscountInput from './discountinput/DiscountInput.jsx'
 
 const Cart = forwardRef((props, ref) => {
   const {
@@ -141,102 +141,12 @@ function CartContent(props) {
   )
 }
 
-function DiscountInput(props) {
-  const { message, validCode, setValid, id, isValid } = props
-  const [value, setValue] = useState(message)
-  const [showDiscountInput, setShowDiscountInput] = useState(false)
-
-  const [isTyping, setIsTyping] = useState(false)
-  const typingDelay = 250
-  const typingTimeout = useRef(null)
-
-  const [applyClicked, setApplyClicked] = useState(false)
-
-  function handleOnChange(e) {
-    setIsTyping(true)
-    clearTimeout(typingTimeout.current)
-
-    typingTimeout.current = setTimeout(() => {
-      setValue(e.target.value)
-      setIsTyping(false)
-    }, 250)
-
-    setApplyClicked(false)
-  }
-
-  function handleTextClick(e) {
-    if (invalidUserInteraction(e)) return
-
-    setShowDiscountInput(true)
-  }
-
-  function handleApplyClick(e) {
-    setApplyClicked(true)
-
-    setValid(value === validCode)
-  }
-
-  const clickedAndInvalid = applyClicked && !isValid
-  const buttonProps = {
-    onPointerUp: handleApplyClick,
-    className: 'discount-input-button'
-  }
-
-  return (
-    <>
-      {!showDiscountInput && (
-        <div className='discount-text'>
-          Discount code?{' '}
-          <ButtonWhoAppear
-            render='Click here!'
-            props={{
-              className: 'discount-text-click',
-              onPointerUp: handleTextClick,
-              onKeyDown: handleTextClick
-            }}
-            bounce={false}
-          />
-        </div>
-      )}
-      {showDiscountInput && (
-        <div className='discount-input-container'>
-          <label
-            htmlFor={id}
-            value='discount code'
-            className='discount-input-label'>
-            {clickedAndInvalid ? (
-              <span className='discount-error'>Invalid Code</span>
-            ) : (
-              'Discount Code'
-            )}
-            <input
-              className={`discount-input${clickedAndInvalid ? ' invalid' : ''}`}
-              type='text'
-              placeholder={message}
-              onChange={handleOnChange}
-              name={id}
-              id={id}
-            />
-          </label>
-
-          <ButtonWhoAppear
-            eventClassName='discount-input-button'
-            render='Apply'
-            props={buttonProps}
-            show={!clickedAndInvalid}
-          />
-        </div>
-      )}
-    </>
-  )
-}
-
 function CartInfo(props) {
   const { totalPrice, discount, setDiscount, confirmOrderProps, cartVariants } =
     props
 
   const discountInputProps = {
-    message: 'Get -10% discount!',
+    message: 'Get -20% discount!',
     validCode: 'FrontendMentor',
     setValid: setDiscount,
     id: 'discount-code',
@@ -251,7 +161,7 @@ function CartInfo(props) {
       variants={cartVariants}>
       <div className='cart__info__total'>
         <div>Order Total</div>
-        <TotalPrice discount={discount} price={totalPrice} />
+        <TotalPrice discount={discount} price={totalPrice} amount={20} />
       </div>
       <p className='cart__info__carbon-neutral'>
         <img
@@ -275,7 +185,7 @@ function CartInfo(props) {
       {!discount ? (
         <DiscountInput {...discountInputProps} />
       ) : (
-        <div className='discount-text'>-10% discount applied!</div>
+        <div className='discount-text'>-20% discount applied!</div>
       )}
     </motion.div>
   )

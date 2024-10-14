@@ -1,8 +1,3 @@
-import { useEffect } from 'react'
-import useFocus from '../../hooks/useFocus.jsx'
-import useHover from '../../hooks/useHover.jsx'
-import usePointer from '../../hooks/usePointer.jsx'
-import { preventContextMenu } from '../../utils/utils.js'
 import ButtonWhoAppear from '../others/ButtonWhoAppear.jsx'
 
 export function QuantityButton(props) {
@@ -12,15 +7,13 @@ export function QuantityButton(props) {
     className: 'product__button product__button--quantity',
     tabIndex: onCart ? '0' : '-1',
     'aria-label': `${props.buttonType} product count`,
-    'data-is': props.buttonType,
-    style: {
-      pointerEvents: props.show ? 'auto' : 'none'
-    }
+    'data-is': props.buttonType
   }
 
   function renderIcon({ isOnHover, isOnFocus, isClicked }) {
     const quantityIconProps = {
       buttonType: props.buttonType,
+      e: props.buttonType,
       isOnHover,
       isOnFocus,
       isClicked
