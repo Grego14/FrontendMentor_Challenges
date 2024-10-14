@@ -1,13 +1,7 @@
-import { useState } from 'react'
 import { motion } from 'framer-motion'
 import './Spinner.css'
 
-export default function Spinner({
-  spinnerColor,
-  bgColor,
-  containerColor,
-  height
-}) {
+export default function Spinner({ isFor }) {
   const rotateAnimation = {
     initial: {
       rotate: 0
@@ -16,7 +10,7 @@ export default function Spinner({
       rotate: 360
     },
     transition: {
-      delay: 0.5,
+      delay: 0.3,
       repeat: Number.POSITIVE_INFINITY,
       ease: 'easeInOut',
       duration: 1
@@ -24,24 +18,11 @@ export default function Spinner({
   }
 
   return (
-    <motion.div className='spinner-container' style={{ height }}>
-      <motion.div
-        className='spinner-child'
-        style={{ backgroundColor: bgColor }}
-        {...rotateAnimation}>
-        <motion.div
-          className='spinner-rotate-line'
-          style={{
-            backgroundColor: spinnerColor
-          }}
-        />
-        <motion.div
-          className='spinner-rotate-circle'
-          style={{
-            backgroundColor: containerColor
-          }}
-        />
+    <div className={`spinner-container${isFor ? ` spinner-${isFor}` : ''}`}>
+      <motion.div className='spinner-child' {...rotateAnimation}>
+        <div className='spinner-rotate-line' />
+        <div className='spinner-rotate-circle' />
       </motion.div>
-    </motion.div>
+    </div>
   )
 }
