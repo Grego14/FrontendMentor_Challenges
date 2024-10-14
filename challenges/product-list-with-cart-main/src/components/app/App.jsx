@@ -46,7 +46,9 @@ export default function App() {
   const [productsCount, setProductsCount] = useState(0)
   const [discount, setDiscount] = useState(storage.getItem('discount') || false)
 
-  function toggleTheme() {
+  function toggleTheme(e) {
+    if (e && invalidUserInteraction(e)) return
+
     setAppTheme(state => {
       const theme = state.theme === themes.light ? 'dark' : 'light'
 
@@ -211,13 +213,13 @@ export default function App() {
   return (
     <ThemeContext.Provider value={appTheme}>
       <div className='app'>
+        <Products {...productsProps} />
+        <SideContent {...sideContentProps} />
         {userDevice === 'mobile' ? (
           <UserData {...userDataProps} />
         ) : (
           <ToggleThemeButton />
         )}
-        <Products {...productsProps} />
-        <SideContent {...sideContentProps} />
       </div>
     </ThemeContext.Provider>
   )
