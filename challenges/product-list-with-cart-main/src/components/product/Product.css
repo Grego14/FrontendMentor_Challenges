@@ -162,13 +162,13 @@
 }
 
 .product:not(.product--added) .product__button--add,
-.product--added .product__buttons__quantity {
+.product--added .product__button--qquantity {
   z-index: 998;
   pointer-events: auto;
 }
 
 .product--added .product__button--add,
-.product:not(.product--added) .product__buttons__quantity {
+.product:not(.product--added) .product__button--_quantity {
   z-index: 997;
   pointer-events: none;
 }
