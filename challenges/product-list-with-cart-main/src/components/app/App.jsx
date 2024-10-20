@@ -28,7 +28,7 @@ export default function App() {
 
   const storageStock = storage.getItem('stock-quantitys')
     ? parseMapFromStorage(storage.getItem('stock-quantitys'))
-    : null
+    : new Map()
 
   const [products, dispatch] = useReducer(productsReducer, storageProducts)
   const productsInCart = [...products.values()].filter(product => product.cart)
@@ -92,7 +92,7 @@ export default function App() {
             ...product,
             id: idHandler,
             cart: false,
-            count: 1,
+            count: 0,
             // initial will be used to manage ordering animations in the
             // CartProduct component, it means the product was added from
             // the localstorage when the page loads. If the user adds/removes

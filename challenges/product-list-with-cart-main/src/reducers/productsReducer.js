@@ -8,16 +8,22 @@ export default function productsReducer(state, action) {
       if (!element) return state
 
       const elementProps = { ...element, cart: !element.cart }
+      // if elementProps.cart is false it means the product is being removed
+      // so count should be reset to 0initial should be false otherwise
+      // the initial animation will be fired once added again.
+      const count = elementProps.cart ? elementProps.count + 1 : 0
+      const outOfStock = count >= elementProps.quantity
 
       map.set(id, {
         ...elementProps,
 
-        // if elementProps.cart is false it means the product is being removed
-        // so count should be reset to 1 and initial should be false otherwise
-        // the initial animation will be fired once added again.
-        count: elementProps.cart ? elementProps.count : 1,
-        initial: false
+        count: count,
+        // initial should be false otherwise the initial animation will
+        // be fired once added again.
+        initial: false,
+        outOfStock
       })
+
       return map
     }
 
@@ -43,7 +49,6 @@ export default function productsReducer(state, action) {
       // and if it was 1 now is 0
       if (quantity === 'decrement' && count === 0) {
         element.cart = false
-        count = 1
         outOfStock = false
       }
 
