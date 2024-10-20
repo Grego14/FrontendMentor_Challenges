@@ -11,7 +11,7 @@ export default function ToggleThemeButton() {
   const toggleThemeProps = {
     className: 'toggle-theme',
     onPointerUp: toggleTheme,
-    'aria-label': `change theme to ${theme.is} mode`
+    'aria-label': `change theme to ${theme} mode`
   }
 
   return (

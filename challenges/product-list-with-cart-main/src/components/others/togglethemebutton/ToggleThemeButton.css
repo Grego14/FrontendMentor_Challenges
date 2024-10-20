@@ -26,8 +26,8 @@
 
 @media only screen and (min-width: 30rem) {
   .toggle-theme {
-    width: clamp(3rem, 3rem + .5vw, 4.5rem);
-    height: clamp(3rem, 3rem + .5vw, 4.5rem);
+    width: clamp(3rem, 3rem + .8vw, 4.5rem);
+    height: clamp(3rem, 3rem + .8vw, 4.5rem);
     position: fixed;
     right: var(--app-padding-clamp);
     bottom: var(--app-padding-clamp);
@@ -36,7 +36,7 @@
 
 @media only screen and (min-width: 64rem) {
   .toggle-theme {
-    width: clamp(3rem, 3rem + 1.2vw, 6rem);
-    height: clamp(3rem, 3rem + 1.2vw, 6rem);
+    width: clamp(3rem, 3rem + 1vw, 5rem);
+    height: clamp(3rem, 3rem + 1vw, 5rem);
   }
 }
