@@ -106,7 +106,7 @@ export default function App() {
             storageStock?.get(idHandler) ?? Math.floor(Math.random() * 20 + 1)
           productToAdd.outOfStock = productToAdd.count >= productToAdd.quantity
 
-          dataWithIds.set(idHandler, productToAdd)
+          dataWithIds.set(productToAdd.id, productToAdd)
           idHandler++
         }
 
