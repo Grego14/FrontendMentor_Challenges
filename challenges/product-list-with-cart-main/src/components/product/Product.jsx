@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from 'react'
 import './Product.css'
 import { motion } from 'framer-motion'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
-import { ThemeContext } from '../../theme-context.jsx'
 import {
   extractId,
   matches,
@@ -102,19 +101,13 @@ export function Product({ data, onCart }) {
   function imageLoad() {
     setTimeout(() => {
       setImageLoaded(true)
-    }, 300)
-  }
-
-  function handleImageClick(e) {
-    // create a component to see the image in a good resolution...
-    console.log(e)
+    }, 500)
   }
 
   const productImageProps = {
     images: image,
     onCart,
     setImageLoaded: imageLoad,
-    handleClick: handleImageClick,
     show
   }
 
@@ -220,14 +213,14 @@ function ProductInfo(props) {
         style={{
           maxWidth: show ? '100%' : '45%'
         }}>
-        {(show && category) || <Skeleton />}
+        {(show && category) || <Skeleton containerClassName='skeleton' />}
       </div>
       <h2
         className='product__name'
         // maxWidth here as need it to turn into 'auto' when the skeleton is removed
         // so we avoid text wraps on long product names...
         style={{ maxWidth: show ? '100%' : '80%' }}>
-        {(show && name) || <Skeleton />}
+        {(show && name) || <Skeleton containerClassName='skeleton' />}
       </h2>
 
       <div
@@ -235,7 +228,9 @@ function ProductInfo(props) {
         style={{
           maxWidth: show ? '100%' : '45%'
         }}>
-        {(show && transformPrice(price)) || <Skeleton />}
+        {(show && transformPrice(price)) || (
+          <Skeleton containerClassName='skeleton' />
+        )}
       </div>
     </div>
   )
