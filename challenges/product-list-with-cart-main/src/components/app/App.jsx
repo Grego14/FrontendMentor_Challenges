@@ -1,12 +1,11 @@
 import { motion } from 'framer-motion'
-import React, { useEffect, useState, useReducer, useRef } from 'react'
+import { useEffect, useState, useReducer, useRef } from 'react'
 import Cart from '../cart/Cart.jsx'
 import OrderModal from '../order/OrderModal.jsx'
 import Spinner from '../others/spinner/Spinner.jsx'
 import Products from '../product/Product.jsx'
 import './App.css'
 import productsReducer from '../../reducers/productsReducer.js'
-import { ThemeContext, themes } from '../../theme-context.jsx'
 import {
   device,
   getTotalPrice,
@@ -16,6 +15,8 @@ import {
 import Section from '../others/Section.jsx'
 import ToggleThemeButton from '../others/togglethemebutton/ToggleThemeButton.jsx'
 import TotalPrice from '../others/totalprice/TotalPrice.jsx'
+import UserData from './userdata/UserData.jsx'
+import UserOrder from './userorder/UserOrder.jsx'
 
 export default function App() {
   const storage = localStorage
@@ -42,7 +43,7 @@ export default function App() {
   )
 
   const [appTheme, setAppTheme] = useState({
-    theme: themes[storage.getItem('theme')] || themes.light,
+    theme: storage.getItem('theme') || 'light',
     toggleTheme
   })
 
@@ -54,12 +55,12 @@ export default function App() {
     if (e && invalidUserInteraction(e)) return
 
     setAppTheme(state => {
-      const theme = state.theme === themes.light ? 'dark' : 'light'
+      const theme = state.theme === 'light' ? 'dark' : 'light'
 
       storage.setItem('theme', theme)
 
       return {
-        theme: themes[theme],
+        theme: theme,
         toggleTheme
       }
     })
@@ -76,6 +77,7 @@ export default function App() {
     })
   }
 
+  // biome-ignore lint: handleStates should not be used here as dependency
   useEffect(() => {
     fetch('/data.json')
       .then(res => res.json())
@@ -133,17 +135,19 @@ export default function App() {
     storage.setItem('discount', discount ? 'true' : '')
   }, [discount, storage.setItem])
 
-  // logs, storage, totalPrice and productsCount
+  // logs, storage
   useEffect(() => {
-    console.groupCollapsed('Product Updated')
+    console.groupCollapsed('Products Updated')
     console.table([...products.values()])
-    console.groupEnd('Product Updated')
+    console.groupEnd('Products Updated')
 
     storage.setItem(
       'products-in-cart',
-      JSON.stringify(productsInCart.map(product => [product.id, product]))
+      JSON.stringify(productsInCart.map(product => [product.order, product]))
     )
+  }, [products, productsInCart.map, storage.setItem])
 
+  useEffect(() => {
     setTotalPrice(() => {
       const prices = []
 
@@ -163,11 +167,12 @@ export default function App() {
 
       return count
     })
-  }, [products, productsInCart, storage.setItem])
+  }, [productsInCart])
 
   const scrollingElement = document.scrollingElement
   const productsFetched = componentStates.get('productsFetched')
 
+  // prevent scrolling when the products aren't fetched or the modal is visible
   !productsFetched || componentStates.get('modalVisible')
     ? scrollingElement.classList.add('no-scroll')
     : scrollingElement.classList.remove('no-scroll')
@@ -228,182 +233,23 @@ export default function App() {
     productsCount,
     productsFetched,
     discount,
-    theme: appTheme.theme
+    theme: appTheme.theme,
+    toggleTheme: appTheme.toggleTheme
   }
 
   return (
-    <ThemeContext.Provider value={appTheme}>
-      <div className='app'>
-        <Products {...productsProps} />
-        <SideContent {...sideContentProps} />
-        {userDevice === 'mobile' ? (
-          <UserData {...userDataProps} />
-        ) : (
-          <ToggleThemeButton />
-        )}
-      </div>
-    </ThemeContext.Provider>
-  )
-}
-
-function UserData(props) {
-  const theme = props.theme
-  const userDataRef = useRef(null)
-  const userDevice = device.any()
-  const [isMoving, setIsMoving] = useState(false)
-
-  const options = {
-    root: null,
-    rootMargin: '0px',
-    // threshold[0] = when to move the userData to its initial position
-    // threshold[1] = when to move the userData to the top of the screen
-    // so it doesn't overlaps the confirm button in mobile devices...
-    threshold: [0.2, 0.4]
-  }
-  const observer = new IntersectionObserver(callback, options)
-
-  function callback(entries, observer) {
-    for (const entrie of entries) {
-      const ths = observer.thresholds
-      const ratio = entrie.intersectionRatio
-
-      if (ratio <= 0 || !entrie.isIntersecting) return false
-
-      if (ratio >= ths[0] && ratio < ths[1]) {
-        userDataRef.current.style.bottom = '0'
-        userDataRef.current.style.top = 'unset'
-      }
-
-      if (ratio >= ths[1] && ratio > ths[0]) {
-        userDataRef.current.style.bottom = 'unset'
-        userDataRef.current.style.top = '0'
-      }
-
-      setIsMoving(true)
-    }
-  }
-
-  useEffect(() => {
-    if (userDevice === 'mobile') {
-      observer.observe(props.cartRef.current)
-    }
-
-    return () => {
-      if (userDevice === 'mobile') {
-        observer.disconnect(props.cartRef.current)
-      }
-    }
-  }, [props.cartRef.current, observer.observe, observer.disconnect, userDevice])
-
-  const userOrderProps = {
-    totalPrice: props.totalPrice,
-    productsCount: props.productsCount,
-    visible: props.productsFetched,
-    discount: props.discount
-  }
-
-  const userDataContainerVariants = {
-    hidden: {
-      opacity: 0,
-      scale: 0
-    },
-    show: {
-      opacity: 1,
-      scale: 1
-    }
-  }
-
-  const userDataVariants = {
-    hidden: {
-      opacity: 0,
-      y: '150%'
-    },
-    show: {
-      opacity: 1,
-      y: '0%'
-    },
-    move: {
-      opacity: [0, 1],
-      transition: {
-        duration: 0.3
-      },
-      transitionEnd(e) {
-        setTimeout(() => {
-          setIsMoving(false)
-        }, 50)
-      }
-    }
-  }
-
-  return (
-    <motion.section
-      className='app-section app-section--user-data'
-      ref={userDataRef}
-      initial='hidden'
-      animate={['show', isMoving ? 'move' : '']}
-      variants={userDataVariants}
-      transition={{
-        delay: 0.2,
-        duration: 0.5,
-        ease: 'easeInOut'
-      }}>
-      <motion.div
-        className='user-data-container'
-        initial='hidden'
-        animate='show'
-        transition={{
-          duration: 0.3
-        }}
-        variants={userDataContainerVariants}>
-        {props.productsFetched ? (
-          <UserOrder {...userOrderProps} />
-        ) : (
-          <Spinner isFor='user-data' />
-        )}
-        <Section isFor='toggle-theme'>
-          <ToggleThemeButton />
-        </Section>
-      </motion.div>
-    </motion.section>
-  )
-}
-
-function UserOrder({ visible, productsCount, totalPrice, discount }) {
-  const userOrderVariants = {
-    hidden: {
-      opacity: 0,
-      scale: 0.5,
-      y: '-150%'
-    },
-    show: {
-      opacity: 1,
-      scale: 1
-    }
-  }
-
-  return (
-    <motion.div
-      initial='show'
-      animate={'show'}
-      variants={userOrderVariants}
-      role='status'
-      aria-live='polite'
-      aria-atomic='true'
-      className='user-order'>
-      <div>
-        Products:{' '}
-        <span className='user-order__products-count'>{productsCount}</span>
-      </div>
-      <div>
-        Total Price:{' '}
-        <TotalPrice
-          price={totalPrice}
-          discount={discount}
-          amount={20}
-          totalClassName=' user-order__total-price'
+    <div className='app'>
+      <Products {...productsProps} />
+      <SideContent {...sideContentProps} />
+      {userDevice === 'mobile' ? (
+        <UserData {...userDataProps} />
+      ) : (
+        <ToggleThemeButton
+          theme={appTheme.theme}
+          toggleTheme={appTheme.toggleTheme}
         />
-      </div>
-    </motion.div>
+      )}
+    </div>
   )
 }
 

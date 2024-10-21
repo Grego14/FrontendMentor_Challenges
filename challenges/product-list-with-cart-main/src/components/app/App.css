@@ -35,7 +35,9 @@
 
 /* APP END */
 
-/* ToggleThemeButton (style only apply on mobile) */
+/* ToggleThemeButton 
+* (this style only apply on mobile as later we don't use an 'app-section') 
+* */
 
 .app-section--toggle-theme {
   display: flex;
@@ -59,14 +61,12 @@
   box-shadow: 0 -2px 5px var(--user-data-shadow);
 }
 
-.app-section--user-data>* {
-  flex: 1 1;
-}
-
 .user-data-container {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 1rem;
+  flex: 1;
 
   min-height: var(--user-data-height);
   padding-inline: 1rem;
@@ -75,42 +75,6 @@
 
 .dark-theme .user-data-container {
   background-color: var(--ebony-clay);
-}
-
-.user-data-container>* {
-  position: absolute;
-}
-
-.user-order {
-  font-weight: 600;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: .3rem
-}
-
-.user-order__products-count,
-.user-order__products-count {
-  color: var(--red-contrast);
-}
-
-.dark-theme .user-order__products-count,
-.dark-theme .user-order__total-price {
-  color: #C29FFF
-}
-
-.user-order>* {
-  min-width: 100%;
-
-  display: flex;
-  align-items: center;
-}
-
-.user-order__products-count,
-.user-order__total-price {
-  font-weight: bold;
-  font-size: 1.2rem;
-  margin-left: .3rem;
 }
 
 .skeleton {
@@ -130,7 +94,7 @@
 
 @media only screen and (min-width: 58.75rem) {
   .app-section--products {
-    width: 70%;
+    width: 65%;
   }
 
   .app {
