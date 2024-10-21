@@ -1,5 +1,5 @@
 import './TotalPrice.css'
-import { transformPrice } from '../../../utils/utils.js'
+import { transformPrice } from '/src/utils/utils.js'
 
 export default function TotalPrice({ price, discount, amount }) {
   return (
@@ -7,7 +7,7 @@ export default function TotalPrice({ price, discount, amount }) {
       <span className='price'>{transformPrice(price)}</span>
       {discount && (
         <span className='discount-price'>
-          {transformPrice(price - price / (amount || 10))}
+          {transformPrice(price - (price / 100) * (amount || 10))}
         </span>
       )}
     </div>
