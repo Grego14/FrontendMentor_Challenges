@@ -4,7 +4,6 @@ import { device } from '../../utils/utils.js'
 
 export default function ProductImage({
   images,
-  theme,
   onCart,
   handleClick,
   setImageLoaded,
@@ -20,7 +19,7 @@ export default function ProductImage({
 
   if (images !== null && typeof images === 'object') {
     const imageVariants = {
-      hidden: { opacity: 0, scale: 0.5 },
+      hidden: { opacity: 0, scale: 0 },
       show: { opacity: 1, scale: 1 }
     }
 
@@ -61,11 +60,7 @@ export default function ProductImage({
           />
         </picture>
         {!show && (
-          <Skeleton
-            width={280}
-            height={skeletonHeight}
-            containerClassName='skeleton'
-          />
+          <Skeleton height={skeletonHeight} containerClassName='skeleton' />
         )}
       </>
     )

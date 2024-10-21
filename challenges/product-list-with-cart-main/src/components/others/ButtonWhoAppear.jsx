@@ -1,7 +1,4 @@
 import { motion } from 'framer-motion'
-import { useEffect } from 'react'
-import useFocus from '../../hooks/useFocus.jsx'
-import useHover from '../../hooks/useHover.jsx'
 import usePointer from '../../hooks/usePointer.jsx'
 import { preventContextMenu } from '../../utils/utils.js'
 
@@ -10,18 +7,10 @@ export default function ButtonWhoAppear({
   isVisible = true,
   render,
   show = true,
-  eventClassName,
-  pointerEvents = true,
-  hoverEvents = true,
-  focusEvents = true,
+  buttonClass,
   bounce = true
 }) {
-  const [isOnHover, hoverHandler] = useHover(eventClassName)
-  const [isOnFocus, focusHandlers] = useFocus()
-  const [isClicked, pointerHandlers] = usePointer(eventClassName)
-
-  if (typeof render !== 'function' && typeof render !== 'string')
-    throw Error('ButtonWhoAppear: renders must be a function or a string!')
+  const [isClicked, pointerHandlers] = usePointer(buttonClass)
 
   function handlePointerDown(e) {
     if (props.onPointerDown) props?.onPointerDown?.(e)
@@ -52,28 +41,6 @@ export default function ButtonWhoAppear({
     }
   }
 
-  const events = () => {
-    const myEvents = {}
-
-    if (pointerEvents) {
-      myEvents.onPointerDown = handlePointerDown
-      myEvents.onPointerUp = handlePointerUpCancel
-      myEvents.onPointerCancel = handlePointerUpCancel
-    }
-
-    if (hoverEvents) {
-      myEvents.onPointerEnter = hoverHandler
-      myEvents.onPointerLeave = hoverHandler
-    }
-
-    if (focusEvents) {
-      myEvents.onFocus = focusHandlers.focus
-      myEvents.onBlur = focusHandlers.blur
-    }
-
-    return myEvents
-  }
-
   return (
     <motion.button
       {...props}
@@ -82,12 +49,12 @@ export default function ButtonWhoAppear({
       viewport={{ once: true }}
       variants={buttonVariants}
       type='button'
-      {...(!show ? { disabled: true } : '')}
-      {...events()}
+      disabled={!show}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUpCancel}
+      onPointerCancel={handlePointerUpCancel}
       onContextMenu={preventContextMenu}>
-      {typeof render !== 'string'
-        ? render({ isOnHover, isOnFocus, isClicked })
-        : render}
+      {typeof render !== 'string' ? render({ isClicked }) : render}
     </motion.button>
   )
 }

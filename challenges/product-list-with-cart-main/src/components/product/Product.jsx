@@ -99,9 +99,7 @@ export function Product({ data, onCart }) {
   }
 
   function imageLoad() {
-    setTimeout(() => {
-      setImageLoaded(true)
-    }, 500)
+    setImageLoaded(true)
   }
 
   const productImageProps = {

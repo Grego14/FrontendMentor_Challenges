@@ -123,11 +123,7 @@ export default function App() {
         }
 
         dispatch({ type: 'fetch', products: dataWithIds })
-
-        // cool effect
-        setTimeout(() => {
-          handleStates('productsFetched', true)
-        }, 200)
+        handleStates('productsFetched', true)
       })
   }, [products.get, storageStock.get, storage.setItem, storage.getItem])
 

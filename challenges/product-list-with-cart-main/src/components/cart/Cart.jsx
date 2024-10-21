@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { forwardRef, useEffect, useRef, useState } from 'react'
+import { forwardRef, useEffect, useState } from 'react'
 import {
   extractId,
   invalidUserInteraction,
@@ -33,6 +33,7 @@ const Cart = forwardRef((props, ref) => {
 
   const cartProductRemoveBtnClass = 'cart-product__button--remove'
 
+  // biome-ignore lint: can't use serVisible as dependency
   useEffect(() => {
     setVisible()
   }, [])
