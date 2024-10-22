@@ -14,9 +14,6 @@ export function QuantityButton(props) {
     const quantityIconProps = {
       buttonType: props.buttonType,
       e: props.buttonType,
-      isOnHover,
-      isOnFocus,
-      isClicked
     }
 
     return <QuantityIcon {...quantityIconProps} />
@@ -27,15 +24,13 @@ export function QuantityButton(props) {
       props={quantityProps}
       isVisible={onCart}
       show={props.show}
-      eventClassName='.product__button--quantity'
+      buttonClass='.product__button--quantity'
       render={renderIcon}
-      hoverEvents={false}
-      focusEvents={false}
     />
   )
 }
 
-function QuantityIcon({ buttonType, isOnHover, isOnFocus, isClicked }) {
+function QuantityIcon({ buttonType }) {
   return (() => {
     const title = `${buttonType} product count`
 
@@ -86,10 +81,8 @@ export function AddToCartButton(props) {
       props={addToCartProps}
       isVisible={!onCart}
       show={props.show}
-      eventClassName='.product__button--add'
-      hoverEvents={false}
-      focusEvents={false}
-      render={({ isOnHover, isOnFocus, isClicked }) => {
+      buttonClass='.product__button--add'
+      render={() => {
         return (
           <>
             <svg
