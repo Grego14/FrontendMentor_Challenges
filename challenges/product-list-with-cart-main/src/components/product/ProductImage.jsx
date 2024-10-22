@@ -20,7 +20,14 @@ export default function ProductImage({
   if (images !== null && typeof images === 'object') {
     const imageVariants = {
       hidden: { opacity: 0, scale: 0 },
-      show: { opacity: 1, scale: 1 }
+      show: {
+        opacity: 1,
+        scale: 1,
+        transition: {
+          delay: 0.3,
+          duration: 0.5
+        }
+      }
     }
 
     const noImage = (
@@ -32,7 +39,7 @@ export default function ProductImage({
     const skeletonHeight = (() => {
       const myDevice = device.any()
 
-      if (myDevice === 'mobile') return 200
+      if (myDevice === 'mobile') return 220
 
       return 260
     })()

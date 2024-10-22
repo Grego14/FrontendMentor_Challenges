@@ -155,7 +155,7 @@ export function Product({ data, onCart }) {
         id={`product-${id}`}>
         <ProductInfo {...productInfoProps} />
 
-        <motion.div className='product__wrapper pos-relative'>
+        <div className='product__wrapper pos-relative'>
           {outOfStock && (
             <motion.div
               initial={{ opacity: 0, scale: 0.5 }}
@@ -195,7 +195,7 @@ export function Product({ data, onCart }) {
               />
             </motion.div>
           </div>
-        </motion.div>
+        </div>
       </motion.div>
     </SkeletonTheme>
   )
