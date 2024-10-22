@@ -21,7 +21,6 @@ export default function Products({
   productsFetched,
   cartVisible
 }) {
-  let keyHandler = 1
   const outputElements = []
 
   function getUserAction(e) {
@@ -41,9 +40,9 @@ export default function Products({
 
     const userAction = getUserAction(e)
     const id = extractId(e)
+    const button = e.target.closest('button')
 
-    if (!userAction) return
-    if (id !== 0 && !id) return
+    if (!userAction || (id !== 0 && !id) || !button || button.disabled) return
 
     productsHandler({
       id,
@@ -58,10 +57,8 @@ export default function Products({
 
   for (const product of Object.values(products)) {
     outputElements.push(
-      <Product data={product} onCart={product?.cart} key={keyHandler} />
+      <Product data={product} onCart={product?.cart} key={product.id} />
     )
-
-    keyHandler++
   }
 
   return (

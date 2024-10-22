@@ -70,6 +70,10 @@
   align-items: center;
 }
 
+.no-product__image {
+  /*position: absolute;*/
+}
+
 .confirm-order {
   background-color: var(--red-contrast);
   color: var(--rose-50);
@@ -137,7 +141,7 @@
     min-width: calc(20rem + 3vw);
   }
 
-  .cart__no-product img {
+  .no-product__image {
     width: calc(96px + .3vw);
     height: calc(96px + .3vw);
   }

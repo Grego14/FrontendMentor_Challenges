@@ -1,15 +1,12 @@
 import { motion } from 'framer-motion'
-import { forwardRef, useEffect, useState } from 'react'
+import { forwardRef, useEffect } from 'react'
 import {
   extractId,
   invalidUserInteraction,
   matches
 } from '../../utils/utils.js'
-import Spinner from '../others/spinner/Spinner.jsx'
 import CartProduct from './CartProduct.jsx'
 import './Cart.css'
-import Skeleton from 'react-loading-skeleton'
-import usePointer from '../../hooks/usePointer.jsx'
 import ButtonWhoAppear from '../others/ButtonWhoAppear.jsx'
 import TotalPrice from '../others/totalprice/TotalPrice.jsx'
 import DiscountInput from './discountinput/DiscountInput.jsx'
@@ -24,23 +21,15 @@ const Cart = forwardRef((props, ref) => {
     totalPrice,
     productsCount,
     setDiscount,
-    discount,
-    theme
+    discount
   } = props
-
-  const [isProductInCart, setIsProductInCart] = useState(false)
-  const [transitionClass, setTransitionClass] = useState('')
 
   const cartProductRemoveBtnClass = 'cart-product__button--remove'
 
-  // biome-ignore lint: can't use serVisible as dependency
+  // biome-ignore lint: can't use setVisible as dependency
   useEffect(() => {
-    setVisible()
-  }, [])
-
-  useEffect(() => {
-    setIsProductInCart(products.length > 0)
-  }, [products])
+    setVisible(productsFetched)
+  }, [productsFetched])
 
   function handleRemoveProduct(e) {
     if (
@@ -69,22 +58,9 @@ const Cart = forwardRef((props, ref) => {
     onKeyDown: handlePointerUpCancel
   }
 
-  const variants = {
-    hidden: {
-      opacity: 0,
-      scale: 0
-    },
-    show: {
-      opacity: 1,
-      scale: 1
-    }
-  }
-
   const cartContentProps = {
     productsFetched,
     productsCount,
-    variants,
-    theme,
 
     infoProps: {
       totalPrice,
@@ -117,34 +93,24 @@ const Cart = forwardRef((props, ref) => {
 export default Cart
 
 function CartContent(props) {
-  const { productsFetched, productsCount, infoProps, productsProps, variants } =
-    props
-
-  const [imageLoaded, setImageLoaded] = useState(false)
+  const { productsFetched, productsCount, infoProps, productsProps } = props
 
   return (
     <div className='cart-content'>
-      {productsFetched ? (
-        productsCount > 0 ? (
-          <>
-            <CartProducts {...productsProps} />
-            <CartInfo {...{ ...infoProps, variants }} />
-          </>
-        ) : (
-          <CartNoProduct
-            {...{ variants, productsCount, imageLoaded, setImageLoaded }}
-          />
-        )
+      {productsCount > 0 ? (
+        <>
+          <CartProducts {...productsProps} />
+          <CartInfo {...infoProps} />
+        </>
       ) : (
-        <Spinner isFor='cart' />
+        <CartNoProduct productsCount={productsCount} />
       )}
     </div>
   )
 }
 
 function CartInfo(props) {
-  const { totalPrice, discount, setDiscount, confirmOrderProps, cartVariants } =
-    props
+  const { totalPrice, discount, setDiscount, confirmOrderProps } = props
 
   const discountInputProps = {
     message: 'Get -20% discount!',
@@ -155,15 +121,12 @@ function CartInfo(props) {
   }
 
   return (
-    <motion.div
-      className='cart__info'
-      initial='hidden'
-      animate='show'
-      variants={cartVariants}>
+    <div className='cart__info'>
       <div className='cart__info__total'>
         <div>Order Total</div>
         <TotalPrice discount={discount} price={totalPrice} amount={20} />
       </div>
+
       <p className='cart__info__carbon-neutral'>
         <img
           src='./assets/images/icon-carbon-neutral.svg'
@@ -178,9 +141,7 @@ function CartInfo(props) {
       <ButtonWhoAppear
         render='Confirm Order'
         props={confirmOrderProps}
-        eventClassName='.confirm-order'
-        hoverEvents={false}
-        focusEvents={false}
+        buttonClass='.confirm-order'
       />
 
       {!discount ? (
@@ -188,13 +149,16 @@ function CartInfo(props) {
       ) : (
         <div className='discount-text'>-20% discount applied!</div>
       )}
-    </motion.div>
+    </div>
   )
 }
 
 function CartProducts({ handleRemoveProduct, products, buttonClass }) {
   return (
-    <div className='cart__products' onPointerUp={handleRemoveProduct}>
+    <div
+      className='cart__products'
+      onPointerUp={handleRemoveProduct}
+      onKeyDown={handleRemoveProduct}>
       {products.map(product => (
         <CartProduct
           data={product}
@@ -206,46 +170,19 @@ function CartProducts({ handleRemoveProduct, products, buttonClass }) {
   )
 }
 
-function CartNoProduct({
-  cartVariants,
-  productsCount,
-  imageLoaded,
-  setImageLoaded
-}) {
-  useEffect(() => {
-    if (imageLoaded) return
-
-    const myImg = new Image()
-    myImg.src = './assets/images/illustration-empty-cart.svg'
-    myImg.onload = () => {
-      setTimeout(() => {
-        setImageLoaded(true)
-      }, 150)
-    }
-  }, [imageLoaded, setImageLoaded])
-
+function CartNoProduct() {
   return (
-    <motion.div
-      className='cart__no-product'
-      initial='hidden'
-      animate='show'
-      variants={cartVariants}
-      style={{
-        display: productsCount > 0 ? 'none' : 'flex'
-      }}>
-      {imageLoaded ? (
-        <img
-          src='./assets/images/illustration-empty-cart.svg'
-          alt=''
-          aria-hidden='true'
-          width='96'
-          height='96'
-        />
-      ) : (
-        <Skeleton height={96} width={96} containerClassName='skeleton' />
-      )}
+    <div className='cart__no-product'>
+      <img
+        className='no-product__image'
+        src='./assets/images/illustration-empty-cart.svg'
+        alt=''
+        aria-hidden='true'
+        width='96'
+        height='96'
+      />
 
       <p>Your added items will appear here</p>
-    </motion.div>
+    </div>
   )
 }

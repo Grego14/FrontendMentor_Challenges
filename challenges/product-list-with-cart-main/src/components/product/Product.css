@@ -27,7 +27,7 @@
 
 .product__name,
 .product__category,
-.product__price{
+.product__price {
   width: 100%;
 }
 
@@ -274,8 +274,8 @@
   }
 }
 
-@media only screen and (min-width: 60rem){
-  .products{
+@media only screen and (min-width: 60rem) {
+  .products {
     --product-width: 14rem;
   }
 }

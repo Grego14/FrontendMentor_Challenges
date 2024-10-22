@@ -139,7 +139,7 @@ export default function App() {
 
     storage.setItem(
       'products-in-cart',
-      JSON.stringify(productsInCart.map(product => [product.order, product]))
+      JSON.stringify(productsInCart.map(product => [product.id, product]))
     )
   }, [products, productsInCart.map, storage.setItem])
 

@@ -6,7 +6,6 @@ export default function ButtonWhoAppear({
   props,
   isVisible = true,
   render,
-  show = true,
   buttonClass,
   bounce = true
 }) {
@@ -49,7 +48,7 @@ export default function ButtonWhoAppear({
       viewport={{ once: true }}
       variants={buttonVariants}
       type='button'
-      disabled={!show}
+      disabled={!isVisible}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUpCancel}
       onPointerCancel={handlePointerUpCancel}

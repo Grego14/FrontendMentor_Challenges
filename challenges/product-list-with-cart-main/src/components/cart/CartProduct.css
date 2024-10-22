@@ -90,6 +90,8 @@
   height: 20px;
   border-color: var(--rose-400);
   transition: var(--color-transitions);
+  /* prevent transition of outline-color */
+  transition-property: border-color, background-color;
 }
 
 .cart-product__button--remove path[fill] {
@@ -103,6 +105,14 @@
 
 .dark-theme .cart-product__button--remove path[fill] {
   fill: var(--rose-50);
+}
+
+.cart-product__button--remove:focus-visible {
+  outline: 3px solid var(--rose-500);
+}
+
+.dark-theme .cart-product__button--remove:focus-visible {
+  outline: 3px solid white;
 }
 
 @media (hover: hover) {

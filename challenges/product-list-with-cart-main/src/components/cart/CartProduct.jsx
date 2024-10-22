@@ -1,7 +1,5 @@
-import { useEffect, useState } from 'react'
 import './CartProduct.css'
 import { AnimatePresence, motion } from 'framer-motion'
-import usePointer from '/src/hooks/usePointer.jsx'
 import { getTotalProductPrice, transformPrice } from '/src/utils/utils.js'
 
 export default function CartProduct({ data }) {
@@ -13,12 +11,12 @@ export default function CartProduct({ data }) {
       originX: 'left',
       originY: 'top'
     },
-    initial: {
+    hidden: {
       x: '-150%',
       opacity: 0,
       scale: 0
     },
-    animate(custom) {
+    show(custom) {
       return {
         x: '0%',
         opacity: 1,
@@ -52,8 +50,9 @@ export default function CartProduct({ data }) {
       <motion.div
         key={id}
         custom={{ initial, id }}
-        initial={cartProductProps.initial}
-        animate={cartProductProps.animate}
+        initial='hidden'
+        animate='show'
+        variants={cartProductProps}
         exit={cartProductProps.exit}
         className='cart-product'
         id={`cart-product-${id}`}>
@@ -63,7 +62,7 @@ export default function CartProduct({ data }) {
           className='cart-product__line'
           whileInView={{ width: '100%', opacity: 1 }}
           transition={{
-            delay: cartProductProps.animate({ initial, id }).transition.delay
+            delay: cartProductProps.show({ initial, id }).transition.delay
           }}
           viewport={{ once: true }}
         />
@@ -77,7 +76,7 @@ function CartProductContent({ name, count, price, totalPrice }) {
     <div className='cart-product__wrapper--content'>
       <h3 className='cart-product__name'>{name}</h3>
       <div className='cart-product__info'>
-        <span className='cart-product__count'>{count || 1}x</span>
+        <span className='cart-product__count'>{count}x</span>
         <div className='cart-product__price-container'>
           <span className='cart-product__price-sign'>@</span>
           <span className='cart-product__price'>{transformPrice(price)}</span>
@@ -89,19 +88,12 @@ function CartProductContent({ name, count, price, totalPrice }) {
 }
 
 function CartProductRemoveButton() {
-  const [isClicked, pointerHandlers] = usePointer(
-    '.cart-product__button--remove'
-  )
-
   return (
     <div className='cart-product__wrapper--button'>
       <button
         className='cart-product__button cart-product__button--remove'
         aria-label='remove product from cart'
-        type='button'
-        onPointerUp={pointerHandlers.pointerUpCancel}
-        onPointerCancel={pointerHandlers.pointerUpCancel}
-        onPointerDown={pointerHandlers.pointerDown}>
+        type='button'>
         <svg
           xmlns='http://www.w3.org/2000/svg'
           width='10'
