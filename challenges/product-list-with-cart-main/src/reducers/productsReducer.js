@@ -65,7 +65,12 @@ export default function productsReducer(state, action) {
       const map = new Map()
 
       for (const product of [...state.values()]) {
-        map.set(product.id, { ...product, cart: false, count: 1 })
+        map.set(product.id, {
+          ...product,
+          cart: false,
+          count: 0,
+          outOfStock: false
+        })
       }
 
       return map
