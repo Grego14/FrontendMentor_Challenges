@@ -42,10 +42,10 @@
 
 :root {
   /* fails contrast ratio (challenge color)*/
-  --red: hsl(14, 86%, 42%);
+  /*--red: hsl(14, 86%, 42%);*/
 
-  /* AA in contrast ratio ()*/
-  --red-contrast: rgb(198, 56, 13);
+  /* AAA in contrast ratio (background --rose-50)*/
+  --red-contrast: hsl(13.9, 87.7%, 41.4%);
 
   --green: hsl(159, 69%, 38%);
 
@@ -59,7 +59,7 @@
   --app-bg: var(--rose-100);
   --user-data-shadow: #888;
 
-  /* cart and modal-info border colors (dark mode) */
+  /* cart and modal-info border colors (used in dark mode) */
   --cart-modal-border-color: #3C356A;
 
   --dull-lavender: #AF8DEA;
@@ -67,9 +67,6 @@
   --ebony-clay: #25213C;
 
   --fast-transition: .2s;
-  --fast-transition-v2: .1s;
-  --slow-transition: .3s;
-  --slow-transition-v2: .45s;
 
   --fs-small: .9rem;
   --fsc-small: clamp(var(--fs-small), var(--fs-small) + .2vw, var(--fs-small) * 1.5);
@@ -94,6 +91,10 @@
 html,
 body {
   overflow-x: hidden
+}
+
+body {
+  background-color: var(--app-bg);
 }
 
 button {
