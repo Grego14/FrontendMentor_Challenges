@@ -2,54 +2,55 @@
   --product-width: 14.5rem;
   --product-quantity-btn-disabled-bg: var(--red-contrast);
   --product-quantity-btn-disabled-border: #aeacaa;
+  --add-to-cart-btn-hover: var(--red-contrast);
 
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(var(--product-width), 1fr));
   gap: clamp(1rem, 1rem + .3vw, 2.2rem);
-  min-height: 100dvh;
+  min-height: 100dvh
 }
 
 .dark-theme .products {
   --product-quantity-btn-disabled-bg: #523E77;
+  --add-to-cart-btn-hover: var(--purple-heart)
 }
 
 .products-title {
-  margin-top: 0;
+  margin-top: 0
 }
 
 .product {
   display: flex;
   flex-direction: column-reverse;
 
-  font-weight: 600;
-  font-size: var(--fsc-small);
+  font-size: var(--fsc-small)
 }
 
 .product__name,
 .product__category,
 .product__price {
-  width: 100%;
+  width: 100%
 }
 
 .product__category {
-  color: var(--rose-500);
+  color: var(--rose-500)
 }
 
 .dark-theme .product__category {
-  color: #A4A4A4;
+  color: #A4A4A4
 }
 
 .product__name {
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 1.025rem;
+  font-weight: 600
 }
 
 .product__price {
-  color: var(--red-contrast);
+  color: var(--red-contrast)
 }
 
 .dark-theme .product__price {
-  color: var(--dull-lavender);
+  color: var(--dull-lavender)
 }
 
 .product__info {
@@ -58,7 +59,6 @@
   gap: .3rem;
   max-width: max-content;
   min-width: 100%;
-  padding-left: .3rem;
 }
 
 .product__wrapper {
@@ -66,7 +66,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
 }
 
 .no-image {
@@ -83,24 +82,23 @@
   width: 100%;
   max-width: 100%;
   height: auto;
-
   display: flex;
   justify-content: center;
   z-index: -1;
-  position: absolute;
+  position: absolute
 }
 
 .product__image--loaded {
   z-index: initial;
-  position: initial;
+  position: initial
 }
 
 .product--added .product__image {
-  border-color: var(--red-contrast);
+  border-color: var(--red-contrast)
 }
 
 .dark-theme .product--added .product__image {
-  border-color: var(--purple-heart);
+  border-color: var(--purple-heart)
 }
 
 .out-of-stock {
@@ -111,11 +109,11 @@
   background-color: var(--red-contrast);
   font-weight: bold;
   padding: .3rem .5rem;
-  border-radius: 0 .5rem 0 .5rem;
+  border-radius: 0 .5rem 0 .5rem
 }
 
 .dark-theme .out-of-stock {
-  background-color: var(--purple-heart);
+  background-color: var(--purple-heart)
 }
 
 .product__buttons {
@@ -127,7 +125,7 @@
   display: flex;
   justify-content: center;
   gap: .3rem;
-  min-width: 100%;
+  min-width: 100%
 }
 
 .product__button--add,
@@ -142,49 +140,48 @@
   border-radius: 5rem;
   border: 1px solid transparent;
   transition: var(--color-transitions);
-  pointer-events: none;
+  pointer-events: none
 }
 
 .product__button--add {
   background-color: var(--rose-50);
-  border-color: var(--rose-500);
+  border-color: var(--rose-500)
 }
 
 .product__button--add svg {
   width: clamp(21px, 21px + .5vw, 40px);
-  height: clamp(20px, 20px + .5vw, 39px);
+  height: clamp(20px, 20px + .5vw, 39px)
 }
 
 .product--show .product__button--add {
-  pointer-events: auto;
+  pointer-events: auto
 }
 
 .product__button--add:focus-visible {
-  outline: 2px solid var(--red-contrast);
+  outline: 2px solid var(--red-contrast)
 }
 
 .product__button--add g[fill] {
-  fill: #C73B0F;
+  fill: #C73B0F
 }
 
 .dark-theme .product__button--add {
-  background-color: var(--rose-50);
-  border-color: var(--purple-heart);
+  border-color: var(--purple-heart)
 }
 
 .dark-theme .product__button--add:focus-visible {
-  outline: 2px solid var(--purple-heart);
+  outline: 2px solid var(--purple-heart)
 }
 
 .dark-theme .product__button--add g[fill] {
-  fill: var(--purple-heart);
+  fill: var(--purple-heart)
 }
 
 .product__buttons__quantity {
   justify-content: space-evenly;
   transition: var(--color-transitions);
   background-color: var(--red-contrast);
-  color: var(--rose-50);
+  color: var(--rose-50)
 }
 
 .dark-theme .product__buttons__quantity {
@@ -194,32 +191,32 @@
 .product:not(.product--added) .product__button--add,
 .product--added .product__button--quantity {
   z-index: 998;
-  pointer-events: auto;
+  pointer-events: auto
 }
 
 .product--added .product__button--add,
 .product:not(.product--added) .product__button--quantity {
   z-index: 997;
-  pointer-events: none;
+  pointer-events: none
 }
 
-.product--out .product__button--quantity[data-is='increment'] {
+.product--out [data-is='increment'] {
   pointer-events: none;
   opacity: .5;
   background-color: color-mix(in srgb, var(--product-quantity-btn-disabled-bg) 30%, gray 70%);
-  border-color: var(--product-quantity-btn-disabled-border);
+  border-color: var(--product-quantity-btn-disabled-border)
 }
 
 .product .product-quantity {
   width: 3ch;
   display: flex;
-  justify-content: center;
+  justify-content: center
 }
 
 .button--add__text,
 .product-quantity {
   font-size: .9rem;
-  font-weight: 600;
+  font-weight: 600
 }
 
 .product__button--quantity {
@@ -230,31 +227,25 @@
   height: 1.5rem;
   border-radius: 50%;
   border: 1px solid var(--rose-50);
-  transition: var(--color-transitions);
+  transition: var(--color-transitions)
 }
 
 .product__button--quantity:focus-visible {
-  outline: 2px solid var(--rose-50);
+  outline: 2px solid var(--rose-50)
 }
 
 @media (pointer: coarse) {
   .product__button--quantity {
     width: 25px;
-    height: 25px;
+    height: 25px
   }
 }
 
 @media (hover: hover) {
-  .dark-theme .product__button--add:hover {
-    background-color: var(--rose-100);
-    border-color: var(--purple-heart);
-    color: var(--purple-heart);
-  }
-
   .product__button--add:hover {
     background-color: var(--rose-100);
-    border-color: var(--red-contrast);
-    color: var(--red-contrast);
+    border-color: var(--add-to-cart-btn-hover);
+    color: var(--add-to-cart-btn-hover)
   }
 
   .product__button--quantity:hover {
@@ -262,20 +253,18 @@
   }
 
   .product__button--quantity:hover path[fill] {
-    fill: var(--red-contrast);
-  }
-
-  .dark-theme .product__button--quantity:hover {
-    background-color: var(--rose-50)
+    fill: var(--red-contrast)
   }
 
   .dark-theme .product__button--quantity:hover path[fill] {
-    fill: var(--purple-heart);
+    fill: var(--purple-heart)
   }
 }
 
 @media only screen and (min-width: 60rem) {
   .products {
-    --product-width: 14rem;
+    --product-width: 12rem;
+
+    grid-template-columns: repeat(3, minmax(var(--product-width), 1fr))
   }
 }

@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from 'react'
+import { useState } from 'react'
 import './Product.css'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import {
   extractId,
@@ -21,24 +21,10 @@ export default function Products({
   productsFetched,
   cartVisible
 }) {
-  const outputElements = []
-
-  function getUserAction(e) {
-    const buttonsClasses = {
-      cart: '.product__button--add',
-      increment: '[data-is="increment"]',
-      decrement: '[data-is="decrement"]'
-    }
-
-    for (const [key, className] of Object.entries(buttonsClasses)) {
-      if (matches(e.target, className)) return key
-    }
-  }
-
   function handleProducts(e) {
     if (invalidUserInteraction(e)) return
 
-    const userAction = getUserAction(e)
+    const userAction = e.target.dataset.action
     const id = extractId(e)
     const button = e.target.closest('button')
 
@@ -46,35 +32,22 @@ export default function Products({
 
     productsHandler({
       id,
-      type:
-        userAction !== 'decrement' && userAction !== 'increment'
-          ? 'cart'
-          : 'quantity',
-      // quantity it's only used when userAction is not 'cart'
-      quantity: userAction
+      type: userAction
     })
-  }
-
-  for (const product of Object.values(products)) {
-    outputElements.push(
-      <Product data={product} onCart={product?.cart} key={product.id} />
-    )
   }
 
   return (
     <Section isFor='products'>
       <h1 className='products-title'>Desserts</h1>
-      {cartVisible ? (
-        <motion.div
-          className='products'
-          layout
-          onPointerUp={handleProducts}
-          onKeyDown={handleProducts}>
-          {productsFetched && outputElements}
-        </motion.div>
-      ) : (
-        <Spinner isFor='products' />
-      )}
+      <div
+        className='products'
+        onPointerUp={handleProducts}
+        onKeyDown={handleProducts}>
+        {productsFetched &&
+          Object.values(products).map(product => (
+            <Product data={product} onCart={product.cart} key={product.id} />
+          ))}
+      </div>
     </Section>
   )
 }
@@ -82,17 +55,10 @@ export default function Products({
 export function Product({ data, onCart }) {
   const { name, price, image, category, id, count, outOfStock } = data
   const [imageLoaded, setImageLoaded] = useState(false)
-  const [show, setShow] = useState(false)
-
-  useEffect(() => {
-    setShow(state => {
-      return imageLoaded
-    })
-  }, [imageLoaded])
 
   const buttonProps = {
     onCart,
-    show
+    imageLoaded
   }
 
   function imageLoad() {
@@ -103,7 +69,7 @@ export function Product({ data, onCart }) {
     images: image,
     onCart,
     setImageLoaded: imageLoad,
-    show
+    show: imageLoaded
   }
 
   const productInfoProps = {
@@ -111,7 +77,7 @@ export function Product({ data, onCart }) {
     category,
     price,
     outOfStock,
-    show
+    show: imageLoaded
   }
 
   const productButtonsQuantityVariants = {
@@ -120,10 +86,10 @@ export function Product({ data, onCart }) {
       opacity: 1,
       scale: 1,
 
-      // same as ButtonWhoAppear component
+      // same as ButtonWhoAppear component variants
       transition: {
-        delay: 0.1,
-        duration: 0.2,
+        delay: 0.3,
+        duration: 0.4,
         ease: 'easeInOut'
       }
     }
@@ -143,7 +109,7 @@ export function Product({ data, onCart }) {
 
   return (
     <SkeletonTheme baseColor='var(--rose-50)' highlightColor='#eee'>
-      <motion.div
+      <m.div
         variants={productVariants}
         initial='hidden'
         whileInView='show'
@@ -154,12 +120,12 @@ export function Product({ data, onCart }) {
 
         <div className='product__wrapper pos-relative'>
           {outOfStock && (
-            <motion.div
+            <m.div
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               className='out-of-stock'>
               Out of stock
-            </motion.div>
+            </m.div>
           )}
 
           <ProductImage {...productImageProps} />
@@ -167,11 +133,11 @@ export function Product({ data, onCart }) {
           <div className='product__buttons pos-relative'>
             <ProductButton.AddToCartButton {...buttonProps} />
 
-            <motion.div
+            <m.div
               className='product__buttons__quantity pos-absolute'
               variants={productButtonsQuantityVariants}
               initial='hidden'
-              animate={show ? 'show' : 'hidden'}
+              animate={imageLoaded && onCart ? 'show' : 'hidden'}
               aria-hidden={onCart ? 'false' : 'true'}
               onContextMenu={preventContextMenu}>
               <ProductButton.QuantityButton
@@ -190,10 +156,10 @@ export function Product({ data, onCart }) {
                 buttonType='increment'
                 {...buttonProps}
               />
-            </motion.div>
+            </m.div>
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </SkeletonTheme>
   )
 }
@@ -203,28 +169,20 @@ function ProductInfo(props) {
 
   return (
     <div className='product__info'>
-      <div
-        className='product__category'
-        style={{
-          maxWidth: show ? '100%' : '45%'
-        }}>
-        {(show && category) || <Skeleton containerClassName='skeleton' />}
+      <div className='product__category'>
+        {(show && category) || (
+          <Skeleton width='45%' containerClassName='skeleton' />
+        )}
       </div>
-      <h2
-        className='product__name'
-        // maxWidth here as need it to turn into 'auto' when the skeleton is removed
-        // so we avoid text wraps on long product names...
-        style={{ maxWidth: show ? '100%' : '80%' }}>
-        {(show && name) || <Skeleton containerClassName='skeleton' />}
+      <h2 className='product__name'>
+        {(show && name) || (
+          <Skeleton width='80%' containerClassName='skeleton' />
+        )}
       </h2>
 
-      <div
-        className='product__price'
-        style={{
-          maxWidth: show ? '100%' : '45%'
-        }}>
+      <div className='product__price'>
         {(show && transformPrice(price)) || (
-          <Skeleton containerClassName='skeleton' />
+          <Skeleton width='35%' containerClassName='skeleton' />
         )}
       </div>
     </div>
