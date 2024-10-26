@@ -27,7 +27,8 @@ export default function productsReducer(state, action) {
       return map
     }
 
-    case 'quantity': {
+    case 'increment':
+    case 'decrement': {
       const id = action.id
       const element = state.get(id)
       const map = new Map(state)
