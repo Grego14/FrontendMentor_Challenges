@@ -1,11 +1,6 @@
-import { motion } from 'framer-motion'
 import { forwardRef, useEffect } from 'react'
-import {
-  extractId,
-  invalidUserInteraction,
-  matches
-} from '../../utils/utils.js'
-import CartProduct from './CartProduct.jsx'
+import { extractId, invalidUserInteraction, matches } from '/src/utils/utils.js'
+import CartProduct, { CartProducts } from './CartProduct.jsx'
 import './Cart.css'
 import ButtonWhoAppear from '../others/ButtonWhoAppear.jsx'
 import TotalPrice from '../others/totalprice/TotalPrice.jsx'
@@ -24,28 +19,25 @@ const Cart = forwardRef((props, ref) => {
     discount
   } = props
 
-  const cartProductRemoveBtnClass = 'cart-product__button--remove'
-
   // biome-ignore lint: can't use setVisible as dependency
   useEffect(() => {
     setVisible(productsFetched)
   }, [productsFetched])
 
   function handleRemoveProduct(e) {
-    if (
-      invalidUserInteraction(e) ||
-      !matches(e.target, `.${cartProductRemoveBtnClass}`)
-    )
-      return
-
     const id = extractId(e)
 
-    if (id !== 0 && !id) return
+    if (
+      invalidUserInteraction(e) ||
+      !matches(e.target, '[data-action="cart"]') ||
+      (id !== 0 && !id)
+    )
+      return
 
     removeProduct({ type: 'cart', id })
   }
 
-  function handlePointerUpCancel(e) {
+  function handleConfirmOrder(e) {
     if (invalidUserInteraction(e)) return
 
     confirmOrder()
@@ -53,13 +45,12 @@ const Cart = forwardRef((props, ref) => {
 
   const confirmOrderProps = {
     className: 'confirm-order',
-    onPointerUp: handlePointerUpCancel,
-    onPointerCancel: handlePointerUpCancel,
-    onKeyDown: handlePointerUpCancel
+    onPointerUp: handleConfirmOrder,
+    onPointerCancel: handleConfirmOrder,
+    onKeyDown: handleConfirmOrder
   }
 
   const cartContentProps = {
-    productsFetched,
     productsCount,
 
     infoProps: {
@@ -71,8 +62,7 @@ const Cart = forwardRef((props, ref) => {
 
     productsProps: {
       handleRemoveProduct,
-      products,
-      buttonClass: cartProductRemoveBtnClass
+      products
     }
   }
 
@@ -80,7 +70,7 @@ const Cart = forwardRef((props, ref) => {
     <div
       className='cart'
       ref={ref}
-      style={{ minHeight: `${50 * products.length + 400}px` }}>
+      style={{ minHeight: `${45 * products.length + 400}px` }}>
       <h2 className='cart__title'>
         Your Cart <span>({productsFetched && productsCount})</span>
       </h2>
@@ -93,10 +83,10 @@ const Cart = forwardRef((props, ref) => {
 export default Cart
 
 function CartContent(props) {
-  const { productsFetched, productsCount, infoProps, productsProps } = props
+  const { productsCount, infoProps, productsProps } = props
 
   return (
-    <div className='cart-content'>
+    <div className='cart-content' aria-live='polite' aria-atomic='true'>
       {productsCount > 0 ? (
         <>
           <CartProducts {...productsProps} />
@@ -116,7 +106,6 @@ function CartInfo(props) {
     message: 'Get -20% discount!',
     validCode: 'FrontendMentor',
     setValid: setDiscount,
-    id: 'discount-code',
     isValid: discount
   }
 
@@ -139,9 +128,9 @@ function CartInfo(props) {
       </p>
 
       <ButtonWhoAppear
-        render='Confirm Order'
         props={confirmOrderProps}
         buttonClass='.confirm-order'
+        text='Confirm Order'
       />
 
       {!discount ? (
@@ -149,23 +138,6 @@ function CartInfo(props) {
       ) : (
         <div className='discount-text'>-20% discount applied!</div>
       )}
-    </div>
-  )
-}
-
-function CartProducts({ handleRemoveProduct, products, buttonClass }) {
-  return (
-    <div
-      className='cart__products'
-      onPointerUp={handleRemoveProduct}
-      onKeyDown={handleRemoveProduct}>
-      {products.map(product => (
-        <CartProduct
-          data={product}
-          buttonClass={buttonClass}
-          key={product.id}
-        />
-      ))}
     </div>
   )
 }
@@ -181,7 +153,6 @@ function CartNoProduct() {
         width='96'
         height='96'
       />
-
       <p>Your added items will appear here</p>
     </div>
   )

@@ -10,7 +10,6 @@ import {
   invalidUserInteraction
 } from '../../utils/utils.js'
 import Section from '../others/Section.jsx'
-import Spinner from '../others/spinner/Spinner.jsx'
 import * as ProductButton from './ProductButtons.jsx'
 import ProductImage from './ProductImage.jsx'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -24,11 +23,16 @@ export default function Products({
   function handleProducts(e) {
     if (invalidUserInteraction(e)) return
 
-    const userAction = e.target.dataset.action
-    const id = extractId(e)
-    const button = e.target.closest('button')
+    const button = e.target.dataset.action
+      ? e.target
+      : e.target.closest('[data-action]')
 
-    if (!userAction || (id !== 0 && !id) || !button || button.disabled) return
+    if (!button || button.disabled) return
+
+    const userAction = button.dataset.action
+    const id = extractId(e)
+
+    if (!userAction || (id !== 0 && !id)) return
 
     productsHandler({
       id,
@@ -86,10 +90,8 @@ export function Product({ data, onCart }) {
       opacity: 1,
       scale: 1,
 
-      // same as ButtonWhoAppear component variants
       transition: {
-        delay: 0.3,
-        duration: 0.4,
+        delay: 0.2,
         ease: 'easeInOut'
       }
     }
@@ -119,7 +121,7 @@ export function Product({ data, onCart }) {
         <ProductInfo {...productInfoProps} />
 
         <div className='product__wrapper pos-relative'>
-          {outOfStock && (
+          {outOfStock && imageLoaded && (
             <m.div
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}

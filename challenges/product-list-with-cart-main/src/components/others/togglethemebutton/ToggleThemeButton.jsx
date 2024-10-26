@@ -12,17 +12,14 @@ export default function ToggleThemeButton({ theme, toggleTheme }) {
   }
 
   return (
-    <ButtonWhoAppear
-      props={toggleThemeProps}
-      render={() => (
-        <img
-          src={theme === 'light' ? iconLight : iconDark}
-          alt=''
-          aria-hidden='true'
-          width={30}
-          height={30}
-        />
-      )}
-    />
+    <ButtonWhoAppear props={toggleThemeProps}>
+      <img
+        src={theme === 'light' ? iconLight : iconDark}
+        alt=''
+        aria-hidden='true'
+        width={30}
+        height={30}
+      />
+    </ButtonWhoAppear>
   )
 }

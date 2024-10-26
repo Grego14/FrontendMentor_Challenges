@@ -1,6 +1,19 @@
 import './CartProduct.css'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 import { getTotalProductPrice, transformPrice } from '/src/utils/utils.js'
+
+export function CartProducts({ handleRemoveProduct, products }) {
+  return (
+    <div
+      className='cart__products'
+      onPointerUp={handleRemoveProduct}
+      onKeyDown={handleRemoveProduct}>
+      {products.map(product => (
+        <CartProduct data={product} key={product.id} />
+      ))}
+    </div>
+  )
+}
 
 export default function CartProduct({ data }) {
   const { name, count, price, id, initial } = data
@@ -31,8 +44,9 @@ export default function CartProduct({ data }) {
     exit: {
       x: '150%',
       opacity: 0,
-      scale: 0.5,
+      scale: 0,
       transition: {
+        delay: 0.2,
         duration: 1
       }
     }
@@ -47,26 +61,18 @@ export default function CartProduct({ data }) {
 
   return (
     <AnimatePresence>
-      <motion.div
+      <m.div
         key={id}
         custom={{ initial, id }}
         initial='hidden'
         animate='show'
+        exit='exit'
         variants={cartProductProps}
-        exit={cartProductProps.exit}
         className='cart-product'
         id={`cart-product-${id}`}>
         <CartProductContent {...cartProductContentProps} />
         <CartProductRemoveButton />
-        <motion.div
-          className='cart-product__line'
-          whileInView={{ width: '100%', opacity: 1 }}
-          transition={{
-            delay: cartProductProps.show({ initial, id }).transition.delay
-          }}
-          viewport={{ once: true }}
-        />
-      </motion.div>
+      </m.div>
     </AnimatePresence>
   )
 }
@@ -93,6 +99,7 @@ function CartProductRemoveButton() {
       <button
         className='cart-product__button cart-product__button--remove'
         aria-label='remove product from cart'
+        data-action='cart'
         type='button'>
         <svg
           xmlns='http://www.w3.org/2000/svg'

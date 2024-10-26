@@ -1,8 +1,7 @@
-import { motion } from 'framer-motion'
-import { useEffect, useState, useReducer, useRef } from 'react'
+import { LazyMotion, domAnimation } from 'framer-motion'
+import { useEffect, useReducer, useRef, useState } from 'react'
 import Cart from '../cart/Cart.jsx'
 import OrderModal from '../order/OrderModal.jsx'
-import Spinner from '../others/spinner/Spinner.jsx'
 import Products from '../product/Product.jsx'
 import './App.css'
 import productsReducer from '../../reducers/productsReducer.js'
@@ -16,7 +15,6 @@ import Section from '../others/Section.jsx'
 import ToggleThemeButton from '../others/togglethemebutton/ToggleThemeButton.jsx'
 import TotalPrice from '../others/totalprice/TotalPrice.jsx'
 import UserData from './userdata/UserData.jsx'
-import UserOrder from './userorder/UserOrder.jsx'
 
 export default function App() {
   const storage = localStorage
@@ -234,18 +232,20 @@ export default function App() {
   }
 
   return (
-    <div className='app'>
-      <Products {...productsProps} />
-      <SideContent {...sideContentProps} />
-      {userDevice === 'mobile' ? (
-        <UserData {...userDataProps} />
-      ) : (
-        <ToggleThemeButton
-          theme={appTheme.theme}
-          toggleTheme={appTheme.toggleTheme}
-        />
-      )}
-    </div>
+    <LazyMotion features={domAnimation} strict>
+      <div className='app'>
+        <Products {...productsProps} />
+        <SideContent {...sideContentProps} />
+        {userDevice === 'mobile' ? (
+          <UserData {...userDataProps} />
+        ) : (
+          <ToggleThemeButton
+            theme={appTheme.theme}
+            toggleTheme={appTheme.toggleTheme}
+          />
+        )}
+      </div>
+    </LazyMotion>
   )
 }
 
@@ -263,6 +263,7 @@ function SideContent({ products, discount, cart, modal }) {
   )
 }
 
+// only used here so don't move to utils folder
 function parseMapFromStorage(mapInStorage) {
   return new Map(Object.values(JSON.parse(mapInStorage)))
 }

@@ -18,8 +18,9 @@ export function QuantityButton(props) {
       props={quantityProps}
       isVisible={props.imageLoaded && onCart}
       buttonClass='.product__button--quantity'
-      render={renderIcon}
-    />
+      bounce={false}>
+      {renderIcon()}
+    </ButtonWhoAppear>
   )
 }
 
@@ -94,14 +95,9 @@ export function AddToCartButton(props) {
       props={addToCartProps}
       isVisible={props.imageLoaded && !onCart}
       buttonClass='.product__button--add'
-      render={() => {
-        return (
-          <>
-            {addToCartIcon}
-            <span className='button--add__text'>Add to Cart</span>
-          </>
-        )
-      }}
-    />
+      bounce={false}>
+      {addToCartIcon}
+      <span className='button--add__text'>Add to Cart</span>
+    </ButtonWhoAppear>
   )
 }

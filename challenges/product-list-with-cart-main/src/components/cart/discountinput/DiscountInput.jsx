@@ -50,13 +50,13 @@ export default function DiscountInput(props) {
         <div className='discount-text'>
           Discount code?{' '}
           <ButtonWhoAppear
-            render='Click here!'
             props={{
               className: 'discount-text-click',
               onPointerUp: handleTextClick,
               onKeyDown: handleTextClick
             }}
             bounce={false}
+            text='Click here!'
           />
         </div>
       )}
@@ -83,9 +83,9 @@ export default function DiscountInput(props) {
 
           <ButtonWhoAppear
             eventClassName='discount-input-button'
-            render='Apply'
             props={buttonProps}
             show={!clickedAndInvalid}
+            text='Apply'
           />
         </div>
       )}

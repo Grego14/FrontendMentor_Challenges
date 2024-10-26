@@ -1,28 +1,14 @@
-import { motion } from 'framer-motion'
-import usePointer from '../../hooks/usePointer.jsx'
+import { m } from 'framer-motion'
 import { preventContextMenu } from '../../utils/utils.js'
 
 export default function ButtonWhoAppear({
   props,
   isVisible = true,
-  render,
   buttonClass,
-  bounce = true
+  bounce = true,
+  children,
+  text
 }) {
-  const [isClicked, pointerHandlers] = usePointer(buttonClass)
-
-  function handlePointerDown(e) {
-    if (props.onPointerDown) props?.onPointerDown?.(e)
-
-    pointerHandlers.pointerDown(e)
-  }
-
-  function handlePointerUpCancel(e) {
-    if (props.onPointerUp) props?.onPointerUp?.(e)
-
-    pointerHandlers.pointerUpCancel(e)
-  }
-
   const buttonVariants = {
     hidden: {
       opacity: 0,
@@ -33,7 +19,7 @@ export default function ButtonWhoAppear({
       scale: bounce ? [1, 0.95, 1] : 1,
 
       transition: {
-        delay: 0.1,
+        delay: 0.3,
         duration: 0.4,
         ease: 'easeInOut'
       }
@@ -41,7 +27,7 @@ export default function ButtonWhoAppear({
   }
 
   return (
-    <motion.button
+    <m.button
       {...props}
       initial='hidden'
       whileInView={isVisible ? 'show' : 'hidden'}
@@ -49,11 +35,8 @@ export default function ButtonWhoAppear({
       variants={buttonVariants}
       type='button'
       disabled={!isVisible}
-      onPointerDown={handlePointerDown}
-      onPointerUp={handlePointerUpCancel}
-      onPointerCancel={handlePointerUpCancel}
       onContextMenu={preventContextMenu}>
-      {typeof render !== 'string' ? render({ isClicked }) : render}
-    </motion.button>
+      {children || text}
+    </m.button>
   )
 }

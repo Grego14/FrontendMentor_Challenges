@@ -1,38 +1,30 @@
-import { useContext, useEffect, useState } from 'react'
 import OrderProduct from './OrderProduct.jsx'
 import './OrderModal.css'
-import { motion } from 'framer-motion'
-import usePointer from '../../hooks/usePointer.jsx'
+import { AnimatePresence, m } from 'framer-motion'
+import { useState } from 'react'
 import { getTotalPrice, getTotalProductPrice } from '../../utils/utils.js'
 import ButtonWhoAppear from '../others/ButtonWhoAppear.jsx'
 import TotalPrice from '../others/totalprice/TotalPrice.jsx'
 
 export default function OrderModal({ products, visible, newOrder, discount }) {
-  const [isClicked, handlers] = usePointer('button')
+  const productsCopy = products.slice()
 
   const totalPrice = getTotalPrice(
     products.map(product => getTotalProductPrice(product.price, product.count))
   )
 
-  const orderProducts = products.map(product => (
-    <OrderProduct data={product} key={product.id} />
-  ))
+  const modalVariants = {
+    hidden: {
+      opacity: 0,
+      y: '5%'
+    },
 
-  const modalProps = {
-    initial: {
-      opacity: 0,
-      scale: 0.5
-    },
-    animate: {
+    show: {
       opacity: 1,
-      scale: 1,
+      y: '0%',
       transition: {
-        delay: 0.3
+        duration: 0.3
       }
-    },
-    exit: {
-      opacity: 0,
-      scale: 0
     }
   }
 
@@ -43,10 +35,15 @@ export default function OrderModal({ products, visible, newOrder, discount }) {
   }
 
   return (
-    <motion.div
+    <div
       className='modal-background'
       style={{ visibility: visible ? 'visible' : 'hidden' }}>
-      <motion.div className='order-modal' {...modalProps}>
+      <m.div
+        className='order-modal'
+        key='modal'
+        initial='hidden'
+        animate={visible ? 'show' : 'hidden'}
+        variants={modalVariants}>
         <img
           className='order-modal__icon'
           src='./assets/images/icon-order-confirmed.svg'
@@ -60,15 +57,22 @@ export default function OrderModal({ products, visible, newOrder, discount }) {
         <p className='order-modal__text'>We hope you enjoy your food!</p>
 
         <div className='order-modal__info'>
-          <div className='order-modal__products'>{orderProducts}</div>
+          <div className='order-modal__products'>
+            <AnimatePresence>
+              {visible &&
+                products.map(product => (
+                  <OrderProduct data={product} key={product.id} />
+                ))}
+            </AnimatePresence>
+          </div>
           <div className='order-modal__total'>
             <div className='total__text'>Order Total</div>
             <TotalPrice price={totalPrice} discount={discount} amount={20} />
           </div>
         </div>
 
-        <ButtonWhoAppear render='Start New Order' props={newOrderBtnProps} />
-      </motion.div>
-    </motion.div>
+        <ButtonWhoAppear text='Start New Order' props={newOrderBtnProps} />
+      </m.div>
+    </div>
   )
 }

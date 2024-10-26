@@ -1,8 +1,13 @@
 import './UserOrder.css'
-import {motion} from 'framer-motion'
+import { m } from 'framer-motion'
 import TotalPrice from '../../others/totalprice/TotalPrice.jsx'
 
-export default function UserOrder({ visible, productsCount, totalPrice, discount }) {
+export default function UserOrder({
+  visible,
+  productsCount,
+  totalPrice,
+  discount
+}) {
   const userOrderVariants = {
     hidden: {
       opacity: 0,
@@ -16,7 +21,7 @@ export default function UserOrder({ visible, productsCount, totalPrice, discount
   }
 
   return (
-    <motion.div
+    <m.div
       initial='show'
       animate={'show'}
       variants={userOrderVariants}
@@ -37,6 +42,6 @@ export default function UserOrder({ visible, productsCount, totalPrice, discount
           totalClassName=' user-order__total-price'
         />
       </div>
-    </motion.div>
+    </m.div>
   )
 }

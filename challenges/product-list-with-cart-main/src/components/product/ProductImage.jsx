@@ -48,7 +48,7 @@ export default function ProductImage({ images, onCart, setImageLoaded, show }) {
       </picture>
       {!show && (
         <Skeleton
-          height={myDevice === 'mobile' ? 220 : 260}
+          height={device.any() === 'mobile' ? 220 : 260}
           containerClassName='skeleton'
         />
       )}

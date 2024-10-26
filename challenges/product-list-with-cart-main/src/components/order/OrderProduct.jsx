@@ -1,68 +1,61 @@
 import './OrderProduct.css'
-import { AnimatePresence, motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { getTotalProductPrice, transformPrice } from '../../utils/utils.js'
 
-// maybe later add some interactivity
 function OrderProductThumbnail({ image, name }) {
-  if (image.thumbnail) {
-    return (
-      <img
-        className='order-product__thumbnail'
-        src={image.thumbnail}
-        alt={`${name}`}
-        width='50'
-        height='50'
-        aria-hidden='true'
-      />
-    )
-  }
-
-  return <div>Invalid image object</div>
+  return image.thumbnail ? (
+    <img
+      className='order-product__thumbnail'
+      src={image.thumbnail}
+      alt=''
+      width='50'
+      height='50'
+      aria-hidden='true'
+    />
+  ) : (
+    <div>Invalid image object</div>
+  )
 }
 
 export default function OrderProduct({ data }) {
   const { name, count, price, image, id } = data
-  const totalPrice = getTotalProductPrice(price, count)
+
+  const oPvariants = {
+    hidden: {
+      x: -100,
+      opacity: 0,
+      scale: 0.5
+    },
+    show: {
+      x: 0,
+      opacity: 1,
+      scale: 1
+    },
+    exit: {
+      x: -100,
+      opacity: 0
+    }
+  }
 
   return (
-    <AnimatePresence
+    <m.div
+      className='order-product pos-relative'
       key={id}
-      initial={{
-        x: -100,
-        opacity: 0
-      }}
-      animate={{
-        x: 0,
-        opacity: 1
-      }}
-      exit={{
-        x: -100,
-        backgroundColor: 'black',
-        opacity: 0
-      }}>
-      <div className='order-product'>
-        <div className='order-product__thumbnail-container'>
-          <OrderProductThumbnail image={image} name={name} />
-        </div>
-
-        <OrderProductContent
-          name={name}
-          count={count}
-          price={price}
-          totalPrice={totalPrice}
-        />
-
-        <motion.div
-          className='order-product__line'
-          whileInView={{ width: '100%', opacity: 1 }}
-          viewport={{ once: true }}
-        />
+      initial='hidden'
+      whileInView='show'
+      viewport={{ once: true }}
+      exit='exit'
+      variants={oPvariants}>
+      <div className='order-product__thumbnail-container'>
+        <OrderProductThumbnail image={image} name={name} />
       </div>
-    </AnimatePresence>
+
+      <OrderProductContent name={name} count={count} price={price} />
+    </m.div>
   )
 }
 
-function OrderProductContent({ name, count, price, totalPrice }) {
+function OrderProductContent({ name, count, price }) {
   return (
     <div className='order-product__content'>
       <div className='order-product__info'>
@@ -74,7 +67,7 @@ function OrderProductContent({ name, count, price, totalPrice }) {
         </div>
       </div>
       <div className='order-product__total-price'>
-        {transformPrice(totalPrice)}
+        {transformPrice(getTotalProductPrice(price, count))}
       </div>
     </div>
   )

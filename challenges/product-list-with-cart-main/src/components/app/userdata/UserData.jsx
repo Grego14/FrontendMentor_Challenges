@@ -1,8 +1,7 @@
 import './UserData.css'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { device } from '/src/utils/utils.js'
-import Spinner from '../../others/spinner/Spinner.jsx'
 import ToggleThemeButton from '../../others/togglethemebutton/ToggleThemeButton.jsx'
 import UserOrder from '../userorder/UserOrder.jsx'
 
@@ -97,7 +96,7 @@ export default function UserData(props) {
   }
 
   return (
-    <motion.section
+    <m.section
       className='app-section app-section--user-data'
       ref={userDataRef}
       initial='hidden'
@@ -108,7 +107,7 @@ export default function UserData(props) {
         duration: 0.5,
         ease: 'easeInOut'
       }}>
-      <motion.div
+      <m.div
         className='user-data-container'
         initial='hidden'
         animate='show'
@@ -116,13 +115,13 @@ export default function UserData(props) {
           duration: 0.3
         }}
         variants={userDataContainerVariants}>
-        {props.productsFetched ? (
-          <UserOrder {...userOrderProps} />
-        ) : (
-          <Spinner isFor='user-data' />
-        )}
-        <ToggleThemeButton theme={props.theme} toggleTheme={props.toggleTheme} />
-      </motion.div>
-    </motion.section>
+        {props.productsFetched && <UserOrder {...userOrderProps} />}
+
+        <ToggleThemeButton
+          theme={props.theme}
+          toggleTheme={props.toggleTheme}
+        />
+      </m.div>
+    </m.section>
   )
 }
