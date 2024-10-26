@@ -142,6 +142,6 @@
   }
 
   .discount-input-label{
-    max-width: min-content;
+    /*max-width: min-content;*/
   }
 }

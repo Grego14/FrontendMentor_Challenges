@@ -200,7 +200,7 @@
   pointer-events: none
 }
 
-.product--out [data-is='increment'] {
+.product--out [data-action='increment'] {
   pointer-events: none;
   opacity: .5;
   background-color: color-mix(in srgb, var(--product-quantity-btn-disabled-bg) 30%, gray 70%);

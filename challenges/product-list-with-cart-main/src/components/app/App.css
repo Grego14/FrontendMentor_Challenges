@@ -27,6 +27,7 @@
   min-height: 100dvh;
   transition: var(--color-transitions);
   color: var(--rose-900);
+  max-width: 90rem;
 }
 
 .dark-theme .app {
@@ -34,16 +35,6 @@
 }
 
 /* APP END */
-
-/* ToggleThemeButton 
-* (this style only apply on mobile as later we don't use an 'app-section') 
-* */
-
-.app-section--toggle-theme {
-  display: flex;
-  align-items: center;
-  right: 1rem;
-}
 
 /* USER DATA START */
 
@@ -95,6 +86,10 @@
 @media only screen and (min-width: 54.75rem) {
   .app-section--products {
     width: 65%;
+  }
+
+  .app-section--cart {
+    width: 35%;
   }
 
   .app {
