@@ -70,7 +70,7 @@ const Cart = forwardRef((props, ref) => {
     <div
       className='cart'
       ref={ref}
-      style={{ minHeight: `${45 * products.length + 400}px` }}>
+      style={{ minHeight: `${45 * products.length + 350}px` }}>
       <h2 className='cart__title'>
         Your Cart <span>({productsFetched && productsCount})</span>
       </h2>
