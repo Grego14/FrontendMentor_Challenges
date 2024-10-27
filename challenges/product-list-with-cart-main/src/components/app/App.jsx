@@ -11,7 +11,6 @@ import {
   getTotalProductPrice,
   invalidUserInteraction
 } from '../../utils/utils.js'
-import Section from '../others/Section.jsx'
 import ToggleThemeButton from '../others/togglethemebutton/ToggleThemeButton.jsx'
 import TotalPrice from '../others/totalprice/TotalPrice.jsx'
 import UserData from './userdata/UserData.jsx'
@@ -195,25 +194,6 @@ export default function App() {
     handleStates('cartVisible', true)
   }
 
-  const sideContentProps = {
-    products: productsInCart,
-    discount,
-    cart: {
-      removeProduct: dispatch,
-      productsFetched,
-      confirmOrder: handleConfirmOrder,
-      setVisible: handleCartVisibility,
-      ref: cartRef,
-      totalPrice,
-      productsCount,
-      setDiscount
-    },
-    modal: {
-      newOrder: handleNewOrder,
-      visible: componentStates.get('modalVisible')
-    }
-  }
-
   const productsProps = {
     products: [...products.values()],
     productsHandler: dispatch,
@@ -231,11 +211,34 @@ export default function App() {
     toggleTheme: appTheme.toggleTheme
   }
 
+  const cartProps = {
+    removeProduct: dispatch,
+    productsFetched,
+    confirmOrder: handleConfirmOrder,
+    setVisible: handleCartVisibility,
+    ref: cartRef,
+    totalPrice,
+    productsCount,
+    setDiscount
+  }
+
+  const modalProps = {
+    newOrder: handleNewOrder,
+    visible: componentStates.get('modalVisible')
+  }
+
   return (
     <LazyMotion features={domAnimation} strict>
       <div className='app'>
         <Products {...productsProps} />
-        <SideContent {...sideContentProps} />
+
+        <Cart {...cartProps} products={productsInCart} discount={discount} />
+        <OrderModal
+          {...modalProps}
+          products={productsInCart}
+          discount={discount}
+        />
+
         {userDevice === 'mobile' ? (
           <UserData {...userDataProps} />
         ) : (
@@ -246,20 +249,6 @@ export default function App() {
         )}
       </div>
     </LazyMotion>
-  )
-}
-
-function SideContent({ products, discount, cart, modal }) {
-  return (
-    <>
-      <Section isFor='cart'>
-        <Cart {...cart} {...{ products, discount }} />
-      </Section>
-
-      <Section isFor='modal pos-absolute'>
-        <OrderModal {...modal} {...{ products, discount }} />
-      </Section>
-    </>
   )
 }
 

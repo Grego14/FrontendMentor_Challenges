@@ -4,12 +4,11 @@ import { m } from 'framer-motion'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import {
   extractId,
+  invalidUserInteraction,
   matches,
   preventContextMenu,
-  transformPrice,
-  invalidUserInteraction
+  transformPrice
 } from '../../utils/utils.js'
-import Section from '../others/Section.jsx'
 import * as ProductButton from './ProductButtons.jsx'
 import ProductImage from './ProductImage.jsx'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -41,7 +40,7 @@ export default function Products({
   }
 
   return (
-    <Section isFor='products'>
+    <>
       <h1 className='products-title'>Desserts</h1>
       <div
         className='products'
@@ -52,7 +51,7 @@ export default function Products({
             <Product data={product} onCart={product.cart} key={product.id} />
           ))}
       </div>
-    </Section>
+    </>
   )
 }
 

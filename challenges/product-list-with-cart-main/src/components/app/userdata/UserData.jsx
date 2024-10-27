@@ -97,7 +97,7 @@ export default function UserData(props) {
 
   return (
     <m.section
-      className='app-section app-section--user-data'
+      className='user-data'
       ref={userDataRef}
       initial='hidden'
       animate={['show', isMoving ? 'move' : '']}
@@ -108,7 +108,7 @@ export default function UserData(props) {
         ease: 'easeInOut'
       }}>
       <m.div
-        className='user-data-container'
+        className='user-data__container'
         initial='hidden'
         animate='show'
         transition={{
