@@ -1,0 +1,35 @@
+.user-data {
+  --user-data-height: 5rem;
+
+  position: fixed;
+  display: flex;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  min-height: var(--user-data-height);
+  overflow: hidden;
+  box-shadow: 0 -2px 5px var(--user-data-shadow);
+}
+
+.user-data__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex: 1;
+
+  min-height: var(--user-data-height);
+  padding-inline: 1rem;
+  background-color: var(--rose-50);
+}
+
+.dark-theme .user-data__container {
+  background-color: var(--ebony-clay);
+}
+
+@media only screen and (min-width: 30rem) {
+  .app-section--user-data {
+    width: calc(30% - var(--app-padding-clamp));
+  }
+}
