@@ -20,7 +20,7 @@
   flex: 1;
 
   min-height: var(--user-data-height);
-  padding-inline: 1rem;
+  padding-inline: var(--app-padding-clamp);
   background-color: var(--rose-50);
 }
 
