@@ -3,9 +3,9 @@ import { extractId, invalidUserInteraction, matches } from '/src/utils/utils.js'
 import './Cart.css'
 import ButtonWhoAppear from '../others/ButtonWhoAppear.jsx'
 import TotalPrice from '../others/totalprice/TotalPrice.jsx'
-import DiscountInput from './discountinput/DiscountInput.jsx'
 
 const CartProducts = lazy(() => import('./CartProduct.jsx'))
+const DiscountInput = lazy(() => import('./discountinput/DiscountInput.jsx'))
 
 const Cart = forwardRef((props, ref) => {
   const {
