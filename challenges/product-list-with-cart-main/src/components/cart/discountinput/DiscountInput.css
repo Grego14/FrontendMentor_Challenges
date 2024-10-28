@@ -77,12 +77,6 @@
   filter: saturate(.3)
 }
 
-.discount-text {
-  text-align: center;
-  font-weight: 600;
-  font-size: var(--fsc-small);
-}
-
 .discount-text-click {
   text-decoration: underline;
   color: var(--rose-500);
