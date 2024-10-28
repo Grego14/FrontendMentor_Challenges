@@ -17,7 +17,8 @@
   --app-padding-clamp: clamp(var(--app-padding), var(--app-padding) + 1vw, var(--app-padding) * 3);
   --app-gap: 3rem;
   --app-gap-clamp: clamp(var(--app-gap), var(--app-gap) + 1vw, var(--app-gap) * 1.5);
-  --icon-fill: var(--rose-50);
+
+  --primary-color: var(--red-contrast);
 
   background-color: var(--app-bg);
   padding: var(--app-padding-clamp);
@@ -31,6 +32,8 @@
 }
 
 .dark-theme .app {
+  --primary-color: var(--purple-heart);
+
   color: var(--rose-50)
 }
 
