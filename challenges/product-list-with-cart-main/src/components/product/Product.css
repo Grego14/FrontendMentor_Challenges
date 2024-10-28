@@ -130,9 +130,13 @@
 
 .product__button--add {
   background-color: var(--rose-50);
-  border-color: var(--primary-color);
+  border-color: var(--rose-500);
 
   transition-property: border-color, background-color, color;
+}
+
+.dark-theme .product__button--add {
+  border-color: var(--purple-heart);
 }
 
 .product--show .product__button--add {
