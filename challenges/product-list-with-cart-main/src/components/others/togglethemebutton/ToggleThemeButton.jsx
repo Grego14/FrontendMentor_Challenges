@@ -1,7 +1,4 @@
 import './ToggleThemeButton.css'
-import { useState } from 'react'
-import iconDark from '/assets/images/icon-dark.svg'
-import iconLight from '/assets/images/icon-light.svg'
 import ButtonWhoAppear from '../ButtonWhoAppear.jsx'
 
 export default function ToggleThemeButton({ theme, toggleTheme }) {
@@ -17,7 +14,7 @@ export default function ToggleThemeButton({ theme, toggleTheme }) {
 
     timeout = setTimeout(() => {
       target.removeAttribute('disabled')
-      toggleTheme()
+      toggleTheme(e)
     }, 200)
   }
 
@@ -31,7 +28,11 @@ export default function ToggleThemeButton({ theme, toggleTheme }) {
   return (
     <ButtonWhoAppear props={toggleThemeProps}>
       <img
-        src={theme === 'light' ? iconLight : iconDark}
+        src={
+          theme === 'light'
+            ? '/assets/images/icon-light.svg'
+            : '/assets/images/icon-dark.svg'
+        }
         alt=''
         aria-hidden='true'
         width={30}
