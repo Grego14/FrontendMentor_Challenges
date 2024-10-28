@@ -1,10 +1,11 @@
-import { forwardRef, useEffect } from 'react'
+import { Suspense, forwardRef, lazy, useEffect } from 'react'
 import { extractId, invalidUserInteraction, matches } from '/src/utils/utils.js'
-import CartProduct, { CartProducts } from './CartProduct.jsx'
 import './Cart.css'
 import ButtonWhoAppear from '../others/ButtonWhoAppear.jsx'
 import TotalPrice from '../others/totalprice/TotalPrice.jsx'
 import DiscountInput from './discountinput/DiscountInput.jsx'
+
+const CartProducts = lazy(() => import('./CartProduct.jsx'))
 
 const Cart = forwardRef((props, ref) => {
   const {
@@ -19,10 +20,9 @@ const Cart = forwardRef((props, ref) => {
     discount
   } = props
 
-  // biome-ignore lint: can't use setVisible as dependency
   useEffect(() => {
     setVisible(productsFetched)
-  }, [productsFetched])
+  }, [productsFetched, setVisible])
 
   function handleRemoveProduct(e) {
     const id = extractId(e)
@@ -88,10 +88,10 @@ function CartContent(props) {
   return (
     <div className='cart-content' aria-live='polite' aria-atomic='true'>
       {productsCount > 0 ? (
-        <>
+        <Suspense>
           <CartProducts {...productsProps} />
           <CartInfo {...infoProps} />
-        </>
+        </Suspense>
       ) : (
         <CartNoProduct productsCount={productsCount} />
       )}

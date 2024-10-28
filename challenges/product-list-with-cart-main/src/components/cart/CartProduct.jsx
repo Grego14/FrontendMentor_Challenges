@@ -2,7 +2,7 @@ import './CartProduct.css'
 import { AnimatePresence, m } from 'framer-motion'
 import { getTotalProductPrice, transformPrice } from '/src/utils/utils.js'
 
-export function CartProducts({ handleRemoveProduct, products }) {
+export default function CartProducts({ handleRemoveProduct, products }) {
   return (
     <div
       className='cart__products'
@@ -15,7 +15,7 @@ export function CartProducts({ handleRemoveProduct, products }) {
   )
 }
 
-export default function CartProduct({ data }) {
+function CartProduct({ data }) {
   const { name, count, price, id, initial } = data
   const totalPrice = transformPrice(getTotalProductPrice(price, count))
 
