@@ -11,23 +11,18 @@
 
   display: flex;
   align-items: center;
+  gap: .5rem;
 }
 
 .user-order__products-count {
   color: var(--red-contrast);
 }
 
-.dark-theme .user-order__products-count,
-.dark-theme .user-order .total-price-container {
-  color: #C29FFF
+.dark-theme .user-order__products-count {
+  color: var(--dull-lavender);
 }
 
 .user-order__products-count {
   font-weight: bold;
   font-size: 1.2rem;
-  margin-left: .5rem;
-}
-
-.user-order .total-price-container {
-  margin-left: .5rem;
 }
