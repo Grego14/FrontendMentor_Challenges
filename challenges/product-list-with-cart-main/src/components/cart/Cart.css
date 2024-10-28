@@ -5,8 +5,9 @@
   background-color: var(--rose-50);
   border: 4px solid transparent;
   box-shadow: 0 0 3px var(--rose-100);
-  max-width: 40rem;
-  align-self: start;
+  width: clamp(20rem, 20rem + 6vw, 40rem);
+  max-width: 100%;
+  align-self: center;
 }
 
 .cart__title {
@@ -115,6 +116,12 @@
   background-color: var(--dull-lavender);
 }
 
+.discount-text {
+  text-align: center;
+  font-weight: 600;
+  font-size: var(--fsc-small);
+}
+
 @media (hover: hover) {
   .confirm-order:hover {
     filter: saturate(.75)
@@ -122,6 +129,12 @@
 
   .confirm-order:hover:active {
     filter: saturate(.75)
+  }
+}
+
+@media only screen and (min-width: 54.75rem) {
+  .cart {
+    align-self: start;
   }
 }
 
