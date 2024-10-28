@@ -50,7 +50,7 @@
 
 .cart__info__carbon-neutral {
   border-radius: .5rem;
-  padding: 1rem .5rem;
+  padding: 1rem .3rem;
   text-align: center;
   background-color: var(--rose-100);
   color: var(--rose-900);
@@ -69,7 +69,7 @@
 }
 
 .confirm-order {
-  background-color: var(--red-contrast);
+  background-color: var(--primary-color);
   color: var(--rose-50);
   border-radius: 3rem;
   font-size: 1.2rem;
@@ -84,7 +84,7 @@
 }
 
 .dark-theme .confirm-order:focus-visible {
-  outline: 3px solid var(--dull-lavender);
+  outline-color: var(--dull-lavender);
 }
 
 .cart__no-product p,
@@ -113,11 +113,6 @@
 
 .dark-theme .cart__info__carbon-neutral {
   background-color: var(--dull-lavender);
-  color: '#0e0f20';
-}
-
-.dark-theme .confirm-order {
-  background-color: var(--purple-heart);
 }
 
 @media (hover: hover) {
