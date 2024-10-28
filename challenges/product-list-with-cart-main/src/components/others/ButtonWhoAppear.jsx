@@ -34,7 +34,7 @@ export default function ButtonWhoAppear({
       viewport={{ once: true }}
       variants={buttonVariants}
       type='button'
-      disabled={!isVisible}
+      disabled={props.disabled ? props.disabled : !isVisible}
       onContextMenu={preventContextMenu}>
       {children || text}
     </m.button>

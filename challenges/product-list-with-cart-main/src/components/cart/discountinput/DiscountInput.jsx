@@ -33,15 +33,18 @@ export default function DiscountInput(props) {
   }
 
   function handleApplyClick(e) {
-    setApplyClicked(true)
+    if (invalidUserInteraction(e)) return
 
+    setApplyClicked(true)
     setValid(value === validCode)
   }
 
   const clickedAndInvalid = applyClicked && !isValid
   const buttonProps = {
     onPointerUp: handleApplyClick,
-    className: 'discount-input-button'
+    onKeyDown: handleApplyClick,
+    className: 'discount-input-button',
+    disabled: clickedAndInvalid
   }
 
   return (
@@ -82,7 +85,7 @@ export default function DiscountInput(props) {
           </label>
 
           <ButtonWhoAppear
-            eventClassName='discount-input-button'
+            buttonClass='discount-input-button'
             props={buttonProps}
             show={!clickedAndInvalid}
             text='Apply'

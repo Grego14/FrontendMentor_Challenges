@@ -12,7 +12,8 @@
   font-weight: 600;
   font-size: var(--fsc-small);
   transition: var(--color-transitions);
-  border: 2px solid transparent;
+  border: 3px solid transparent;
+  transition-property: border-color, background-color, color;
 }
 
 .discount-input {
@@ -21,8 +22,6 @@
   color: var(--rose-900);
   border-color: var(--rose-400);
   max-width: 100%;
-  /* prevent transition of the outline-color... */
-  transition-property: border-color, background-color, color;
 }
 
 .discount-input.invalid {
@@ -39,15 +38,17 @@
   border-color: var(--dull-lavender);
 }
 
-/* temporal focus-visible */
-.discount-input-button:focus-visible,
 .discount-input:focus-visible {
-  outline: 2px solid var(--red-contrast);
+  outline: 3px solid var(--red-contrast);
+}
+
+.discount-input-button:focus-visible {
+  outline: 3px solid var(--rose-900);
 }
 
 .dark-theme .discount-input-button:focus-visible,
 .dark-theme .discount-input:focus-visible {
-  outline: 2px solid var(--dull-lavender);
+  outline-color: var(--rose-50);
 }
 
 .discount-input-label {
@@ -79,6 +80,7 @@
 .discount-text {
   text-align: center;
   font-weight: 600;
+  font-size: var(--fsc-small);
 }
 
 .discount-text-click {
@@ -126,22 +128,10 @@
     border-color: var(--purple-heart);
     color: var(--dull-lavender);
   }
-
-  .discount-input-button.clicked:hover {
-    color: green;
-  }
-
-  .dark-theme .discount-input-button.clicked:hover {
-    background-color: red;
-  }
 }
 
-@media only screen and (min-width: 30rem){
-  .discount-input-container{
-    justify-content: initial
-  }
-
-  .discount-input-label{
-    /*max-width: min-content;*/
+@media only screen and (min-width: 30rem) {
+  .discount-input-container {
+    justify-content: center;
   }
 }

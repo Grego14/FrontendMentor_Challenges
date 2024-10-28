@@ -30,21 +30,15 @@ export default function OrderProduct({ data }) {
       x: 0,
       opacity: 1,
       scale: 1
-    },
-    exit: {
-      x: -100,
-      opacity: 0
     }
   }
 
   return (
     <m.div
       className='order-product pos-relative'
-      key={id}
       initial='hidden'
       whileInView='show'
       viewport={{ once: true }}
-      exit='exit'
       variants={oPvariants}>
       <div className='order-product__thumbnail-container'>
         <OrderProductThumbnail image={image} name={name} />

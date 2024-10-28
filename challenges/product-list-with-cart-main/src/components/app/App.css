@@ -36,38 +36,6 @@
 
 /* APP END */
 
-/* USER DATA START */
-
-.app-section--user-data {
-  --user-data-height: 5rem;
-
-  position: fixed;
-  display: flex;
-  bottom: 0;
-  left: 0;
-  z-index: 1000;
-  width: 100%;
-  min-height: var(--user-data-height);
-  overflow: hidden;
-  box-shadow: 0 -2px 5px var(--user-data-shadow);
-}
-
-.user-data-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  flex: 1;
-
-  min-height: var(--user-data-height);
-  padding-inline: 1rem;
-  background-color: var(--rose-50);
-}
-
-.dark-theme .user-data-container {
-  background-color: var(--ebony-clay);
-}
-
 .skeleton {
   z-index: 10;
   width: 100%;
@@ -76,19 +44,12 @@
   line-height: 1;
 }
 
-/* 480px */
-@media only screen and (min-width: 30rem) {
-  .app-section--user-data {
-    width: calc(30% - var(--app-padding-clamp));
-  }
-}
-
 @media only screen and (min-width: 54.75rem) {
-  .app-section--products {
+  .products-section {
     width: 65%;
   }
 
-  .app-section--cart {
+  .cart {
     width: 35%;
   }
 

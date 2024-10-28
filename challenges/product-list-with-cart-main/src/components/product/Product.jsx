@@ -40,7 +40,7 @@ export default function Products({
   }
 
   return (
-    <>
+    <div className='products-section'>
       <h1 className='products-title'>Desserts</h1>
       <div
         className='products'
@@ -51,7 +51,7 @@ export default function Products({
             <Product data={product} onCart={product.cart} key={product.id} />
           ))}
       </div>
-    </>
+    </div>
   )
 }
 

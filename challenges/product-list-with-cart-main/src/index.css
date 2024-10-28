@@ -57,6 +57,8 @@
   --rose-900: hsl(14, 65%, 9%);
 
   --app-bg: var(--rose-100);
+
+  /* shadow used in userData and modal components */
   --user-data-shadow: #888;
 
   /* cart and modal-info border colors (used in dark mode) */
@@ -70,6 +72,9 @@
 
   --fs-small: .9rem;
   --fsc-small: clamp(var(--fs-small), var(--fs-small) + .2vw, var(--fs-small) * 1.5);
+
+  --fs-medium: 1.1rem;
+  --fsc-medium: clamp(var(--fs-medium), var(--fs-medium) + .2vw, var(--fs-medium) * 1.5);
 
   --color-transitions: border-color var(--fast-transition) ease-in-out, color var(--fast-transition) ease-in-out,
     background-color var(--fast-transition) ease-in-out, outline-color var(--fast-transition) ease-in-out;
@@ -99,6 +104,7 @@ body {
 
 button {
   border: none;
+  appearance: none;
   cursor: pointer;
   background-color: transparent;
 }
@@ -111,7 +117,7 @@ img {
 
 @media only screen and (min-width: 64rem) {
   :root {
-    --fs-small: .8rem;
+    --fs-small: .85rem;
     font-size: 16px;
   }
 }

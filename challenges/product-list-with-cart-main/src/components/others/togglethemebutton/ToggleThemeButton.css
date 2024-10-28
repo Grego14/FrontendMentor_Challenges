@@ -5,6 +5,7 @@
   background-color: var(--red-contrast);
   width: clamp(3rem, 3rem + .8vw, 5rem);
   height: clamp(3rem, 3rem + .8vw, 5rem);
+  transition: border-color, background-color;
 }
 
 .toggle-theme img {
@@ -17,11 +18,11 @@
 }
 
 .toggle-theme:focus-visible {
-  outline: 2px solid var(--rose-400);
+  outline: 3px solid var(--rose-900);
 }
 
 .dark-theme .toggle-theme:focus-visible {
-  outline: 2px solid var(--rose-50);
+  outline-color: var(--rose-50);
 }
 
 @media only screen and (min-width: 30rem) {
