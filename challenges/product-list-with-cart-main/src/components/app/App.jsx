@@ -1,7 +1,13 @@
 import { LazyMotion, domAnimation } from 'framer-motion'
-import { useEffect, useReducer, useRef, useState } from 'react'
-import Cart from '../cart/Cart.jsx'
-import OrderModal from '../order/OrderModal.jsx'
+import {
+  Suspense,
+  lazy,
+  useCallback,
+  useEffect,
+  useReducer,
+  useRef,
+  useState
+} from 'react'
 import Products from '../product/Product.jsx'
 import './App.css'
 import productsReducer from '../../reducers/productsReducer.js'
@@ -12,8 +18,12 @@ import {
   invalidUserInteraction
 } from '../../utils/utils.js'
 import ToggleThemeButton from '../others/togglethemebutton/ToggleThemeButton.jsx'
-import TotalPrice from '../others/totalprice/TotalPrice.jsx'
-import UserData from './userdata/UserData.jsx'
+
+const Cart = lazy(() => import('../cart/Cart.jsx'))
+const OrderModal = lazy(() => import('../order/OrderModal.jsx'))
+
+// prevent importing the component on non-mobile devices
+const UserData = lazy(() => import('./userdata/UserData.jsx'))
 
 export default function App() {
   const storage = localStorage
@@ -49,7 +59,7 @@ export default function App() {
   const [discount, setDiscount] = useState(storage.getItem('discount') || false)
 
   function toggleTheme(e) {
-    if (e && invalidUserInteraction(e)) return
+    if (invalidUserInteraction(e)) return
 
     setAppTheme(state => {
       const theme = state.theme === 'light' ? 'dark' : 'light'
@@ -63,7 +73,7 @@ export default function App() {
     })
   }
 
-  function handleStates(stateProp, stateValue) {
+  const handleStates = useCallback((stateProp, stateValue) => {
     setComponentStates(state => {
       if (!state.has(stateProp)) return state
 
@@ -72,14 +82,12 @@ export default function App() {
 
       return map
     })
-  }
+  }, [])
 
-  // biome-ignore lint: handleStates should not be used here as dependency
   useEffect(() => {
     fetch('data.json')
       .then(res => res.json())
       .then(data => {
-        console.log('data fetched %o', data)
         let idHandler = 0
         const dataWithIds = new Map()
 
@@ -122,7 +130,13 @@ export default function App() {
         dispatch({ type: 'fetch', products: dataWithIds })
         handleStates('productsFetched', true)
       })
-  }, [products.get, storageStock.get, storage.setItem, storage.getItem])
+  }, [
+    products.get,
+    storageStock.get,
+    storage.setItem,
+    storage.getItem,
+    handleStates
+  ])
 
   useEffect(() => {
     storage.setItem('discount', discount ? 'true' : '')
@@ -130,10 +144,6 @@ export default function App() {
 
   // logs, storage
   useEffect(() => {
-    console.groupCollapsed('Products Updated')
-    console.table([...products.values()])
-    console.groupEnd('Products Updated')
-
     storage.setItem(
       'products-in-cart',
       JSON.stringify(productsInCart.map(product => [product.id, product]))
@@ -190,9 +200,10 @@ export default function App() {
     setDiscount(false)
   }
 
-  function handleCartVisibility() {
-    handleStates('cartVisible', true)
-  }
+  const handleCartVisibility = useCallback(
+    () => handleStates('cartVisible', true),
+    [handleStates]
+  )
 
   const productsProps = {
     products: [...products.values()],
@@ -230,23 +241,34 @@ export default function App() {
   return (
     <LazyMotion features={domAnimation} strict>
       <div className='app'>
-        <Products {...productsProps} />
+        <Suspense>
+          <Products {...productsProps} />
 
-        <Cart {...cartProps} products={productsInCart} discount={discount} />
-        <OrderModal
-          {...modalProps}
-          products={productsInCart}
-          discount={discount}
-        />
+          {productsFetched && (
+            <Cart
+              {...cartProps}
+              products={productsInCart}
+              discount={discount}
+            />
+          )}
 
-        {userDevice === 'mobile' ? (
-          <UserData {...userDataProps} />
-        ) : (
-          <ToggleThemeButton
-            theme={appTheme.theme}
-            toggleTheme={appTheme.toggleTheme}
-          />
-        )}
+          {modalProps.visible && (
+            <OrderModal
+              {...modalProps}
+              products={productsInCart}
+              discount={discount}
+            />
+          )}
+
+          {userDevice === 'mobile' ? (
+            productsFetched && <UserData {...userDataProps} />
+          ) : (
+            <ToggleThemeButton
+              theme={appTheme.theme}
+              toggleTheme={appTheme.toggleTheme}
+            />
+          )}
+        </Suspense>
       </div>
     </LazyMotion>
   )
