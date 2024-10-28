@@ -49,12 +49,9 @@
 }
 
 .cart__info__carbon-neutral {
-  background-color: var(--rose-100);
   border-radius: .5rem;
-  font-size: .9rem;
   padding: 1rem .5rem;
   text-align: center;
-  color: #333;
   background-color: var(--rose-100);
   color: var(--rose-900);
 }
