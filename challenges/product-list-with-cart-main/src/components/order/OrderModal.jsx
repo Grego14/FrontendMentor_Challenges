@@ -14,11 +14,6 @@ export default function OrderModal({ products, visible, newOrder, discount }) {
   )
 
   const modalVariants = {
-    hidden: {
-      opacity: 0,
-      y: '5%'
-    },
-
     show: {
       opacity: 1,
       y: '0%',
@@ -35,14 +30,15 @@ export default function OrderModal({ products, visible, newOrder, discount }) {
   }
 
   return (
-    <div
-      className='modal-background'
-      style={{ visibility: visible ? 'visible' : 'hidden' }}>
+    <div className='modal-background'>
       <m.div
+        style={{
+          opacity: 0.5,
+          y: '5%'
+        }}
         className='order-modal'
         key='modal'
-        initial='hidden'
-        animate={visible ? 'show' : 'hidden'}
+        animate='show'
         variants={modalVariants}>
         <img
           className='order-modal__icon'
