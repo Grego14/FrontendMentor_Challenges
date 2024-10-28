@@ -10,6 +10,10 @@
   margin-bottom: 1.5rem;
 }
 
+.dark-theme .order-product:last-child {
+  margin-bottom: 0;
+}
+
 .order-product::after {
   content: '';
   position: absolute;
@@ -66,6 +70,10 @@
 .order-product__price,
 .order-product__total-price {
   font-weight: 600;
+}
+
+.order-product__total-price {
+  font-size: var(--fsc-medium);
 }
 
 .order-product__thumbnail {

@@ -8,7 +8,6 @@
   display: flex;
   align-items: end;
   z-index: 1000;
-  overflow: scroll;
 }
 
 .order-modal {
@@ -24,7 +23,7 @@
   overflow: scroll;
   background-color: white;
   max-width: var(--modal-width);
-  max-height: 85%;
+  max-height: 90%;
   box-shadow: 0 0 20px 3px var(--user-data-shadow);
 }
 
@@ -34,13 +33,13 @@
 
 .order-modal__icon {
   user-select: none;
-  width: calc(50px + 1.5vw);
-  height: calc(50px + 1.5vw);
+  width: calc(50px + 1vw);
+  height: calc(50px + 1vw);
 }
 
 .order-modal__title {
   margin-block: 1rem;
-  font-size: clamp(2rem, 2rem + .5vw, 3rem);
+  font-size: clamp(2.5rem, 2.5rem + 1vw, 4rem);
 }
 
 .order-modal__text {
@@ -66,25 +65,30 @@
   overflow-x: hidden;
 
   border: 2px solid transparent;
-  padding: 1rem 1.5rem;
+  padding: 1.5rem;
   max-height: 22rem;
 }
 
 .dark-theme .order-modal__products {
   border-radius: .5rem;
   border-color: var(--cart-modal-border-color);
+  padding: 1rem;
 }
 
 .order-modal__total {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1rem 1.2rem;
-  margin-top: 0;
+  margin-inline: 1rem;
+  margin-block: 0 2rem;
 }
 
 .dark-theme .order-modal__total {
   margin-top: 1.2rem;
+}
+
+.order-modal__total .price {
+  color: inherit;
 }
 
 .total__text {
