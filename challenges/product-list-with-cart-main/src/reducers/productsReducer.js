@@ -16,15 +16,15 @@ export default function productsReducer(state, action) {
 
   function handleProductInCart() {
     const map = new Map(state)
-    const elementProps = { ...element, cart: !element.cart }
+    const _element = { ...element, cart: !element.cart }
 
     // if elementProps.cart is false it means the product
     // is being removed so count should be reset to 0.
-    const count = elementProps.cart ? elementProps.count + 1 : 0
-    const outOfStock = count >= elementProps.quantity
+    const count = _element.cart ? _element.count + 1 : 0
+    const outOfStock = count >= _element.quantity
 
     map.set(id, {
-      ...elementProps,
+      ..._element,
       count: count,
       // initial should be false otherwise the initial animation will
       // be fired once added again.
@@ -38,9 +38,14 @@ export default function productsReducer(state, action) {
   function handleProductQuantity() {
     const map = new Map(state)
 
+    // increment | decrement
     const userAction = action.type
+
+    const _element = { ...element }
+
     let count = element.count
     let outOfStock = count >= element.quantity
+    let cart = element.cart
 
     // prevents unnecessary rendering
     if (outOfStock && userAction !== 'decrement') return
@@ -51,13 +56,11 @@ export default function productsReducer(state, action) {
     // compare to 0 because above we are decrementing no matter what
     // and if it was 1 now is 0
     if (userAction === 'decrement' && count === 0) {
-      element.cart = false
+      cart = false
       outOfStock = false
     }
 
-    const elementProps = { ...element, count, outOfStock }
-
-    map.set(id, elementProps)
+    map.set(id, { ..._element, cart, outOfStock, count })
     return map
   }
 
@@ -80,5 +83,5 @@ export default function productsReducer(state, action) {
     return map
   }
 
-  return types[action.type]() || state
+  return types[action.type]?.() || state
 }
