@@ -7,18 +7,14 @@ import {
   invalidUserInteraction,
   matches,
   preventContextMenu,
-  transformPrice
+  transformPrice,
+  device
 } from '../../utils/utils.js'
 import * as ProductButton from './ProductButtons.jsx'
 import ProductImage from './ProductImage.jsx'
 import 'react-loading-skeleton/dist/skeleton.css'
 
-export default function Products({
-  products,
-  productsHandler,
-  productsFetched,
-  cartVisible
-}) {
+export default function Products({ products, productsHandler }) {
   function handleProducts(e) {
     if (invalidUserInteraction(e)) return
 
@@ -46,10 +42,9 @@ export default function Products({
         className='products'
         onPointerUp={handleProducts}
         onKeyDown={handleProducts}>
-        {productsFetched &&
-          Object.values(products).map(product => (
-            <Product data={product} onCart={product.cart} key={product.id} />
-          ))}
+        {Object.values(products).map(product => (
+          <Product data={product} onCart={product.cart} key={product.id} />
+        ))}
       </div>
     </div>
   )
@@ -127,6 +122,13 @@ export function Product({ data, onCart }) {
               className='out-of-stock'>
               Out of stock
             </m.div>
+          )}
+
+          {!imageLoaded && (
+            <Skeleton
+              height={device.any() === 'mobile' ? 220 : 265}
+              containerClassName='skeleton'
+            />
           )}
 
           <ProductImage {...productImageProps} />
