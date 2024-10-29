@@ -1,6 +1,4 @@
 import { m } from 'framer-motion'
-import Skeleton from 'react-loading-skeleton'
-import { device } from '../../utils/utils.js'
 
 export default function ProductImage({ images, onCart, setImageLoaded, show }) {
   function handleImageError(e) {
@@ -26,32 +24,24 @@ export default function ProductImage({ images, onCart, setImageLoaded, show }) {
   )
 
   return (
-    <>
-      <picture>
-        <source srcSet={images.mobile} media='(max-width: 640px)' />
-        <source srcSet={images.tablet} media='(min-width: 641px)' />
-        <source srcSet={images.desktop} media='(min-width: 1025px)' />
-        <m.img
-          initial='hidden'
-          animate={show && 'show'}
-          variants={imageVariants}
-          className={`product__image${show ? ' product__image--loaded' : ''}`}
-          loading='lazy'
-          width='280'
-          height='220'
-          src={images.mobile}
-          alt=''
-          aria-hidden='true'
-          onLoad={setImageLoaded}
-          onError={handleImageError}
-        />
-      </picture>
-      {!show && (
-        <Skeleton
-          height={device.any() === 'mobile' ? 220 : 260}
-          containerClassName='skeleton'
-        />
-      )}
-    </>
+    <picture>
+      <source srcSet={images.mobile} media='(max-width: 640px)' />
+      <source srcSet={images.tablet} media='(min-width: 641px)' />
+      <source srcSet={images.desktop} media='(min-width: 1025px)' />
+      <m.img
+        initial='hidden'
+        animate={show && 'show'}
+        variants={imageVariants}
+        className={`product__image${show ? ' product__image--loaded' : ''}`}
+        loading='lazy'
+        width='280'
+        height='220'
+        src={images.mobile}
+        alt=''
+        aria-hidden='true'
+        onLoad={setImageLoaded}
+        onError={handleImageError}
+      />
+    </picture>
   )
 }
