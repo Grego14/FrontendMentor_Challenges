@@ -17,14 +17,19 @@
 
   border-radius: 1rem 1rem 0 0;
   width: 100%;
-  min-height: 90%;
   padding: 1.5rem;
+
   display: flex;
   flex-direction: column;
   overflow: scroll;
   background-color: var(--modal-bg);
+
+  /* mobile height */
+  min-height: 90%;
+
   max-width: var(--modal-width);
   max-height: 90%;
+
   box-shadow: 0 0 20px 3px var(--user-data-shadow);
 }
 
@@ -53,39 +58,40 @@
 }
 
 .order-modal__info {
-  background-color: var(--rose-50);
-  margin-block: 1.5rem;
-  border-radius: .3rem;
-}
-
-.dark-theme .order-modal__info {
-  background-color: transparent;
+  margin-block: 1.2rem;
 }
 
 .order-modal__products {
   overflow-x: hidden;
 
   border: 2px solid transparent;
-  padding: 1.5rem;
+  padding: 1rem;
   max-height: 22rem;
+  border-radius: .5rem .5rem 0 0;
+  background-color: var(--rose-50);
 }
 
 .dark-theme .order-modal__products {
   border-radius: .5rem;
   border-color: var(--cart-modal-border-color);
-  padding: 1rem;
+  background-color: transparent;
 }
 
 .order-modal__total {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-inline: 1rem;
   margin-block: 0 2rem;
+  padding: 1rem;
+
+  border-radius: 0 0 .5rem .5rem;
+  background-color: var(--rose-50);
 }
 
 .dark-theme .order-modal__total {
   margin-top: 1.2rem;
+  padding: 0;
+  background-color: transparent;
 }
 
 .order-modal__total .price {
@@ -135,5 +141,11 @@
 @media only screen and (min-width: 45rem) {
   .order-modal {
     --modal-width: 35rem;
+  }
+}
+
+@media only screen and (max-height: 50rem) {
+  .order-modal__products {
+    max-height: 18rem;
   }
 }
