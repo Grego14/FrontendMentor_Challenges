@@ -12,17 +12,12 @@ const Cart = forwardRef((props, ref) => {
     products,
     removeProduct,
     confirmOrder,
-    setVisible,
     productsFetched,
     totalPrice,
     productsCount,
     setDiscount,
     discount
   } = props
-
-  useEffect(() => {
-    setVisible(productsFetched)
-  }, [productsFetched, setVisible])
 
   function handleRemoveProduct(e) {
     const id = extractId(e)
