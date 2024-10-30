@@ -1,27 +1,13 @@
 import OrderProduct from './OrderProduct.jsx'
 import './OrderModal.css'
-import { AnimatePresence, m } from 'framer-motion'
-import { useState } from 'react'
 import { getTotalPrice, getTotalProductPrice } from '../../utils/utils.js'
 import ButtonWhoAppear from '../others/ButtonWhoAppear.jsx'
 import TotalPrice from '../others/totalprice/TotalPrice.jsx'
 
 export default function OrderModal({ products, visible, newOrder, discount }) {
-  const productsCopy = products.slice()
-
   const totalPrice = getTotalPrice(
     products.map(product => getTotalProductPrice(product.price, product.count))
   )
-
-  const modalVariants = {
-    show: {
-      opacity: 1,
-      y: '0%',
-      transition: {
-        duration: 0.3
-      }
-    }
-  }
 
   const newOrderBtnProps = {
     className: 'order-modal__button',
@@ -31,15 +17,7 @@ export default function OrderModal({ products, visible, newOrder, discount }) {
 
   return (
     <div className='modal-background'>
-      <m.div
-        style={{
-          opacity: 0.5,
-          y: '5%'
-        }}
-        className='order-modal'
-        key='modal'
-        animate='show'
-        variants={modalVariants}>
+      <div className={`order-modal ${visible ? 'order-modal--show' : ''}`}>
         <img
           className='order-modal__icon'
           src='./assets/images/icon-order-confirmed.svg'
@@ -54,12 +32,10 @@ export default function OrderModal({ products, visible, newOrder, discount }) {
 
         <div className='order-modal__info'>
           <div className='order-modal__products'>
-            <AnimatePresence>
-              {visible &&
-                products.map(product => (
-                  <OrderProduct data={product} key={product.id} />
-                ))}
-            </AnimatePresence>
+            {visible &&
+              products.map(product => (
+                <OrderProduct data={product} key={product.id} />
+              ))}
           </div>
           <div className='order-modal__total'>
             <div className='total__text'>Order Total</div>
@@ -68,7 +44,7 @@ export default function OrderModal({ products, visible, newOrder, discount }) {
         </div>
 
         <ButtonWhoAppear text='Start New Order' props={newOrderBtnProps} />
-      </m.div>
+      </div>
     </div>
   )
 }
