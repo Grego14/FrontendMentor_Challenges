@@ -2,8 +2,11 @@ import './UserData.css'
 import { m } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { device } from '/src/utils/utils.js'
-import ToggleThemeButton from '../../others/togglethemebutton/ToggleThemeButton.jsx'
 import UserOrder from '../userorder/UserOrder.jsx'
+
+const ToggleThemeButton = lazy(
+  () => import('../../others/togglethemebutton/ToggleThemeButton.jsx')
+)
 
 export default function UserData(props) {
   const theme = props.theme
@@ -96,7 +99,7 @@ export default function UserData(props) {
   }
 
   return (
-    <m.section
+    <m.div
       className='user-data'
       ref={userDataRef}
       initial='hidden'
@@ -115,13 +118,16 @@ export default function UserData(props) {
           duration: 0.3
         }}
         variants={userDataContainerVariants}>
-        {props.productsFetched && <UserOrder {...userOrderProps} />}
-
-        <ToggleThemeButton
-          theme={props.theme}
-          toggleTheme={props.toggleTheme}
-        />
+        {props.productsFetched && (
+          <>
+            <UserOrder {...userOrderProps} />
+            <ToggleThemeButton
+              theme={props.theme}
+              toggleTheme={props.toggleTheme}
+            />
+          </>
+        )}
       </m.div>
-    </m.section>
+    </m.div>
   )
 }
