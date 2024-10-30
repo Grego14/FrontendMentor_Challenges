@@ -4,17 +4,6 @@
   position: relative;
 }
 
-.cart-product__line {
-  position: absolute;
-  bottom: -1rem;
-  height: 1px;
-  background-color: var(--rose-100);
-}
-
-.dark-theme .cart-product__line {
-  background-color: var(--dull-lavender);
-}
-
 .cart-product__wrapper--content {
   flex: 1 1;
   display: flex;

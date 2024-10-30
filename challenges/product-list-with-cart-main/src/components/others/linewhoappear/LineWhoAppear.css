@@ -1,0 +1,10 @@
+.line-who-appear {
+  height: 2px;
+  background-color: var(--rose-100);
+  position: absolute;
+  bottom: -1rem;
+}
+
+.dark-theme .line-who-appear {
+  background-color: var(--dull-lavender);
+}

@@ -1,6 +1,7 @@
 import './OrderProduct.css'
 import { m } from 'framer-motion'
-import { getTotalProductPrice, transformPrice } from '../../utils/utils.js'
+import { transformPrice } from '../../utils/utils.js'
+import LineWhoAppear from '../others/linewhoappear/LineWhoAppear.jsx'
 
 function OrderProductThumbnail({ image, name }) {
   return image.thumbnail ? (
@@ -18,7 +19,7 @@ function OrderProductThumbnail({ image, name }) {
 }
 
 export default function OrderProduct({ data }) {
-  const { name, count, price, image, id } = data
+  const { name, count, price, image, id, totalPrice } = data
 
   const oPvariants = {
     hidden: {
@@ -29,8 +30,19 @@ export default function OrderProduct({ data }) {
     show: {
       x: 0,
       opacity: 1,
-      scale: 1
+      scale: 1,
+
+      transition: {
+        when: 'beforeChildren'
+      }
     }
+  }
+
+  const productContentProps = {
+    name,
+    count,
+    price,
+    totalPrice
   }
 
   return (
@@ -44,12 +56,15 @@ export default function OrderProduct({ data }) {
         <OrderProductThumbnail image={image} name={name} />
       </div>
 
-      <OrderProductContent name={name} count={count} price={price} />
+      <OrderProductContent {...productContentProps} />
+      <LineWhoAppear />
     </m.div>
   )
 }
 
-function OrderProductContent({ name, count, price }) {
+function OrderProductContent(props) {
+  const { name, count, price, totalPrice } = props
+
   return (
     <div className='order-product__content'>
       <div className='order-product__info'>
@@ -61,7 +76,7 @@ function OrderProductContent({ name, count, price }) {
         </div>
       </div>
       <div className='order-product__total-price'>
-        {transformPrice(getTotalProductPrice(price, count))}
+        {transformPrice(totalPrice)}
       </div>
     </div>
   )

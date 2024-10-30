@@ -1,14 +1,15 @@
 import './CartProduct.css'
 import { m } from 'framer-motion'
-import { getTotalProductPrice, transformPrice } from '/src/utils/utils.js'
+import { transformPrice } from '/src/utils/utils.js'
+import LineWhoAppear from '../others/linewhoappear/LineWhoAppear.jsx'
 
-export default function CartProducts({ handleRemoveProduct, products }) {
+export default function CartProducts({ handleRemoveProduct, productsInCart }) {
   return (
     <div
       className='cart__products'
       onPointerUp={handleRemoveProduct}
       onKeyDown={handleRemoveProduct}>
-      {products.map(product => (
+      {productsInCart.map(product => (
         <CartProduct data={product} key={product.id} />
       ))}
     </div>
@@ -16,8 +17,7 @@ export default function CartProducts({ handleRemoveProduct, products }) {
 }
 
 function CartProduct({ data }) {
-  const { name, count, price, id, initial } = data
-  const totalPrice = transformPrice(getTotalProductPrice(price, count))
+  const { name, count, price, id, initial, totalPrice } = data
 
   const productVariants = {
     hidden: {
@@ -41,17 +41,6 @@ function CartProduct({ data }) {
     }
   }
 
-  const lineVariants = {
-    hidden: {
-      opacity: 0,
-      width: '0%'
-    },
-    show: {
-      opacity: 1,
-      width: '100%'
-    }
-  }
-
   return (
     <m.div
       initial='hidden'
@@ -67,7 +56,7 @@ function CartProduct({ data }) {
         totalPrice={totalPrice}
       />
       <CartProductRemoveButton />
-      <m.div className='cart-product__line' variants={lineVariants} />
+      <LineWhoAppear />
     </m.div>
   )
 }
@@ -82,7 +71,9 @@ function CartProductContent({ name, count, price, totalPrice }) {
           <span className='cart-product__price-sign'>@</span>
           <span className='cart-product__price'>{transformPrice(price)}</span>
         </div>
-        <span className='cart-product__total-price'>{totalPrice}</span>
+        <span className='cart-product__total-price'>
+          {transformPrice(totalPrice)}
+        </span>
       </div>
     </div>
   )
