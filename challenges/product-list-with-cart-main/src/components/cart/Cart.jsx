@@ -19,6 +19,10 @@ const Cart = forwardRef((props, ref) => {
     discount
   } = props
 
+  useEffect(() => {
+    import('../order/OrderModal.jsx')
+  }, [])
+
   function handleRemoveProduct(e) {
     const id = extractId(e)
 
