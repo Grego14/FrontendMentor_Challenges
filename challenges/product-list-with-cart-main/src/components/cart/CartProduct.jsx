@@ -19,7 +19,7 @@ function CartProduct({ data }) {
   const { name, count, price, id, initial } = data
   const totalPrice = transformPrice(getTotalProductPrice(price, count))
 
-  const cartProductProps = {
+  const productVariants = {
     hidden: {
       opacity: 0,
       scale: 0,
@@ -34,19 +34,30 @@ function CartProduct({ data }) {
         transition: {
           delay: custom.initial
             ? 0.2 + custom.id / (custom.id > 5 ? 15 : 5)
-            : 0.2
+            : 0.2,
+          when: 'beforeChildren'
         }
       }
     }
   }
 
+  const lineVariants = {
+    hidden: {
+      opacity: 0,
+      width: '0%'
+    },
+    show: {
+      opacity: 1,
+      width: '100%'
+    }
+  }
+
   return (
     <m.div
-      key={id}
       initial='hidden'
       animate='show'
       custom={{ initial, id }}
-      variants={cartProductProps}
+      variants={productVariants}
       className='cart-product'
       id={`cart-product-${id}`}>
       <CartProductContent
@@ -56,6 +67,7 @@ function CartProduct({ data }) {
         totalPrice={totalPrice}
       />
       <CartProductRemoveButton />
+      <m.div className='cart-product__line' variants={lineVariants} />
     </m.div>
   )
 }

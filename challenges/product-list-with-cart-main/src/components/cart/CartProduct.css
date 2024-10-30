@@ -7,10 +7,8 @@
 .cart-product__line {
   position: absolute;
   bottom: -1rem;
-  width: 0%;
   height: 1px;
-  opacity: 0;
-  background-color: var(--rose-300);
+  background-color: var(--rose-100);
 }
 
 .dark-theme .cart-product__line {
