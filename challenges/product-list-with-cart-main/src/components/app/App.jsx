@@ -17,37 +17,31 @@ import {
   getTotalProductPrice,
   invalidUserInteraction
 } from '../../utils/utils.js'
-import ToggleThemeButton from '../others/togglethemebutton/ToggleThemeButton.jsx'
 
 const Cart = lazy(() => import('../cart/Cart.jsx'))
 const OrderModal = lazy(() => import('../order/OrderModal.jsx'))
-
-// prevent importing the component on non-mobile devices
 const UserData = lazy(() => import('./userdata/UserData.jsx'))
+
+const ToggleThemeButton = lazy(
+  () => import('../others/togglethemebutton/ToggleThemeButton.jsx')
+)
 
 export default function App() {
   const storage = localStorage
   const cartRef = useRef(null)
   const userDevice = device.any()
 
-  const storageProducts = storage.getItem('products-in-cart')
-    ? parseMapFromStorage(storage.getItem('products-in-cart'))
-    : new Map()
+  const storageStock = getMapFromStorage(storage.getItem('stock-quantitys'))
 
-  const storageStock = storage.getItem('stock-quantitys')
-    ? parseMapFromStorage(storage.getItem('stock-quantitys'))
-    : new Map()
-
-  const [products, dispatch] = useReducer(productsReducer, storageProducts)
-  const productsInCart = [...products.values()].filter(product => product.cart)
-
-  const [componentStates, setComponentStates] = useState(
-    new Map([
-      ['modalVisible', false],
-      ['cartVisible', false],
-      ['productsFetched', false]
-    ])
+  const [products, dispatch] = useReducer(
+    productsReducer,
+    getMapFromStorage(storage.getItem('products-in-cart'))
   )
+
+  const productsInCart = [...products.values()].filter(product => product?.cart)
+
+  const [modalVisible, setModalVisible] = useState(false)
+  const [productsFetched, setProductsFetched] = useState(false)
 
   const [appTheme, setAppTheme] = useState({
     theme: storage.getItem('theme') || 'light',
@@ -73,28 +67,19 @@ export default function App() {
     })
   }
 
-  const handleStates = useCallback((stateProp, stateValue) => {
-    setComponentStates(state => {
-      if (!state.has(stateProp)) return state
-
-      const map = new Map(state)
-      map.set(stateProp, stateValue || !state.get(stateProp))
-
-      return map
-    })
-  }, [])
-
   useEffect(() => {
     fetch('data.json')
       .then(res => res.json())
       .then(data => {
         let idHandler = 0
         const dataWithIds = new Map()
-
-        // fetch products... if they are in the storage they must be in the
-        // products Map.
-        for (const product of Object.values(data)) {
+        const l = data.length
+        // fetch products... if they are in the
+        // storage they must be in the products Map.
+        for (let i = 0; i < l; i++) {
+          const product = data[i]
           // if the product isn't in the storage we set default values
+
           const productToAdd = products.get(idHandler) || {
             ...product,
             id: idHandler,
@@ -104,11 +89,11 @@ export default function App() {
             // CartProduct component, it means the product was added from
             // the localstorage when the page loads. If the user adds/removes
             // a product, initial must be false so we avoid the delay.
-            initial: true
+            initial: true,
+            quantity:
+              storageStock?.get(idHandler) ?? Math.floor(Math.random() * 20 + 1)
           }
 
-          productToAdd.quantity =
-            storageStock?.get(idHandler) ?? Math.floor(Math.random() * 20 + 1)
           productToAdd.outOfStock = productToAdd.count >= productToAdd.quantity
 
           dataWithIds.set(productToAdd.id, productToAdd)
@@ -128,55 +113,41 @@ export default function App() {
         }
 
         dispatch({ type: 'fetch', products: dataWithIds })
-        handleStates('productsFetched', true)
+        setProductsFetched(true)
       })
-  }, [
-    products.get,
-    storageStock.get,
-    storage.setItem,
-    storage.getItem,
-    handleStates
-  ])
+  }, [storageStock.get, storage.setItem, storage.getItem, products.get])
 
   useEffect(() => {
     storage.setItem('discount', discount ? 'true' : '')
   }, [discount, storage.setItem])
 
-  // logs, storage
   useEffect(() => {
     storage.setItem(
       'products-in-cart',
       JSON.stringify(productsInCart.map(product => [product.id, product]))
     )
-  }, [products, productsInCart.map, storage.setItem])
+  }, [storage.setItem, productsInCart])
 
   useEffect(() => {
-    setTotalPrice(() => {
-      const prices = []
+    const l = productsInCart.length
+    const prices = []
+    let count = 0
 
-      for (const product of productsInCart) {
-        prices.push(getTotalProductPrice(product.price, product.count))
-      }
+    for (let i = 0; i < l; i++) {
+      const product = productsInCart[i]
 
-      return getTotalPrice(prices)
-    })
+      prices.push(getTotalProductPrice(product.price, product.count))
+      count += product.count
+    }
 
-    setProductsCount(() => {
-      let count = 0
-
-      for (const product of productsInCart) {
-        count += product.count
-      }
-
-      return count
-    })
+    setTotalPrice(getTotalPrice(prices))
+    setProductsCount(count)
   }, [productsInCart])
 
   const scrollingElement = document.scrollingElement
-  const productsFetched = componentStates.get('productsFetched')
 
   // prevent scrolling when the products aren't fetched or the modal is visible
-  !productsFetched || componentStates.get('modalVisible')
+  !productsFetched || modalVisible
     ? scrollingElement.classList.add('no-scroll')
     : scrollingElement.classList.remove('no-scroll')
 
@@ -188,28 +159,26 @@ export default function App() {
     ? scrollingElement.classList.replace(lastThemeClass, themeClass)
     : scrollingElement.classList.add(themeClass)
 
-  function handleConfirmOrder() {
-    handleStates('modalVisible')
+  function handleModalVisibility() {
+    setModalVisible(state => !state)
   }
 
   function handleNewOrder(e) {
     if (invalidUserInteraction(e)) return
 
     dispatch({ type: 'newOrder' })
-    handleStates('modalVisible')
+    handleModalVisibility()
     setDiscount(false)
   }
 
-  const handleCartVisibility = useCallback(
-    () => handleStates('cartVisible', true),
-    [handleStates]
-  )
+  const productsHandler = useCallback(({ id, type }) => {
+    dispatch({ id, type })
+  }, [])
 
   const productsProps = {
     products: [...products.values()],
-    productsHandler: dispatch,
-    productsFetched,
-    cartVisible: componentStates.get('cartVisible')
+    productsHandler,
+    productsFetched
   }
 
   const userDataProps = {
@@ -225,8 +194,7 @@ export default function App() {
   const cartProps = {
     removeProduct: dispatch,
     productsFetched,
-    confirmOrder: handleConfirmOrder,
-    setVisible: handleCartVisibility,
+    confirmOrder: handleModalVisibility,
     ref: cartRef,
     totalPrice,
     productsCount,
@@ -235,15 +203,15 @@ export default function App() {
 
   const modalProps = {
     newOrder: handleNewOrder,
-    visible: componentStates.get('modalVisible')
+    visible: modalVisible
   }
 
   return (
     <LazyMotion features={domAnimation} strict>
       <div className='app'>
-        <Suspense>
-          <Products {...productsProps} />
+        <Products {...productsProps} />
 
+        <Suspense>
           {productsFetched && (
             <Cart
               {...cartProps}
@@ -260,8 +228,8 @@ export default function App() {
             />
           )}
 
-          {userDevice === 'mobile' ? (
-            productsFetched && <UserData {...userDataProps} />
+          {userDevice === 'mobile' && productsFetched ? (
+            <UserData {...userDataProps} />
           ) : (
             <ToggleThemeButton
               theme={appTheme.theme}
@@ -274,7 +242,7 @@ export default function App() {
   )
 }
 
-// only used here so don't move to utils folder
-function parseMapFromStorage(mapInStorage) {
-  return new Map(Object.values(JSON.parse(mapInStorage)))
+function getMapFromStorage(mapOnStorage) {
+  const data = Object.values(JSON.parse(mapOnStorage || '[]'))
+  return !data || data.length === 0 ? new Map() : new Map(data)
 }
