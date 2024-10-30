@@ -14,7 +14,11 @@ import * as ProductButton from './ProductButtons.jsx'
 import ProductImage from './ProductImage.jsx'
 import 'react-loading-skeleton/dist/skeleton.css'
 
-export default function Products({ products, productsHandler }) {
+export default function Products({
+  products,
+  productsHandler,
+  productsFetched
+}) {
   function handleProducts(e) {
     if (invalidUserInteraction(e)) return
 
@@ -42,16 +46,24 @@ export default function Products({ products, productsHandler }) {
         className='products'
         onPointerUp={handleProducts}
         onKeyDown={handleProducts}>
-        {Object.values(products).map(product => (
-          <Product data={product} onCart={product.cart} key={product.id} />
-        ))}
+        {productsFetched &&
+          products.map(product => <Product data={product} key={product?.id} />)}
       </div>
     </div>
   )
 }
 
-export function Product({ data, onCart }) {
-  const { name, price, image, category, id, count, outOfStock } = data
+export function Product({ data }) {
+  const {
+    name,
+    price,
+    image,
+    category,
+    id,
+    count,
+    outOfStock,
+    cart: onCart
+  } = data
   const [imageLoaded, setImageLoaded] = useState(false)
 
   const buttonProps = {
@@ -85,7 +97,7 @@ export function Product({ data, onCart }) {
       scale: 1,
 
       transition: {
-        delay: 0.2,
+        duration: 0.4,
         ease: 'easeInOut'
       }
     }
@@ -97,7 +109,6 @@ export function Product({ data, onCart }) {
       opacity: 1,
 
       transition: {
-        delay: 0.2,
         ease: 'easeInOut'
       }
     }
