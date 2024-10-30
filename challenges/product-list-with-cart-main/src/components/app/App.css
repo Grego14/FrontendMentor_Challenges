@@ -38,6 +38,9 @@
 .dark-theme .app {
   --primary-color: var(--purple-heart);
 
+  --primary-color-dark: #5B30A8;
+  --primary-color-light: #7B46DB;
+
   color: var(--rose-50)
 }
 
