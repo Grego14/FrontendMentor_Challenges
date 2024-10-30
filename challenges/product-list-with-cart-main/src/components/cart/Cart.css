@@ -78,10 +78,13 @@
   min-height: 3.5rem;
   transition: var(--color-transitions), filter var(--fast-transition) ease-in-out;
   transition-property: color, background-color, filter;
+
+  box-shadow: 0 4px 8px var(--primary-color);
 }
 
 .confirm-order:focus-visible {
   outline: 3px solid var(--rose-900);
+  background-color: var(--primary-color-dark)
 }
 
 .dark-theme .confirm-order:focus-visible {
@@ -124,11 +127,11 @@
 
 @media (hover: hover) {
   .confirm-order:hover {
-    filter: saturate(.75)
+    background-color: var(--primary-color-dark);
   }
 
   .confirm-order:hover:active {
-    filter: saturate(.75)
+    background-color: var(--primary-color-light)
   }
 }
 
