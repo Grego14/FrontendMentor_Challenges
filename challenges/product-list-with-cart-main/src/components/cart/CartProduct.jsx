@@ -1,5 +1,5 @@
 import './CartProduct.css'
-import { AnimatePresence, m } from 'framer-motion'
+import { m } from 'framer-motion'
 import { getTotalProductPrice, transformPrice } from '/src/utils/utils.js'
 
 export default function CartProducts({ handleRemoveProduct, products }) {
@@ -20,15 +20,12 @@ function CartProduct({ data }) {
   const totalPrice = transformPrice(getTotalProductPrice(price, count))
 
   const cartProductProps = {
-    style: {
-      originX: 'left',
-      originY: 'top'
-    },
     hidden: {
-      x: '-150%',
       opacity: 0,
-      scale: 0
+      scale: 0,
+      x: '-150%'
     },
+
     show(custom) {
       return {
         x: '0%',
@@ -40,40 +37,26 @@ function CartProduct({ data }) {
             : 0.2
         }
       }
-    },
-    exit: {
-      x: '150%',
-      opacity: 0,
-      scale: 0,
-      transition: {
-        delay: 0.2,
-        duration: 1
-      }
     }
   }
 
-  const cartProductContentProps = {
-    name,
-    count,
-    price,
-    totalPrice
-  }
-
   return (
-    <AnimatePresence>
-      <m.div
-        key={id}
-        custom={{ initial, id }}
-        initial='hidden'
-        animate='show'
-        exit='exit'
-        variants={cartProductProps}
-        className='cart-product'
-        id={`cart-product-${id}`}>
-        <CartProductContent {...cartProductContentProps} />
-        <CartProductRemoveButton />
-      </m.div>
-    </AnimatePresence>
+    <m.div
+      key={id}
+      initial='hidden'
+      animate='show'
+      custom={{ initial, id }}
+      variants={cartProductProps}
+      className='cart-product'
+      id={`cart-product-${id}`}>
+      <CartProductContent
+        name={name}
+        count={count}
+        price={price}
+        totalPrice={totalPrice}
+      />
+      <CartProductRemoveButton />
+    </m.div>
   )
 }
 
