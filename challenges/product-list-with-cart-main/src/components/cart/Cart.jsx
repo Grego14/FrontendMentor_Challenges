@@ -9,7 +9,7 @@ const DiscountInput = lazy(() => import('./discountinput/DiscountInput.jsx'))
 
 const Cart = forwardRef((props, ref) => {
   const {
-    products,
+    productsInCart,
     removeProduct,
     confirmOrder,
     productsFetched,
@@ -57,7 +57,7 @@ const Cart = forwardRef((props, ref) => {
 
     productsProps: {
       handleRemoveProduct,
-      products
+      productsInCart
     }
   }
 
@@ -65,7 +65,7 @@ const Cart = forwardRef((props, ref) => {
     <div
       className='cart'
       ref={ref}
-      style={{ minHeight: `${45 * products.length + 350}px` }}>
+      style={{ minHeight: `${45 * productsInCart.length + 350}px` }}>
       <h2 className='cart__title'>
         Your Cart <span>({productsFetched && productsCount})</span>
       </h2>

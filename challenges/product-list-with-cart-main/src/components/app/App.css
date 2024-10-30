@@ -20,6 +20,10 @@
 
   --primary-color: var(--red-contrast);
 
+  /* used in hover/focus/hover-active states */
+  --primary-color-dark: #ae340e;
+  --primary-color-light: #dd4a1e;
+
   background-color: var(--app-bg);
   padding: var(--app-padding-clamp);
   display: flex;

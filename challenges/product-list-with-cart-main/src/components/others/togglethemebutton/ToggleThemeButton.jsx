@@ -1,10 +1,13 @@
 import './ToggleThemeButton.css'
 import ButtonWhoAppear from '../ButtonWhoAppear.jsx'
+import { invalidUserInteraction } from '/src/utils/utils.js'
 
 export default function ToggleThemeButton({ theme, toggleTheme }) {
   let timeout
 
   function handleToggleTheme(e) {
+    if (invalidUserInteraction(e)) return
+
     const target = e.target.matches('.toggle-theme')
       ? e.target
       : e.target.closest('.toggle-theme')

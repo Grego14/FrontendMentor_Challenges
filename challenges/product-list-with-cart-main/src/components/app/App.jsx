@@ -14,8 +14,7 @@ import productsReducer from '../../reducers/productsReducer.js'
 import {
   device,
   getTotalPrice,
-  getTotalProductPrice,
-  invalidUserInteraction
+  getTotalProductPrice
 } from '../../utils/utils.js'
 
 const Cart = lazy(() => import('../cart/Cart.jsx'))
@@ -53,8 +52,6 @@ export default function App() {
   const [discount, setDiscount] = useState(storage.getItem('discount') || false)
 
   function toggleTheme(e) {
-    if (invalidUserInteraction(e)) return
-
     setAppTheme(state => {
       const theme = state.theme === 'light' ? 'dark' : 'light'
 
@@ -163,9 +160,7 @@ export default function App() {
     setModalVisible(state => !state)
   }
 
-  function handleNewOrder(e) {
-    if (invalidUserInteraction(e)) return
-
+  function newOrder(e) {
     dispatch({ type: 'newOrder' })
     handleModalVisibility()
     setDiscount(false)
@@ -198,12 +193,17 @@ export default function App() {
     ref: cartRef,
     totalPrice,
     productsCount,
-    setDiscount
+    setDiscount,
+    productsInCart,
+    discount
   }
 
   const modalProps = {
-    newOrder: handleNewOrder,
-    visible: modalVisible
+    newOrder,
+    visible: modalVisible,
+    totalPrice,
+    productsInCart,
+    discount
   }
 
   return (
@@ -212,21 +212,9 @@ export default function App() {
         <Products {...productsProps} />
 
         <Suspense>
-          {productsFetched && (
-            <Cart
-              {...cartProps}
-              products={productsInCart}
-              discount={discount}
-            />
-          )}
+          {productsFetched && <Cart {...cartProps} />}
 
-          {modalProps.visible && (
-            <OrderModal
-              {...modalProps}
-              products={productsInCart}
-              discount={discount}
-            />
-          )}
+          {modalProps.visible && <OrderModal {...modalProps} />}
 
           {userDevice === 'mobile' && productsFetched ? (
             <UserData {...userDataProps} />

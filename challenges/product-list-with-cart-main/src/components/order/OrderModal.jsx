@@ -1,18 +1,25 @@
 import OrderProduct from './OrderProduct.jsx'
 import './OrderModal.css'
-import { getTotalPrice, getTotalProductPrice } from '../../utils/utils.js'
+import { invalidUserInteraction } from '../../utils/utils.js'
 import ButtonWhoAppear from '../others/ButtonWhoAppear.jsx'
 import TotalPrice from '../others/totalprice/TotalPrice.jsx'
 
-export default function OrderModal({ products, visible, newOrder, discount }) {
-  const totalPrice = getTotalPrice(
-    products.map(product => getTotalProductPrice(product.price, product.count))
-  )
+export default function OrderModal({
+  productsInCart,
+  visible,
+  newOrder,
+  discount,
+  totalPrice
+}) {
+  function handleNewOrder(e) {
+    if (invalidUserInteraction(e)) return
+    newOrder()
+  }
 
   const newOrderBtnProps = {
     className: 'order-modal__button',
-    onPointerUp: newOrder,
-    onKeyDown: newOrder
+    onPointerUp: handleNewOrder,
+    onKeyDown: handleNewOrder
   }
 
   return (
@@ -33,7 +40,7 @@ export default function OrderModal({ products, visible, newOrder, discount }) {
         <div className='order-modal__info'>
           <div className='order-modal__products'>
             {visible &&
-              products.map(product => (
+              productsInCart.map(product => (
                 <OrderProduct data={product} key={product.id} />
               ))}
           </div>
