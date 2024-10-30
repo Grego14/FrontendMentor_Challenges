@@ -1,6 +1,6 @@
 import './UserData.css'
 import { m } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
+import { lazy, useEffect, useRef, useState } from 'react'
 import { device } from '/src/utils/utils.js'
 import UserOrder from '../userorder/UserOrder.jsx'
 
