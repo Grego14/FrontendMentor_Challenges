@@ -115,15 +115,8 @@ img {
 
 /* TAGS END */
 
-@media only screen and (min-width: 64rem) {
-  :root {
-    --fs-small: .85rem;
-    font-size: 16px;
-  }
-}
-
 @media only screen and (min-width: 82rem) {
   :root {
-    font-size: 18px;
+    font-size: 16px;
   }
 }
