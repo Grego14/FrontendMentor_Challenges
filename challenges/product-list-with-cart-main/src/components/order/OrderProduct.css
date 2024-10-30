@@ -2,16 +2,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 2rem;
-  position: relative;
-}
-
-.dark-theme .order-product {
   margin-bottom: 1.5rem;
-}
-
-.dark-theme .order-product:last-child {
-  margin-bottom: 0;
 }
 
 .order-product__content {
