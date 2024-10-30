@@ -19,7 +19,6 @@ export default function ButtonWhoAppear({
       scale: bounce ? [1, 0.95, 1] : 1,
 
       transition: {
-        delay: 0.3,
         duration: 0.4,
         ease: 'easeInOut'
       }
