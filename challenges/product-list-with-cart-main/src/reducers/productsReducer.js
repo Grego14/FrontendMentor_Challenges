@@ -1,3 +1,5 @@
+import { getTotalProductPrice } from '../utils/utils.js'
+
 export default function productsReducer(state, action) {
   const types = {
     cart: handleProductInCart,
@@ -29,7 +31,8 @@ export default function productsReducer(state, action) {
       // initial should be false otherwise the initial animation will
       // be fired once added again.
       initial: false,
-      outOfStock
+      outOfStock,
+      totalPrice: _element.price
     })
 
     return map
@@ -60,7 +63,13 @@ export default function productsReducer(state, action) {
       outOfStock = false
     }
 
-    map.set(id, { ..._element, cart, outOfStock, count })
+    map.set(id, {
+      ..._element,
+      cart,
+      outOfStock,
+      count,
+      totalPrice: getTotalProductPrice(_element.price, count)
+    })
     return map
   }
 
