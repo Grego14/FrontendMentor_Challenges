@@ -1,0 +1,1 @@
+import{j as i,a as t}from"./index-BBXt9MN5.js";function n(){const a={hidden:{opacity:0,width:"0%"},show:{opacity:1,width:"100%"}};return i.jsx(t.div,{className:"line-who-appear",variants:a})}export{n as L};
