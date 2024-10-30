@@ -1,4 +1,4 @@
-import { Suspense, forwardRef, lazy, useEffect } from 'react'
+import { forwardRef, lazy, useEffect, useState } from 'react'
 import { extractId, invalidUserInteraction, matches } from '/src/utils/utils.js'
 import './Cart.css'
 import ButtonWhoAppear from '../others/ButtonWhoAppear.jsx'
@@ -83,12 +83,12 @@ function CartContent(props) {
   return (
     <div className='cart-content' aria-live='polite' aria-atomic='true'>
       {productsCount > 0 ? (
-        <Suspense>
+        <>
           <CartProducts {...productsProps} />
           <CartInfo {...infoProps} />
-        </Suspense>
+        </>
       ) : (
-        <CartNoProduct productsCount={productsCount} />
+        <CartNoProduct />
       )}
     </div>
   )
