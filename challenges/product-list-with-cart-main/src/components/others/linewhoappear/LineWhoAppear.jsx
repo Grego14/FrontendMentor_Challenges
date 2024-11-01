@@ -13,5 +13,12 @@ export default function LineWhoAppear() {
     }
   }
 
-  return <m.div className='line-who-appear' variants={lineVariants} />
+  return (
+    <m.div
+      className='line-who-appear'
+      initial='hidden'
+      whileInView='show'
+      variants={lineVariants}
+    />
+  )
 }
