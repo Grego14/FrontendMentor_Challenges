@@ -5,7 +5,7 @@
   background-color: var(--red-contrast);
   width: clamp(3rem, 3rem + .8vw, 5rem);
   height: clamp(3rem, 3rem + .8vw, 5rem);
-  transition: border-color, background-color;
+  transition-property: border-color, background-color;
 }
 
 .toggle-theme img {
@@ -23,6 +23,16 @@
 
 .dark-theme .toggle-theme:focus-visible {
   outline-color: var(--rose-50);
+}
+
+@media (hover: hover) {
+  .toggle-theme:hover {
+    background-color: var(--primary-color-dark);
+  }
+
+  .toggle-theme:hover:active {
+    background-color: var(--primary-color-light);
+  }
 }
 
 @media only screen and (min-width: 30rem) {

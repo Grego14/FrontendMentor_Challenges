@@ -1,6 +1,6 @@
 import './ToggleThemeButton.css'
-import ButtonWhoAppear from '../ButtonWhoAppear.jsx'
 import { invalidUserInteraction } from '/src/utils/utils.js'
+import ButtonWhoAppear from '../ButtonWhoAppear.jsx'
 
 export default function ToggleThemeButton({ theme, toggleTheme }) {
   let timeout
@@ -40,6 +40,7 @@ export default function ToggleThemeButton({ theme, toggleTheme }) {
         aria-hidden='true'
         width={30}
         height={30}
+        draggable='false'
       />
     </ButtonWhoAppear>
   )
