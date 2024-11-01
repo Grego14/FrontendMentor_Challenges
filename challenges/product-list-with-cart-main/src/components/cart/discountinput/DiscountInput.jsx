@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import ButtonWhoAppear from '../../others/ButtonWhoAppear.jsx'
 import './DiscountInput.css'
 import { invalidUserInteraction } from '/src/utils/utils.js'
@@ -10,15 +10,15 @@ export default function DiscountInput(props) {
 
   const [isTyping, setIsTyping] = useState(false)
   const typingDelay = 250
-  const typingTimeout = useRef(null)
+  let typingTimeout
 
   const [applyClicked, setApplyClicked] = useState(false)
 
   function handleOnChange(e) {
     setIsTyping(true)
-    clearTimeout(typingTimeout.current)
+    clearTimeout(typingTimeout)
 
-    typingTimeout.current = setTimeout(() => {
+    typingTimeout = setTimeout(() => {
       setValue(e.target.value)
       setIsTyping(false)
     }, 300)
