@@ -78,6 +78,7 @@
   min-height: 3.5rem;
   transition: var(--color-transitions);
   transition-property: color, background-color;
+  transition-duration: var(--fast-transition);
 
   box-shadow: 0 2px 6px var(--primary-color);
 }
@@ -91,17 +92,17 @@
   outline-color: var(--dull-lavender);
 }
 
-.cart__no-product p,
+.no-product__text,
 .cart__info__carbon-neutral {
   font-size: var(--fsc-small);
 }
 
-.cart__no-product p {
+.no-product__text {
   font-weight: 600;
   color: var(--rose-500);
 }
 
-.dark-theme .cart__no-product p {
+.dark-theme .no-product__text {
   color: var(--dull-lavender);
 }
 
