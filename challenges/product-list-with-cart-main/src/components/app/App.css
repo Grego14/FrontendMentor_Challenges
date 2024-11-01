@@ -31,8 +31,8 @@
   gap: var(--app-gap-clamp);
   min-height: 100dvh;
   transition: var(--color-transitions);
+  transition-duration: var(--fast-transition);
   color: var(--rose-900);
-  max-width: 90rem;
 }
 
 .dark-theme .app {
@@ -54,6 +54,29 @@
   line-height: 1;
 }
 
+.price,
+.discount-price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--red-contrast);
+}
+
+.discount-price {
+  margin-left: .5rem;
+}
+
+.dark-theme .price,
+.dark-theme .discount-price {
+  color: var(--dull-lavender);
+}
+
+.total-price-container:has(.discount-price) .price {
+  text-decoration: line-through;
+  font-size: .9rem;
+  font-style: italic;
+  color: inherit;
+}
+
 @media only screen and (min-width: 54.75rem) {
   .products-section {
     width: 65%;
@@ -68,5 +91,12 @@
     --app-gap: 1.5rem;
 
     flex-direction: row;
+  }
+}
+
+@media only screen and (min-width: 82rem) {
+  .app {
+    max-width: 85rem;
+    margin-inline: auto;
   }
 }
