@@ -1,8 +1,8 @@
-import { forwardRef, lazy, useEffect, useState } from 'react'
+import { Suspense, forwardRef, lazy, useEffect } from 'react'
 import { extractId, invalidUserInteraction, matches } from '/src/utils/utils.js'
 import './Cart.css'
+
 import ButtonWhoAppear from '../others/ButtonWhoAppear.jsx'
-import TotalPrice from '../others/totalprice/TotalPrice.jsx'
 
 const CartProducts = lazy(() => import('./CartProduct.jsx'))
 const DiscountInput = lazy(() => import('./discountinput/DiscountInput.jsx'))
@@ -10,17 +10,21 @@ const DiscountInput = lazy(() => import('./discountinput/DiscountInput.jsx'))
 const Cart = forwardRef((props, ref) => {
   const {
     productsInCart,
-    removeProduct,
+    productsHandler,
     confirmOrder,
-    productsFetched,
     totalPrice,
     productsCount,
-    setDiscount,
-    discount
+    handleDiscount,
+    discount,
+    setCartVisible,
+    TotalPriceComponent
   } = props
 
+  // biome-ignore lint: Can't use that function here
   useEffect(() => {
-    import('../order/OrderModal.jsx')
+    setTimeout(() => {
+      setCartVisible(true)
+    }, 500)
   }, [])
 
   function handleRemoveProduct(e) {
@@ -33,7 +37,7 @@ const Cart = forwardRef((props, ref) => {
     )
       return
 
-    removeProduct({ type: 'cart', id })
+    productsHandler({ type: 'cart', id })
   }
 
   function handleConfirmOrder(e) {
@@ -54,8 +58,9 @@ const Cart = forwardRef((props, ref) => {
 
     infoProps: {
       totalPrice,
+      TotalPriceComponent,
       discount,
-      setDiscount,
+      handleDiscount,
       confirmOrderProps
     },
 
@@ -71,7 +76,7 @@ const Cart = forwardRef((props, ref) => {
       ref={ref}
       style={{ minHeight: `${45 * productsInCart.length + 350}px` }}>
       <h2 className='cart__title'>
-        Your Cart <span>({productsFetched && productsCount})</span>
+        Your Cart <span>({productsCount})</span>
       </h2>
 
       <CartContent {...cartContentProps} />
@@ -87,10 +92,10 @@ function CartContent(props) {
   return (
     <div className='cart-content' aria-live='polite' aria-atomic='true'>
       {productsCount > 0 ? (
-        <>
+        <Suspense>
           <CartProducts {...productsProps} />
           <CartInfo {...infoProps} />
-        </>
+        </Suspense>
       ) : (
         <CartNoProduct />
       )}
@@ -99,12 +104,18 @@ function CartContent(props) {
 }
 
 function CartInfo(props) {
-  const { totalPrice, discount, setDiscount, confirmOrderProps } = props
+  const {
+    totalPrice,
+    discount,
+    handleDiscount,
+    confirmOrderProps,
+    TotalPriceComponent
+  } = props
 
   const discountInputProps = {
     message: 'Get -20% discount!',
     validCode: 'FrontendMentor',
-    setValid: setDiscount,
+    setValid: handleDiscount,
     isValid: discount
   }
 
@@ -112,7 +123,7 @@ function CartInfo(props) {
     <div className='cart__info'>
       <div className='cart__info__total'>
         <div>Order Total</div>
-        <TotalPrice discount={discount} price={totalPrice} amount={20} />
+        <TotalPriceComponent />
       </div>
 
       <p className='cart__info__carbon-neutral'>
@@ -152,7 +163,7 @@ function CartNoProduct() {
         width='96'
         height='96'
       />
-      <p>Your added items will appear here</p>
+      <p className='no-product__text'>Your added items will appear here</p>
     </div>
   )
 }
