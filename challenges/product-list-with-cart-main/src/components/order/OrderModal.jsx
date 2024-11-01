@@ -2,14 +2,12 @@ import OrderProduct from './OrderProduct.jsx'
 import './OrderModal.css'
 import { invalidUserInteraction } from '../../utils/utils.js'
 import ButtonWhoAppear from '../others/ButtonWhoAppear.jsx'
-import TotalPrice from '../others/totalprice/TotalPrice.jsx'
 
 export default function OrderModal({
   productsInCart,
-  visible,
   newOrder,
-  discount,
-  totalPrice
+  totalPrice,
+  TotalPriceComponent
 }) {
   function handleNewOrder(e) {
     if (invalidUserInteraction(e)) return
@@ -24,7 +22,7 @@ export default function OrderModal({
 
   return (
     <div className='modal-background'>
-      <div className={`order-modal ${visible ? 'order-modal--show' : ''}`}>
+      <div className='order-modal'>
         <img
           className='order-modal__icon'
           src='./assets/images/icon-order-confirmed.svg'
@@ -32,6 +30,7 @@ export default function OrderModal({
           aria-hidden='true'
           width='50'
           height='50'
+          draggable='false'
         />
 
         <h2 className='order-modal__title'>Order Confirmed</h2>
@@ -39,14 +38,13 @@ export default function OrderModal({
 
         <div className='order-modal__info'>
           <div className='order-modal__products'>
-            {visible &&
-              productsInCart.map(product => (
-                <OrderProduct data={product} key={product.id} />
-              ))}
+            {productsInCart.map(product => (
+              <OrderProduct data={product} key={product.id} />
+            ))}
           </div>
           <div className='order-modal__total'>
             <div className='total__text'>Order Total</div>
-            <TotalPrice price={totalPrice} discount={discount} amount={20} />
+            <TotalPriceComponent />
           </div>
         </div>
 
