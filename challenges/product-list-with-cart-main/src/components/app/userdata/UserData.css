@@ -36,12 +36,6 @@
   background-color: var(--ebony-clay);
 }
 
-@media only screen and (min-width: 30rem) {
-  .app-section--user-data {
-    width: calc(30% - var(--app-padding-clamp));
-  }
-}
-
 .user-order,
 .user-data__container {
   transition: opacity ease-in-out, transform ease-in-out;

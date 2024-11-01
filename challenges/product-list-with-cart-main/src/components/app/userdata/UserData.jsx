@@ -2,17 +2,14 @@ import './UserData.css'
 import { m } from 'framer-motion'
 import { lazy, useEffect, useRef, useState } from 'react'
 import { device } from '/src/utils/utils.js'
-import UserOrder from '../userorder/UserOrder.jsx'
-
-const ToggleThemeButton = lazy(
-  () => import('../../others/togglethemebutton/ToggleThemeButton.jsx')
-)
 
 export default function UserData(props) {
-  const theme = props.theme
+  const { productsCount, productsFetched, TotalPriceComponent, cartRef } = props
+
   const userDataRef = useRef(null)
   const userDevice = device.any()
   const [isMoving, setIsMoving] = useState(false)
+  const [showUserOrder, setShowUserOrder] = useState(false)
 
   const options = {
     root: null,
@@ -47,33 +44,19 @@ export default function UserData(props) {
   }
 
   useEffect(() => {
-    if (userDevice === 'mobile') {
-      observer.observe(props.cartRef.current)
+    if (userDevice === 'mobile' && cartRef.current) {
+      observer.observe(cartRef.current)
     }
 
     return () => {
-      if (userDevice === 'mobile') {
-        observer.disconnect(props.cartRef.current)
-      }
+      observer.disconnect(cartRef.current)
     }
-  }, [props.cartRef.current, observer.observe, observer.disconnect, userDevice])
+  }, [cartRef.current, observer.observe, observer.disconnect, userDevice])
 
   const userOrderProps = {
-    totalPrice: props.totalPrice,
-    productsCount: props.productsCount,
-    visible: props.productsFetched,
-    discount: props.discount
-  }
-
-  const userDataContainerVariants = {
-    hidden: {
-      opacity: 0,
-      scale: 0
-    },
-    show: {
-      opacity: 1,
-      scale: 1
-    }
+    productsCount,
+    TotalPriceComponent,
+    visible: showUserOrder
   }
 
   const userDataVariants = {
@@ -83,17 +66,24 @@ export default function UserData(props) {
     },
     show: {
       opacity: 1,
-      y: '0%'
+      y: '0%',
+      transitionEnd() {
+        setShowUserOrder(true)
+      }
     },
     move: {
       opacity: [0, 1],
-      transition: {
-        duration: 0.3
-      },
-      transitionEnd(e) {
+
+      transitionEnd() {
         setTimeout(() => {
           setIsMoving(false)
         }, 50)
+      },
+
+      transition: {
+        delay: 0.2,
+        duration: 0.5,
+        ease: 'easeInOut'
       }
     }
   }
@@ -104,30 +94,34 @@ export default function UserData(props) {
       ref={userDataRef}
       initial='hidden'
       animate={['show', isMoving ? 'move' : '']}
-      variants={userDataVariants}
-      transition={{
-        delay: 0.2,
-        duration: 0.5,
-        ease: 'easeInOut'
-      }}>
-      <m.div
-        className='user-data__container'
-        initial='hidden'
-        animate='show'
-        transition={{
-          duration: 0.3
-        }}
-        variants={userDataContainerVariants}>
-        {props.productsFetched && (
+      variants={userDataVariants}>
+      <div
+        className={`user-data__container${productsFetched ? ' user-data__container--show' : ''}`}>
+        {productsFetched && (
           <>
             <UserOrder {...userOrderProps} />
-            <ToggleThemeButton
-              theme={props.theme}
-              toggleTheme={props.toggleTheme}
-            />
+            {props.children}
           </>
         )}
-      </m.div>
+      </div>
     </m.div>
+  )
+}
+
+function UserOrder({ visible, productsCount, TotalPriceComponent }) {
+  return (
+    <div
+      role='status'
+      aria-live='polite'
+      aria-atomic='true'
+      className={`user-order${visible ? ' user-order--show' : ''}`}>
+      <div>
+        Products:{' '}
+        <span className='user-order__products-count'>{productsCount}</span>
+      </div>
+      <div>
+        Total Price: <TotalPriceComponent />
+      </div>
+    </div>
   )
 }
