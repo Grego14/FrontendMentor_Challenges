@@ -75,7 +75,8 @@
 .product__image {
   border-radius: .5rem;
   border: 4px solid transparent;
-  transition: border-color var(--fast-transition) ease-in-out;
+  transition: border-color ease-in-out, opacity ease-in-out, transform ease-in-out;
+  transition-duration: var(--fast-transition);
   user-select: none;
   width: 100%;
   max-width: 100%;
@@ -83,12 +84,18 @@
   display: flex;
   justify-content: center;
   z-index: -1;
-  position: absolute
+  position: absolute;
+
+  transform: scale(0.5);
+  opacity: 0;
 }
 
 .product__image--loaded {
-  z-index: initial;
-  position: initial
+  z-index: 1;
+  position: static;
+
+  transform: scale(1);
+  opacity: 1;
 }
 
 .product--added .product__image {
@@ -103,7 +110,8 @@
   background-color: var(--primary-color);
   font-weight: bold;
   padding: .3rem .5rem;
-  border-radius: 0 .5rem 0 .5rem
+  border-radius: 0 .5rem 0 .5rem;
+  z-index: 50
 }
 
 .product__buttons {

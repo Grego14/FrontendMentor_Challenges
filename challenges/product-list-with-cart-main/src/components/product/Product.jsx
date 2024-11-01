@@ -46,8 +46,12 @@ export default function Products({
         className='products'
         onPointerUp={handleProducts}
         onKeyDown={handleProducts}>
-        {productsFetched &&
-          products.map(product => <Product data={product} key={product?.id} />)}
+        <SkeletonTheme baseColor='var(--rose-50)' highlightColor='#eee'>
+          {productsFetched &&
+            products.map(product => (
+              <Product data={product} key={product?.id} />
+            ))}
+        </SkeletonTheme>
       </div>
     </div>
   )
@@ -68,7 +72,8 @@ export function Product({ data }) {
 
   const buttonProps = {
     onCart,
-    imageLoaded
+    imageLoaded,
+    id
   }
 
   function imageLoad() {
@@ -115,66 +120,64 @@ export function Product({ data }) {
   }
 
   return (
-    <SkeletonTheme baseColor='var(--rose-50)' highlightColor='#eee'>
-      <m.div
-        variants={productVariants}
-        initial='hidden'
-        whileInView='show'
-        viewport={{ once: true }}
-        className={`product${onCart ? ' product--added' : ''}${outOfStock ? ' product--out' : ''}`}
-        id={`product-${id}`}>
-        <ProductInfo {...productInfoProps} />
+    <m.div
+      variants={productVariants}
+      initial='hidden'
+      whileInView='show'
+      viewport={{ once: true }}
+      className={`product${onCart ? ' product--added' : ''}${outOfStock ? ' product--out' : ''}`}
+      id={`product-${id}`}>
+      <ProductInfo {...productInfoProps} />
 
-        <div className='product__wrapper pos-relative'>
-          {outOfStock && imageLoaded && (
-            <m.div
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className='out-of-stock'>
-              Out of stock
-            </m.div>
-          )}
+      <div className='product__wrapper pos-relative'>
+        {outOfStock && imageLoaded && (
+          <m.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className='out-of-stock'>
+            Out of stock
+          </m.div>
+        )}
 
-          {!imageLoaded && (
-            <Skeleton
-              height={device.any() === 'mobile' ? 220 : 265}
-              containerClassName='skeleton'
+        {!imageLoaded && (
+          <Skeleton
+            height={device.any() === 'mobile' ? 220 : 265}
+            containerClassName='skeleton'
+          />
+        )}
+
+        <ProductImage {...productImageProps} />
+
+        <div className='product__buttons pos-relative'>
+          <ProductButton.AddToCartButton {...buttonProps} />
+
+          <m.div
+            className='product__buttons__quantity pos-absolute'
+            variants={productButtonsQuantityVariants}
+            initial='hidden'
+            animate={imageLoaded && onCart ? 'show' : 'hidden'}
+            aria-hidden={onCart ? 'false' : 'true'}
+            onContextMenu={preventContextMenu}>
+            <ProductButton.QuantityButton
+              buttonType='decrement'
+              {...buttonProps}
             />
-          )}
 
-          <ProductImage {...productImageProps} />
+            <div
+              className='product-quantity'
+              aria-label={`product count is ${count}`}
+              aria-live='polite'>
+              {count}
+            </div>
 
-          <div className='product__buttons pos-relative'>
-            <ProductButton.AddToCartButton {...buttonProps} />
-
-            <m.div
-              className='product__buttons__quantity pos-absolute'
-              variants={productButtonsQuantityVariants}
-              initial='hidden'
-              animate={imageLoaded && onCart ? 'show' : 'hidden'}
-              aria-hidden={onCart ? 'false' : 'true'}
-              onContextMenu={preventContextMenu}>
-              <ProductButton.QuantityButton
-                buttonType='decrement'
-                {...buttonProps}
-              />
-
-              <div
-                className='product-quantity'
-                aria-label={`product count is ${count}`}
-                aria-live='polite'>
-                {count}
-              </div>
-
-              <ProductButton.QuantityButton
-                buttonType='increment'
-                {...buttonProps}
-              />
-            </m.div>
-          </div>
+            <ProductButton.QuantityButton
+              buttonType='increment'
+              {...buttonProps}
+            />
+          </m.div>
         </div>
-      </m.div>
-    </SkeletonTheme>
+      </div>
+    </m.div>
   )
 }
 
