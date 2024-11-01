@@ -1,7 +1,8 @@
 import { m } from 'framer-motion'
+import { memo } from 'react'
 import { preventContextMenu } from '../../utils/utils.js'
 
-export default function ButtonWhoAppear({
+export default memo(function ButtonWhoAppear({
   props,
   isVisible = true,
   buttonClass,
@@ -38,4 +39,4 @@ export default function ButtonWhoAppear({
       {children || text}
     </m.button>
   )
-}
+})
