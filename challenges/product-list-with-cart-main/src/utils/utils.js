@@ -52,7 +52,7 @@ export function preventContextMenu(e) {
   e.preventDefault()
 }
 
-const device = {
+export const device = {
   mobile: matchMedia('(max-width: 480px)'),
 
   tablet: matchMedia('(min-width: 481px) and (max-width: 1023px)'),
@@ -82,4 +82,3 @@ const utils = {
 }
 
 export default utils
-export { device }
