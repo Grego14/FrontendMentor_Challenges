@@ -84,7 +84,8 @@ export function Product({ data }) {
     images: image,
     onCart,
     setImageLoaded: imageLoad,
-    show: imageLoaded
+    show: imageLoaded,
+    priority: id === 0 || id === 1 || id === 2 ? 'high' : 'low'
   }
 
   const productInfoProps = {
