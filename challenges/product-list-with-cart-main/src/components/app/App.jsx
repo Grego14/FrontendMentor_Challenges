@@ -1,8 +1,8 @@
-import { LazyMotion, domAnimation } from 'framer-motion'
+import { LazyMotion, domAnimation, useInView } from 'framer-motion'
 import {
   Suspense,
   lazy,
-  useCallback,
+  memo,
   useEffect,
   useReducer,
   useRef,
@@ -14,7 +14,8 @@ import productsReducer from '../../reducers/productsReducer.js'
 import {
   device,
   getTotalPrice,
-  getTotalProductPrice
+  getTotalProductPrice,
+  transformPrice
 } from '../../utils/utils.js'
 
 const Cart = lazy(() => import('../cart/Cart.jsx'))
@@ -28,7 +29,6 @@ const ToggleThemeButton = lazy(
 export default function App() {
   const storage = localStorage
   const cartRef = useRef(null)
-  const userDevice = device.any()
 
   const storageStock = getMapFromStorage(storage.getItem('stock-quantitys'))
 
@@ -41,28 +41,37 @@ export default function App() {
 
   const [modalVisible, setModalVisible] = useState(false)
   const [productsFetched, setProductsFetched] = useState(false)
+  const [cartVisible, setCartVisible] = useState(false)
 
-  const [appTheme, setAppTheme] = useState({
-    theme: storage.getItem('theme') || 'light',
-    toggleTheme
-  })
+  const [discount, setDiscount] = useState(
+    () => storage.getItem('discount') || false
+  )
 
-  const [totalPrice, setTotalPrice] = useState(0)
-  const [productsCount, setProductsCount] = useState(0)
-  const [discount, setDiscount] = useState(storage.getItem('discount') || false)
+  let totalPrice = 0
+  let productsCount = 0
 
-  function toggleTheme(e) {
-    setAppTheme(state => {
-      const theme = state.theme === 'light' ? 'dark' : 'light'
+  const l = productsInCart.length
+  const prices = []
+  let count = 0
 
-      storage.setItem('theme', theme)
+  for (let i = 0; i < l; i++) {
+    const product = productsInCart[i]
 
-      return {
-        theme: theme,
-        toggleTheme
-      }
-    })
+    prices.push(getTotalProductPrice(product.price, product.count))
+    count += product.count
   }
+
+  storage.setItem(
+    'products-in-cart',
+    JSON.stringify(productsInCart.map(product => [product.id, product]))
+  )
+
+  totalPrice = getTotalPrice(prices)
+  productsCount = count
+
+  const TotalPriceComponent = () => (
+    <TotalPrice price={totalPrice} discount={discount} amount={20} />
+  )
 
   useEffect(() => {
     fetch('data.json')
@@ -75,29 +84,29 @@ export default function App() {
         // storage they must be in the products Map.
         for (let i = 0; i < l; i++) {
           const product = data[i]
-          // if the product isn't in the storage we set default values
 
+          // if the product isn't in the storage we set default values
           const productToAdd = products.get(idHandler) || {
             ...product,
             id: idHandler,
             cart: false,
             count: 0,
-            // initial will be used to manage ordering animations in the
-            // CartProduct component, it means the product was added from
-            // the localstorage when the page loads. If the user adds/removes
-            // a product, initial must be false so we avoid the delay.
-            initial: true,
             quantity:
               storageStock?.get(idHandler) ?? Math.floor(Math.random() * 20 + 1)
           }
 
+          // initial will be used to manage ordering animations in the
+          // CartProduct component, it means the product was added from
+          // the localstorage when the page loads. If the user adds/removes
+          // a product, initial must be false so we avoid the delay.
+          productToAdd.initial = true
           productToAdd.outOfStock = productToAdd.count >= productToAdd.quantity
 
           dataWithIds.set(productToAdd.id, productToAdd)
           idHandler++
         }
 
-        if (!storage.getItem('stock-quantitys')) {
+        !storage.getItem('stock-quantitys') &&
           storage.setItem(
             'stock-quantitys',
             JSON.stringify(
@@ -107,39 +116,29 @@ export default function App() {
               ])
             )
           )
-        }
 
         dispatch({ type: 'fetch', products: dataWithIds })
         setProductsFetched(true)
       })
   }, [storageStock.get, storage.setItem, storage.getItem, products.get])
 
-  useEffect(() => {
-    storage.setItem('discount', discount ? 'true' : '')
-  }, [discount, storage.setItem])
+  function toggleTheme() {
+    setAppTheme(state => {
+      const theme = state.theme === 'light' ? 'dark' : 'light'
 
-  useEffect(() => {
-    storage.setItem(
-      'products-in-cart',
-      JSON.stringify(productsInCart.map(product => [product.id, product]))
-    )
-  }, [storage.setItem, productsInCart])
+      storage.setItem('theme', theme)
 
-  useEffect(() => {
-    const l = productsInCart.length
-    const prices = []
-    let count = 0
+      return {
+        theme: theme,
+        toggleTheme
+      }
+    })
+  }
 
-    for (let i = 0; i < l; i++) {
-      const product = productsInCart[i]
-
-      prices.push(getTotalProductPrice(product.price, product.count))
-      count += product.count
-    }
-
-    setTotalPrice(getTotalPrice(prices))
-    setProductsCount(count)
-  }, [productsInCart])
+  const [appTheme, setAppTheme] = useState(() => ({
+    theme: storage.getItem('theme') || 'light',
+    toggleTheme
+  }))
 
   const scrollingElement = document.scrollingElement
 
@@ -156,6 +155,11 @@ export default function App() {
     ? scrollingElement.classList.replace(lastThemeClass, themeClass)
     : scrollingElement.classList.add(themeClass)
 
+  function handleDiscount(value) {
+    setDiscount(value)
+    storage.setItem('discount', discount ? 'true' : '')
+  }
+
   function handleModalVisibility() {
     setModalVisible(state => !state)
   }
@@ -163,74 +167,139 @@ export default function App() {
   function newOrder(e) {
     dispatch({ type: 'newOrder' })
     handleModalVisibility()
-    setDiscount(false)
+    handleDiscount(false)
   }
 
-  const productsHandler = useCallback(({ id, type }) => {
-    dispatch({ id, type })
-  }, [])
-
-  const productsProps = {
+  const layoutData = {
     products: [...products.values()],
-    productsHandler,
-    productsFetched
-  }
+    dispatch,
 
-  const userDataProps = {
-    cartRef,
     totalPrice,
+    productsInCart,
     productsCount,
-    productsFetched,
     discount,
-    theme: appTheme.theme,
-    toggleTheme: appTheme.toggleTheme
-  }
+    TotalPriceComponent,
 
-  const cartProps = {
-    removeProduct: dispatch,
-    productsFetched,
     confirmOrder: handleModalVisibility,
-    ref: cartRef,
-    totalPrice,
-    productsCount,
-    setDiscount,
-    productsInCart,
-    discount
-  }
-
-  const modalProps = {
+    handleDiscount,
+    setCartVisible,
     newOrder,
-    visible: modalVisible,
-    totalPrice,
-    productsInCart,
-    discount
+
+    cartVisible,
+    modalVisible,
+    cartRef,
+    productsFetched,
+
+    ...appTheme
   }
 
   return (
     <LazyMotion features={domAnimation} strict>
       <div className='app'>
-        <Products {...productsProps} />
-
         <Suspense>
-          {productsFetched && <Cart {...cartProps} />}
-
-          {modalProps.visible && <OrderModal {...modalProps} />}
-
-          {userDevice === 'mobile' && productsFetched ? (
-            <UserData {...userDataProps} />
-          ) : (
-            <ToggleThemeButton
-              theme={appTheme.theme}
-              toggleTheme={appTheme.toggleTheme}
-            />
-          )}
+          <Layout {...layoutData} />
         </Suspense>
       </div>
     </LazyMotion>
   )
 }
 
+function Layout(props) {
+  const {
+    products,
+    dispatch: productsHandler,
+
+    totalPrice,
+    productsInCart,
+    productsCount,
+    discount,
+    TotalPriceComponent,
+
+    confirmOrder,
+    handleDiscount,
+    setCartVisible,
+    newOrder,
+
+    cartVisible,
+    modalVisible,
+    cartRef,
+    productsFetched,
+
+    toggleTheme,
+    theme
+  } = props
+
+  const productsProps = {
+    productsFetched,
+    TotalPriceComponent,
+    products,
+    productsHandler
+  }
+
+  const cartProps = {
+    productsInCart,
+    confirmOrder,
+    totalPrice,
+    productsCount,
+    handleDiscount,
+    discount,
+    setCartVisible,
+    TotalPriceComponent,
+    productsHandler
+  }
+
+  const modalProps = {
+    productsInCart,
+    newOrder,
+    totalPrice,
+    TotalPriceComponent
+  }
+
+  const userDataProps = {
+    productsCount,
+    productsFetched,
+    TotalPriceComponent,
+    cartRef
+  }
+
+  if (cartVisible) {
+    import('../order/OrderModal.jsx')
+  }
+
+  return (
+    <>
+      <Products {...productsProps} />
+
+      {productsFetched && <Cart {...cartProps} ref={cartRef} />}
+
+      {productsFetched &&
+        (device.any() === 'mobile' ? (
+          <UserData {...userDataProps}>
+            <ToggleThemeButton theme={theme} toggleTheme={toggleTheme} />
+          </UserData>
+        ) : (
+          <ToggleThemeButton theme={theme} toggleTheme={toggleTheme} />
+        ))}
+
+      {modalVisible && <OrderModal {...modalProps} />}
+    </>
+  )
+}
+
 function getMapFromStorage(mapOnStorage) {
-  const data = Object.values(JSON.parse(mapOnStorage || '[]'))
+  const data = [...JSON.parse(mapOnStorage || '[]')]
   return !data || data.length === 0 ? new Map() : new Map(data)
+}
+
+function TotalPrice({ price, discount, amount }) {
+  return (
+    <div className='total-price-container'>
+      <span className='price'>{transformPrice(price)}</span>
+      {discount && (
+        <span className='discount-price'>
+          {transformPrice(price - (price / 100) * (amount || 10))}
+        </span>
+      )}
+    </div>
+  )
 }
