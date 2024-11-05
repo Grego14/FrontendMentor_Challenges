@@ -1,7 +1,9 @@
-import OrderProduct from './OrderProduct.jsx'
 import './OrderModal.css'
 import { invalidUserInteraction } from '../../utils/utils.js'
 import ButtonWhoAppear from '../others/ButtonWhoAppear.jsx'
+import { lazy } from 'react'
+
+const OrderProduct = lazy(() => import('./OrderProduct.jsx'))
 
 export default function OrderModal({
   productsInCart,
@@ -21,7 +23,7 @@ export default function OrderModal({
   }
 
   return (
-    <div className='modal-background'>
+    <div className='modal-overlay' onPointerUp={newOrder}>
       <div className='order-modal'>
         <img
           className='order-modal__icon'
@@ -37,7 +39,7 @@ export default function OrderModal({
         <p className='order-modal__text'>We hope you enjoy your food!</p>
 
         <div className='order-modal__info'>
-          <div className='order-modal__products'>
+          <div className='order-modal__products' aria-live='polite'>
             {productsInCart.map(product => (
               <OrderProduct data={product} key={product.id} />
             ))}
