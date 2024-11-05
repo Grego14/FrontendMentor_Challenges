@@ -1,6 +1,12 @@
 import { Suspense, forwardRef, lazy, useEffect } from 'react'
-import { extractId, invalidUserInteraction, matches } from '/src/utils/utils.js'
+import {
+  device,
+  extractId,
+  invalidUserInteraction,
+  matches
+} from '/src/utils/utils.js'
 import './Cart.css'
+import { m } from 'framer-motion'
 
 import ButtonWhoAppear from '../others/ButtonWhoAppear.jsx'
 
@@ -68,8 +74,26 @@ const Cart = forwardRef((props, ref) => {
     }
   }
 
+  const cartVariants = {
+    hidden: {
+      opacity: 1,
+      x: device.any() === 'desktop' ? '250%' : '0%'
+    },
+
+    show: {
+      opacity: 1,
+      x: '0%',
+      transition: {
+        duration: 0.4
+      }
+    }
+  }
+
   return (
-    <div
+    <m.div
+      initial='hidden'
+      animate='show'
+      variants={cartVariants}
       className='cart'
       ref={ref}
       style={{ minHeight: `${45 * productsInCart.length + 350}px` }}>
@@ -78,7 +102,7 @@ const Cart = forwardRef((props, ref) => {
       </h2>
 
       <CartContent {...cartContentProps} />
-    </div>
+    </m.div>
   )
 })
 
