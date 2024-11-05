@@ -1,0 +1,1 @@
+import{j as a,a as n}from"./index-11-P78ul.js";function e(){const i={hidden:{opacity:0,width:"0%"},show:{opacity:1,width:"100%"}};return a.jsx(n.div,{className:"line-who-appear",initial:"hidden",whileInView:"show",variants:i})}export{e as L};
