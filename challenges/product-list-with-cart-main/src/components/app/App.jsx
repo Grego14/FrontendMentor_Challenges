@@ -1,6 +1,7 @@
-import { LazyMotion, domAnimation, useInView } from 'framer-motion'
+import { LazyMotion, useInView } from 'framer-motion'
 import {
   Suspense,
+  forwardRef,
   lazy,
   memo,
   useEffect,
@@ -8,15 +9,16 @@ import {
   useRef,
   useState
 } from 'react'
-import Products from '../product/Product.jsx'
-import './App.css'
 import productsReducer from '../../reducers/productsReducer.js'
 import {
   device,
+  extractId,
   getTotalPrice,
   getTotalProductPrice,
+  invalidUserInteraction,
   transformPrice
 } from '../../utils/utils.js'
+import Product from '../product/Product.jsx'
 
 const Cart = lazy(() => import('../cart/Cart.jsx'))
 const OrderModal = lazy(() => import('../order/OrderModal.jsx'))
@@ -27,54 +29,22 @@ const ToggleThemeButton = lazy(
 )
 
 export default function App() {
-  const storage = localStorage
   const cartRef = useRef(null)
 
-  const storageStock = getMapFromStorage(storage.getItem('stock-quantitys'))
-
-  const [products, dispatch] = useReducer(
-    productsReducer,
-    getMapFromStorage(storage.getItem('products-in-cart'))
-  )
-
-  const productsInCart = [...products.values()].filter(product => product?.cart)
+  const [products, dispatch] = useReducer(productsReducer, new Map())
+  const productsArr = [...products.values()]
+  const productsInCart = productsArr.filter(product => product?.cart)
 
   const [modalVisible, setModalVisible] = useState(false)
   const [productsFetched, setProductsFetched] = useState(false)
   const [cartVisible, setCartVisible] = useState(false)
 
-  const [discount, setDiscount] = useState(
-    () => storage.getItem('discount') || false
-  )
-
-  let totalPrice = 0
-  let productsCount = 0
-
-  const l = productsInCart.length
-  const prices = []
-  let count = 0
-
-  for (let i = 0; i < l; i++) {
-    const product = productsInCart[i]
-
-    prices.push(getTotalProductPrice(product.price, product.count))
-    count += product.count
-  }
-
-  storage.setItem(
-    'products-in-cart',
-    JSON.stringify(productsInCart.map(product => [product.id, product]))
-  )
-
-  totalPrice = getTotalPrice(prices)
-  productsCount = count
-
-  const TotalPriceComponent = () => (
-    <TotalPrice price={totalPrice} discount={discount} amount={20} />
-  )
+  const storage = localStorage
+  const [discount, setDiscount] = useState(storage.getItem('discount') || false)
+  const storageStock = getMapFromStorage(storage.getItem('stock-quantitys'))
 
   useEffect(() => {
-    fetch('data.json')
+    fetch(`${import.meta.env.BASE_URL}data.json`)
       .then(res => res.json())
       .then(data => {
         let idHandler = 0
@@ -84,9 +54,10 @@ export default function App() {
         // storage they must be in the products Map.
         for (let i = 0; i < l; i++) {
           const product = data[i]
+          const productsStorage = getMapFromStorage(storage.getItem('products'))
 
           // if the product isn't in the storage we set default values
-          const productToAdd = products.get(idHandler) || {
+          const productToAdd = productsStorage.get(idHandler) || {
             ...product,
             id: idHandler,
             cart: false,
@@ -120,7 +91,35 @@ export default function App() {
         dispatch({ type: 'fetch', products: dataWithIds })
         setProductsFetched(true)
       })
-  }, [storageStock.get, storage.setItem, storage.getItem, products.get])
+  }, [storageStock.get, storage.setItem, storage.getItem])
+
+  let totalPrice = 0
+  let productsCount = 0
+
+  const l = productsInCart.length
+  const prices = []
+  let count = 0
+
+  for (let i = 0; i < l; i++) {
+    const product = productsInCart[i]
+
+    prices.push(getTotalProductPrice(product.price, product.count))
+    count += product.count
+  }
+
+  totalPrice = getTotalPrice(prices)
+  productsCount = count
+
+  const TotalPriceComponent = () => (
+    <TotalPrice price={totalPrice} discount={discount} amount={20} />
+  )
+
+  if (productsArr.length > 0) {
+    storage.setItem(
+      'products',
+      JSON.stringify(productsArr.map(product => [product.id, product]))
+    )
+  }
 
   function toggleTheme() {
     setAppTheme(state => {
@@ -157,7 +156,7 @@ export default function App() {
 
   function handleDiscount(value) {
     setDiscount(value)
-    storage.setItem('discount', discount ? 'true' : '')
+    storage.setItem('discount', value ? 'true' : '')
   }
 
   function handleModalVisibility() {
@@ -171,7 +170,7 @@ export default function App() {
   }
 
   const layoutData = {
-    products: [...products.values()],
+    products: productsArr,
     dispatch,
 
     totalPrice,
@@ -183,22 +182,29 @@ export default function App() {
     confirmOrder: handleModalVisibility,
     handleDiscount,
     setCartVisible,
-    newOrder,
 
     cartVisible,
-    modalVisible,
     cartRef,
     productsFetched,
 
     ...appTheme
   }
 
+  const modalProps = {
+    productsInCart,
+    newOrder,
+    totalPrice,
+    TotalPriceComponent
+  }
+
+  const loadFeatures = () => import('./fm-features.js').then(res => res.default)
+
   return (
-    <LazyMotion features={domAnimation} strict>
-      <div className='app'>
-        <Suspense>
-          <Layout {...layoutData} />
-        </Suspense>
+    <LazyMotion features={loadFeatures} strict>
+      <div className='app' aria-live='polite'>
+        <Layout {...layoutData} />
+
+        <Suspense>{modalVisible && <OrderModal {...modalProps} />}</Suspense>
       </div>
     </LazyMotion>
   )
@@ -218,16 +224,49 @@ function Layout(props) {
     confirmOrder,
     handleDiscount,
     setCartVisible,
-    newOrder,
 
     cartVisible,
-    modalVisible,
     cartRef,
     productsFetched,
 
     toggleTheme,
     theme
   } = props
+
+  const [halfProductsVisible, setHalfProductsVisible] = useState(false)
+  const timeout = useRef(null)
+  const productsRef = useRef(null)
+
+  useEffect(() => {
+    function handleScroll() {
+      clearTimeout(timeout.current)
+
+      // debounce the event
+      timeout.current = setTimeout(() => {
+        setHalfProductsVisible(state => {
+          if (state || device.any() !== 'mobile') return true
+
+          if (
+            document.scrollingElement.scrollTop >=
+            productsRef.current.clientHeight / 2
+          )
+            return true
+
+          return false
+        })
+      }, 300)
+    }
+
+    if (productsRef.current) {
+      handleScroll()
+
+      document.addEventListener('scroll', handleScroll)
+
+      return () => {
+        document.removeEventListener('scroll', handleScroll)
+      }
+    }
+  }, [])
 
   const productsProps = {
     productsFetched,
@@ -248,13 +287,6 @@ function Layout(props) {
     productsHandler
   }
 
-  const modalProps = {
-    productsInCart,
-    newOrder,
-    totalPrice,
-    TotalPriceComponent
-  }
-
   const userDataProps = {
     productsCount,
     productsFetched,
@@ -262,34 +294,69 @@ function Layout(props) {
     cartRef
   }
 
-  if (cartVisible) {
+  if (cartVisible && productsCount > 0) {
     import('../order/OrderModal.jsx')
   }
 
   return (
     <>
-      <Products {...productsProps} />
+      <Products {...productsProps} ref={productsRef} />
 
-      {productsFetched && <Cart {...cartProps} ref={cartRef} />}
+      <Suspense>
+        {halfProductsVisible && <Cart {...cartProps} ref={cartRef} />}
+      </Suspense>
 
-      {productsFetched &&
-        (device.any() === 'mobile' ? (
-          <UserData {...userDataProps}>
+      <Suspense>
+        {productsFetched &&
+          (device.any() === 'mobile' ? (
+            <UserData {...userDataProps}>
+              <ToggleThemeButton theme={theme} toggleTheme={toggleTheme} />
+            </UserData>
+          ) : (
             <ToggleThemeButton theme={theme} toggleTheme={toggleTheme} />
-          </UserData>
-        ) : (
-          <ToggleThemeButton theme={theme} toggleTheme={toggleTheme} />
-        ))}
-
-      {modalVisible && <OrderModal {...modalProps} />}
+          ))}
+      </Suspense>
     </>
   )
 }
 
-function getMapFromStorage(mapOnStorage) {
-  const data = [...JSON.parse(mapOnStorage || '[]')]
-  return !data || data.length === 0 ? new Map() : new Map(data)
-}
+const Products = forwardRef((props, ref) => {
+  const { products, productsHandler, productsFetched } = props
+
+  function handleProducts(e) {
+    if (invalidUserInteraction(e)) return
+
+    const button = e.target.dataset.action
+      ? e.target
+      : e.target.closest('[data-action]')
+
+    if (!button || button.disabled) return
+
+    const userAction = button.dataset.action
+    const id = extractId(e)
+
+    if (!userAction || (id !== 0 && !id)) return
+
+    productsHandler({
+      id,
+      type: userAction
+    })
+  }
+
+  return (
+    <div className='products-section'>
+      <h1 className='products-title'>Desserts</h1>
+      <div
+        ref={ref}
+        className='products'
+        onPointerUp={handleProducts}
+        onKeyDown={handleProducts}>
+        {productsFetched &&
+          products.map(product => <Product data={product} key={product?.id} />)}
+      </div>
+    </div>
+  )
+})
 
 function TotalPrice({ price, discount, amount }) {
   return (
@@ -302,4 +369,9 @@ function TotalPrice({ price, discount, amount }) {
       )}
     </div>
   )
+}
+
+function getMapFromStorage(mapOnStorage) {
+  const data = [...JSON.parse(mapOnStorage || '[]')]
+  return !data || data.length === 0 ? new Map() : new Map(data)
 }
