@@ -22,8 +22,14 @@ export default function OrderModal({
     onKeyDown: handleNewOrder
   }
 
+  function handleOverlayClick(e) {
+    if (!e.target.classList.contains('modal-overlay')) return
+
+    newOrder()
+  }
+
   return (
-    <div className='modal-overlay' onPointerUp={newOrder}>
+    <div className='modal-overlay' onPointerUp={handleOverlayClick}>
       <div className='order-modal'>
         <img
           className='order-modal__icon'
