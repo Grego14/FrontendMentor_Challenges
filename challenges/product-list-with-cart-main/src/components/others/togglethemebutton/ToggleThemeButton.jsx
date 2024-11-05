@@ -1,6 +1,7 @@
 import './ToggleThemeButton.css'
 import { invalidUserInteraction } from '/src/utils/utils.js'
 import ButtonWhoAppear from '../ButtonWhoAppear.jsx'
+import { m } from 'framer-motion'
 
 export default function ToggleThemeButton({ theme, toggleTheme }) {
   let timeout
@@ -25,7 +26,20 @@ export default function ToggleThemeButton({ theme, toggleTheme }) {
     className: 'toggle-theme',
     onPointerUp: handleToggleTheme,
     onKeyDown: handleToggleTheme,
-    'aria-label': `change theme to ${theme === 'light' ? 'dark' : 'light'} mode`
+    'aria-label': `change theme to ${theme === 'light' ? 'dark' : 'light'} mode`,
+    variants: {
+      hidden: {
+        opacity: 0,
+        x: '100%'
+      },
+      show: {
+        opacity: 1,
+        x: '0%',
+        transition: {
+          duration: 0.4
+        }
+      }
+    }
   }
 
   return (

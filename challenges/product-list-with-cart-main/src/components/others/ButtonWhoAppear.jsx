@@ -30,7 +30,7 @@ export default memo(function ButtonWhoAppear({
       initial='hidden'
       whileInView={isVisible ? 'show' : 'hidden'}
       viewport={{ once: true }}
-      variants={buttonVariants}
+      variants={props.variants || buttonVariants}
       type='button'
       disabled={props?.disabled ? props?.disabled : !isVisible}
       onContextMenu={preventContextMenu}>
