@@ -31,7 +31,6 @@
   gap: var(--app-gap-clamp);
   min-height: 100dvh;
   transition: var(--color-transitions);
-  transition-duration: var(--fast-transition);
   color: var(--rose-900);
 }
 
@@ -45,14 +44,6 @@
 }
 
 /* APP END */
-
-.skeleton {
-  z-index: 10;
-  width: 100%;
-
-  /* solves height problem with the library */
-  line-height: 1;
-}
 
 .price,
 .discount-price {
