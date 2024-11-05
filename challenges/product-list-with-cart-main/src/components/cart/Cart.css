@@ -5,8 +5,7 @@
   background-color: white;
   border: 4px solid transparent;
   box-shadow: 0 0 3px var(--rose-100);
-  width: clamp(20rem, 20rem + 6vw, 40rem);
-  max-width: 100%;
+  width: clamp(16rem, 16rem + 6vw, 24rem);
   align-self: center;
 }
 
@@ -78,7 +77,6 @@
   min-height: 3.5rem;
   transition: var(--color-transitions);
   transition-property: color, background-color;
-  transition-duration: var(--fast-transition);
 
   box-shadow: 0 2px 6px var(--primary-color);
 }
@@ -100,6 +98,7 @@
 .no-product__text {
   font-weight: 600;
   color: var(--rose-500);
+  text-align: center;
 }
 
 .dark-theme .no-product__text {
@@ -139,15 +138,11 @@
 @media only screen and (min-width: 54.75rem) {
   .cart {
     align-self: start;
+    margin-left: auto;
   }
 }
 
 @media only screen and (min-width: 64rem) {
-  .cart {
-    max-width: 22rem;
-    margin-left: auto;
-  }
-
   .no-product__image {
     width: calc(96px + .5vw);
     height: calc(96px + .5vw);
