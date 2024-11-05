@@ -9,6 +9,7 @@
 
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(var(--product-width), 1fr));
+  align-items: start;
   gap: clamp(1rem, 1rem + .3vw, 2.2rem);
   min-height: 100dvh
 }
@@ -21,12 +22,13 @@
 }
 
 .products-title {
-  margin-top: 0;
+  margin-block: 0 1rem
 }
 
 .product {
   display: flex;
   flex-direction: column-reverse;
+  gap: 1rem;
 
   font-size: var(--fsc-small)
 }
@@ -34,7 +36,7 @@
 .product__name,
 .product__category,
 .product__price {
-  width: 100%;
+  width: auto;
   font-weight: 600;
 }
 
@@ -57,6 +59,7 @@
   gap: .3rem;
   max-width: max-content;
   min-width: 100%;
+  margin-top: 1.5rem;
 }
 
 .product__wrapper {
@@ -66,10 +69,25 @@
   justify-content: center;
 }
 
-.no-image {
-  text-align: center;
-  text-wrap: balance;
-  line-height: 1.5;
+.skeleton-product-image {
+  --skeleton-divisor: 1.1;
+
+  z-index: 10;
+  width: 100%;
+  background-color: var(--rose-50);
+  animation: skeleton-pulse 1.5s ease-in-out infinite alternate;
+  min-height: calc((var(--product-width) / var(--skeleton-divisor)) + 3vw);
+  border-radius: .3rem;
+}
+
+@keyframes skeleton-pulse {
+  from {
+    opacity: 0.9;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .product__image {
@@ -115,11 +133,18 @@
 }
 
 .product__buttons {
-  bottom: 1.6rem;
+  bottom: -1.4rem;
   height: 2.8rem;
-  min-width: 100%;
   display: flex;
+  width: calc(9rem + 1.5vw);
+  max-width: 12rem;
+  border-radius: 5rem;
   justify-content: center;
+  z-index: 50
+}
+
+.dark-theme .product__buttons {
+  border-color: var(--purple-heart);
 }
 
 .product__button--add,
@@ -129,8 +154,7 @@
   justify-content: center;
   gap: .5rem;
   min-height: 100%;
-  width: calc(9rem + 1.5vw);
-  max-width: 12rem;
+  min-width: 100%;
   border-radius: 5rem;
   border: 1px solid transparent;
   transition: var(--color-transitions);
@@ -167,19 +191,30 @@
 .product__buttons__quantity {
   justify-content: space-evenly;
   background-color: var(--primary-color);
-  color: var(--rose-50)
+  color: var(--rose-50);
+
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity ease-in-out, transform ease-in-out;
+  transition-duration: .4s;
+}
+
+.product__buttons__quantity--show {
+  opacity: 1;
+  transform: scale(1)
 }
 
 .product:not(.product--added) .product__button--add,
-.product--added .product__button--quantity {
+.product--added .product__button__quantity {
   z-index: 998;
   pointer-events: auto
 }
 
 .product--added .product__button--add,
-.product:not(.product--added) .product__button--quantity {
+.product:not(.product--added) .product__button__quantity {
   z-index: 997;
-  pointer-events: none
+  pointer-events: none;
+  cursor: none
 }
 
 .product--out [data-action='increment'] {
@@ -199,7 +234,7 @@
   font-weight: 600;
 }
 
-.product__button--quantity {
+.product__button__quantity {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -210,12 +245,12 @@
   transition: background-color var(--fast-transition) ease-in-out;
 }
 
-.product__button--quantity:focus-visible {
+.product__button__quantity:focus-visible {
   outline: 3px solid var(--rose-50)
 }
 
 @media (pointer: coarse) {
-  .product__button--quantity {
+  .product__button__quantity {
     width: 25px;
     height: 25px
   }
@@ -228,12 +263,18 @@
     color: var(--primary-color)
   }
 
-  .product__button--quantity:hover {
+  .product__button__quantity:hover {
     background-color: var(--rose-50)
   }
 
-  .product__button--quantity:hover path[fill] {
+  .product__button__quantity:hover path[fill] {
     fill: var(--primary-color)
+  }
+}
+
+@media only screen and (min-width: 30rem) {
+  .skeleton.product-image {
+    --skeleton-divisor: 1.4;
   }
 }
 

@@ -1,63 +1,16 @@
 import { useState } from 'react'
 import './Product.css'
 import { m } from 'framer-motion'
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import {
   extractId,
   invalidUserInteraction,
   matches,
-  preventContextMenu,
   transformPrice,
   device
 } from '../../utils/utils.js'
-import * as ProductButton from './ProductButtons.jsx'
-import ProductImage from './ProductImage.jsx'
-import 'react-loading-skeleton/dist/skeleton.css'
+import * as ProductButtons from './ProductButtons.jsx'
 
-export default function Products({
-  products,
-  productsHandler,
-  productsFetched
-}) {
-  function handleProducts(e) {
-    if (invalidUserInteraction(e)) return
-
-    const button = e.target.dataset.action
-      ? e.target
-      : e.target.closest('[data-action]')
-
-    if (!button || button.disabled) return
-
-    const userAction = button.dataset.action
-    const id = extractId(e)
-
-    if (!userAction || (id !== 0 && !id)) return
-
-    productsHandler({
-      id,
-      type: userAction
-    })
-  }
-
-  return (
-    <div className='products-section'>
-      <h1 className='products-title'>Desserts</h1>
-      <div
-        className='products'
-        onPointerUp={handleProducts}
-        onKeyDown={handleProducts}>
-        <SkeletonTheme baseColor='var(--rose-50)' highlightColor='#eee'>
-          {productsFetched &&
-            products.map(product => (
-              <Product data={product} key={product?.id} />
-            ))}
-        </SkeletonTheme>
-      </div>
-    </div>
-  )
-}
-
-export function Product({ data }) {
+export default function Product({ data }) {
   const {
     name,
     price,
@@ -69,44 +22,26 @@ export function Product({ data }) {
     cart: onCart
   } = data
   const [imageLoaded, setImageLoaded] = useState(false)
+  const show = imageLoaded
 
   const buttonProps = {
     onCart,
     imageLoaded,
-    id
+    count
   }
 
   function imageLoad() {
     setImageLoaded(true)
   }
 
+  const firstThreeProducts = id === 0 || id === 1 || id === 2
+
   const productImageProps = {
     images: image,
     onCart,
     setImageLoaded: imageLoad,
-    show: imageLoaded,
-    priority: id === 0 || id === 1 || id === 2 ? 'high' : 'low'
-  }
-
-  const productInfoProps = {
-    name,
-    category,
-    price,
-    outOfStock,
-    show: imageLoaded
-  }
-
-  const productButtonsQuantityVariants = {
-    hidden: { opacity: 0, scale: 0.5 },
-    show: {
-      opacity: 1,
-      scale: 1,
-
-      transition: {
-        duration: 0.4,
-        ease: 'easeInOut'
-      }
-    }
+    show,
+    important: firstThreeProducts
   }
 
   const productVariants = {
@@ -128,10 +63,15 @@ export function Product({ data }) {
       viewport={{ once: true }}
       className={`product${onCart ? ' product--added' : ''}${outOfStock ? ' product--out' : ''}`}
       id={`product-${id}`}>
-      <ProductInfo {...productInfoProps} />
+      <div className='product__info'>
+        <div className='product__category'>{category}</div>
+        <h2 className='product__name'>{name}</h2>
+
+        <div className='product__price'>{transformPrice(price)}</div>
+      </div>
 
       <div className='product__wrapper pos-relative'>
-        {outOfStock && imageLoaded && (
+        {outOfStock && show && (
           <m.div
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -140,69 +80,40 @@ export function Product({ data }) {
           </m.div>
         )}
 
-        {!imageLoaded && (
-          <Skeleton
-            height={device.any() === 'mobile' ? 220 : 265}
-            containerClassName='skeleton'
-          />
-        )}
+        {!show && <div className='skeleton-product-image' />}
 
         <ProductImage {...productImageProps} />
 
-        <div className='product__buttons pos-relative'>
-          <ProductButton.AddToCartButton {...buttonProps} />
-
-          <m.div
-            className='product__buttons__quantity pos-absolute'
-            variants={productButtonsQuantityVariants}
-            initial='hidden'
-            animate={imageLoaded && onCart ? 'show' : 'hidden'}
-            aria-hidden={onCart ? 'false' : 'true'}
-            onContextMenu={preventContextMenu}>
-            <ProductButton.QuantityButton
-              buttonType='decrement'
-              {...buttonProps}
-            />
-
-            <div
-              className='product-quantity'
-              aria-label={`product count is ${count}`}
-              aria-live='polite'>
-              {count}
-            </div>
-
-            <ProductButton.QuantityButton
-              buttonType='increment'
-              {...buttonProps}
-            />
-          </m.div>
+        <div className='product__buttons pos-absolute'>
+          <ProductButtons.AddToCartButton {...buttonProps} />
+          <ProductButtons.QuantityButtons {...buttonProps} />
         </div>
       </div>
     </m.div>
   )
 }
 
-function ProductInfo(props) {
-  const { category, name, price, show } = props
-
+function ProductImage({ images, setImageLoaded, show, important }) {
   return (
-    <div className='product__info'>
-      <div className='product__category'>
-        {(show && category) || (
-          <Skeleton width='45%' containerClassName='skeleton' />
-        )}
-      </div>
-      <h2 className='product__name'>
-        {(show && name) || (
-          <Skeleton width='80%' containerClassName='skeleton' />
-        )}
-      </h2>
-
-      <div className='product__price'>
-        {(show && transformPrice(price)) || (
-          <Skeleton width='35%' containerClassName='skeleton' />
-        )}
-      </div>
-    </div>
+    <picture>
+      <source srcSet={images.mobile} media='(max-width: 480px)' />
+      <source
+        srcSet={images.tablet}
+        media='(min-width: 481px) and (max-width: 1023)'
+      />
+      <source srcSet={images.desktop} media='(min-width: 1024px)' />
+      <img
+        className={`product__image${show ? ' product__image--loaded' : ''}`}
+        fetchpriority={important ? 'high' : 'low'}
+        loading={important ? 'eager' : 'lazy'}
+        width='280'
+        height='260'
+        src={images.mobile}
+        alt=''
+        aria-hidden='true'
+        onLoad={setImageLoaded}
+        draggable='false'
+      />
+    </picture>
   )
 }
