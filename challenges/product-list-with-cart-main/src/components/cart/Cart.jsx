@@ -22,9 +22,7 @@ const Cart = forwardRef((props, ref) => {
 
   // biome-ignore lint: Can't use that function here
   useEffect(() => {
-    setTimeout(() => {
-      setCartVisible(true)
-    }, 500)
+    setCartVisible(true)
   }, [])
 
   function handleRemoveProduct(e) {
