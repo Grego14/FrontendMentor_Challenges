@@ -31,11 +31,11 @@ export default function ToggleThemeButton({ theme, toggleTheme }) {
   return (
     <ButtonWhoAppear props={toggleThemeProps}>
       <img
-        src={
+        src={`${import.meta.env.BASE_URL}${
           theme === 'light'
-            ? '/assets/images/icon-light.svg'
-            : '/assets/images/icon-dark.svg'
-        }
+            ? 'assets/images/icon-light.svg'
+            : 'assets/images/icon-dark.svg'
+        }`}
         alt=''
         aria-hidden='true'
         width={30}
