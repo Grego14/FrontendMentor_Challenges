@@ -8,7 +8,7 @@
 		"build": "vite build",
 		"lint": "biome lint --write",
 		"format": "biome format ./src/**/*.js",
-		"preview": "vite preview"
+		"preview": "vite preview --outDir build"
 	},
 	"dependencies": {
 		"framer-motion": "^11.5.2",
