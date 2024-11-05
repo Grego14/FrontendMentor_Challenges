@@ -1,7 +1,8 @@
 import { m } from 'framer-motion'
+import { memo } from 'react'
 import './LineWhoAppear.css'
 
-export default function LineWhoAppear() {
+export default memo(function LineWhoAppear() {
   const lineVariants = {
     hidden: {
       opacity: 0,
@@ -21,4 +22,4 @@ export default function LineWhoAppear() {
       variants={lineVariants}
     />
   )
-}
+})
