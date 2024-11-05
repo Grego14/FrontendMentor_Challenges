@@ -1,13 +1,14 @@
-import { LazyMotion, useInView } from 'framer-motion'
+import { LazyMotion } from 'framer-motion'
 import {
   Suspense,
   forwardRef,
   lazy,
-  memo,
   useEffect,
   useReducer,
   useRef,
-  useState
+  useState,
+  useMemo,
+  memo
 } from 'react'
 import productsReducer from '../../reducers/productsReducer.js'
 import {
@@ -41,57 +42,87 @@ export default function App() {
 
   const storage = localStorage
   const [discount, setDiscount] = useState(storage.getItem('discount') || false)
-  const storageStock = getMapFromStorage(storage.getItem('stock-quantitys'))
+  const storageStock = useMemo(
+    () => getMapFromStorage(storage.getItem('stock-quantitys')),
+    [storage.getItem]
+  )
 
   useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}data.json`)
-      .then(res => res.json())
-      .then(data => {
-        let idHandler = 0
-        const dataWithIds = new Map()
-        const l = data.length
-        // fetch products... if they are in the
-        // storage they must be in the products Map.
-        for (let i = 0; i < l; i++) {
-          const product = data[i]
-          const productsStorage = getMapFromStorage(storage.getItem('products'))
+    function handleJsonData(data) {
+      let idHandler = 0
+      const dataConverted = new Map()
+      const l = data.length
+      const productsStorage = getMapFromStorage(storage.getItem('products'))
 
-          // if the product isn't in the storage we set default values
-          const productToAdd = productsStorage.get(idHandler) || {
-            ...product,
-            id: idHandler,
-            cart: false,
-            count: 0,
-            quantity:
-              storageStock?.get(idHandler) ?? Math.floor(Math.random() * 20 + 1)
-          }
+      for (let i = 0; i < l; i++) {
+        const product = data[i]
 
-          // initial will be used to manage ordering animations in the
-          // CartProduct component, it means the product was added from
-          // the localstorage when the page loads. If the user adds/removes
-          // a product, initial must be false so we avoid the delay.
-          productToAdd.initial = true
-          productToAdd.outOfStock = productToAdd.count >= productToAdd.quantity
-
-          dataWithIds.set(productToAdd.id, productToAdd)
-          idHandler++
+        // if the product isn't in the storage we set default values
+        const productToAdd = productsStorage.get(idHandler) || {
+          ...product,
+          id: idHandler,
+          cart: false,
+          count: 0,
+          quantity:
+            storageStock.get(idHandler) || Math.floor(Math.random() * 20 + 1)
         }
 
-        !storage.getItem('stock-quantitys') &&
-          storage.setItem(
-            'stock-quantitys',
-            JSON.stringify(
-              [...dataWithIds.values()].map(product => [
-                product.id,
-                product.quantity
-              ])
-            )
-          )
+        // initial will be used to manage ordering animations in the
+        // CartProduct component, it means the product was added from
+        // the localstorage when the page loads. If the user adds/removes
+        // a product, initial must be false so we avoid the delay.
+        productToAdd.initial = true
+        productToAdd.outOfStock = productToAdd.count >= productToAdd.quantity
 
-        dispatch({ type: 'fetch', products: dataWithIds })
-        setProductsFetched(true)
+        dataConverted.set(productToAdd.id, productToAdd)
+        idHandler++
+      }
+      ;[...storageStock.values()].length <= 0 &&
+        storage.setItem(
+          'stock-quantitys',
+          JSON.stringify(
+            [...dataConverted.values()].map(product => [
+              product.id,
+              product.quantity
+            ])
+          )
+        )
+
+      dispatch({ type: 'fetch', products: dataConverted })
+      setProductsFetched(true)
+    }
+
+    async function handleJsonDownload() {
+      const url = `${import.meta.env.BASE_URL}data.json`
+
+      if (window.caches) {
+        const myCache = await caches?.open('App')
+        const match = await myCache?.match(url)
+        const json = await match?.json()
+
+        if (match) {
+          return handleJsonData(json)
+        }
+      }
+
+      fetch(url, {
+        priority: 'high',
+        mode: 'same-origin',
+        headers: { 'Cache-Control': 'max-age=604800, inmutable' }
       })
-  }, [storageStock.get, storage.setItem, storage.getItem])
+        .then(res => {
+          window.caches &&
+            caches?.open('App').then(cacheStorage => cacheStorage.add(url))
+
+          return res.json()
+        })
+        .then(data => {
+          handleJsonData(data)
+        })
+    }
+
+    handleJsonDownload()
+  }, [storageStock.get, storage.setItem, storage.getItem, storageStock.values])
 
   let totalPrice = 0
   let productsCount = 0
@@ -110,9 +141,9 @@ export default function App() {
   totalPrice = getTotalPrice(prices)
   productsCount = count
 
-  const TotalPriceComponent = () => (
+  const TotalPriceComponent = memo(() => (
     <TotalPrice price={totalPrice} discount={discount} amount={20} />
-  )
+  ))
 
   if (productsArr.length > 0) {
     storage.setItem(
