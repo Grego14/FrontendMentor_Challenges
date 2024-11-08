@@ -7,13 +7,12 @@ import {
   useReducer,
   useRef,
   useState,
-  useMemo,
   memo
 } from 'react'
 import productsReducer from '../../reducers/productsReducer.js'
 import {
   device,
-  extractId,
+  extractProductId,
   getTotalPrice,
   getTotalProductPrice,
   invalidUserInteraction,
@@ -32,9 +31,18 @@ const ToggleThemeButton = lazy(
 export default function App() {
   const cartRef = useRef(null)
 
+  const [cartSort, setCartSort] = useState('order')
+
   const [products, dispatch] = useReducer(productsReducer, new Map())
   const productsArr = [...products.values()]
-  const productsInCart = productsArr.filter(product => product?.cart)
+
+  const productsInCart = productsArr
+    .filter(product => product?.cart)
+    .sort((a, b) => {
+      if (cartSort === 'order') return a.order - b.order
+      if (cartSort === 'cheaper') return a.totalPrice - b.totalPrice
+      if (cartSort === 'expensive') return b.totalPrice - a.totalPrice
+    })
 
   const [modalVisible, setModalVisible] = useState(false)
   const [productsFetched, setProductsFetched] = useState(false)
@@ -42,86 +50,59 @@ export default function App() {
 
   const storage = localStorage
   const [discount, setDiscount] = useState(storage.getItem('discount') || false)
-  const storageStock = useMemo(
-    () => getMapFromStorage(storage.getItem('stock-quantitys')),
-    [storage.getItem]
-  )
+  const storageStock = getMapFromStorage(storage.getItem('stock-quantitys'))
 
   useEffect(() => {
-    function handleJsonData(data) {
-      let idHandler = 0
-      const dataConverted = new Map()
-      const l = data.length
-      const productsStorage = getMapFromStorage(storage.getItem('products'))
+    const url = `${import.meta.env.BASE_URL}data.json`
 
-      for (let i = 0; i < l; i++) {
-        const product = data[i]
+    fetch(url, {
+      priority: 'high',
+      mode: 'same-origin'
+    })
+      .then(res => res.json())
+      .then(data => {
+        let idHandler = 0
+        const dataConverted = new Map()
+        const l = data.length
+        const productsStorage = getMapFromStorage(storage.getItem('products'))
 
-        // if the product isn't in the storage we set default values
-        const productToAdd = productsStorage.get(idHandler) || {
-          ...product,
-          id: idHandler,
-          cart: false,
-          count: 0,
-          quantity:
-            storageStock.get(idHandler) || Math.floor(Math.random() * 20 + 1)
+        for (let i = 0; i < l; i++) {
+          const product = data[i]
+
+          // if the product isn't in the storage we set default values
+          const productToAdd = productsStorage.get(idHandler) || {
+            ...product,
+            id: idHandler,
+            cart: false,
+            count: 0,
+            quantity:
+              storageStock.get(idHandler) || Math.floor(Math.random() * 20 + 1)
+          }
+
+          // initial will be used to manage ordering animations in the
+          // CartProduct component, it means the product was added from
+          // the localstorage when the page loads. If the user adds/removes
+          // a product, initial must be false so we avoid the delay.
+          productToAdd.initial = true
+          productToAdd.outOfStock = productToAdd.count >= productToAdd.quantity
+
+          dataConverted.set(productToAdd.id, productToAdd)
+          idHandler++
         }
-
-        // initial will be used to manage ordering animations in the
-        // CartProduct component, it means the product was added from
-        // the localstorage when the page loads. If the user adds/removes
-        // a product, initial must be false so we avoid the delay.
-        productToAdd.initial = true
-        productToAdd.outOfStock = productToAdd.count >= productToAdd.quantity
-
-        dataConverted.set(productToAdd.id, productToAdd)
-        idHandler++
-      }
-      ;[...storageStock.values()].length <= 0 &&
-        storage.setItem(
-          'stock-quantitys',
-          JSON.stringify(
-            [...dataConverted.values()].map(product => [
-              product.id,
-              product.quantity
-            ])
+        ;[...storageStock.values()].length <= 0 &&
+          storage.setItem(
+            'stock-quantitys',
+            JSON.stringify(
+              [...dataConverted.values()].map(product => [
+                product.id,
+                product.quantity
+              ])
+            )
           )
-        )
 
-      dispatch({ type: 'fetch', products: dataConverted })
-      setProductsFetched(true)
-    }
-
-    async function handleJsonDownload() {
-      const url = `${import.meta.env.BASE_URL}data.json`
-
-      if (window.caches) {
-        const myCache = await caches?.open('App')
-        const match = await myCache?.match(url)
-        const json = await match?.json()
-
-        if (match) {
-          return handleJsonData(json)
-        }
-      }
-
-      fetch(url, {
-        priority: 'high',
-        mode: 'same-origin',
-        headers: { 'Cache-Control': 'max-age=604800, inmutable' }
+        dispatch({ type: 'fetch', products: dataConverted })
+        setProductsFetched(true)
       })
-        .then(res => {
-          window.caches &&
-            caches?.open('App').then(cacheStorage => cacheStorage.add(url))
-
-          return res.json()
-        })
-        .then(data => {
-          handleJsonData(data)
-        })
-    }
-
-    handleJsonDownload()
   }, [storageStock.get, storage.setItem, storage.getItem, storageStock.values])
 
   let totalPrice = 0
@@ -213,6 +194,7 @@ export default function App() {
     confirmOrder: handleModalVisibility,
     handleDiscount,
     setCartVisible,
+    setCartSort,
 
     cartVisible,
     cartRef,
@@ -232,7 +214,7 @@ export default function App() {
 
   return (
     <LazyMotion features={loadFeatures} strict>
-      <div className='app' aria-live='polite'>
+      <div className='app'>
         <Layout {...layoutData} />
 
         <Suspense>{modalVisible && <OrderModal {...modalProps} />}</Suspense>
@@ -255,6 +237,7 @@ function Layout(props) {
     confirmOrder,
     handleDiscount,
     setCartVisible,
+    setCartSort,
 
     cartVisible,
     cartRef,
@@ -315,7 +298,8 @@ function Layout(props) {
     discount,
     setCartVisible,
     TotalPriceComponent,
-    productsHandler
+    productsHandler,
+    setCartSort
   }
 
   const userDataProps = {
@@ -364,7 +348,7 @@ const Products = forwardRef((props, ref) => {
     if (!button || button.disabled) return
 
     const userAction = button.dataset.action
-    const id = extractId(e)
+    const id = extractProductId(e)
 
     if (!userAction || (id !== 0 && !id)) return
 
@@ -381,7 +365,8 @@ const Products = forwardRef((props, ref) => {
         ref={ref}
         className='products'
         onPointerUp={handleProducts}
-        onKeyDown={handleProducts}>
+        onKeyDown={handleProducts}
+        aria-live='polite'>
         {productsFetched &&
           products.map(product => <Product data={product} key={product?.id} />)}
       </div>
