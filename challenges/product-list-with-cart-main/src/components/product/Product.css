@@ -75,19 +75,8 @@
   z-index: 10;
   width: 100%;
   background-color: var(--rose-50);
-  animation: skeleton-pulse 1.5s ease-in-out infinite alternate;
   min-height: calc((var(--product-width) / var(--skeleton-divisor)) + 3vw);
   border-radius: .3rem;
-}
-
-@keyframes skeleton-pulse {
-  from {
-    opacity: 0.9;
-  }
-
-  to {
-    opacity: 1;
-  }
 }
 
 .product__image {
