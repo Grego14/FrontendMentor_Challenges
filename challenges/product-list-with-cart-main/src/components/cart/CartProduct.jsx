@@ -17,7 +17,7 @@ export default function CartProducts({ handleRemoveProduct, productsInCart }) {
 }
 
 function CartProduct({ data }) {
-  const { name, count, price, id, initial, totalPrice } = data
+  const { name, count, price, id, order, initial, totalPrice } = data
 
   const productVariants = {
     hidden: {
@@ -33,7 +33,7 @@ function CartProduct({ data }) {
         scale: 1,
         transition: {
           delay: custom.initial
-            ? 0.2 + custom.id / (custom.id > 5 ? 15 : 5)
+            ? 0.2 + custom.order / (custom.order > 5 ? 15 : 10)
             : 0.2,
           when: 'beforeChildren'
         }
@@ -45,10 +45,10 @@ function CartProduct({ data }) {
     <m.div
       initial='hidden'
       animate='show'
-      custom={{ initial, id }}
+      custom={{ initial, order }}
       variants={productVariants}
       className='cart-product'
-      id={`cart-product-${id}`}>
+      data-id={id}>
       <CartProductContent
         name={name}
         count={count}

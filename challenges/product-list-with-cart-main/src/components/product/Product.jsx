@@ -2,7 +2,6 @@ import { useState } from 'react'
 import './Product.css'
 import { m } from 'framer-motion'
 import {
-  extractId,
   invalidUserInteraction,
   matches,
   transformPrice,
@@ -62,7 +61,7 @@ export default function Product({ data }) {
       whileInView='show'
       viewport={{ once: true }}
       className={`product${onCart ? ' product--added' : ''}${outOfStock ? ' product--out' : ''}`}
-      id={`product-${id}`}>
+      data-id={id}>
       <div className='product__info'>
         <div className='product__category'>{category}</div>
         <h2 className='product__name'>{name}</h2>

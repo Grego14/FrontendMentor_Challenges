@@ -19,7 +19,7 @@ function OrderProductThumbnail({ image, name }) {
 }
 
 export default function OrderProduct({ data }) {
-  const { name, count, price, image, id, totalPrice } = data
+  const { name, count, price, image, totalPrice } = data
 
   return (
     <div className='order-product pos-relative'>
