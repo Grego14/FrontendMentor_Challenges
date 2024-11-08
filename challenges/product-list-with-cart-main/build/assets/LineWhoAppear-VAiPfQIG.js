@@ -1,0 +1,1 @@
+import{r as a,j as e,m as t}from"./index-CJ-a4D2k.js";const s=a.memo(function(){const i={hidden:{opacity:0,width:"0%"},show:{opacity:1,width:"100%"}};return e.jsx(t.div,{className:"line-who-appear",initial:"hidden",whileInView:"show",variants:i})});export{s as L};
