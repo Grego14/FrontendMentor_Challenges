@@ -36,16 +36,14 @@ export function isEnterKey(e) {
 }
 
 export function invalidUserInteraction(e) {
-  if (e.type === 'pointerup' && e.button !== 0) return true
-  if (e.type === 'keydown' && !isEnterKey(e)) return true
-
-  return false
+  return (
+    (e.type === 'pointerup' && e.button !== 0) ||
+    (e.type === 'keydown' && !isEnterKey(e))
+  )
 }
 
-export function extractId(event) {
-  return typeof event === 'number'
-    ? event
-    : Number(event?.target?.closest('*[id]')?.id?.match(/[0-9]+/)?.[0])
+export function extractProductId(event) {
+  return Number(event?.target?.closest?.('[data-id]')?.dataset?.id)
 }
 
 export function preventContextMenu(e) {
@@ -76,7 +74,7 @@ const utils = {
   matches,
   isEnterKey,
   invalidUserInteraction,
-  extractId,
+  extractProductId,
   preventContextMenu,
   device
 }
