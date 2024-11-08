@@ -1,7 +1,7 @@
 import { Suspense, forwardRef, lazy, useEffect } from 'react'
 import {
   device,
-  extractId,
+  extractProductId,
   invalidUserInteraction,
   matches
 } from '/src/utils/utils.js'
@@ -23,7 +23,8 @@ const Cart = forwardRef((props, ref) => {
     handleDiscount,
     discount,
     setCartVisible,
-    TotalPriceComponent
+    TotalPriceComponent,
+    setCartSort
   } = props
 
   // biome-ignore lint: Can't use that function here
@@ -32,7 +33,7 @@ const Cart = forwardRef((props, ref) => {
   }, [])
 
   function handleRemoveProduct(e) {
-    const id = extractId(e)
+    const id = extractProductId(e)
 
     if (
       invalidUserInteraction(e) ||
@@ -89,6 +90,10 @@ const Cart = forwardRef((props, ref) => {
     }
   }
 
+  function handleCartSorting(e) {
+    setCartSort(e.target.value)
+  }
+
   return (
     <m.div
       initial='hidden'
@@ -97,9 +102,26 @@ const Cart = forwardRef((props, ref) => {
       className='cart'
       ref={ref}
       style={{ minHeight: `${45 * productsInCart.length + 350}px` }}>
-      <h2 className='cart__title'>
-        Your Cart <span>({productsCount})</span>
-      </h2>
+      <div className='cart-top-info'>
+        <h2 className='cart__title'>
+          Your Cart <span>({productsCount})</span>
+        </h2>
+
+        {productsCount > 0 && (
+          <div className='cart__sort-container'>
+            <select
+              className='sort-container__select'
+              name='sort-button'
+              id='sort-button'
+              onChange={handleCartSorting}
+              defaultValue='order'>
+              <option value='order'>Order</option>
+              <option value='cheaper'>Cheaper</option>
+              <option value='expensive'>Expensive</option>
+            </select>
+          </div>
+        )}
+      </div>
 
       <CartContent {...cartContentProps} />
     </m.div>

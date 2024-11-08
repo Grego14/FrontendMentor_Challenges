@@ -9,8 +9,43 @@
   align-self: center;
 }
 
+.cart-top-info {
+  display: flex;
+  justify-content: space-between;
+}
+
 .cart__title {
   color: var(--red-contrast);
+  margin-block: auto
+}
+
+.sort-container__select {
+  background-color: var(--rose-100);
+  padding: .3rem .2rem;
+  border-color: var(--rose-900);
+  color: var(--rose-900);
+  font-weight: 600;
+  border-radius: .25rem;
+  appearance: none;
+  padding-right: 1.2rem
+}
+
+.cart__sort-container {
+  position: relative;
+}
+
+.cart__sort-container::after {
+  content: '▼';
+  position: absolute;
+  right: .4rem;
+  top: .4rem;
+  pointer-events: none;
+}
+
+.dark-theme .sort-container__select {
+  background-color: transparent;
+  border: 2px solid var(--dull-lavender);
+  color: var(--rose-50)
 }
 
 .cart-content {
