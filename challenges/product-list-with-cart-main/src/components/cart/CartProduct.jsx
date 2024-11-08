@@ -34,8 +34,7 @@ function CartProduct({ data }) {
         transition: {
           delay: custom.initial
             ? 0.2 + custom.order / (custom.order > 5 ? 15 : 10)
-            : 0.2,
-          when: 'beforeChildren'
+            : 0.2
         }
       }
     }
