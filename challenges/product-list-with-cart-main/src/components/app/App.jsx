@@ -324,7 +324,9 @@ function Layout(props) {
               <ToggleThemeButton theme={theme} toggleTheme={toggleTheme} />
             </UserData>
           ) : (
-            <ToggleThemeButton theme={theme} toggleTheme={toggleTheme} />
+            cartVisible && (
+              <ToggleThemeButton theme={theme} toggleTheme={toggleTheme} />
+            )
           ))}
       </Suspense>
     </>
