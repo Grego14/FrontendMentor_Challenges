@@ -1,13 +1,12 @@
 import './UserData.css'
 import { m } from 'framer-motion'
-import { lazy, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { device } from '/src/utils/utils.js'
 
 export default function UserData(props) {
   const { productsCount, productsFetched, TotalPriceComponent, cartRef } = props
 
   const userDataRef = useRef(null)
-  const userDevice = device.any()
   const [isMoving, setIsMoving] = useState(false)
   const [showUserOrder, setShowUserOrder] = useState(false)
 
@@ -20,6 +19,9 @@ export default function UserData(props) {
     threshold: [0.2, 0.4]
   }
 
+  // useInView hook from framer-motion can't be used here as it stop working
+  // when the Cart component is downloaded and the cartRef is updated so we
+  // use an IntersectionObserver
   const observer = new IntersectionObserver(callback, options)
 
   function callback(entries, observer) {
@@ -27,7 +29,7 @@ export default function UserData(props) {
       const ths = observer.thresholds
       const ratio = entrie.intersectionRatio
 
-      if (ratio <= 0 || !entrie.isIntersecting) return false
+      if (ratio <= 0 || !entrie.isIntersecting) return
 
       if (ratio >= ths[0] && ratio < ths[1]) {
         userDataRef.current.style.bottom = '0'
@@ -44,14 +46,14 @@ export default function UserData(props) {
   }
 
   useEffect(() => {
-    if (userDevice === 'mobile' && cartRef.current) {
+    if (device.any() === 'mobile' && cartRef.current) {
       observer.observe(cartRef.current)
     }
 
     return () => {
       observer.disconnect(cartRef.current)
     }
-  }, [cartRef.current, observer.observe, observer.disconnect, userDevice])
+  }, [cartRef.current, observer.observe, observer.disconnect])
 
   const userOrderProps = {
     productsCount,
