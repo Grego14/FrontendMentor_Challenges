@@ -19,11 +19,19 @@ export default function productsReducer(state, action) {
   function handleProductInCart() {
     const map = new Map(state)
     const _element = { ...element, cart: !element.cart }
+    const lastOrder = (() => {
+      const orderProducts = [...state.values()]
+        .filter(product => product.order)
+        .sort((a, b) => a.order - b.order)
+
+      return orderProducts[orderProducts.length - 1]?.order
+    })()
 
     // if elementProps.cart is false it means the product
     // is being removed so count should be reset to 0.
     const count = _element.cart ? _element.count + 1 : 0
     const outOfStock = count >= _element.quantity
+    const order = lastOrder ? lastOrder + 1 : 1
 
     map.set(id, {
       ..._element,
@@ -32,7 +40,8 @@ export default function productsReducer(state, action) {
       // be fired once added again.
       initial: false,
       outOfStock,
-      totalPrice: _element.price
+      totalPrice: _element.price,
+      order
     })
 
     return map
@@ -61,6 +70,7 @@ export default function productsReducer(state, action) {
     if (userAction === 'decrement' && count === 0) {
       cart = false
       outOfStock = false
+      _element.order = null
     }
 
     map.set(id, {
