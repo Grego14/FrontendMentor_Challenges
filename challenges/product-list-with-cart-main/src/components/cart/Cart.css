@@ -16,7 +16,8 @@
 
 .cart__title {
   color: var(--red-contrast);
-  margin-block: auto
+  margin-block: auto;
+  text-wrap: balance;
 }
 
 .sort-container__select {
