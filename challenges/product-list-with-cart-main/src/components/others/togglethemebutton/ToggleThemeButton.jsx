@@ -2,30 +2,24 @@ import './ToggleThemeButton.css'
 import { invalidUserInteraction } from '/src/utils/utils.js'
 import ButtonWhoAppear from '../ButtonWhoAppear.jsx'
 import { m } from 'framer-motion'
+import useDebounce from '/src/hooks/useDebounce'
 
 export default function ToggleThemeButton({ theme, toggleTheme }) {
-  let timeout
-
-  function handleToggleTheme(e) {
+  const [isDebouncing, handleToggleThemeClick] = useDebounce(e => {
     if (invalidUserInteraction(e)) return
 
     const target = e.target.matches('.toggle-theme')
       ? e.target
       : e.target.closest('.toggle-theme')
 
-    target.disabled = true
-    clearTimeout(timeout)
-
-    timeout = setTimeout(() => {
-      target.removeAttribute('disabled')
-      toggleTheme(e)
-    }, 200)
-  }
+    target.removeAttribute('disabled')
+    toggleTheme(e)
+  }, 200)
 
   const toggleThemeProps = {
     className: 'toggle-theme',
-    onPointerUp: handleToggleTheme,
-    onKeyDown: handleToggleTheme,
+    onPointerUp: handleToggleThemeClick,
+    onKeyDown: handleToggleThemeClick,
     'aria-label': `change theme to ${theme === 'light' ? 'dark' : 'light'} mode`,
     variants: {
       hidden: {
