@@ -19,6 +19,7 @@ import {
   transformPrice
 } from '../../utils/utils.js'
 import Product from '../product/Product.jsx'
+import useDebounce from '../../hooks/useDebounce.jsx'
 
 const Cart = lazy(() => import('../cart/Cart.jsx'))
 const OrderModal = lazy(() => import('../order/OrderModal.jsx'))
@@ -248,29 +249,24 @@ function Layout(props) {
   } = props
 
   const [halfProductsVisible, setHalfProductsVisible] = useState(false)
-  const timeout = useRef(null)
   const productsRef = useRef(null)
 
+  const [isDebouncing, handleScroll] = useDebounce(() => {
+    setHalfProductsVisible(state => {
+      if (state || device.any() !== 'mobile') return true
+
+      if (
+        document.scrollingElement.scrollTop >=
+        productsRef.current.clientHeight / 2
+      )
+        return true
+
+      return false
+    })
+  }, 300)
+
+  // biome-ignore lint: can't use that function here
   useEffect(() => {
-    function handleScroll() {
-      clearTimeout(timeout.current)
-
-      // debounce the event
-      timeout.current = setTimeout(() => {
-        setHalfProductsVisible(state => {
-          if (state || device.any() !== 'mobile') return true
-
-          if (
-            document.scrollingElement.scrollTop >=
-            productsRef.current.clientHeight / 2
-          )
-            return true
-
-          return false
-        })
-      }, 300)
-    }
-
     if (productsRef.current) {
       handleScroll()
 
