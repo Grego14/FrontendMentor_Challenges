@@ -108,13 +108,14 @@ const Cart = forwardRef((props, ref) => {
         </h2>
 
         {productsCount > 0 && (
-          <div className='cart__sort-container'>
+          <div className='sort-container pos-relative'>
             <select
               className='sort-container__select'
-              name='sort-button'
-              id='sort-button'
+              name='sort'
+              id='sort'
               onChange={handleCartSorting}
-              defaultValue='order'>
+              defaultValue='order'
+              aria-label='Sort by'>
               <option value='order'>Order</option>
               <option value='cheaper'>Cheaper</option>
               <option value='expensive'>Expensive</option>
@@ -170,16 +171,18 @@ function CartInfo(props) {
         <TotalPriceComponent />
       </div>
 
-      <p className='cart__info__carbon-neutral'>
-        <img
-          src='./assets/images/icon-carbon-neutral.svg'
-          alt=''
-          aria-hidden='true'
-          width='20'
-          height='20'
-        />
-        This is a <b className='carbon-neutral'>carbon-neutral</b> delivery
-      </p>
+      <div className='cart__info__carbon-neutral'>
+        <p className='carbon-neutral__text'>
+          <img
+            src='./assets/images/icon-carbon-neutral.svg'
+            alt=''
+            aria-hidden='true'
+            width='20'
+            height='20'
+          />
+          This is a <b className='carbon-neutral'>carbon-neutral</b> delivery
+        </p>
+      </div>
 
       <ButtonWhoAppear
         props={confirmOrderProps}
