@@ -10,7 +10,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(var(--product-width), 1fr));
   align-items: start;
-  gap: clamp(1rem, 1rem + .3vw, 2.2rem);
+  gap: clamp(1rem, 1rem + .5vw, 2.2rem);
   min-height: 100dvh
 }
 
@@ -28,7 +28,6 @@
 .product {
   display: flex;
   flex-direction: column-reverse;
-  gap: 1rem;
 
   font-size: var(--fsc-small)
 }
@@ -50,10 +49,6 @@
   color: var(--product-price-color);
 }
 
-.product__info {
-  margin-top: 1.5rem;
-}
-
 .skeleton-product-image {
   --skeleton-divisor: 1.1;
 
@@ -62,10 +57,6 @@
   background-color: var(--rose-50);
   min-height: calc((var(--product-width) / var(--skeleton-divisor)) + 3vw);
   border-radius: .3rem;
-}
-
-.product__wrapper {
-  width: 18rem;
 }
 
 .product__image {
@@ -128,6 +119,7 @@
   width: calc(9rem + 1.5vw);
   max-width: 12rem;
   margin-inline: auto;
+  color: var(--rose-50)
 }
 
 .product__button--add,
