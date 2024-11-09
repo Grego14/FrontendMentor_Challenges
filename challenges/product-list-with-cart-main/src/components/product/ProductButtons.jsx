@@ -1,5 +1,6 @@
 import ButtonWhoAppear from '../others/ButtonWhoAppear.jsx'
 import { useId } from 'react'
+import { m } from 'framer-motion'
 
 export function QuantityButtons(props) {
   const { imageLoaded, onCart, count } = props
@@ -7,18 +8,34 @@ export function QuantityButtons(props) {
   const quantityBtnProps = {
     className: 'product__button product__button__quantity',
     tabIndex: onCart ? '0' : '-1',
-    'aria-hidden': !onCart ? 'true' : 'false'
+    visible: imageLoaded && onCart
+  }
+
+  const variants = {
+    hidden: {
+      opacity: 0,
+      scale: 0
+    },
+
+    show: {
+      opacity: 1,
+      scale: [1, 1.15, 1],
+      transition: {
+        duration: 0.3,
+        delay: 0.2
+      }
+    }
   }
 
   return (
-    <div
-      className={`product__buttons__quantity pos-absolute${imageLoaded && onCart ? ' product__buttons__quantity--show' : ''}`}
+    <m.div
+      initial='hidden'
+      whileInView={imageLoaded && onCart ? 'show' : ''}
+      viewport={{ once: true }}
+      variants={variants}
+      className='product__buttons__quantity pos-absolute'
       aria-hidden={onCart ? 'false' : 'true'}>
-      <QuantityButton
-        props={quantityBtnProps}
-        type='decrement'
-        visible={imageLoaded && onCart}
-      />
+      <QuantityButton props={quantityBtnProps} type='decrement' />
 
       <div
         className='product-quantity'
@@ -26,18 +43,16 @@ export function QuantityButtons(props) {
         {count}
       </div>
 
-      <QuantityButton
-        props={quantityBtnProps}
-        type='increment'
-        visible={imageLoaded && onCart}
-      />
-    </div>
+      <QuantityButton props={quantityBtnProps} type='increment' />
+    </m.div>
   )
 }
 
-function QuantityButton({ props, type, visible }) {
+function QuantityButton({ props, type }) {
+  const { visible, ...buttonProps } = props
+
   const _props = {
-    ...props,
+    ...buttonProps,
     'aria-label': `${type} product count`,
     'data-action': type
   }
@@ -83,7 +98,7 @@ export function AddToCartButton(props) {
   const id = useId()
 
   const addToCartProps = {
-    className: `product__button product__button--add pos-absolute${props.show ? ' product--show' : ''}`,
+    className: 'product__button product__button--add pos-absolute',
     tabIndex: onCart ? '-1' : '0',
     'aria-hidden': onCart ? 'true' : 'false',
     'data-action': 'cart'
