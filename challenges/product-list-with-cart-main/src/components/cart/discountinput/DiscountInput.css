@@ -1,14 +1,15 @@
 .discount-input-container {
+  --bright-red: #FF501B;
+
   display: flex;
   gap: 1rem;
-  align-items: center;
   justify-content: space-between;
 }
 
 .discount-input-button,
 .discount-input {
   padding: .3rem .5rem;
-  border-radius: 6%;
+  border-radius: .5rem;
   font-weight: 600;
   font-size: var(--fsc-small);
   transition: var(--color-transitions);
@@ -28,8 +29,8 @@
   border-color: var(--red-contrast);
 }
 
-.dark-theme .discount-innput.invalid {
-  border-color: #FF501B;
+.dark-theme .discount-input.invalid {
+  border-color: var(--bright-red);
 }
 
 .dark-theme .discount-input {
@@ -55,13 +56,14 @@
   font-size: var(--fs-small);
   font-weight: 600;
   cursor: pointer;
-  max-width: 10rem;
+  max-width: 12rem;
 }
 
 .discount-input-button {
   align-self: end;
-  min-width: 5rem;
-  min-height: 2.15rem;
+  width: 5rem;
+  height: 2.15rem;
+  border-width: 2px;
 
   background-color: var(--red-contrast);
   color: var(--rose-50);
@@ -69,7 +71,11 @@
 
 .dark-theme .discount-input-button {
   background-color: var(--purple-heart);
-  color: var(--rose-50);
+  border-color: var(--dull-lavender)
+}
+
+.discount-input-button:focus-visible {
+  background-color: var(--primary-color-dark)
 }
 
 .discount-input-button:disabled {
@@ -81,20 +87,21 @@
   text-decoration: underline;
   color: var(--rose-500);
   cursor: pointer;
-  transition: opacity var(--fast-transition) ease-in-out;
-}
-
-.discount-text-click:focus-visible {
-  opacity: .6;
-  outline: 2px dotted var(--rose-300);
-}
-
-.dark-theme .discount-text-click:focus-visible {
-  outline: 2px dotted var(--dull-lavender);
+  margin-left: .5rem;
+  padding: .2rem;
 }
 
 .dark-theme .discount-text-click {
   color: #af8dea;
+}
+
+.discount-text-click:focus-visible {
+  outline: 3px dotted var(--rose-300);
+  text-decoration: none;
+}
+
+.dark-theme .discount-text-click:focus-visible {
+  outline-color: var(--dull-lavender);
 }
 
 .discount-error {
@@ -103,14 +110,10 @@
 }
 
 .dark-theme .discount-error {
-  color: #FF501B
+  color: var(--bright-red)
 }
 
 @media (hover: hover) {
-  .discount-text-click:hover {
-    opacity: .6;
-  }
-
   .discount-input-button:hover:not(:disabled) {
     background-color: var(--rose-100);
     color: var(--red-contrast);
