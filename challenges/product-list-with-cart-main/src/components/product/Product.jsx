@@ -1,12 +1,7 @@
 import { useState } from 'react'
 import './Product.css'
 import { m } from 'framer-motion'
-import {
-  invalidUserInteraction,
-  matches,
-  transformPrice,
-  device
-} from '../../utils/utils.js'
+import { transformPrice } from '../../utils/utils.js'
 import * as ProductButtons from './ProductButtons.jsx'
 
 export default function Product({ data }) {
@@ -21,7 +16,6 @@ export default function Product({ data }) {
     cart: onCart
   } = data
   const [imageLoaded, setImageLoaded] = useState(false)
-  const show = imageLoaded
 
   const buttonProps = {
     onCart,
@@ -33,14 +27,11 @@ export default function Product({ data }) {
     setImageLoaded(true)
   }
 
-  const firstThreeProducts = id === 0 || id === 1 || id === 2
-
   const productImageProps = {
     images: image,
-    onCart,
     setImageLoaded: imageLoad,
-    show,
-    important: firstThreeProducts
+    show: imageLoaded,
+    important: id === 0 || id === 1 || id === 2
   }
 
   const productVariants = {
@@ -70,20 +61,18 @@ export default function Product({ data }) {
       </div>
 
       <div className='product__wrapper pos-relative'>
-        {outOfStock && show && (
-          <m.div
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className='out-of-stock'>
-            Out of stock
-          </m.div>
-        )}
+        <div
+          className={`out-of-stock${
+            outOfStock && imageLoaded ? ' out-of-stock--show' : ''
+          }`}>
+          Out of stock
+        </div>
 
-        {!show && <div className='skeleton-product-image' />}
+        {!imageLoaded && <div className='skeleton-product-image' />}
 
         <ProductImage {...productImageProps} />
 
-        <div className='product__buttons pos-absolute'>
+        <div className='product__buttons pos-relative'>
           <ProductButtons.AddToCartButton {...buttonProps} />
           <ProductButtons.QuantityButtons {...buttonProps} />
         </div>
