@@ -158,17 +158,7 @@
 .product__buttons__quantity {
   justify-content: space-evenly;
   background-color: var(--primary-color);
-
-  opacity: 0;
-  transform: scale(0.5);
-  transition: opacity ease-in-out, transform ease-in-out;
-  transition-duration: .4s;
   border: none
-}
-
-.product__buttons__quantity--show {
-  opacity: 1;
-  transform: scale(1)
 }
 
 .product:not(.product--added) .product__button--add,
