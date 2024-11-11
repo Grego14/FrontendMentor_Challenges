@@ -46,7 +46,7 @@ function CartProduct({ data }) {
       animate='show'
       custom={{ initial, order }}
       variants={productVariants}
-      className='cart-product'
+      className='cart-product pos-relative'
       data-id={id}>
       <CartProductContent
         name={name}
@@ -62,14 +62,16 @@ function CartProduct({ data }) {
 
 function CartProductContent({ name, count, price, totalPrice }) {
   return (
-    <div className='cart-product__wrapper--content'>
+    <div className='cart-product__content'>
       <h3 className='cart-product__name'>{name}</h3>
       <div className='cart-product__info'>
         <span className='cart-product__count'>{count}x</span>
-        <div className='cart-product__price-container'>
-          <span className='cart-product__price-sign'>@</span>
-          <span className='cart-product__price'>{transformPrice(price)}</span>
-        </div>
+        <span className='cart-product__price-container'>
+          <span className='price-container__sign'>@</span>
+          <span className='price-container__price'>
+            {transformPrice(price)}
+          </span>
+        </span>
         <span className='cart-product__total-price'>
           {transformPrice(totalPrice)}
         </span>
@@ -80,9 +82,9 @@ function CartProductContent({ name, count, price, totalPrice }) {
 
 function CartProductRemoveButton() {
   return (
-    <div className='cart-product__wrapper--button'>
+    <div className='cart-product__button-container'>
       <button
-        className='cart-product__button cart-product__button--remove'
+        className='cart-product__button'
         aria-label='remove product from cart'
         data-action='cart'
         type='button'>
@@ -94,6 +96,7 @@ function CartProductRemoveButton() {
           viewBox='0 0 10 10'>
           <title>remove product from cart</title>
           <path
+            className='cart-product__button__path'
             fill='#CAAFA7'
             d='M8.375 9.375 5 6 1.625 9.375l-1-1L4 5 .625 1.625l1-1L5 4 8.375.625l1 1L6 5l3.375 3.375-1 1Z'
           />
