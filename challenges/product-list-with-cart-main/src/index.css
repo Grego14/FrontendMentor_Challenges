@@ -53,6 +53,7 @@
   --rose-100: hsl(13, 31%, 94%);
   --rose-300: hsl(14, 25%, 72%);
   --rose-400: hsl(7, 20%, 60%);
+  --rose-400-contrast: #826a67;
   --rose-500: hsl(12, 20%, 44%);
   --rose-900: hsl(14, 65%, 9%);
 
@@ -67,6 +68,7 @@
   --dull-lavender: #AF8DEA;
   --purple-heart: #673AB7;
   --ebony-clay: #25213C;
+  --glossy-grape: #A69ABB;
 
   --fast-transition: .2s;
 
