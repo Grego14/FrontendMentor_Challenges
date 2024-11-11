@@ -23,20 +23,18 @@ export default function OrderProduct({ data }) {
 
   return (
     <div className='order-product pos-relative'>
-      <div className='order-product__thumbnail-container'>
-        <OrderProductThumbnail image={image} name={name} />
-      </div>
+      <OrderProductThumbnail image={image} name={name} />
 
       <div className='order-product__content'>
         <div className='order-product__info'>
           <h3 className='order-product__name'>{name}</h3>
-          <div className='order-product__count'>{count}x</div>
-          <div className='order-product__price-container'>
+          <span className='order-product__count'>{count}x</span>
+          <span className='order-product__price-container'>
             <span className='order-product__sign'>@</span>
             <span className='order-product__price'>
               {transformPrice(price)}
             </span>
-          </div>
+          </span>
         </div>
         <div className='order-product__total-price'>
           {transformPrice(totalPrice)}
