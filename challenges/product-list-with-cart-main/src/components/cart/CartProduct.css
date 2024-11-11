@@ -1,6 +1,5 @@
 .cart-product {
-  /* like --rose-400 but with AA contrast ratio*/
-  --cart-product-price-color: #886f6c;
+  --cart-product-price-color: var(--rose-400-contrast);
   --cart-product-count-color: var(--red-contrast);
   --cart-product-total-color: var(--rose-500);
 
@@ -21,7 +20,7 @@
 }
 
 .dark-theme .cart-product {
-  --cart-product-price-color: #A69ABB;
+  --cart-product-price-color: var(--glossy-grape);
   --cart-product-count-color: var(--dull-lavender);
   --cart-product-total-color: #E68FFF;
 
