@@ -16,9 +16,10 @@ export default memo(function LineWhoAppear() {
 
   return (
     <m.div
-      className='line-who-appear'
+      className='line-who-appear pos-absolute'
       initial='hidden'
       whileInView='show'
+      viewport={{ once: true }}
       variants={lineVariants}
     />
   )
