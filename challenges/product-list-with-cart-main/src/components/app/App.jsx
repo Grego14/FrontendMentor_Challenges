@@ -1,14 +1,15 @@
-import { LazyMotion } from 'framer-motion'
+import { LazyMotion, MotionConfig } from 'framer-motion'
 import {
   Suspense,
   forwardRef,
   lazy,
+  memo,
   useEffect,
   useReducer,
   useRef,
-  useState,
-  memo
+  useState
 } from 'react'
+import useDebounce from '../../hooks/useDebounce.jsx'
 import productsReducer from '../../reducers/productsReducer.js'
 import {
   device,
@@ -19,7 +20,6 @@ import {
   transformPrice
 } from '../../utils/utils.js'
 import Product from '../product/Product.jsx'
-import useDebounce from '../../hooks/useDebounce.jsx'
 
 const Cart = lazy(() => import('../cart/Cart.jsx'))
 const OrderModal = lazy(() => import('../order/OrderModal.jsx'))
@@ -32,7 +32,7 @@ const ToggleThemeButton = lazy(
 export default function App() {
   const cartRef = useRef(null)
 
-  const [cartSort, setCartSort] = useState('order')
+  const [cartSort, setCartSort] = useState(0)
 
   const [products, dispatch] = useReducer(productsReducer, new Map())
   const productsArr = [...products.values()]
@@ -40,9 +40,10 @@ export default function App() {
   const productsInCart = productsArr
     .filter(product => product?.cart)
     .sort((a, b) => {
-      if (cartSort === 'order') return a.order - b.order
-      if (cartSort === 'cheaper') return a.totalPrice - b.totalPrice
-      if (cartSort === 'expensive') return b.totalPrice - a.totalPrice
+      if (cartSort === 1) return a.totalPrice - b.totalPrice
+      if (cartSort === 2) return b.totalPrice - a.totalPrice
+
+      return a.order - b.order
     })
 
   const [modalVisible, setModalVisible] = useState(false)
@@ -214,13 +215,19 @@ export default function App() {
   const loadFeatures = () => import('./fm-features.js').then(res => res.default)
 
   return (
-    <LazyMotion features={loadFeatures} strict>
-      <div className='app'>
-        <Layout {...layoutData} />
+    <MotionConfig
+      transition={{
+        duration: 0.2
+      }}
+      reducedMotion='user'>
+      <LazyMotion features={loadFeatures} strict>
+        <div className='app'>
+          <Layout {...layoutData} />
 
-        <Suspense>{modalVisible && <OrderModal {...modalProps} />}</Suspense>
-      </div>
-    </LazyMotion>
+          <Suspense>{modalVisible && <OrderModal {...modalProps} />}</Suspense>
+        </div>
+      </LazyMotion>
+    </MotionConfig>
   )
 }
 
