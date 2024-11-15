@@ -1,11 +1,17 @@
 .toggle-theme {
+  --outline-color: var(--rose-900);
+
   z-index: 1200;
   border-radius: 50%;
   transition: var(--color-transitions);
-  background-color: var(--red-contrast);
+  background-color: var(--primary-color);
   width: clamp(3rem, 3rem + .8vw, 5rem);
   height: clamp(3rem, 3rem + .8vw, 5rem);
   transition-property: border-color, background-color;
+}
+
+.dark-theme .toggle-theme {
+  --outline-color: var(--rose-50)
 }
 
 .toggle-theme img {
@@ -13,26 +19,8 @@
   height: calc(30px + .5vw);
 }
 
-.dark-theme .toggle-theme {
-  background-color: var(--purple-heart);
-}
-
 .toggle-theme:focus-visible {
-  outline: 3px solid var(--rose-900);
-}
-
-.dark-theme .toggle-theme:focus-visible {
-  outline-color: var(--rose-50);
-}
-
-@media (hover: hover) {
-  .toggle-theme:hover {
-    background-color: var(--primary-color-dark);
-  }
-
-  .toggle-theme:hover:active {
-    background-color: var(--primary-color-light);
-  }
+  outline: 3px solid var(--outline-color);
 }
 
 @media only screen and (min-width: 30rem) {
