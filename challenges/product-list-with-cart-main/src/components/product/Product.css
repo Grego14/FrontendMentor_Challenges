@@ -7,6 +7,8 @@
   --product-category-color: var(--rose-500);
   --product-price-color: var(--red-contrast);
 
+  --buttons-border-color: var(--rose-500);
+
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(var(--product-width), 1fr));
   align-items: start;
@@ -19,6 +21,8 @@
 
   --product-category-color: #A4A4A4;
   --product-price-color: var(--dull-lavender);
+
+  --buttons-border-color: var(--purple-heart);
 }
 
 .products-title {
@@ -42,7 +46,7 @@
 .product__category {
   color: var(--product-category-color);
   font-weight: 400;
-  font-size: 1rem
+  font-size: var(--fsc-tiny);
 }
 
 .product__price {
@@ -122,8 +126,13 @@
   color: var(--rose-50)
 }
 
-.product__button--add,
-.product__buttons__quantity {
+.product__button {
+  z-index: 998;
+  pointer-events: auto
+}
+
+.product__buttons__quantity,
+.product__button__add {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -135,23 +144,15 @@
   transition: var(--color-transitions);
   transition-property: border-color, background-color, color;
   background-color: var(--rose-50);
-  border-color: var(--rose-500);
+  border-color: var(--buttons-border-color);
 }
 
-.dark-theme .product__button--add {
-  border-color: var(--purple-heart);
+.button__add__svg {
+  width: clamp(21px, 21px + .3vw, 30px);
+  height: clamp(20px, 20px + .3vw, 29px)
 }
 
-.product__button--add svg {
-  width: clamp(21px, 21px + .5vw, 40px);
-  height: clamp(20px, 20px + .5vw, 39px)
-}
-
-.product__button--add:focus-visible {
-  outline: 3px solid var(--primary-color);
-}
-
-.dark-theme .product__button--add g[fill] {
+.dark-theme .product__button__add .button__add__fill {
   fill: var(--purple-heart)
 }
 
@@ -161,13 +162,7 @@
   border: none
 }
 
-.product:not(.product--added) .product__button--add,
-.product--added .product__button__quantity {
-  z-index: 998;
-  pointer-events: auto
-}
-
-.product--added .product__button--add,
+.product--added .product__button__add,
 .product:not(.product--added) .product__button__quantity {
   z-index: 997;
   pointer-events: none;
@@ -214,7 +209,7 @@
 }
 
 @media (hover: hover) {
-  .product__button--add:hover {
+  .product__button__add:hover {
     background-color: var(--rose-100);
     border-color: var(--primary-color);
     color: var(--primary-color)
@@ -224,13 +219,13 @@
     background-color: var(--rose-50)
   }
 
-  .product__button__quantity:hover path[fill] {
-    fill: var(--primary-color)
+  .product__button__quantity:hover .quantity-path {
+    fill: var(--primary-color);
   }
 }
 
 @media only screen and (min-width: 30rem) {
-  .skeleton.product-image {
+  .skeleton-product-image {
     --skeleton-divisor: 1.4;
   }
 }
@@ -240,5 +235,9 @@
     --product-width: 12rem;
 
     grid-template-columns: repeat(3, minmax(var(--product-width), 1fr))
+  }
+
+  .skeleton-product-image {
+    --skeleton-divisor: .8;
   }
 }
