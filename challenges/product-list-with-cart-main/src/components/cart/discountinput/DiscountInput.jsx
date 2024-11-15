@@ -39,8 +39,7 @@ export default function DiscountInput(props) {
     onPointerUp: handleApplyClick,
     onKeyDown: handleApplyClick,
     className: 'discount-input-button',
-    disabled: clickedAndInvalid,
-    'data-hover': ''
+    disabled: clickedAndInvalid
   }
 
   const textClickBtnProps = {
