@@ -1,9 +1,57 @@
 .discount-input-container {
-  --bright-red: #FF501B;
+  --error-color: var(--red-contrast);
+
+  --text-click-color: var(--rose-500);
+  --text-click-hover-color: var(--rose-300);
+  --text-click-focus-active-color: var(--rose-400);
+
+  --input-button-bg: var(--primary-color);
+  --input-button-fg: var(--rose-50);
+  --input-button-border-color: transparent;
+  --input-button-focus-color: var(--rose-50);
+
+  --input-button-hover-bg: var(--rose-100);
+  --input-button-hover-color: var(--red-contrast);
+  --input-button-hover-border-color: var(--rose-300);
+
+  --input-bg: var(--rose-300);
+  --input-fg: var(--rose-900);
+  --input-border-color: var(--rose-400);
 
   display: flex;
   gap: 1rem;
   justify-content: space-between;
+}
+
+.dark-theme .discount-input-container {
+  --error-color: #FF501B;
+
+  --text-click-color: #AF9DEA;
+  --text-click-hover-color: #D3C5FF;
+  --text-click-focus-active-color: #967DE8;
+
+  --input-button-fg: var(--dull-lavender);
+  --input-button-bg: transparent;
+  --input-button-border-color: var(--dull-lavender);
+
+  --input-button-focus-color: var(--rose-50);
+
+  --input-button-hover-bg: var(--primary-color-dark);
+  --input-button-hover-color: var(--input-button-focus-color);
+  --input-button-hover-border-color: var(--dull-lavender);
+
+  --input-bg: transparent;
+  --input-fg: var(--rose-50);
+  --input-border-color: var(--dull-lavender);
+
+  /* change the outline-color only on dark-theme as we wan't the outline to be
+  * the default color at light-theme */
+  --outline-color: var(--rose-50)
+}
+
+.discount-text {
+  font-weight: 600;
+  font-size: var(--fsc-small);
 }
 
 .discount-input-button,
@@ -13,43 +61,20 @@
   font-weight: 600;
   font-size: var(--fsc-small);
   transition: var(--color-transitions);
-  border: 3px solid transparent;
+  border: 2px solid transparent;
   transition-property: border-color, background-color, color;
 }
 
 .discount-input {
   margin-top: .3rem;
-  background-color: var(--rose-300);
-  color: var(--rose-900);
-  border-color: var(--rose-400);
+  background-color: var(--input-bg);
+  border-color: var(--input-border-color);
+  color: var(--input-fg);
   max-width: 100%;
 }
 
 .discount-input.invalid {
-  border-color: var(--red-contrast);
-}
-
-.dark-theme .discount-input.invalid {
-  border-color: var(--bright-red);
-}
-
-.dark-theme .discount-input {
-  background-color: transparent;
-  color: var(--rose-50);
-  border-color: var(--dull-lavender);
-}
-
-.discount-input:focus-visible {
-  outline: 3px solid var(--red-contrast);
-}
-
-.discount-input-button:focus-visible {
-  outline: 3px solid var(--rose-900);
-}
-
-.dark-theme .discount-input-button:focus-visible,
-.dark-theme .discount-input:focus-visible {
-  outline-color: var(--rose-50);
+  border-color: var(--error-color);
 }
 
 .discount-input-label {
@@ -59,23 +84,19 @@
   max-width: 12rem;
 }
 
+.discount-error {
+  font-weight: bold;
+  color: var(--error-color)
+}
+
 .discount-input-button {
   align-self: end;
   width: 5rem;
   height: 2.15rem;
-  border-width: 2px;
 
-  background-color: var(--red-contrast);
-  color: var(--rose-50);
-}
-
-.dark-theme .discount-input-button {
-  background-color: var(--purple-heart);
-  border-color: var(--dull-lavender)
-}
-
-.discount-input-button:focus-visible {
-  background-color: var(--primary-color-dark)
+  background-color: var(--input-button-bg);
+  color: var(--input-button-fg);
+  border-color: var(--input-button-border-color)
 }
 
 .discount-input-button:disabled {
@@ -85,45 +106,37 @@
 
 .discount-text-click {
   text-decoration: underline;
-  color: var(--rose-500);
   cursor: pointer;
   margin-left: .5rem;
   padding: .2rem;
-}
-
-.dark-theme .discount-text-click {
-  color: #af8dea;
+  color: var(--text-click-color);
+  transition: var(--color-transitions);
 }
 
 .discount-text-click:focus-visible {
-  outline: 3px dotted var(--rose-300);
+  outline: 2px dotted var(--text-click-focus-active-color);
   text-decoration: none;
 }
 
-.dark-theme .discount-text-click:focus-visible {
-  outline-color: var(--dull-lavender);
-}
-
-.discount-error {
-  font-weight: bold;
-  color: var(--red-contrast);
-}
-
-.dark-theme .discount-error {
-  color: var(--bright-red)
+.discount-input-button:focus-visible {
+  background-color: var(--input-button-hover-bg);
+  color: var(--input-button-hover-color);
+  border-color: var(--input-button-hover-border-color);
 }
 
 @media (hover: hover) {
-  .discount-input-button:hover:not(:disabled) {
-    background-color: var(--rose-100);
-    color: var(--red-contrast);
-    border-color: var(--rose-300);
+  .discount-text-click:hover {
+    color: var(--text-click-hover-color)
   }
 
-  .dark-theme .discount-input-button:hover:not(:disabled) {
-    background-color: transparent;
-    border-color: var(--purple-heart);
-    color: var(--dull-lavender);
+  .discount-text-click:hover:active {
+    color: var(--text-click-focus-active-color);
+  }
+
+  .discount-input-button:hover:not(:disabled) {
+    background-color: var(--input-button-hover-bg);
+    color: var(--input-button-hover-color);
+    border-color: var(--input-button-hover-border-color)
   }
 }
 
