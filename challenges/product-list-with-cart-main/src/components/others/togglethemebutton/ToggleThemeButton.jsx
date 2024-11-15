@@ -1,8 +1,8 @@
 import './ToggleThemeButton.css'
 import { invalidUserInteraction } from '/src/utils/utils.js'
-import ButtonWhoAppear from '../ButtonWhoAppear.jsx'
 import { m } from 'framer-motion'
 import useDebounce from '/src/hooks/useDebounce'
+import AppButton from '../appbutton/AppButton.jsx'
 
 export default function ToggleThemeButton({ theme, toggleTheme }) {
   const [isDebouncing, handleToggleThemeClick] = useDebounce(e => {
@@ -37,19 +37,22 @@ export default function ToggleThemeButton({ theme, toggleTheme }) {
   }
 
   return (
-    <ButtonWhoAppear props={toggleThemeProps}>
-      <img
-        src={`${import.meta.env.BASE_URL}${
-          theme === 'light'
-            ? 'assets/images/icon-light.svg'
-            : 'assets/images/icon-dark.svg'
-        }`}
-        alt=''
-        aria-hidden='true'
-        width={30}
-        height={30}
-        draggable='false'
-      />
-    </ButtonWhoAppear>
+    <AppButton
+      props={toggleThemeProps}
+      render={
+        <img
+          src={`${import.meta.env.BASE_URL}${
+            theme === 'light'
+              ? 'assets/images/icon-light.svg'
+              : 'assets/images/icon-dark.svg'
+          }`}
+          alt=''
+          aria-hidden='true'
+          width={30}
+          height={30}
+          draggable='false'
+        />
+      }
+    />
   )
 }
