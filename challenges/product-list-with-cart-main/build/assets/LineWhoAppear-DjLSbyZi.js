@@ -1,0 +1,1 @@
+import{r as e,j as o,m as t}from"./index-CDa9gCp2.js";const s=e.memo(function(){const i={hidden:{opacity:0,width:"0%"},show:{opacity:1,width:"100%"}};return o.jsx(t.div,{className:"line-who-appear pos-absolute",initial:"hidden",whileInView:"show",viewport:{once:!0},variants:i})});export{s as L};

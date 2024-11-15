@@ -1,0 +1,1 @@
+.app-button{--outline-color:var(--rose-900)}.dark-theme .app-button{--outline-color:var(--rose-50)}.app-button:focus-visible{outline-color:var(--outline-color);background-color:var(--primary-color-dark)}@media (hover:hover){.app-button:hover{background-color:var(--primary-color-dark)}.app-button:hover:active{background-color:var(--primary-color-light)}}
