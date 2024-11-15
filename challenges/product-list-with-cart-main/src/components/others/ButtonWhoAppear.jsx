@@ -5,8 +5,7 @@ import { preventContextMenu } from '../../utils/utils.js'
 export default memo(function ButtonWhoAppear({
   props,
   isVisible = true,
-  children,
-  text
+  render
 }) {
   const variants = {
     hidden: {
@@ -31,11 +30,11 @@ export default memo(function ButtonWhoAppear({
       initial='hidden'
       whileInView={isVisible ? 'show' : 'hidden'}
       viewport={{ once: true }}
-      variants={props.variants || variants}
+      variants={props?.variants || variants}
       type='button'
       disabled={props?.disabled ? props?.disabled : !isVisible}
       onContextMenu={preventContextMenu}>
-      {children || text}
+      {typeof render === 'function' ? render() : render}
     </m.button>
   )
 })
