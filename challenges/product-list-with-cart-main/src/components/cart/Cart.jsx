@@ -7,8 +7,7 @@ import {
 } from '/src/utils/utils.js'
 import './Cart.css'
 import { m } from 'framer-motion'
-
-import ButtonWhoAppear from '../others/ButtonWhoAppear.jsx'
+import AppButton from '../others/appbutton/AppButton.jsx'
 
 const CartProducts = lazy(() => import('./CartProduct.jsx'))
 const DiscountInput = lazy(() => import('./discountinput/DiscountInput.jsx'))
@@ -91,7 +90,7 @@ const Cart = forwardRef((props, ref) => {
   }
 
   function handleCartSorting(e) {
-    setCartSort(e.target.value)
+    setCartSort(Number(e.target.value))
   }
 
   return (
@@ -116,9 +115,9 @@ const Cart = forwardRef((props, ref) => {
               onChange={handleCartSorting}
               defaultValue='order'
               aria-label='Sort by'>
-              <option value='order'>Order</option>
-              <option value='cheaper'>Cheaper</option>
-              <option value='expensive'>Expensive</option>
+              <option value='0'>Order</option>
+              <option value='1'>Cheaper</option>
+              <option value='2'>Expensive</option>
             </select>
           </div>
         )}
@@ -184,17 +183,8 @@ function CartInfo(props) {
         </p>
       </div>
 
-      <ButtonWhoAppear
-        props={confirmOrderProps}
-        buttonClass='.confirm-order'
-        text='Confirm Order'
-      />
-
-      {!discount ? (
-        <DiscountInput {...discountInputProps} />
-      ) : (
-        <div className='discount-text'>-20% discount applied!</div>
-      )}
+      <AppButton props={confirmOrderProps} render='Confirm Order' />
+      <DiscountInput {...discountInputProps} />
     </div>
   )
 }
