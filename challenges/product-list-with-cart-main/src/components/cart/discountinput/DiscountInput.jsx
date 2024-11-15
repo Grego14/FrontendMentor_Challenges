@@ -2,28 +2,22 @@ import { useState } from 'react'
 import ButtonWhoAppear from '../../others/ButtonWhoAppear.jsx'
 import './DiscountInput.css'
 import { invalidUserInteraction } from '/src/utils/utils.js'
+import useDebounce from '/src/hooks/useDebounce.jsx'
 
 export default function DiscountInput(props) {
   const { message, validCode, setValid, id, isValid } = props
   const [value, setValue] = useState(message)
+
   const [showDiscountInput, setShowDiscountInput] = useState(false)
-
-  const [isTyping, setIsTyping] = useState(false)
-  const typingDelay = 250
-  let typingTimeout
-
   const [applyClicked, setApplyClicked] = useState(false)
 
+  const [isTyping, debounce] = useDebounce(e => {
+    setValue(e.target.value)
+  }, 250)
+
   function handleOnChange(e) {
-    setIsTyping(true)
-    clearTimeout(typingTimeout)
-
-    typingTimeout = setTimeout(() => {
-      setValue(e.target.value)
-      setIsTyping(false)
-    }, 300)
-
     setApplyClicked(false)
+    debounce(e)
   }
 
   function handleTextClick(e) {
@@ -40,31 +34,25 @@ export default function DiscountInput(props) {
   }
 
   const clickedAndInvalid = applyClicked && !isValid
-  const buttonProps = {
+
+  const inputBtnProps = {
     onPointerUp: handleApplyClick,
     onKeyDown: handleApplyClick,
     className: 'discount-input-button',
-    disabled: clickedAndInvalid
+    disabled: clickedAndInvalid,
+    'data-hover': ''
+  }
+
+  const textClickBtnProps = {
+    className: 'discount-text-click',
+    onPointerUp: handleTextClick,
+    onKeyDown: handleTextClick
   }
 
   return (
-    <>
-      {!showDiscountInput && (
-        <div className='discount-text'>
-          Discount code?{' '}
-          <ButtonWhoAppear
-            props={{
-              className: 'discount-text-click',
-              onPointerUp: handleTextClick,
-              onKeyDown: handleTextClick
-            }}
-            bounce={false}
-            text='Click here!'
-          />
-        </div>
-      )}
-      {showDiscountInput && (
-        <div className='discount-input-container'>
+    <div className='discount-input-container'>
+      {showDiscountInput && !isValid ? (
+        <>
           <label
             htmlFor={id}
             value='discount code'
@@ -84,14 +72,18 @@ export default function DiscountInput(props) {
             />
           </label>
 
-          <ButtonWhoAppear
-            buttonClass='discount-input-button'
-            props={buttonProps}
-            show={!clickedAndInvalid}
-            text='Apply'
-          />
-        </div>
+          <ButtonWhoAppear props={inputBtnProps} render='Apply' />
+        </>
+      ) : (
+        !isValid && (
+          <div className='discount-text'>
+            Discount code?{' '}
+            <ButtonWhoAppear props={textClickBtnProps} render='Click here!' />
+          </div>
+        )
       )}
-    </>
+
+      {isValid && <div className='discount-text'>-20% discount applied!</div>}
+    </div>
   )
 }
