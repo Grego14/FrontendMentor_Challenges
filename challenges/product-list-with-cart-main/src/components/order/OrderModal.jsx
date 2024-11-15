@@ -1,6 +1,6 @@
 import './OrderModal.css'
 import { invalidUserInteraction } from '../../utils/utils.js'
-import ButtonWhoAppear from '../others/ButtonWhoAppear.jsx'
+import AppButton from '../others/appbutton/AppButton.jsx'
 import { lazy } from 'react'
 
 const OrderProduct = lazy(() => import('./OrderProduct.jsx'))
@@ -56,7 +56,7 @@ export default function OrderModal({
           </div>
         </div>
 
-        <ButtonWhoAppear text='Start New Order' props={newOrderBtnProps} />
+        <AppButton props={newOrderBtnProps} render='Start New Order' />
       </div>
     </div>
   )
