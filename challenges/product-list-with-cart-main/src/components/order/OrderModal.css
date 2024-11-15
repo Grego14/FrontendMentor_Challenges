@@ -110,22 +110,12 @@
   background-color: var(--primary-color);
   color: var(--rose-50);
   box-shadow: 0 2px 6px var(--primary-color);
-  font-size: var(--fsc-medium)
+  font-size: var(--fsc-small)
 }
 
 .order-modal__button:focus-visible {
   outline: 3px solid var(--modal-button-focus);
   background-color: var(--primary-color-dark)
-}
-
-@media (hover: hover) {
-  .order-modal__button:hover {
-    background-color: var(--primary-color-dark)
-  }
-
-  .order-modal__button:hover:active {
-    background-color: var(--primary-color-light)
-  }
 }
 
 @media only screen and (min-width: 30rem) {
