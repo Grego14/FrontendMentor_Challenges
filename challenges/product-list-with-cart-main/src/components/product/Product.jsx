@@ -20,7 +20,8 @@ export default function Product({ data }) {
   const buttonProps = {
     onCart,
     imageLoaded,
-    count
+    count,
+    outOfStock
   }
 
   function imageLoad() {
