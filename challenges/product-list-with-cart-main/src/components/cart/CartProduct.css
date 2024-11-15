@@ -86,8 +86,7 @@
 
 .cart-product__button:focus-visible {
   transition-property: background-color;
-  outline: 3px solid var(--cart-product-button-active-focus-color);
-  border-color: transparent;
+  outline-color: var(--cart-product-button-active-focus-color);
 }
 
 @media (hover: hover) {
