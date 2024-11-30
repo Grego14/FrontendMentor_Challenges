@@ -8,7 +8,6 @@ const OrderProduct = lazy(() => import('./OrderProduct.jsx'))
 export default function OrderModal({
   productsInCart,
   newOrder,
-  totalPrice,
   TotalPriceComponent
 }) {
   function handleNewOrder(e) {
