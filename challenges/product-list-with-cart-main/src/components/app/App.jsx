@@ -1,4 +1,4 @@
-import { LazyMotion, MotionConfig } from 'framer-motion'
+import { LazyMotion, MotionConfig, domAnimation } from 'motion/react'
 import {
   Suspense,
   forwardRef,
@@ -11,6 +11,7 @@ import {
 } from 'react'
 import useDebounce from '../../hooks/useDebounce.jsx'
 import productsReducer from '../../reducers/productsReducer.js'
+import statesReducer from '../../reducers/statesReducer.js'
 import {
   device,
   extractProductId,
@@ -24,6 +25,7 @@ import Product from '../product/Product.jsx'
 const Cart = lazy(() => import('../cart/Cart.jsx'))
 const OrderModal = lazy(() => import('../order/OrderModal.jsx'))
 const UserData = lazy(() => import('./userdata/UserData.jsx'))
+const TotalPrice = lazy(() => import('./TotalPrice.jsx'))
 
 const ToggleThemeButton = lazy(
   () => import('../others/togglethemebutton/ToggleThemeButton.jsx')
@@ -34,7 +36,7 @@ export default function App() {
 
   const [cartSort, setCartSort] = useState(0)
 
-  const [products, dispatch] = useReducer(productsReducer, new Map())
+  const [products, dispatchProducts] = useReducer(productsReducer, new Map())
   const productsArr = [...products.values()]
 
   const productsInCart = productsArr
@@ -46,9 +48,17 @@ export default function App() {
       return a.order - b.order
     })
 
-  const [modalVisible, setModalVisible] = useState(false)
-  const [productsFetched, setProductsFetched] = useState(false)
-  const [cartVisible, setCartVisible] = useState(false)
+  const [appStates, dispatchStates] = useReducer(
+    statesReducer,
+    new Map(),
+    map => {
+      map.set('cartVisible', false)
+      map.set('modalVisible', false)
+      map.set('productsFetched', false)
+
+      return map
+    }
+  )
 
   const storage = localStorage
   const [discount, setDiscount] = useState(storage.getItem('discount') || false)
@@ -102,27 +112,28 @@ export default function App() {
             )
           )
 
-        dispatch({ type: 'fetch', products: dataConverted })
-        setProductsFetched(true)
+        dispatchProducts({ type: 'fetch', products: dataConverted })
+        dispatchStates({ state: 'productsFetched', value: true })
       })
   }, [storageStock.get, storage.setItem, storage.getItem, storageStock.values])
 
   let totalPrice = 0
   let productsCount = 0
 
-  const l = productsInCart.length
-  const prices = []
-  let count = 0
+  !(() => {
+    const prices = []
+    let count = 0
 
-  for (let i = 0; i < l; i++) {
-    const product = productsInCart[i]
+    for (let i = 0; i < productsInCart.length; i++) {
+      const product = productsInCart[i]
 
-    prices.push(getTotalProductPrice(product.price, product.count))
-    count += product.count
-  }
+      prices.push(getTotalProductPrice(product.price, product.count))
+      count += product.count
+    }
 
-  totalPrice = getTotalPrice(prices)
-  productsCount = count
+    totalPrice = getTotalPrice(prices)
+    productsCount = count
+  })()
 
   const TotalPriceComponent = memo(() => (
     <TotalPrice price={totalPrice} discount={discount} amount={20} />
@@ -156,7 +167,7 @@ export default function App() {
   const scrollingElement = document.scrollingElement
 
   // prevent scrolling when the products aren't fetched or the modal is visible
-  !productsFetched || modalVisible
+  !appStates.get('productsFetched') || appStates.get('modalVisible')
     ? scrollingElement.classList.add('no-scroll')
     : scrollingElement.classList.remove('no-scroll')
 
@@ -165,7 +176,11 @@ export default function App() {
     scrollingElement.classList.value.match(/[a-z]+\-theme/)?.[0]
 
   scrollingElement.classList.contains(lastThemeClass)
-    ? scrollingElement.classList.replace(lastThemeClass, themeClass)
+    ? scrollingElement.classList.replace(
+        lastThemeClass,
+        themeClass,
+        lastThemeClass !== themeClass
+      )
     : scrollingElement.classList.add(themeClass)
 
   function handleDiscount(value) {
@@ -173,34 +188,28 @@ export default function App() {
     storage.setItem('discount', value ? 'true' : '')
   }
 
-  function handleModalVisibility() {
-    setModalVisible(state => !state)
-  }
-
   function newOrder(e) {
-    dispatch({ type: 'newOrder' })
-    handleModalVisibility()
+    dispatchProducts({ type: 'newOrder' })
+    dispatchStates({ state: 'modalVisible', value: false })
     handleDiscount(false)
   }
 
   const layoutData = {
     products: productsArr,
-    dispatch,
+    dispatchProducts,
+    dispatchStates,
 
-    totalPrice,
     productsInCart,
     productsCount,
     discount,
     TotalPriceComponent,
 
-    confirmOrder: handleModalVisibility,
     handleDiscount,
-    setCartVisible,
     setCartSort,
 
-    cartVisible,
+    cartVisible: appStates.get('cartVisible'),
     cartRef,
-    productsFetched,
+    productsFetched: appStates.get('productsFetched'),
 
     ...appTheme
   }
@@ -208,23 +217,22 @@ export default function App() {
   const modalProps = {
     productsInCart,
     newOrder,
-    totalPrice,
     TotalPriceComponent
   }
-
-  const loadFeatures = () => import('./fm-features.js').then(res => res.default)
 
   return (
     <MotionConfig
       transition={{
-        duration: 0.2
+        duration: 0.2,
+        ease: 'easeInOut'
       }}
       reducedMotion='user'>
-      <LazyMotion features={loadFeatures} strict>
+      <LazyMotion features={domAnimation}>
         <div className='app'>
           <Layout {...layoutData} />
-
-          <Suspense>{modalVisible && <OrderModal {...modalProps} />}</Suspense>
+          <Suspense>
+            {appStates.get('modalVisible') && <OrderModal {...modalProps} />}
+          </Suspense>
         </div>
       </LazyMotion>
     </MotionConfig>
@@ -234,17 +242,15 @@ export default function App() {
 function Layout(props) {
   const {
     products,
-    dispatch: productsHandler,
+    dispatchProducts: productsHandler,
+    dispatchStates,
 
-    totalPrice,
     productsInCart,
     productsCount,
     discount,
     TotalPriceComponent,
 
-    confirmOrder,
     handleDiscount,
-    setCartVisible,
     setCartSort,
 
     cartVisible,
@@ -255,16 +261,17 @@ function Layout(props) {
     theme
   } = props
 
+  const [loadCart, setLoadCart] = useState(false)
   const [halfProductsVisible, setHalfProductsVisible] = useState(false)
   const productsRef = useRef(null)
 
   const [isDebouncing, handleScroll] = useDebounce(() => {
     setHalfProductsVisible(state => {
-      if (state || device.any() !== 'mobile') return true
-
       if (
+        state ||
+        device.any() !== 'mobile' ||
         document.scrollingElement.scrollTop >=
-        productsRef.current.clientHeight / 2
+          productsRef.current.clientHeight / 2
       )
         return true
 
@@ -289,17 +296,16 @@ function Layout(props) {
     productsFetched,
     TotalPriceComponent,
     products,
-    productsHandler
+    productsHandler,
+    loadCart: setLoadCart
   }
 
   const cartProps = {
     productsInCart,
-    confirmOrder,
-    totalPrice,
     productsCount,
     handleDiscount,
     discount,
-    setCartVisible,
+    dispatchStates,
     TotalPriceComponent,
     productsHandler,
     setCartSort
@@ -321,7 +327,9 @@ function Layout(props) {
       <Products {...productsProps} ref={productsRef} />
 
       <Suspense>
-        {halfProductsVisible && <Cart {...cartProps} ref={cartRef} />}
+        {loadCart && halfProductsVisible && (
+          <Cart {...cartProps} ref={cartRef} />
+        )}
       </Suspense>
 
       <Suspense>
@@ -340,8 +348,41 @@ function Layout(props) {
   )
 }
 
-const Products = forwardRef((props, ref) => {
-  const { products, productsHandler, productsFetched } = props
+const Products = forwardRef(function Products(props, ref) {
+  const { products, productsHandler, productsFetched, loadCart } = props
+  const [firstImagesLoaded, setFirstImagesLoaded] = useState(false)
+
+  useEffect(() => {
+    setFirstImagesLoaded(() => {
+      if (ref.current) {
+        const productImages = ref.current.querySelectorAll('.product__image')
+
+        // only wait for the first 3 images
+        for (let i = 0; i < 3; i++) {
+          const image = productImages[i]
+
+          if (!image?.complete) return false
+
+          if (i === 2 && image?.complete) return true
+        }
+      }
+
+      return false
+    })
+
+    // Fallback in case the first 3 images doesn't load
+    const timeout = setTimeout(() => {
+      setFirstImagesLoaded(true)
+    }, 300)
+
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [ref.current])
+
+  useEffect(() => {
+    loadCart(firstImagesLoaded)
+  }, [firstImagesLoaded, loadCart])
 
   function handleProducts(e) {
     if (invalidUserInteraction(e)) return
@@ -378,19 +419,6 @@ const Products = forwardRef((props, ref) => {
     </div>
   )
 })
-
-function TotalPrice({ price, discount, amount }) {
-  return (
-    <div className='total-price-container'>
-      <span className='price'>{transformPrice(price)}</span>
-      {discount && (
-        <span className='discount-price'>
-          {transformPrice(price - (price / 100) * (amount || 10))}
-        </span>
-      )}
-    </div>
-  )
-}
 
 function getMapFromStorage(mapOnStorage) {
   const data = [...JSON.parse(mapOnStorage || '[]')]
