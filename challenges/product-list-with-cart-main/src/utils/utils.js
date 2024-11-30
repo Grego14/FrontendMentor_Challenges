@@ -31,14 +31,10 @@ export function matches(element, className) {
   return element.matches(className) || element.matches(`${className} *`)
 }
 
-export function isEnterKey(e) {
-  return e.type === 'keydown' && e.key === 'Enter'
-}
-
 export function invalidUserInteraction(e) {
   return (
     (e.type === 'pointerup' && e.button !== 0) ||
-    (e.type === 'keydown' && !isEnterKey(e))
+    (e.type === 'keydown' && e.key !== 'Enter')
   )
 }
 
@@ -72,7 +68,6 @@ const utils = {
   getTotalPrice,
   getTotalProductPrice,
   matches,
-  isEnterKey,
   invalidUserInteraction,
   extractProductId,
   preventContextMenu,
