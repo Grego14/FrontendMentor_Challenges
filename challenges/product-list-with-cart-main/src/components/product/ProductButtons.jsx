@@ -1,6 +1,6 @@
 import ButtonWhoAppear from '../others/ButtonWhoAppear.jsx'
 import { useId } from 'react'
-import { m } from 'framer-motion'
+import { motion as m } from 'motion/react'
 
 export function QuantityButtons(props) {
   const { imageLoaded, onCart, count, outOfStock } = props
