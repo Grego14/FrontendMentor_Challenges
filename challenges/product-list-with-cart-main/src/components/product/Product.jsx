@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useState, memo } from 'react'
 import './Product.css'
-import { m } from 'framer-motion'
+import { m } from 'motion/react'
 import { transformPrice } from '../../utils/utils.js'
-import * as ProductButtons from './ProductButtons.jsx'
+import { QuantityButtons, AddToCartButton } from './ProductButtons.jsx'
 
-export default function Product({ data }) {
+const Product = memo(function Product({ data }) {
   const {
     name,
     price,
@@ -74,13 +74,15 @@ export default function Product({ data }) {
         <ProductImage {...productImageProps} />
 
         <div className='product__buttons pos-relative'>
-          <ProductButtons.AddToCartButton {...buttonProps} />
-          <ProductButtons.QuantityButtons {...buttonProps} />
+          <AddToCartButton {...buttonProps} />
+          <QuantityButtons {...buttonProps} />
         </div>
       </div>
     </m.div>
   )
-}
+})
+
+export default Product
 
 function ProductImage({ images, setImageLoaded, show, important }) {
   return (
