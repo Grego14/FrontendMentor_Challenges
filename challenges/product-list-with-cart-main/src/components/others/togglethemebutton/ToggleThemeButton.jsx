@@ -1,6 +1,6 @@
 import './ToggleThemeButton.css'
 import { invalidUserInteraction } from '/src/utils/utils.js'
-import { m } from 'framer-motion'
+import { m } from 'motion/react'
 import useDebounce from '/src/hooks/useDebounce'
 import AppButton from '../appbutton/AppButton.jsx'
 
