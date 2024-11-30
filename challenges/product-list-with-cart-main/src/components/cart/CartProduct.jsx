@@ -1,22 +1,10 @@
 import './CartProduct.css'
-import { m } from 'framer-motion'
+import { memo } from 'react'
+import { motion as m } from 'motion/react'
 import { transformPrice } from '/src/utils/utils.js'
 import LineWhoAppear from '../others/linewhoappear/LineWhoAppear.jsx'
 
-export default function CartProducts({ handleRemoveProduct, productsInCart }) {
-  return (
-    <div
-      className='cart__products'
-      onPointerUp={handleRemoveProduct}
-      onKeyDown={handleRemoveProduct}>
-      {productsInCart.map(product => (
-        <CartProduct data={product} key={product.id} />
-      ))}
-    </div>
-  )
-}
-
-function CartProduct({ data }) {
+const CartProduct = memo(function CartProduct({ data }) {
   const { name, count, price, id, order, initial, totalPrice } = data
 
   const productVariants = {
@@ -58,7 +46,9 @@ function CartProduct({ data }) {
       <LineWhoAppear />
     </m.div>
   )
-}
+})
+
+export default CartProduct
 
 function CartProductContent({ name, count, price, totalPrice }) {
   return (
