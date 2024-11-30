@@ -1,0 +1,1 @@
+import{r as s,j as a,B as e}from"./index-Dm6GZMbr.js";const p=s.memo(function({props:t,render:o}){const n={...t,className:`app-button ${t==null?void 0:t.className}`};return a.jsx(e,{props:n,render:o})}),m=p;export{m as A};

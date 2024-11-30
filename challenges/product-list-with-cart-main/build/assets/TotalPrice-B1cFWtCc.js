@@ -1,0 +1,1 @@
+import{j as a,t as r}from"./index-Dm6GZMbr.js";function c({price:s,discount:e,amount:t}){return a.jsxs("div",{className:"total-price-container",children:[a.jsx("span",{className:"price",children:r(s)}),e&&a.jsx("span",{className:"discount-price",children:r(s-s/100*(t||10))})]})}export{c as default};
