@@ -1,8 +1,8 @@
-import { m } from 'framer-motion'
+import { motion as m } from 'motion/react'
 import { memo } from 'react'
 import { preventContextMenu } from '../../utils/utils.js'
 
-export default memo(function ButtonWhoAppear({
+const ButtonWhoAppear = memo(function ButtonWhoAppear({
   props,
   isVisible = true,
   render
@@ -38,3 +38,5 @@ export default memo(function ButtonWhoAppear({
     </m.button>
   )
 })
+
+export default ButtonWhoAppear
