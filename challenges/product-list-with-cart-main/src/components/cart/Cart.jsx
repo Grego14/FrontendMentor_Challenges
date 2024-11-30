@@ -6,30 +6,27 @@ import {
   matches
 } from '/src/utils/utils.js'
 import './Cart.css'
-import { m } from 'framer-motion'
+import { motion } from 'motion/react'
 import AppButton from '../others/appbutton/AppButton.jsx'
 
-const CartProducts = lazy(() => import('./CartProduct.jsx'))
+const CartProduct = lazy(() => import('./CartProduct.jsx'))
 const DiscountInput = lazy(() => import('./discountinput/DiscountInput.jsx'))
 
 const Cart = forwardRef((props, ref) => {
   const {
     productsInCart,
     productsHandler,
-    confirmOrder,
-    totalPrice,
     productsCount,
     handleDiscount,
     discount,
-    setCartVisible,
     TotalPriceComponent,
-    setCartSort
+    setCartSort,
+    dispatchStates
   } = props
 
-  // biome-ignore lint: Can't use that function here
   useEffect(() => {
-    setCartVisible(true)
-  }, [])
+    dispatchStates({ state: 'cartVisible', value: true })
+  }, [dispatchStates])
 
   function handleRemoveProduct(e) {
     const id = extractProductId(e)
@@ -47,7 +44,7 @@ const Cart = forwardRef((props, ref) => {
   function handleConfirmOrder(e) {
     if (invalidUserInteraction(e)) return
 
-    confirmOrder()
+    dispatchStates({ state: 'modalVisible', value: true })
   }
 
   const confirmOrderProps = {
@@ -59,33 +56,26 @@ const Cart = forwardRef((props, ref) => {
 
   const cartContentProps = {
     productsCount,
+    handleRemoveProduct,
+    productsInCart,
 
     infoProps: {
-      totalPrice,
       TotalPriceComponent,
       discount,
       handleDiscount,
       confirmOrderProps
-    },
-
-    productsProps: {
-      handleRemoveProduct,
-      productsInCart
     }
   }
 
   const cartVariants = {
     hidden: {
-      opacity: 1,
+      opacity: 0,
       x: device.any() === 'desktop' ? '250%' : '0%'
     },
 
     show: {
       opacity: 1,
-      x: '0%',
-      transition: {
-        duration: 0.4
-      }
+      x: '0%'
     }
   }
 
@@ -94,7 +84,7 @@ const Cart = forwardRef((props, ref) => {
   }
 
   return (
-    <m.div
+    <motion.div
       initial='hidden'
       animate='show'
       variants={cartVariants}
@@ -124,37 +114,53 @@ const Cart = forwardRef((props, ref) => {
       </div>
 
       <CartContent {...cartContentProps} />
-    </m.div>
+    </motion.div>
   )
 })
 
 export default Cart
 
 function CartContent(props) {
-  const { productsCount, infoProps, productsProps } = props
+  const { productsCount, infoProps, handleRemoveProduct, productsInCart } =
+    props
 
   return (
     <div className='cart-content' aria-live='polite' aria-atomic='true'>
       {productsCount > 0 ? (
-        <Suspense>
-          <CartProducts {...productsProps} />
-          <CartInfo {...infoProps} />
-        </Suspense>
+        <>
+          <div
+            className='cart__products'
+            onPointerUp={handleRemoveProduct}
+            onKeyDown={handleRemoveProduct}>
+            {productsInCart.map(product => (
+              <CartProduct data={product} key={product.id} />
+            ))}
+          </div>
+
+          <Suspense>
+            <CartInfo {...infoProps} />
+          </Suspense>
+        </>
       ) : (
-        <CartNoProduct />
+        <div className='cart__no-product'>
+          <img
+            className='no-product__image'
+            src='./assets/images/illustration-empty-cart.svg'
+            alt=''
+            aria-hidden='true'
+            width='96'
+            height='96'
+          />
+          <p className='no-product__text'>Your added items will appear here</p>
+        </div>
       )}
     </div>
   )
 }
 
 function CartInfo(props) {
-  const {
-    totalPrice,
-    discount,
-    handleDiscount,
-    confirmOrderProps,
-    TotalPriceComponent
-  } = props
+  const { discount, handleDiscount, confirmOrderProps, TotalPriceComponent } =
+    props
 
   const discountInputProps = {
     message: 'Get -20% discount!',
@@ -185,22 +191,6 @@ function CartInfo(props) {
 
       <AppButton props={confirmOrderProps} render='Confirm Order' />
       <DiscountInput {...discountInputProps} />
-    </div>
-  )
-}
-
-function CartNoProduct() {
-  return (
-    <div className='cart__no-product'>
-      <img
-        className='no-product__image'
-        src='./assets/images/illustration-empty-cart.svg'
-        alt=''
-        aria-hidden='true'
-        width='96'
-        height='96'
-      />
-      <p className='no-product__text'>Your added items will appear here</p>
     </div>
   )
 }
