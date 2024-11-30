@@ -1,5 +1,5 @@
 import './UserData.css'
-import { m } from 'framer-motion'
+import { m } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { device } from '/src/utils/utils.js'
 
@@ -19,7 +19,7 @@ export default function UserData(props) {
     threshold: [0.2, 0.4]
   }
 
-  // useInView hook from framer-motion can't be used here as it stop working
+  // useInView hook from motion can't be used here as it stop working
   // when the Cart component is downloaded and the cartRef is updated so we
   // use an IntersectionObserver
   const observer = new IntersectionObserver(callback, options)
@@ -54,12 +54,6 @@ export default function UserData(props) {
       observer.disconnect(cartRef.current)
     }
   }, [cartRef.current, observer.observe, observer.disconnect])
-
-  const userOrderProps = {
-    productsCount,
-    TotalPriceComponent,
-    visible: showUserOrder
-  }
 
   const userDataVariants = {
     hidden: {
@@ -99,31 +93,22 @@ export default function UserData(props) {
       variants={userDataVariants}>
       <div
         className={`user-data__container${productsFetched ? ' user-data__container--show' : ''}`}>
-        {productsFetched && (
-          <>
-            <UserOrder {...userOrderProps} />
-            {props.children}
-          </>
-        )}
+        <div
+          role='status'
+          aria-live='polite'
+          aria-atomic='true'
+          className={`user-order${showUserOrder ? ' user-order--show' : ''}`}>
+          <div>
+            Products:{' '}
+            <span className='user-order__products-count'>{productsCount}</span>
+          </div>
+          <div>
+            Total Price: <TotalPriceComponent />
+          </div>
+        </div>
+
+        {props.children}
       </div>
     </m.div>
-  )
-}
-
-function UserOrder({ visible, productsCount, TotalPriceComponent }) {
-  return (
-    <div
-      role='status'
-      aria-live='polite'
-      aria-atomic='true'
-      className={`user-order${visible ? ' user-order--show' : ''}`}>
-      <div>
-        Products:{' '}
-        <span className='user-order__products-count'>{productsCount}</span>
-      </div>
-      <div>
-        Total Price: <TotalPriceComponent />
-      </div>
-    </div>
   )
 }
