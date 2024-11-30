@@ -13,7 +13,7 @@ export default function DiscountInput(props) {
 
   const [isTyping, debounce] = useDebounce(e => {
     setValue(e.target.value)
-  }, 250)
+  }, 500)
 
   function handleOnChange(e) {
     setApplyClicked(false)
