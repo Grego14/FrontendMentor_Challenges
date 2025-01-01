@@ -1,0 +1,198 @@
+/* DECORATION START */
+
+.background-images {
+  min-width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  width: 2px;
+  pointer-events: none;
+}
+
+.background-image {
+  z-index: 1;
+  pointer-events: none;
+  position: absolute;
+  user-select: none;
+}
+
+/* TODO - Move the main background a above */
+.background-image__main {
+  top: 0;
+  max-height: 100%;
+  min-width: 100%;
+  z-index: -2;
+}
+
+.background-image:not(.background-image__main) {
+  opacity: .85;
+}
+
+.background-image__pattern-lines {
+  top: 0;
+  max-height: 80%;
+}
+
+.background-image__circle-top {
+  top: -2rem;
+  left: -1rem;
+}
+
+.background-image__line-top {
+  top: -0.8rem;
+  right: 0rem;
+}
+
+.background-image__circle-bottom {
+  top: 62%;
+  right: -3rem;
+}
+
+.background-image__line-bottom {
+  bottom: 0;
+  left: -1rem;
+  object-fit: cover;
+  z-index: -1;
+}
+
+/* DECORATION END */
+
+/* HEADER START */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* HEADER END */
+
+/* MAIN TEXT START */
+
+.main-title {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-block: 0 1.2rem
+}
+
+.main-text {
+  color: var(--color-neutral-300);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 1.6rem
+}
+
+/* TODO 
+* - Add gradient to the fullName text
+* - Change color to the email text
+* .main-title__fullName {}
+* .main-text__email {}
+*/
+
+/* MAIN TEXT END */
+
+/* FORM START */
+
+.form {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 4rem;
+  opacity: 1;
+
+  transition: transform .3s ease-in-out, opacity .3s ease-in-out;
+}
+
+.form--hide {
+  transform: translateY(300%);
+  opacity: 0;
+}
+
+.form--remove {
+  display: none;
+}
+
+.form__field {
+  display: flex;
+  flex-direction: column;
+}
+
+.form__field+.form__field,
+.form__button {
+  margin-top: 1.6rem;
+}
+
+.form__label {
+  font-size: var(--fs-label);
+  margin-bottom: .6rem;
+  font-weight: 500;
+}
+
+.form__input {
+  appearance: none;
+  background-color: var(--bg-input);
+  border: 1px solid var(--color-neutral-500);
+  min-height: 3rem;
+  border-radius: .8rem;
+  padding-inline: 1rem;
+  color: var(--color-neutral-000);
+  font-weight: 500;
+  font-size: 1.125rem;
+
+  transition: background-color .15s ease-in-out;
+}
+
+.form__input::placeholder {
+  color: var(--color-neutral-300);
+}
+
+.form__button {
+  --form-button-hover-shadow: hsl(7, 60%, 58%);
+
+  background-color: var(--color-orange-500);
+  color: var(--color-neutral-900);
+  border-radius: .5rem;
+  min-width: 100%;
+  min-height: 3rem;
+  font-weight: bold;
+  font-size: var(--fs-label);
+
+  transition: background-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  box-shadow: 0 3px 5px transparent;
+}
+
+.form__button.form__button--bounce {
+  animation: form-button-bounce .3s ease-in-out;
+}
+
+@keyframes form-button-bounce {
+  0% {
+    scale: 1;
+  }
+
+  25% {
+    scale: .9;
+  }
+
+  50% {
+    scale: 1.05;
+  }
+
+  100% {
+    scale: 1;
+  }
+}
+
+/* FORM END */
+
+@media (hover: hover) {
+  .form__field:hover .form__input {
+    background-color: var(--bg-input-hover);
+  }
+
+  .form__button:hover {
+    box-shadow: 0 2px 3px var(--form-button-hover-shadow);
+  }
+}

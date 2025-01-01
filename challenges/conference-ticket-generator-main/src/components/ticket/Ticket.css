@@ -1,0 +1,95 @@
+.ticket {
+  position: relative;
+  margin-top: 3rem;
+  display: flex;
+  justify-content: space-between;
+  margin-inline: 1rem;
+
+  transform: translate(300%);
+  transition: transform .3s ease-in-out;
+}
+
+/* TODO - Add a cool animation */
+.ticket--show {
+  transform: translate(0)
+}
+
+.ticket-background {
+  position: absolute;
+  top: 0;
+  max-width: 100%;
+  z-index: -1;
+}
+
+.ticket__content-left {
+  display: flex;
+  flex-direction: column;
+  max-width: 80%;
+  padding: 1rem;
+}
+
+.ticket__data__top,
+.ticket__data__bottom {
+  display: flex;
+  gap: .6rem;
+}
+
+.ticket__data__bottom {
+  margin-top: 2rem;
+}
+
+.data__top__footer,
+.data__bottom__footer {
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+
+/* LEFT CONTENT START */
+
+.ticket__date {
+  font-size: var(--fs-small);
+  color: var(--color-neutral-300);
+}
+
+.ticket__avatar {
+  border-radius: .5rem;
+}
+
+.ticket__full-name {
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.github-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--color-neutral-300);
+}
+
+.github-link__icon {
+  margin-right: .3rem;
+}
+
+.github-link__name {
+  font-size: var(--fs-small);
+}
+
+/* LEFT CONTENT END */
+
+/* RIGHT CONTENT START */
+
+.ticket__content-right {
+  display: flex;
+  align-items: center;
+}
+
+.ticket__id {
+  transform: rotate(90deg);
+  font-size: 1.3rem;
+  letter-spacing: 1px;
+  color: var(--color-neutral-500)
+}
+
+/* RIGHT CONTENT END */

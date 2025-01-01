@@ -1,0 +1,126 @@
+.file-input {
+  display: none;
+}
+
+.drop-zone {
+  --bg-button: hsla(245, 19%, 35%, 50%);
+  --bg-button-hover: hsla(245, 19%, 35%, 70%);
+
+  background-color: var(--bg-input);
+  position: relative;
+  min-height: 8rem;
+  border-radius: .5rem;
+  border: 2px dashed var(--color-neutral-500);
+  margin-bottom: .8rem;
+
+  transition: background-color .15s ease-in-out;
+}
+
+.drop-zone__upload-container {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+}
+
+.upload-container--hidden {
+  display: none;
+}
+
+.drop-zone__upload {
+  min-width: 3rem;
+  min-height: 3rem;
+  background-color: var(--bg-button);
+  border: 1px solid var(--color-neutral-700);
+  border-radius: .8rem;
+  margin-top: 1rem;
+  margin-inline: auto;
+
+  transition: background-color .15s ease-in-out, border-color .15s ease-in-out;
+  box-shadow: 0 3px 5px 0 var(--color-neutral-900);
+}
+
+.drop-zone__text {
+  position: absolute;
+  bottom: 1rem;
+  font-size: var(--fs-label)
+}
+
+.drop-zone:focus-visible,
+.drop-zone__upload:focus-visible {
+  outline: 2px solid var(--color-neutral-300);
+}
+
+.drop-zone__max-size {
+  font-size: .8rem;
+  display: flex;
+  align-items: center;
+}
+
+.max-size-icon {
+  margin-right: .3rem;
+}
+
+.drop-zone__max-size-error {
+  color: var(--color-orange-700)
+}
+
+/* preview avatar */
+
+.drop-zone__preview--hidden {
+  display: none;
+}
+
+.drop-zone__preview--show {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+
+  min-height: inherit;
+}
+
+.preview__image {
+  border-radius: .8rem;
+  border: 1px solid var(--color-neutral-500);
+  transition: border-radius .15s ease-in-out;
+}
+
+.preview__button {
+  background-color: var(--bg-button);
+  color: var(--color-neutral-300);
+  font-weight: 500;
+  border-radius: .3rem;
+  min-height: 1.5rem;
+  font-size: var(--fs-small);
+  padding-inline: .5rem;
+
+  transition: background-color .15s ease-in-out;
+}
+
+.preview__button+.preview__button {
+  margin-left: .6rem;
+}
+
+@media (hover: hover) {
+  .drop-zone:hover {
+    background-color: var(--bg-input-hover);
+  }
+
+  .drop-zone:hover:has(.drop-zone__upload:hover) {
+    background-color: var(--bg-input);
+  }
+
+  .drop-zone:hover .drop-zone__upload {
+    background-color: var(--bg-button-hover);
+    border-color: var(--color-neutral-500);
+  }
+
+  .preview__button:hover {
+    background-color: var(--bg-button-hover);
+  }
+
+  .preview__image:hover {
+    border-radius: 1.6rem;
+  }
+}

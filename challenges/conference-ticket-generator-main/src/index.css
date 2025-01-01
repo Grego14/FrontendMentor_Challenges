@@ -1,0 +1,90 @@
+@font-face {
+  font-family: 'Inconsolata';
+  src: local('Inconsolata Regular');
+  src: url('/assets/fonts/Inconsolata-Regular.woff2') format('woff2'),
+    url('/assets/fonts/Inconsolata-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inconsolata';
+  src: local('Inconsolata Medium');
+  src: url('/assets/fonts/Inconsolata-Medium.woff2') format('woff2'),
+    url('/assets/fonts/Inconsolata-Medium.woff2') format('truetype');
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inconsolata';
+  src: local('Inconsolata Bold');
+  src: url('/assets/fonts/Inconsolata-Bold.woff2') format('woff2'),
+    url('/assets/fonts/Inconsolata-Bold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: bold;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inconsolata';
+  src: local('Inconsolata ExtraBold');
+  src: url('/assets/fonts/Inconsolata-ExtraBold.woff2') format('woff2'),
+    url('/assets/fonts/Inconsolata-ExtraBold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* user full-name text gradient */
+  /*- Gradient (text): hsl(7, 86%, 67%) to hsl(0, 0%, 100%)*/
+
+  --color-neutral-000: hsl(0, 0%, 100%);
+  --color-neutral-300: hsl(252, 6%, 83%);
+  --color-neutral-500: hsl(245, 15%, 58%);
+  --color-neutral-700: hsl(245, 19%, 35%);
+  --color-neutral-900: hsl(248, 70%, 10%);
+
+  --color-orange-500: hsl(7, 88%, 67%);
+  --color-orange-700: hsl(7, 71%, 60%);
+
+  --bg-input: hsla(245, 19%, 35%, 45%);
+  --bg-input-hover: hsla(245, 19%, 35%, 80%);
+
+  --fs-label: 1.25rem;
+  --fs-small: .9rem;
+
+  font-family: 'Inconsolata', system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
+    'Helvetica Neue', sans-serif;
+  color: var(--color-neutral-000);
+}
+
+button {
+  border: none;
+  appearance: none;
+  cursor: pointer;
+  background-color: transparent;
+  font-family: inherit;
+}
+
+body {
+  min-height: 100dvh;
+  position: relative;
+}
+
+html,
+body {
+  overflow-x: hidden;
+}
