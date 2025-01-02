@@ -3,8 +3,8 @@ import './Ticket.css'
 
 export default function Ticket({
   ticketVisible,
-  fullName,
-  githubUser,
+  fullName = '',
+  githubUser = '',
   userAvatar }) {
 
   const ticketID = Math.floor(Math.random() * 10000) + 1
