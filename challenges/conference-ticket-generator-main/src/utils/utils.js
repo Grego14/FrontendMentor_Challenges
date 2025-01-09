@@ -1,8 +1,3 @@
-const utils = {
-  preventDefault,
-  howManyChars
-}
-
 export function preventDefault(e) {
   e.preventDefault()
 }
@@ -20,4 +15,19 @@ export function howManyChars(str, char) {
   return chars
 }
 
-export default utils
+export function setErrorAttribute(target) {
+  target && target.setAttribute('data-error', '')
+}
+
+export function removeErrorAttribute(target) {
+  target && target.removeAttribute('data-error')
+}
+
+export function getClosest(target, selector) {
+  return target ? target.closest(selector) : null
+}
+
+export function substring(str, length) {
+  return str.length >= length ? `${str.substring(0, length)}...` : str
+}
+
