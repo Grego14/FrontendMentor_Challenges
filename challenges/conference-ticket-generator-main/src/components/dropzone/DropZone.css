@@ -3,23 +3,49 @@
 }
 
 .drop-zone {
+  --drop-zone-height: 8rem;
+
   --bg-button: hsla(245, 19%, 35%, 50%);
   --bg-button-hover: hsla(245, 19%, 35%, 70%);
 
-  background-color: var(--bg-input);
+  --drop-zone-bg: var(--color-bg-input);
+  --drop-zone-bg-hover: var(--color-bg-input-hover);
+  --drop-zone-border: var(--color-neutral-500);
+
+  --upload-btn-bg-color: var(--bg-button);
+  --upload-btn-border-color: var(--color-neutral-700);
+  --upload-btn-bshadow-color: var(--color-neutral-900);
+
+  background-color: var(--drop-zone-bg);
   position: relative;
-  min-height: 8rem;
+  min-height: var(--drop-zone-height);
   border-radius: .5rem;
-  border: 2px dashed var(--color-neutral-500);
+  border: 2px dashed var(--drop-zone-border);
   margin-bottom: .8rem;
 
-  transition: background-color .15s ease-in-out;
+  transition: background-color var(--transition-fast) ease-in-out,
+    border-color var(--transition-fast) ease-in-out;
+}
+
+[data-error] .drop-zone {
+  /* same as --color-error-light but almost transparent */
+  --drop-zone-bg: #FF656511;
+  --drop-zone-bg-hover: #FF656522;
+  --drop-zone-border: var(--color-error-light);
+
+  --upload-btn-bg-color: var(--drop-zone-bg);
+  --upload-btn-border-color: var(--color-error-light);
+  --upload-btn-bshadow-color: #FF656588;
 }
 
 .drop-zone__upload-container {
   display: flex;
   justify-content: center;
-  align-items: start;
+  align-items: center;
+  flex-direction: column;
+  min-height: var(--drop-zone-height);
+  padding: 1rem;
+  gap: .5rem;
 }
 
 .upload-container--hidden {
@@ -29,20 +55,20 @@
 .drop-zone__upload {
   min-width: 3rem;
   min-height: 3rem;
-  background-color: var(--bg-button);
-  border: 1px solid var(--color-neutral-700);
+  background-color: var(--upload-btn-bg-color);
+  border: 1px solid var(--upload-btn-border-color);
   border-radius: .8rem;
-  margin-top: 1rem;
-  margin-inline: auto;
 
-  transition: background-color .15s ease-in-out, border-color .15s ease-in-out;
-  box-shadow: 0 3px 5px 0 var(--color-neutral-900);
+  transition: background-color var(--transition-fast) ease-in-out,
+    border-color var(--transition-fast) ease-in-out,
+    color var(--transition-fast) ease-in-out transform var(--transition-faster) ease-in-out;
+  box-shadow: 0 3px 5px 0 var(--upload-btn-bshadow-color);
 }
 
 .drop-zone__text {
-  position: absolute;
-  bottom: 1rem;
-  font-size: var(--fs-label)
+  font-size: var(--fs-label);
+  text-wrap: balance;
+  text-align: center;
 }
 
 .drop-zone:focus-visible,
@@ -54,14 +80,12 @@
   font-size: .8rem;
   display: flex;
   align-items: center;
+
+  transition: color var(--transition-fast) ease-in-out;
 }
 
-.max-size-icon {
-  margin-right: .3rem;
-}
-
-.drop-zone__max-size-error {
-  color: var(--color-orange-700)
+.max-size-error {
+  color: var(--color-error-dark);
 }
 
 /* preview avatar */
@@ -83,7 +107,8 @@
 .preview__image {
   border-radius: .8rem;
   border: 1px solid var(--color-neutral-500);
-  transition: border-radius .15s ease-in-out;
+  transition: border-radius var(--transition-fast) ease-in-out;
+  object-fit: cover;
 }
 
 .preview__button {
@@ -95,7 +120,7 @@
   font-size: var(--fs-small);
   padding-inline: .5rem;
 
-  transition: background-color .15s ease-in-out;
+  transition: background-color var(--transition-fast) ease-in-out;
 }
 
 .preview__button+.preview__button {
@@ -104,16 +129,16 @@
 
 @media (hover: hover) {
   .drop-zone:hover {
-    background-color: var(--bg-input-hover);
+    background-color: var(--drop-zone-bg-hover);
   }
 
   .drop-zone:hover:has(.drop-zone__upload:hover) {
-    background-color: var(--bg-input);
+    background-color: var(--drop-zone-bg);
   }
 
-  .drop-zone:hover .drop-zone__upload {
-    background-color: var(--bg-button-hover);
-    border-color: var(--color-neutral-500);
+  .drop-zone:hover:has(.drop-zone__upload:hover) .drop-zone__upload {
+    background-color: var(--drop-zone-bg-hover);
+    transform: scale(1.1);
   }
 
   .preview__button:hover {

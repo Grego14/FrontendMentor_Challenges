@@ -1,18 +1,21 @@
-import React, { useState, useRef } from 'react'
+import { forwardRef, useRef, useState } from 'react'
+import useBounce from '../../hooks/useBounce'
 import './DropZone.css'
+import ErrorIcon from '../erroricon/ErrorIcon'
+import { preventDefault, getClosest, setErrorAttribute, removeErrorAttribute, BASE_URL } from '../../utils/utils'
 
-const base_url = import.meta.env.BASE_URL
-
-export default function DropZone({ sendUserAvatar }) {
+const DropZone = forwardRef(function DropZone(props, ref) {
+  const { setUserAvatar, userAvatar, setImageUploaded, imageUploaded } = props
   const fileInputRef = useRef(null)
+  const uploadBtnRef = useRef(null)
 
-  const [imageIsInvalid, setImageIsInvalid] = useState(false)
-  const [imageUploaded, setImageUploaded] = useState(false)
-  const [userAvatar, setUserAvatar] = useState(null)
+  const [addBounce, revBounce] = useBounce(uploadBtnRef)
+  const [imageIsBig, setImageIsBig] = useState(false)
 
-  const svgColor = imageIsInvalid ? 'var(--color-orange-700)' : '#D1D0D5'
+  const closestField = getClosest.call(null, ref.current, '.form__field')
 
-  // clicks on the hidden input
+  const dropZoneError = imageIsBig || closestField?.getAttribute('data-error') === ''
+
   function simulateInputFileClick() {
     fileInputRef.current.click()
   }
@@ -38,38 +41,52 @@ export default function DropZone({ sendUserAvatar }) {
     const allowedFileSize = 500
 
     if (!selectedImage ||
-      !allowedFileTypes.find(type => type === selectedImage.type))
-      return setImageIsInvalid(true)
+      !allowedFileTypes.find(type => type === selectedImage.type)) {
+      handleRemoveImage()
+      return setErrorAttribute(closestField)
+    }
 
     if (Math.floor(selectedImage.size / 1024) >= allowedFileSize) {
-      setImageIsInvalid(true)
+      setErrorAttribute(closestField)
+      handleRemoveImage()
+      setImageIsBig(true)
 
       // removes the preview if the image is bigger than the allowedFileSize
       setImageUploaded(false)
       return
     }
 
-    setImageUploaded(true)
 
     const reader = new FileReader(selectedImage)
-
-    reader.addEventListener('loadend', () => {
-      setUserAvatar(reader.result)
-      sendUserAvatar(reader.result)
-    }, { once: true })
-
     reader.readAsDataURL(selectedImage)
 
-    setImageIsInvalid(false)
+    reader.addEventListener('loadend', () => {
+      if (reader.error) return setErrorAttribute(closestField)
+
+      setImageUploaded(true)
+      setImageIsBig(false)
+      removeErrorAttribute(closestField)
+      setUserAvatar(reader.result)
+      ref.current.removeAttribute('data-error')
+    }, { once: true })
   }
 
   function handleRemoveImage() {
     setImageUploaded(false)
+    setUserAvatar('')
+  }
+
+  function handleUploadBtnAnimationEnd() {
+    simulateInputFileClick()
+    revBounce()
   }
 
   return (
     <>
-      <div className='drop-zone' tabIndex='0'
+      <div
+        className='drop-zone'
+        tabIndex='0'
+        ref={ref}
         aria-label='Drag and drop or click to upload your avatar image'
         onDragOver={preventDefaultAndPropagation}
         onDragEnter={preventDefaultAndPropagation}
@@ -117,11 +134,14 @@ export default function DropZone({ sendUserAvatar }) {
           : ' upload-container--show'}`}>
 
           <button className='drop-zone__upload'
+            ref={uploadBtnRef}
             aria-label='Press to upload your avatar image'
-            onClick={simulateInputFileClick}>
+            onClick={addBounce}
+            onContextMenu={preventDefault}
+            onAnimationEnd={handleUploadBtnAnimationEnd}>
             <img
               className='drop-zone__upload__icon'
-              src={`${base_url}assets/images/icon-upload.svg`}
+              src={`${BASE_URL}assets/images/icon-upload.svg`}
               alt=''
               aria-hidden='true'
               width='30'
@@ -133,24 +153,12 @@ export default function DropZone({ sendUserAvatar }) {
 
       </div>
 
-      <div className={`drop-zone__max-size${imageIsInvalid ? ' drop-zone__max-size-error' : ''}`}>
-
-        <svg className='max-size-icon'
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden='true'
-          width="16"
-          height="16"
-          fill="none"
-          viewBox="0 0 16 16">
-          <path stroke={svgColor} strokeLinecap="round"
-            strokeLinejoin="round" d="M2 8a6 6 0 1 0 12 0A6 6 0 0 0 2 8Z" />
-          <path fill={svgColor} d="M8.004 10.462V7.596ZM8 5.57v-.042Z" />
-          <path stroke={svgColor} strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M8.004 10.462V7.596M8 5.569v-.042" />
-        </svg>
-        Upload your photo (JPG or PNG, max size: 500KB).
+      <div className={`drop-zone__max-size${dropZoneError ? ' max-size-error' : ''}`}>
+        <ErrorIcon error={dropZoneError} />
+        {imageIsBig ? 'File too largue. Please upload a photo under 500KB' : 'Upload your photo (JPG or PNG, max size: 500KB).'}
       </div>
     </>
   )
-}
+})
+
+export default DropZone
