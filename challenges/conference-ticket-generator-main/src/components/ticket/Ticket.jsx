@@ -6,7 +6,11 @@ export default function Ticket(props) {
   const ticketID = Math.floor(Math.random() * 10000) + 1
 
   return (
-    <div className={`ticket pos-absolute${ticketVisible ? ' ticket--show' : ''}`}>
+    <div className={`ticket pos-absolute${ticketVisible ? ' ticket--show' : ''}`}
+      style={{
+        background: `url('${BASE_URL}assets/images/pattern-ticket.svg') no-repeat center/100% 100%`
+      }}
+    >
       <div className='ticket__content-left'>
 
         <div className='ticket__data'>
@@ -59,14 +63,6 @@ export default function Ticket(props) {
       <div className='ticket__content-right'>
         <div className='ticket__id'>#{ticketID.toString().padStart(5, '0')}</div>
       </div>
-
-      <img
-        className='ticket-background'
-        src={`${BASE_URL}assets/images/pattern-ticket.svg`}
-        alt=''
-        width='280'
-        height='140'
-        aria-hidden='true' />
     </div>
   )
 }
