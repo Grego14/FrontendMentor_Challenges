@@ -5,7 +5,7 @@ export default function DecorationIcons() {
     <div className='background-images' style={{ minHeight: document.documentElement.offsetHeight }}>
 
       <img
-        className='background-image background-image__circle-top'
+        className='background-image background-image__circle background-image__circle--top'
         src={`${base_url}assets/images/pattern-circle.svg`}
         alt=''
         aria-hidden='true'
@@ -13,7 +13,7 @@ export default function DecorationIcons() {
         height='100' />
 
       <img
-        className='background-image background-image__line-top'
+        className='background-image background-image__line background-image__line--top'
         src={`${base_url}assets/images/pattern-squiggly-line-top.svg`}
         alt=''
         aria-hidden='true'
@@ -22,7 +22,7 @@ export default function DecorationIcons() {
       />
 
       <img
-        className='background-image background-image__circle-bottom'
+        className='background-image background-image__circle background-image__circle--bottom'
         src={`${base_url}assets/images/pattern-circle.svg`}
         alt=''
         aria-hidden='true'
@@ -30,7 +30,7 @@ export default function DecorationIcons() {
         height='120' />
 
       <img
-        className='background-image background-image__line-bottom'
+        className='background-image background-image__line background-image__line--bottom'
         src={`${base_url}assets/images/pattern-squiggly-line-bottom.svg`}
         alt=''
         aria-hidden='true'
