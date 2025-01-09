@@ -1,13 +1,14 @@
-import { useState, useReducer } from 'react'
+import { useState, useReducer, useRef } from 'react'
 import Ticket from '../ticket/Ticket'
 import ConferenceForm from '../form/ConferenceForm'
 import DecorationIcons from './DecorationIcons'
 import ticketReducer from '../../reducers/ticketReducer'
 import './App.css'
-
-const base_url = import.meta.env.BASE_URL
+import { substring, BASE_URL } from '../../utils/utils'
 
 export default function App() {
+  const dropZoneRef = useRef(null)
+
   const [ticketVisible, setTicketVisible] = useState(false)
   const [ticketData, dispatch] = useReducer(ticketReducer, {})
   const [userAvatar, setUserAvatar] = useState('')
@@ -20,30 +21,19 @@ export default function App() {
     dispatch({ data })
   }
 
-  function sendUserAvatar(src) {
-    setUserAvatar(src)
-  }
-
   const layoutProps = {
+    dropZoneRef,
+    ticketVisible,
+    fullName: ticketData.fullName,
+    githubUser: ticketData.github,
+    email: ticketData.email,
+    userAvatar,
 
     conferenceForm: {
       showTicket,
       sendTicketData,
-      sendUserAvatar
+      setUserAvatar
     },
-
-    mainText: {
-      ticketVisible,
-      fullName: ticketData.fullName,
-      githubUser: ticketData.github,
-    },
-
-    ticket() {
-      return {
-        ...this.mainText,
-        userAvatar,
-      }
-    }
   }
 
   return (
@@ -55,14 +45,14 @@ export default function App() {
       <Layout {...layoutProps} />
 
       <img className='background-image background-image__pattern-lines'
-        src={`${base_url}assets/images/pattern-lines.svg`} alt='' aria-hidden='true' />
+        src={`${BASE_URL}assets/images/pattern-lines.svg`} alt='' aria-hidden='true' />
 
       <picture>
-        <source srcSet={`${base_url}assets/images/background-mobile.png`} media='(max-width: 480px)'></source>
-        <source srcSet={`${base_url}assets/images/background-tablet.png`} media='(min-width: 481px) and (max-width: 1023px)'></source>
-        <source srcSet={`${base_url}assets/images/background-desktop.png`} media='(min-width: 1024px)'></source>
+        <source srcSet={`${BASE_URL}assets/images/background-mobile.png`} media='(max-width: 480px)'></source>
+        <source srcSet={`${BASE_URL}assets/images/background-tablet.png`} media='(min-width: 481px) and (max-width: 1023px)'></source>
+        <source srcSet={`${BASE_URL}assets/images/background-desktop.png`} media='(min-width: 1024px)'></source>
         <img className='background-image background-image__main'
-          src={`${base_url}assets/images/background-mobile.png`}
+          src={`${BASE_URL}assets/images/background-mobile.png`}
           alt=''
           aria-hidden='true'
           draggable='false'
@@ -74,14 +64,36 @@ export default function App() {
 }
 
 function Layout(props) {
+  const { conferenceForm, dropZoneRef, fullName, githubUser,
+    email, userAvatar, ticketVisible } = props
+
+  const formProps = {
+    ...conferenceForm,
+    dropZoneRef,
+    ticketVisible,
+    userAvatar
+  }
+
+  const mainTextProps = {
+    fullName,
+    githubUser,
+    email,
+    ticketVisible
+  }
+
+  const ticketProps = {
+    ...mainTextProps,
+    userAvatar,
+  }
+
   return (
-    <main aria-live='polite' aria-atomic='true'>
+    <main className='pos-relative' aria-live='polite' aria-atomic='true'>
 
-      <MainText {...props.mainText} />
+      <MainText {...mainTextProps} />
 
-      <ConferenceForm {...props.conferenceForm} />
+      <ConferenceForm {...formProps} />
 
-      <Ticket {...props.ticket()} />
+      <Ticket {...ticketProps} />
     </main>
   )
 }
@@ -89,25 +101,26 @@ function Layout(props) {
 function MainText({ ticketVisible, fullName, email }) {
   return (
     <>
-      <h1 className='main-title'>
+      <h1 className={`main-title${ticketVisible ? ' main-title--ticket' : ''}`}>
         {!ticketVisible
           ? 'Your Journey to Coding Conf 2025 Starts Here'
           : (
             <>
               Congrats, <span className='main-title__fullName'>
-                {fullName}
+                {substring(fullName, 16)}
               </span>! Your ticket is ready.
             </>
           )}
       </h1>
 
-      <p className='main-text'>{
+      <p className={`main-text${ticketVisible ? ' main-text--ticket' : ''}`}>{
         !ticketVisible
           ? 'Secure your spot at next year\'s biggest coding conference.'
           : (
             <>
               We've emailed your ticket to{' '}
-              <span className='main-text__email'>{email}</span> and will send
+              <span className='main-text__email'>
+                {substring(email, 18)}</span> and will send
               updates in the run up to the event.
             </>
           )
@@ -119,7 +132,7 @@ function MainText({ ticketVisible, fullName, email }) {
 function Header() {
   return (
     <header className='header'>
-      <img src={`${base_url}assets/images/logo-full.svg`} alt='Coding Conf Logo' />
+      <img src={`${BASE_URL}assets/images/logo-full.svg`} alt='Coding Conf Logo' />
     </header>
   )
 }
