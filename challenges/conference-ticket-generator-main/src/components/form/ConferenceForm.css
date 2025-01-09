@@ -1,29 +1,30 @@
 .form {
-  --color-input-error: #ff6565;
-
-  padding: 1rem;
   display: flex;
   flex-direction: column;
   margin-bottom: 4rem;
   opacity: 1;
+  max-width: 25rem;
+  margin-inline: auto;
 
-  transition: transform .3s ease-in-out, opacity .3s ease-in-out;
+  transition: transform var(--transition-faster) ease-in-out,
+    opacity var(--transition-faster) ease-in-out;
 }
 
 .form--hide {
   opacity: 0;
+  visibility: hidden;
 }
 
 .form__field {
   display: flex;
   flex-direction: column;
   position: relative;
-  margin-bottom: .5rem;
 }
 
 .form__field+.form__field,
 .form__button {
   margin-top: 1.6rem;
+  margin-bottom: .5rem;
 }
 
 .form__label {
@@ -34,7 +35,7 @@
 
 .form__input {
   appearance: none;
-  background-color: var(--bg-input);
+  background-color: var(--color-bg-input);
   border: 1px solid var(--color-neutral-500);
   min-height: 3rem;
   border-radius: .8rem;
@@ -43,7 +44,8 @@
   font-weight: 500;
   font-size: 1.125rem;
 
-  transition: background-color .15s ease-in-out, border-color .15s ease-in-out;
+  transition: background-color var(--transition-fast) ease-in-out,
+    border-color var(--transition-fast) ease-in-out;
 }
 
 .form__input::placeholder {
@@ -51,18 +53,18 @@
 }
 
 .form__input:focus-visible {
-  background-color: var(--bg-input-hover);
+  background-color: var(--color-bg-input-hover);
 }
 
 .form__input:focus-visible::placeholder {
   color: var(--color-neutral-000)
 }
 
-.form__input[data-error] {
-  border-color: var(--color-input-error);
+.form__field[data-error] .form__input {
+  border-color: var(--color-error-light);
 }
 
-.form__field:has(.form__input[data-error]) .form__field__error {
+.form__field[data-error] .form__field__error {
   opacity: 1;
   visibility: visible;
 }
@@ -71,12 +73,14 @@
   position: absolute;
   visibility: hidden;
   opacity: 0;
-  bottom: -1rem;
-  right: 0;
+  bottom: -1.3rem;
+  left: 0;
   font-size: .8rem;
-  color: var(--color-input-error);
+  color: var(--color-error-light);
+  display: flex;
+  align-items: center;
 
-  transition: opacity .15s ease-in-out;
+  transition: opacity var(--transition-fast) ease-in-out;
 }
 
 .form__button {
@@ -90,35 +94,14 @@
   font-weight: bold;
   font-size: var(--fs-label);
 
-  transition: background-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  transition: background-color var(--transition-fast) ease-in-out,
+    box-shadow var(--transition-fast) ease-in-out;
   box-shadow: 0 3px 5px transparent;
-}
-
-.form__button.form__button--bounce {
-  animation: form-button-bounce .3s ease-in-out;
-}
-
-@keyframes form-button-bounce {
-  0% {
-    scale: 1;
-  }
-
-  25% {
-    scale: .9;
-  }
-
-  50% {
-    scale: 1.05;
-  }
-
-  100% {
-    scale: 1;
-  }
 }
 
 @media (hover: hover) {
   .form__field:hover .form__input {
-    background-color: var(--bg-input-hover);
+    background-color: var(--color-bg-input-hover);
   }
 
   .form__button:hover {

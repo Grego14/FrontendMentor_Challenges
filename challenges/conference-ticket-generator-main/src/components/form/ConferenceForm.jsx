@@ -1,46 +1,49 @@
-import { useReducer, useRef } from 'react'
+import { useReducer, useRef, useState } from 'react'
 import './ConferenceForm.css'
 import DropZone from '../dropzone/DropZone'
 import userDataReducer from '../../reducers/userDataReducer'
+import {
+  preventDefault, howManyChars, setErrorAttribute,
+  removeErrorAttribute, getClosest, BASE_URL
+} from '../../utils/utils'
+import useBounce from '../../hooks/useBounce'
+import ErrorIcon from '../erroricon/ErrorIcon'
 
-/* TODO - Implement use of the ticketRef to make the 
- * user auto-scroll when the form data is valid */
-export default function ConferenceForm({ showTicket, sendTicketData, sendUserAvatar, ticketRef }) {
+const buttonClickSound = new Audio(
+  `${BASE_URL}assets/sounds/button-click.mp3`)
+
+const formErrorSound = new Audio(
+  `${BASE_URL}assets/sounds/form-error.mp3`)
+
+export default function ConferenceForm({ showTicket, sendTicketData,
+  setUserAvatar, userAvatar, dropZoneRef }) {
+  const [userData, dispatchUserData] = useReducer(userDataReducer, {}, userDataInitializer)
+
   const formRef = useRef(null)
-  const buttonAnimationClass = 'form__button--bounce'
-  const buttonClickSound = new Audio(`${import.meta.env.BASE_URL}assets/sounds/button-click.mp3`)
-  const formErrorSound = new Audio(`${import.meta.env.BASE_URL}assets/sounds/form-error.mp3`)
+  const buttonRef = useRef(null)
 
-  const [userData, dispatchUserData] = useReducer(userDataReducer, {
-    'full-name': {
-      value: '',
-      error: ''
-    },
+  const [audioPlaying, setAudioPlaying] = useState(false)
+  const [formSent, setFormSent] = useState(false)
+  const [inputsAreValid, setInputsAreValid] = useState(false)
 
-    email: {
-      value: '',
-      error: ''
-    },
+  const [imageUploaded, setImageUploaded] = useState(false)
+  const [addBounceClass, removeBounceClass] = useBounce(buttonRef)
 
-    'github-name': {
-      value: '',
-      error: ''
-    }
-  })
+  const getClosestFormField = (target) => getClosest.call(null, target, '.form__field')
 
-  function handleInputError(input, error = false) {
-    if (error) return input.setAttribute('data-error', '')
-
-    input.removeAttribute('data-error')
+  function setInputErrorMsg(inputName, msg) {
+    dispatchUserData({ type: 'error', who: inputName, msg })
   }
 
-  function handleErrorMessage(who, msg = '') {
-    dispatchUserData({ type: 'error', who, msg })
-    return !msg
-  }
+  function playSound(sound) {
+    if (audioPlaying) return
 
-  function preventDefault(e) {
-    e.preventDefault()
+    sound.addEventListener('ended', () => {
+      setAudioPlaying(false)
+    }, { once: true })
+
+    sound.play()
+    setAudioPlaying(true)
   }
 
   const validateFuncs = {
@@ -57,6 +60,12 @@ export default function ConferenceForm({ showTicket, sendTicketData, sendUserAva
     },
   }
 
+  function runValidationFunc(inputName, inputValue) {
+    const validated = validateFuncs[inputName]?.validate(inputValue)
+
+    return { msg: !validated ? '' : validated, state: !validated ? true : false }
+  }
+
   function validateUserName(name) {
     const trimmed = name.trim()
     const messages = {
@@ -67,28 +76,57 @@ export default function ConferenceForm({ showTicket, sendTicketData, sendUserAva
     }
 
     const errorMessage = (() => {
+      const match = trimmed.match(/[0-9!*\(\)+%\$\^\{\}\\\:\;\/\,\<\>"@_]/)?.[0]
+
       if (trimmed.length === 0) return 'empty'
       if (trimmed.length >= 64) return 'long'
+
+      if (trimmed.length < 3 && match) return 'chars'
       if (trimmed.length < 3) return 'short'
-      if (trimmed.match(/[0-9!*\(\)+%\$\^\{\}\\\:\;\/\,\<\>"@]/)?.[0]) return 'chars'
+
+      if (match) return 'chars'
     })()
 
-    return handleErrorMessage('full-name', messages[errorMessage])
+    return messages[errorMessage]
   }
 
   function validateUserEmail(email) {
     const trimmed = email.trim()
     const messages = {
       match: 'Email must match username@domain.tld',
-      empty: 'Email can\'t be empty'
+      empty: 'Email can\'t be empty',
+      usernameShort: 'Username is too short',
+      domainShort: 'Domain is too short',
+      tldShort: 'TLD is too short'
     }
 
+    const splittedMail = email.split(/[@\.]/)
+    /* 
+     * splittedMail[0] = username
+     * splittedMail[1] = domain || null
+     * splittedMail[2] = tld || null
+    */
+
     const errorMessage = (() => {
+      const howManyAts = howManyChars(trimmed, '@')
+
+      // order matters
       if (trimmed.length === 0) return 'empty'
-      if (!trimmed.match(/^.{2,}@.{2,}\..{2,3}/)) return 'match'
+
+      if (splittedMail.length > 3) return 'match'
+
+      if (splittedMail[0].length < 2) return 'usernameShort'
+
+      if (!splittedMail[1]) return 'match'
+      if (splittedMail[1].length < 2) return 'domainShort'
+
+      if (!splittedMail[2]) return 'match'
+      if (splittedMail[2].length < 2) return 'tldShort'
+
+      if (howManyAts > 1 || howManyAts < 1) return 'match'
     })()
 
-    return handleErrorMessage('email', messages[errorMessage])
+    return messages[errorMessage]
   }
 
   function validateUserGithubName(githubUser) {
@@ -100,31 +138,45 @@ export default function ConferenceForm({ showTicket, sendTicketData, sendUserAva
     }
 
     const errorMessage = (() => {
+      const howManyAts = howManyChars(trimmed, '@')
+
       if (trimmed.length === 0) return 'empty'
+
+      // In this case...[0] will be the @
+      if (trimmed.split(/[@]/)[0] !== '') return 'match'
+
+      // Github usersnames can be 1 char so we test for @ + char
       if (trimmed.length < 2) return 'short'
-      if (!trimmed.match(/^@.+/)) return 'match'
+
+      if (howManyAts > 1 || howManyAts < 1) return 'match'
     })()
 
-    return handleErrorMessage('github-name', messages[errorMessage])
+    return messages[errorMessage]
   }
 
   function handleInputsChange(e) {
     const inputName = e.target.name
     const inputValue = e.target.value
+    const closestField = getClosestFormField(e.target)
 
-    if (validateFuncs[inputName].validate(inputValue)) {
-      handleInputError(e.target)
+    const inputValidation = runValidationFunc(inputName, inputValue)
+
+    setFormSent(false)
+    setInputErrorMsg(inputName, inputValidation.msg)
+
+    if (inputValidation.state) {
+      removeErrorAttribute(closestField)
       dispatchUserData({ type: 'set', who: inputName, value: inputValue })
-      handleErrorMessage(inputName, '')
       return
     }
 
-    handleInputError(e.target, true)
+    setErrorAttribute(closestField)
   }
 
   function handleFormTransitionEnd(e) {
+    const form = formRef.current
     // prevent sending the data if the transition event isn't from the Form
-    if (e.target !== formRef.current) return
+    if (e.target !== form) return
 
     sendTicketData({
       fullName: userData['full-name'].value,
@@ -133,53 +185,65 @@ export default function ConferenceForm({ showTicket, sendTicketData, sendUserAva
     })
 
     showTicket()
+
+    form.style.display = 'hidden'
   }
 
   function handleButtonClick() {
-    const inputs = formRef.current.querySelectorAll('input:not([type="file"])')
-    let inputsAreValid = true
+    const form = formRef.current
+    const inputs = form.querySelectorAll('input:not([type="file"])')
+    let inputsAreValidTemp = true
 
-    // run inputs validate validateFuncs
+    addBounceClass()
+
+    // run validationfunc on each input
     for (let i = 0; i < inputs.length; i++) {
       const input = inputs[i];
-      const inputValidateFunc = validateFuncs[input.name]
+      const closestField = getClosestFormField(input)
+      const inputValidation = runValidationFunc(input.name, input.value)
 
-      if (!inputValidateFunc.validate(input.value)) {
-        handleInputError(input, true)
-        inputsAreValid = false
+      setInputErrorMsg(input.name, inputValidation.msg);
+
+      (inputValidation.state
+        ? removeErrorAttribute
+        : setErrorAttribute)(closestField)
+
+      // check for inputsAreValidTemp so we avoid updating it to true if there's
+      // was already an invalid input, otherwise if an input is valid it will
+      // update it to true and the formErrorSound will not be played.
+      if (!inputValidation.state || inputsAreValidTemp) {
+        inputsAreValidTemp = inputValidation.state
       }
     }
 
-    if (!inputsAreValid) {
-      formRef.current.setAttribute('data-error', '')
-      return formErrorSound.play()
-    }
+    inputsAreValidTemp = inputsAreValidTemp && userAvatar ? true : false;
 
-    formRef.current.removeAttribute('data-error')
-    buttonClickSound.play()
+    setInputsAreValid(inputsAreValidTemp);
+    (userAvatar ? removeErrorAttribute : setErrorAttribute)(getClosestFormField(dropZoneRef.current))
+
+    setFormSent(true)
+
+    playSound(inputsAreValidTemp ? buttonClickSound : formErrorSound)
   }
 
-  function makeButtonBounce(e) {
-    if (e.target.classList.contains(buttonAnimationClass)) return
+  function handleButtonBounceEnd() {
+    removeBounceClass()
 
-    e.target.classList.add(buttonAnimationClass)
+    if (!inputsAreValid) return
 
-    // maybe use the animationEnd event instead of a setTimeout
-    setTimeout(() => {
-      e.target.classList.remove(buttonAnimationClass)
+    playSound(buttonClickSound)
+  }
 
-      if (formRef.current.getAttribute('data-error') === '') return
-
-      formRef.current.classList.add('form--hide')
-      ticketRef.current.scrollIntoView()
-      buttonClickSound.play()
-
-    }, 300);
+  const dropZoneProps = {
+    setUserAvatar,
+    userAvatar,
+    imageUploaded,
+    setImageUploaded
   }
 
   return (
     <form
-      className='form'
+      className={`form pos-relative${formSent && inputsAreValid ? ' form--hide' : ''}`}
       onTransitionEnd={handleFormTransitionEnd}
       onSubmit={preventDefault}
       noValidate
@@ -187,53 +251,85 @@ export default function ConferenceForm({ showTicket, sendTicketData, sendUserAva
 
       <div className='form__field'>
         <label className='form__label' htmlFor='avatar'>Upload Avatar</label>
-        <DropZone sendUserAvatar={sendUserAvatar} />
+        <DropZone {...dropZoneProps} ref={dropZoneRef} />
       </div>
 
       <div className='form__field'>
         <label className='form__label' htmlFor='full-name'>Full Name</label>
         <input
+          autoComplete='off'
           onChange={handleInputsChange}
           className='form__input'
           type='text'
           name='full-name'
           id='full-name' />
-        <span className='form__field__error' aria-live='polite'>{userData['full-name'].error}</span>
+        <FormFieldError>{userData['full-name'].error}</FormFieldError>
       </div>
 
       <div className='form__field'>
         <label className='form__label' htmlFor='email'>Email Address</label>
         <input
+          autoComplete='off'
           onChange={handleInputsChange}
           className='form__input'
           type='email'
           name='email'
           id='email'
           placeholder='example@email.com' />
-        <span className='form__field__error' aria-live='polite'>{userData.email.error}</span>
+        <FormFieldError>{userData.email.error}</FormFieldError>
       </div>
 
       <div className='form__field'>
         <label className='form__label' htmlFor='github'>GitHub Username</label>
         <input
+          autoComplete='off'
           onChange={handleInputsChange}
           className='form__input'
           type='text'
           name='github-name'
           id='github'
           placeholder='@yourusername' />
-        <span className='form__field__error' aria-live='polite'>{userData['github-name'].error}</span>
+        <FormFieldError>{userData['github-name'].error}</FormFieldError>
       </div>
 
       <button
+        ref={buttonRef}
         onClick={handleButtonClick}
-        onTouchStart={makeButtonBounce}
-        onPointerUp={makeButtonBounce}
+        onAnimationEnd={handleButtonBounceEnd}
+        onTouchStart={addBounceClass}
         onContextMenu={preventDefault}
         type='submit'
         className='form__button'>
         Generate My Ticket
       </button>
     </form>
+  )
+}
+
+function userDataInitializer() {
+  return {
+    'full-name': {
+      value: '',
+      error: ''
+    },
+
+    email: {
+      value: '',
+      error: ''
+    },
+
+    'github-name': {
+      value: '',
+      error: ''
+    }
+  }
+}
+
+function FormFieldError({ children }) {
+  return (
+    <span className='form__field__error' aria-live='polite'>
+      <ErrorIcon error={true} />
+      {children}
+    </span>
   )
 }
