@@ -7,9 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "oxlint .",
-    "preview": "vite preview",
-    "tests": "vitest",
-    "coverage": "vitest run --coverage"
+    "preview": "vite preview"
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -19,10 +17,8 @@
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",
-    "@vitest/coverage-v8": "2.1.8",
     "globals": "^15.14.0",
-    "oxlint": "^0.15.3",
-    "vite": "^6.0.5",
-    "vitest": "^2.1.8"
+    "oxlint": "^0.15.6",
+    "vite": "^6.0.7"
   }
 }
