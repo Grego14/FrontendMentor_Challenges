@@ -10,6 +10,7 @@ export default function DecorationIcons() {
         alt=''
         aria-hidden='true'
         width='100'
+        fetchpriority='low'
         height='100' />
 
       <img
@@ -18,6 +19,7 @@ export default function DecorationIcons() {
         alt=''
         aria-hidden='true'
         width='100'
+        fetchpriority='low'
         height='100'
       />
 
@@ -27,6 +29,7 @@ export default function DecorationIcons() {
         alt=''
         aria-hidden='true'
         width='120'
+        fetchpriority='low'
         height='120' />
 
       <img
@@ -35,6 +38,7 @@ export default function DecorationIcons() {
         alt=''
         aria-hidden='true'
         width='300'
+        fetchpriority='low'
         height='150' />
     </div>
   )
