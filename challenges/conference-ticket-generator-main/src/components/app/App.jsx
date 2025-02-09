@@ -1,17 +1,21 @@
-import { useState, useReducer, useRef } from 'react'
-import Ticket from '../ticket/Ticket'
+import { useState, useReducer, useRef, lazy, Suspense } from 'react'
 import ConferenceForm from '../form/ConferenceForm'
 import DecorationIcons from './DecorationIcons'
 import ticketReducer from '../../reducers/ticketReducer'
 import './App.css'
 import { substring, BASE_URL } from '../../utils/utils'
+import useBounce from '../../hooks/useBounce'
+
+const Ticket = lazy(() => import('../ticket/Ticket'))
 
 export default function App() {
   const dropZoneRef = useRef(null)
+  const ticketRef = useRef(null)
 
   const [ticketVisible, setTicketVisible] = useState(false)
   const [ticketData, dispatch] = useReducer(ticketReducer, {})
   const [userAvatar, setUserAvatar] = useState('')
+  const [ticketID, setTicketID] = useState(null)
 
   function showTicket() {
     setTicketVisible(true)
@@ -23,11 +27,17 @@ export default function App() {
 
   const layoutProps = {
     dropZoneRef,
-    ticketVisible,
     fullName: ticketData.fullName,
     githubUser: ticketData.github,
     email: ticketData.email,
     userAvatar,
+
+    ticket: {
+      ticketVisible,
+      ticketRef,
+      ticketID,
+      setTicketID
+    },
 
     conferenceForm: {
       showTicket,
@@ -65,12 +75,43 @@ export default function App() {
 
 function Layout(props) {
   const { conferenceForm, dropZoneRef, fullName, githubUser,
-    email, userAvatar, ticketVisible } = props
+    email, userAvatar, ticket } = props
+
+  const buttonRef = useRef(null)
+  const [addBounceClass, removeBounceClass] = useBounce(buttonRef)
+
+  function handleTicketBtnClick() {
+    addBounceClass()
+
+    const options = {
+      backgroundColor: 'hsl(248, 70%, 10%)',
+      logging: false
+    }
+
+    import('html2canvas').then(mod => {
+      mod.default(ticket.ticketRef.current, options).then((canvas) => {
+        const imagenURL = canvas.toDataURL()
+        const link = document.createElement('a')
+        link.href = imagenURL
+        link.download = `ticket_${ticket.ticketID}`
+
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      })
+    })
+  }
+
+  function handleTicketBtnTransition() {
+    removeBounceClass()
+
+    new Audio(`${BASE_URL}assets/sounds/button-click.mp3`).play()
+  }
 
   const formProps = {
     ...conferenceForm,
     dropZoneRef,
-    ticketVisible,
+    ticketVisible: ticket.ticketVisible,
     userAvatar
   }
 
@@ -78,11 +119,13 @@ function Layout(props) {
     fullName,
     githubUser,
     email,
-    ticketVisible
+    ticketVisible: ticket.ticketVisible
   }
 
   const ticketProps = {
     ...mainTextProps,
+    ticketID: ticket.ticketID,
+    setTicketID: ticket.setTicketID,
     userAvatar,
   }
 
@@ -93,7 +136,18 @@ function Layout(props) {
 
       <ConferenceForm {...formProps} />
 
-      <Ticket {...ticketProps} />
+      <Suspense>
+        <Ticket {...ticketProps} ref={ticket.ticketRef} />
+      </Suspense>
+
+      <button
+        ref={buttonRef}
+        className={`save-ticket-btn${ticket.ticketVisible ? ' save-ticket-btn--show' : ''}`}
+        aria-hidden={!ticket.ticketVisible}
+        onClick={handleTicketBtnClick}
+        onAnimationEnd={handleTicketBtnTransition}>
+        Click to save your ticket!
+      </button>
     </main>
   )
 }
@@ -132,7 +186,7 @@ function MainText({ ticketVisible, fullName, email }) {
 function Header() {
   return (
     <header className='header'>
-      <img src={`${BASE_URL}assets/images/logo-full.svg`} alt='Coding Conf Logo' />
+      <img src={`${BASE_URL}assets/images/logo-full.svg`} alt='Coding Conf Logo' draggable={false} />
     </header>
   )
 }
