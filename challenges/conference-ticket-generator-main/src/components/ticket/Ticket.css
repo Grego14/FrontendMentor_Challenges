@@ -1,11 +1,15 @@
 .ticket {
+  --ticket-left-items-gap: clamp(.5rem, .5rem + 5vh, 1.5rem);
+
   display: flex;
   justify-content: space-between;
   top: 40%;
   left: 50%;
-  width: clamp(280px, 280px + 5vw, 500px);
+  width: clamp(280px, 280px + 10vw, 500px);
+  height: clamp(130px, 130px + 6vw, 300px);
+  background: url('./assets/images/pattern-ticket.svg') no-repeat center/100% 100%;
 
-  transform: translate(300%);
+  transform: translate(300%, -40%);
   opacity: 0;
   transition: transform var(--transition-faster) ease-in-out;
 }
@@ -19,19 +23,17 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 1.2rem;
-  height: 100%;
-  flex: 1
+  padding-inline: .8rem;
+  gap: var(--ticket-left-items-gap);
 }
 
-.ticket__data__top,
-.ticket__data__bottom {
+.ticket__content-left>div {
   display: flex;
   gap: .6rem;
 }
 
 .ticket__data__bottom {
-  margin-top: 1rem;
+  margin-top: auto;
 }
 
 .data__top__footer,
@@ -43,18 +45,30 @@
 
 /* LEFT CONTENT START */
 
+.ticket__title{
+  font-size: clamp(1.5rem, 1.5rem + .8vw, 1.8rem);
+}
+
 .ticket__date {
-  font-size: var(--fs-small);
+  font-size: clamp(.85rem, .85rem + .5vw, 1.1rem);
   color: var(--color-neutral-300);
+}
+
+.ticket__logo{
+  width: clamp(40px, 40px + 1vw, 60px);
+  height: clamp(40px, 40px + 1vw, 60px);
 }
 
 .ticket__avatar {
   object-fit: cover;
   border-radius: .5rem;
+
+  width: clamp(50px, 50px + 1vw, 70px);
+  height: clamp(50px, 50px + 1vw, 70px);
 }
 
 .ticket__full-name {
-  font-size: 1.3rem;
+  font-size: clamp(1.3rem, 1.3rem + 1vw, 1.6rem);
   font-weight: 500;
 }
 
@@ -62,7 +76,12 @@
   display: flex;
   align-items: center;
   text-decoration: none;
+  outline-offset: 2px;
   color: var(--color-neutral-300);
+}
+
+.github-link:focus-visible {
+  opacity: .8;
 }
 
 .github-link__icon {
@@ -70,7 +89,13 @@
 }
 
 .github-link__name {
-  font-size: var(--fs-small);
+  font-size: clamp(var(--fs-small), var(--fs-small) + .1vw, var(--fs-small) * 1.125rem);
+}
+
+@media (hover: hover) {
+  .github-link:hover {
+    opacity: .8;
+  }
 }
 
 /* LEFT CONTENT END */
