@@ -75,6 +75,11 @@
   padding: var(--header-padding);
 }
 
+.header-image {
+  width: clamp(200px, 200px + 3vw, 280px);
+  height: clamp(30px, 30px + 1.5vw, 42px)
+}
+
 /* HEADER END */
 
 /* MAIN TEXT START */
