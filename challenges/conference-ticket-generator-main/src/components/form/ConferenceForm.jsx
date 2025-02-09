@@ -9,11 +9,7 @@ import {
 import useBounce from '../../hooks/useBounce'
 import ErrorIcon from '../erroricon/ErrorIcon'
 
-const buttonClickSound = new Audio(
-  `${BASE_URL}assets/sounds/button-click.mp3`)
-
-const formErrorSound = new Audio(
-  `${BASE_URL}assets/sounds/form-error.mp3`)
+const getClosestFormField = (target) => getClosest.call(null, target, '.form__field')
 
 export default function ConferenceForm({ showTicket, sendTicketData,
   setUserAvatar, userAvatar, dropZoneRef }) {
@@ -28,8 +24,6 @@ export default function ConferenceForm({ showTicket, sendTicketData,
 
   const [imageUploaded, setImageUploaded] = useState(false)
   const [addBounceClass, removeBounceClass] = useBounce(buttonRef)
-
-  const getClosestFormField = (target) => getClosest.call(null, target, '.form__field')
 
   function setInputErrorMsg(inputName, msg) {
     dispatchUserData({ type: 'error', who: inputName, msg })
@@ -46,23 +40,18 @@ export default function ConferenceForm({ showTicket, sendTicketData,
     setAudioPlaying(true)
   }
 
-  const validateFuncs = {
-    'full-name': {
-      validate: validateUserName,
-    },
-
-    'email': {
-      validate: validateUserEmail,
-    },
-
-    'github-name': {
-      validate: validateUserGithubName,
-    },
-  }
-
+  // choose the appropriate validation function and send an object 
+  // with the validation state and an error message that may be empty
   function runValidationFunc(inputName, inputValue) {
-    const validated = validateFuncs[inputName]?.validate(inputValue)
+    const validateFuncs = {
+      'full-name': validateUserName,
+      'email': validateUserEmail,
+      'github-name': validateUserGithubName,
+    }
 
+    const validated = validateFuncs[inputName](inputValue)
+
+    // if validated is true, it means that an error message exists
     return { msg: !validated ? '' : validated, state: !validated ? true : false }
   }
 
@@ -156,21 +145,11 @@ export default function ConferenceForm({ showTicket, sendTicketData,
 
   function handleInputsChange(e) {
     const inputName = e.target.name
-    const inputValue = e.target.value
     const closestField = getClosestFormField(e.target)
 
-    const inputValidation = runValidationFunc(inputName, inputValue)
-
     setFormSent(false)
-    setInputErrorMsg(inputName, inputValidation.msg)
-
-    if (inputValidation.state) {
-      removeErrorAttribute(closestField)
-      dispatchUserData({ type: 'set', who: inputName, value: inputValue })
-      return
-    }
-
-    setErrorAttribute(closestField)
+    setInputErrorMsg(inputName, '')
+    removeErrorAttribute(closestField)
   }
 
   function handleFormTransitionEnd(e) {
@@ -208,6 +187,8 @@ export default function ConferenceForm({ showTicket, sendTicketData,
         ? removeErrorAttribute
         : setErrorAttribute)(closestField)
 
+      dispatchUserData({ type: 'set', who: input.name, value: input.value })
+
       // check for inputsAreValidTemp so we avoid updating it to true if there's
       // was already an invalid input, otherwise if an input is valid it will
       // update it to true and the formErrorSound will not be played.
@@ -222,16 +203,16 @@ export default function ConferenceForm({ showTicket, sendTicketData,
     (userAvatar ? removeErrorAttribute : setErrorAttribute)(getClosestFormField(dropZoneRef.current))
 
     setFormSent(true)
-
-    playSound(inputsAreValidTemp ? buttonClickSound : formErrorSound)
   }
 
   function handleButtonBounceEnd() {
     removeBounceClass()
 
-    if (!inputsAreValid) return
-
-    playSound(buttonClickSound)
+    playSound(
+      new Audio(`${BASE_URL}${inputsAreValid
+        ? 'assets/sounds/button-click.mp3'
+        : 'assets/sounds/form-error.mp3'}`)
+    )
   }
 
   const dropZoneProps = {
@@ -244,6 +225,7 @@ export default function ConferenceForm({ showTicket, sendTicketData,
   return (
     <form
       className={`form pos-relative${formSent && inputsAreValid ? ' form--hide' : ''}`}
+      aria-hidden={formSent && inputsAreValid}
       onTransitionEnd={handleFormTransitionEnd}
       onSubmit={preventDefault}
       noValidate
@@ -328,6 +310,7 @@ function userDataInitializer() {
 function FormFieldError({ children }) {
   return (
     <span className='form__field__error' aria-live='polite'>
+      {/* always show the icon on red color */}
       <ErrorIcon error={true} />
       {children}
     </span>
