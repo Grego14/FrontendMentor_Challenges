@@ -91,6 +91,7 @@ button {
 body {
   min-height: 100dvh;
   position: relative;
+  background-color: var(--color-neutral-900);
 }
 
 html,
