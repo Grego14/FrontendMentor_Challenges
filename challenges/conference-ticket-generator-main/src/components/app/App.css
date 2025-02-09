@@ -87,10 +87,6 @@
   max-width: 50rem
 }
 
-.main-title--ticket {
-  max-width: 32rem;
-}
-
 .main-text {
   color: var(--color-neutral-300);
   font-size: var(--fs-label);
@@ -100,7 +96,7 @@
 }
 
 .main-text--ticket {
-  max-width: 30rem;
+  max-width: 55rem;
   margin-inline: auto;
   text-wrap: balance;
 }
@@ -110,24 +106,47 @@
 }
 
 .main-title__fullName {
+  background: linear-gradient(90deg, var(--color-neutral-000), var(--color-orange-700)) 0 0 / 400% 100%;
   background-clip: text;
   color: transparent;
-  animation: fullName-gradient var(--transition-slow) ease-in-out alternate infinite;
 }
 
-/* TODO - Make the gradient animation smooth */
-@keyframes fullName-gradient {
-  from {
-    background-image: linear-gradient(90deg, var(--color-orange-700), var(--color-neutral-000));
-    background-position-x: left;
+@media (prefers-reduced-motion: no-preference) {
+  .main-title__fullName {
+    animation: fullName-gradient 5s alternate infinite;
   }
 
-  to {
-    background-image: linear-gradient(90deg, var(--color-neutral-000), var(--color-orange-700));
+  @keyframes fullName-gradient {
+    to {
+      background-position-x: -100%;
+    }
   }
 }
 
 /* MAIN TEXT END */
+
+.save-ticket-btn {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%) scale(0);
+  opacity: 0;
+  color: var(--color-neutral-900);
+  background-color: var(--color-orange-700);
+  min-height: 3rem;
+  padding-inline: 1rem;
+  border-radius: .3rem;
+  transition: background-color var(--transition-fast) ease-in-out,
+    opacity var(--transition-fast) ease-in-out,
+    transform var(--transition-fast) ease-in-out;
+  font-weight: bold;
+  box-shadow: 0 2px 8px var(--color-orange-700);
+}
+
+.save-ticket-btn--show {
+  opacity: 1;
+  transform: translate(-50%) scale(1);
+}
 
 @media only screen and (min-width: 48rem) {
   .background-images {
@@ -156,5 +175,13 @@
 @media only screen and (min-width: 64rem) {
   .background-image__pattern-lines {
     max-height: 100%;
+  }
+}
+
+@media (hover: hover) {
+  .save-ticket-btn:hover {
+    background-color: var(--color-orange-500);
+    transition: transform .1s ease-in-out .05s;
+    transform: translate(-50%, -3px)
   }
 }
