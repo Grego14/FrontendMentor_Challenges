@@ -117,11 +117,13 @@ const DropZone = forwardRef(function DropZone(props, ref) {
 
           <div>
             <button
+              type='button'
               className='preview__button preview__button--remove'
               onClick={handleRemoveImage}>
               Remove image
             </button>
             <button
+              type='button'
               className='preview__button preview__button--change'
               onClick={simulateInputFileClick}>
               Change image
@@ -135,6 +137,7 @@ const DropZone = forwardRef(function DropZone(props, ref) {
           : ' upload-container--show'}`}>
 
           <button className='drop-zone__upload'
+            type='button'
             ref={uploadBtnRef}
             aria-label='Press to upload your avatar image'
             onClick={addBounce}
