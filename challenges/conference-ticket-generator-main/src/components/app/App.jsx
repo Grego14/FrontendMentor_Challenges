@@ -83,6 +83,7 @@ function Layout(props) {
 
   const buttonRef = useRef(null)
   const [addBounceClass, removeBounceClass] = useBounce(buttonRef)
+  const ticketVisible = ticket.ticketVisible
 
   function handleTicketBtnClick() {
     addBounceClass()
@@ -115,7 +116,7 @@ function Layout(props) {
   const formProps = {
     ...conferenceForm,
     dropZoneRef,
-    ticketVisible: ticket.ticketVisible,
+    ticketVisible,
     userAvatar
   }
 
@@ -123,7 +124,7 @@ function Layout(props) {
     fullName,
     githubUser,
     email,
-    ticketVisible: ticket.ticketVisible
+    ticketVisible
   }
 
   const ticketProps = {
@@ -141,15 +142,16 @@ function Layout(props) {
       <ConferenceForm {...formProps} />
 
       <Suspense>
-        {ticket.ticketVisible && (
+        {ticketVisible && (
           <Ticket {...ticketProps} ref={ticket.ticketRef} />
         )}
       </Suspense>
 
       <button
         ref={buttonRef}
-        className={`save-ticket-btn${ticket.ticketVisible ? ' save-ticket-btn--show' : ''}`}
-        aria-hidden={!ticket.ticketVisible}
+        className={`save-ticket-btn${ticketVisible ? ' save-ticket-btn--show' : ''}`}
+        aria-hidden={!ticketVisible}
+        tabIndex={!ticketVisible ? '-1' : '0'}
         onClick={handleTicketBtnClick}
         onAnimationEnd={handleTicketBtnTransition}>
         Click to save your ticket!

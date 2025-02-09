@@ -24,6 +24,7 @@
   z-index: 1;
   pointer-events: none;
   position: absolute;
+  -webkit-user-select: none;
   user-select: none;
   opacity: .85;
 }
@@ -146,6 +147,11 @@
     transform var(--transition-fast) ease-in-out;
   font-weight: bold;
   box-shadow: 0 2px 8px var(--color-orange-700);
+}
+
+.save-ticket-btn:focus-visible {
+  outline: 3px dotted var(--color-orange-700);
+  outline-offset: 1px;
 }
 
 .save-ticket-btn--show {
