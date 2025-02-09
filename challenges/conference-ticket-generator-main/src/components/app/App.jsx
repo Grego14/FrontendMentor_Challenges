@@ -54,8 +54,12 @@ export default function App() {
 
       <Layout {...layoutProps} />
 
-      <img className='background-image background-image__pattern-lines'
-        src={`${BASE_URL}assets/images/pattern-lines.svg`} alt='' aria-hidden='true' />
+      <img
+        className='background-image background-image__pattern-lines'
+        src={`${BASE_URL}assets/images/pattern-lines.svg`}
+        alt=''
+        aria-hidden='true'
+        fetchpriority='low' />
 
       <picture>
         <source srcSet={`${BASE_URL}assets/images/background-mobile.png`} media='(max-width: 480px)'></source>
@@ -137,7 +141,9 @@ function Layout(props) {
       <ConferenceForm {...formProps} />
 
       <Suspense>
-        <Ticket {...ticketProps} ref={ticket.ticketRef} />
+        {ticket.ticketVisible && (
+          <Ticket {...ticketProps} ref={ticket.ticketRef} />
+        )}
       </Suspense>
 
       <button
@@ -186,7 +192,13 @@ function MainText({ ticketVisible, fullName, email }) {
 function Header() {
   return (
     <header className='header'>
-      <img src={`${BASE_URL}assets/images/logo-full.svg`} alt='Coding Conf Logo' draggable={false} />
+      <img
+        src={`${BASE_URL}assets/images/logo-full.svg`}
+        className='header-image'
+        alt='Coding Conf Logo'
+        draggable={false}
+        width='200'
+        height='30' />
     </header>
   )
 }
