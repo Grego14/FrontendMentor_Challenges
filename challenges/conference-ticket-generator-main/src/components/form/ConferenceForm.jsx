@@ -3,7 +3,7 @@ import './ConferenceForm.css'
 import DropZone from '../dropzone/DropZone'
 import userDataReducer from '../../reducers/userDataReducer'
 import {
-  preventDefault, howManyChars, setErrorAttribute,
+  preventDefault, setErrorAttribute,
   removeErrorAttribute, getClosest, BASE_URL
 } from '../../utils/utils'
 import useBounce from '../../hooks/useBounce'
@@ -42,105 +42,19 @@ export default function ConferenceForm({ showTicket, sendTicketData,
 
   // choose the appropriate validation function and send an object 
   // with the validation state and an error message that may be empty
-  function runValidationFunc(inputName, inputValue) {
+  async function runValidationFunc(inputName, inputValue) {
+    const validations = await import('./validations.js').then(mod => mod.default)
+
     const validateFuncs = {
-      'full-name': validateUserName,
-      'email': validateUserEmail,
-      'github-name': validateUserGithubName,
+      'full-name': validations.validateUserName,
+      'email': validations.validateUserEmail,
+      'github-name': validations.validateUserGithubName,
     }
 
-    const validated = validateFuncs[inputName](inputValue)
+    const validated = validateFuncs[inputName](inputValue.trim())
 
     // if validated is true, it means that an error message exists
     return { msg: !validated ? '' : validated, state: !validated ? true : false }
-  }
-
-  function validateUserName(name) {
-    const trimmed = name.trim()
-    const messages = {
-      long: 'Name is too long',
-      short: 'Name is too short',
-      empty: 'Name can\'t be empty',
-      chars: 'Name must not contain numbers or signs'
-    }
-
-    const errorMessage = (() => {
-      const match = trimmed.match(/[0-9!*\(\)+%\$\^\{\}\\\:\;\/\,\<\>"@_]/)?.[0]
-
-      if (trimmed.length === 0) return 'empty'
-      if (trimmed.length >= 64) return 'long'
-
-      if (trimmed.length < 3 && match) return 'chars'
-      if (trimmed.length < 3) return 'short'
-
-      if (match) return 'chars'
-    })()
-
-    return messages[errorMessage]
-  }
-
-  function validateUserEmail(email) {
-    const trimmed = email.trim()
-    const messages = {
-      match: 'Email must match username@domain.tld',
-      empty: 'Email can\'t be empty',
-      usernameShort: 'Username is too short',
-      domainShort: 'Domain is too short',
-      tldShort: 'TLD is too short'
-    }
-
-    const splittedMail = email.split(/[@\.]/)
-    /* 
-     * splittedMail[0] = username
-     * splittedMail[1] = domain || null
-     * splittedMail[2] = tld || null
-    */
-
-    const errorMessage = (() => {
-      const howManyAts = howManyChars(trimmed, '@')
-
-      // order matters
-      if (trimmed.length === 0) return 'empty'
-
-      if (splittedMail.length > 3) return 'match'
-
-      if (splittedMail[0].length < 2) return 'usernameShort'
-
-      if (!splittedMail[1]) return 'match'
-      if (splittedMail[1].length < 2) return 'domainShort'
-
-      if (!splittedMail[2]) return 'match'
-      if (splittedMail[2].length < 2) return 'tldShort'
-
-      if (howManyAts > 1 || howManyAts < 1) return 'match'
-    })()
-
-    return messages[errorMessage]
-  }
-
-  function validateUserGithubName(githubUser) {
-    const trimmed = githubUser.trim()
-    const messages = {
-      empty: 'Github user can\'t be empty',
-      short: 'Github user is too short',
-      match: 'Github user must match @username'
-    }
-
-    const errorMessage = (() => {
-      const howManyAts = howManyChars(trimmed, '@')
-
-      if (trimmed.length === 0) return 'empty'
-
-      // In this case...[0] will be the @
-      if (trimmed.split(/[@]/)[0] !== '') return 'match'
-
-      // Github usersnames can be 1 char so we test for @ + char
-      if (trimmed.length < 2) return 'short'
-
-      if (howManyAts > 1 || howManyAts < 1) return 'match'
-    })()
-
-    return messages[errorMessage]
   }
 
   function handleInputsChange(e) {
@@ -153,9 +67,8 @@ export default function ConferenceForm({ showTicket, sendTicketData,
   }
 
   function handleFormTransitionEnd(e) {
-    const form = formRef.current
     // prevent sending the data if the transition event isn't from the Form
-    if (e.target !== form) return
+    if (e.target !== formRef.current) return
 
     sendTicketData({
       fullName: userData['full-name'].value,
@@ -164,22 +77,20 @@ export default function ConferenceForm({ showTicket, sendTicketData,
     })
 
     showTicket()
-
-    form.style.display = 'hidden'
   }
 
-  function handleButtonClick() {
-    const form = formRef.current
-    const inputs = form.querySelectorAll('input:not([type="file"])')
+  async function handleButtonClick() {
+    const inputs = formRef.current.querySelectorAll('input:not([type="file"])')
     let inputsAreValidTemp = true
 
     addBounceClass()
 
-    // run validationfunc on each input
+    // run validationfunc on each input,
+    // set/remove the error attribute and update userData
     for (let i = 0; i < inputs.length; i++) {
       const input = inputs[i];
       const closestField = getClosestFormField(input)
-      const inputValidation = runValidationFunc(input.name, input.value)
+      const inputValidation = await runValidationFunc(input.name, input.value)
 
       setInputErrorMsg(input.name, inputValidation.msg);
 
@@ -232,7 +143,7 @@ export default function ConferenceForm({ showTicket, sendTicketData,
       ref={formRef}>
 
       <div className='form__field'>
-        <label className='form__label' htmlFor='avatar'>Upload Avatar</label>
+        <label className='form__label' htmlFor='drop-zone'>Upload Avatar</label>
         <DropZone {...dropZoneProps} ref={dropZoneRef} />
       </div>
 
