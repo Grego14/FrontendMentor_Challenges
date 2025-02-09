@@ -153,7 +153,7 @@ const DropZone = forwardRef(function DropZone(props, ref) {
 
       </div>
 
-      <div className={`drop-zone__max-size${dropZoneError ? ' max-size-error' : ''}`}>
+      <div className={`drop-zone__max-size${dropZoneError ? ' max-size-error' : ''}`} aria-live='polite'>
         <ErrorIcon error={dropZoneError} />
         {imageIsBig ? 'File too largue. Please upload a photo under 500KB' : 'Upload your photo (JPG or PNG, max size: 500KB).'}
       </div>
