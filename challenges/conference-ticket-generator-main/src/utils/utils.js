@@ -33,3 +33,7 @@ export function substring(str, length) {
   return str.length >= length ? `${str.substring(0, length)}...` : str
 }
 
+export const audios = {
+  click: 'assets/sounds/button-click.mp3',
+  error: 'assets/sounds/form-error.mp3'
+}
