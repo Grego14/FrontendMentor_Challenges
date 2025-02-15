@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite --open",
     "build": "vite build --outDir build",
-    "lint": "biome lint ./src/**/**.js",
     "preview": "vite preview --outDir build --open"
   },
   "dependencies": {
