@@ -23,19 +23,18 @@
   border: 2px dashed var(--drop-zone-border);
   margin-bottom: .8rem;
 
-  transition: background-color var(--transition-fast) ease-in-out,
-    border-color var(--transition-fast) ease-in-out;
+  transition: background-color var(--transition-fast) ease-in-out, border-color var(--transition-fast) ease-in-out;
 }
 
 [data-error] .drop-zone {
   /* same as --color-error-light but almost transparent */
-  --drop-zone-bg: #FF656511;
-  --drop-zone-bg-hover: #FF656522;
+  --drop-zone-bg: #ff656511;
+  --drop-zone-bg-hover: #ff656522;
   --drop-zone-border: var(--color-error-light);
 
   --upload-btn-bg-color: var(--drop-zone-bg);
   --upload-btn-border-color: var(--color-error-light);
-  --upload-btn-bshadow-color: #FF656588;
+  --upload-btn-bshadow-color: #ff656588;
 }
 
 .drop-zone__upload-container {
@@ -59,9 +58,8 @@
   border: 1px solid var(--upload-btn-border-color);
   border-radius: .8rem;
 
-  transition: background-color var(--transition-fast) ease-in-out,
-    border-color var(--transition-fast) ease-in-out,
-    color var(--transition-fast) ease-in-out transform var(--transition-faster) ease-in-out;
+  transition: background-color var(--transition-fast) ease-in-out, border-color var(--transition-fast) ease-in-out, color var(--transition-fast) ease-in-out,
+    transform var(--transition-faster) ease-in-out;
   box-shadow: 0 3px 5px 0 var(--upload-btn-bshadow-color);
 }
 
