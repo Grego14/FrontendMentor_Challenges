@@ -1,10 +1,10 @@
-import { useState, useReducer, useRef, lazy, Suspense } from 'react'
+import { Suspense, lazy, useReducer, useRef, useState } from 'react'
+import ticketReducer from '../../reducers/ticketReducer'
 import ConferenceForm from '../form/ConferenceForm'
 import DecorationIcons from './DecorationIcons'
-import ticketReducer from '../../reducers/ticketReducer'
 import './App.css'
-import { substring, BASE_URL } from '../../utils/utils'
 import useBounce from '../../hooks/useBounce'
+import { BASE_URL, substring } from '../../utils/utils'
 
 const Ticket = lazy(() => import('../ticket/Ticket'))
 
@@ -43,7 +43,7 @@ export default function App() {
       showTicket,
       sendTicketData,
       setUserAvatar
-    },
+    }
   }
 
   return (
@@ -59,13 +59,21 @@ export default function App() {
         src={`${BASE_URL}assets/images/pattern-lines.svg`}
         alt=''
         aria-hidden='true'
-        fetchpriority='low' />
+        fetchpriority='low'
+      />
 
       <picture>
-        <source srcSet={`${BASE_URL}assets/images/background-mobile.png`} media='(max-width: 480px)'></source>
-        <source srcSet={`${BASE_URL}assets/images/background-tablet.png`} media='(min-width: 481px) and (max-width: 1023px)'></source>
-        <source srcSet={`${BASE_URL}assets/images/background-desktop.png`} media='(min-width: 1024px)'></source>
-        <img className='background-image background-image__main'
+        <source
+          srcSet={`${BASE_URL}assets/images/background-mobile.png`}
+          media='(max-width: 480px)'/>
+        <source
+          srcSet={`${BASE_URL}assets/images/background-tablet.png`}
+          media='(min-width: 481px) and (max-width: 1023px)'/>
+        <source
+          srcSet={`${BASE_URL}assets/images/background-desktop.png`}
+          media='(min-width: 1024px)'/>
+        <img
+          className='background-image background-image__main'
           src={`${BASE_URL}assets/images/background-mobile.png`}
           alt=''
           aria-hidden='true'
@@ -78,8 +86,15 @@ export default function App() {
 }
 
 function Layout(props) {
-  const { conferenceForm, dropZoneRef, fullName, githubUser,
-    email, userAvatar, ticket } = props
+  const {
+    conferenceForm,
+    dropZoneRef,
+    fullName,
+    githubUser,
+    email,
+    userAvatar,
+    ticket
+  } = props
 
   const buttonRef = useRef(null)
   const [addBounceClass, removeBounceClass] = useBounce(buttonRef)
@@ -94,7 +109,7 @@ function Layout(props) {
     }
 
     import('html2canvas').then(mod => {
-      mod.default(ticket.ticketRef.current, options).then((canvas) => {
+      mod.default(ticket.ticketRef.current, options).then(canvas => {
         const imagenURL = canvas.toDataURL()
         const link = document.createElement('a')
         link.href = imagenURL
@@ -131,23 +146,21 @@ function Layout(props) {
     ...mainTextProps,
     ticketID: ticket.ticketID,
     setTicketID: ticket.setTicketID,
-    userAvatar,
+    userAvatar
   }
 
   return (
     <main className='pos-relative' aria-live='polite' aria-atomic='true'>
-
       <MainText {...mainTextProps} />
 
       <ConferenceForm {...formProps} />
 
       <Suspense>
-        {ticketVisible && (
-          <Ticket {...ticketProps} ref={ticket.ticketRef} />
-        )}
+        {ticketVisible && <Ticket {...ticketProps} ref={ticket.ticketRef} />}
       </Suspense>
 
       <button
+        type='button'
         ref={buttonRef}
         className={`save-ticket-btn${ticketVisible ? ' save-ticket-btn--show' : ''}`}
         aria-hidden={!ticketVisible}
@@ -164,29 +177,30 @@ function MainText({ ticketVisible, fullName, email }) {
   return (
     <>
       <h1 className={`main-title${ticketVisible ? ' main-title--ticket' : ''}`}>
-        {!ticketVisible
-          ? 'Your Journey to Coding Conf 2025 Starts Here'
-          : (
-            <>
-              Congrats, <span className='main-title__fullName'>
-                {substring(fullName, 16)}
-              </span>! Your ticket is ready.
-            </>
-          )}
+        {!ticketVisible ? (
+          'Your Journey to Coding Conf 2025 Starts Here'
+        ) : (
+          <>
+            Congrats,{' '}
+            <span className='main-title__fullName'>
+              {substring(fullName, 16)}
+            </span>
+            ! Your ticket is ready.
+          </>
+        )}
       </h1>
 
-      <p className={`main-text${ticketVisible ? ' main-text--ticket' : ''}`}>{
-        !ticketVisible
-          ? 'Secure your spot at next year\'s biggest coding conference.'
-          : (
-            <>
-              We've emailed your ticket to{' '}
-              <span className='main-text__email'>
-                {substring(email, 18)}</span> and will send
-              updates in the run up to the event.
-            </>
-          )
-      }</p>
+      <p className={`main-text${ticketVisible ? ' main-text--ticket' : ''}`}>
+        {!ticketVisible ? (
+          "Secure your spot at next year's biggest coding conference."
+        ) : (
+          <>
+            We've emailed your ticket to{' '}
+            <span className='main-text__email'>{substring(email, 18)}</span> and
+            will send updates in the run up to the event.
+          </>
+        )}
+      </p>
     </>
   )
 }
@@ -200,7 +214,8 @@ function Header() {
         alt='Coding Conf Logo'
         draggable={false}
         width='200'
-        height='30' />
+        height='30'
+      />
     </header>
   )
 }
