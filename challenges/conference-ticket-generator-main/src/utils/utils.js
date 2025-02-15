@@ -18,11 +18,11 @@ export function howManyChars(str, char) {
 }
 
 export function setErrorAttribute(target) {
-  target && target.setAttribute('data-error', '')
+  target?.setAttribute('data-error', '')
 }
 
 export function removeErrorAttribute(target) {
-  target && target.removeAttribute('data-error')
+  target?.removeAttribute('data-error')
 }
 
 export function getClosest(target, selector) {
