@@ -85,10 +85,7 @@ const DropZone = forwardRef(function DropZone(props, ref) {
     <>
       <div
         className='drop-zone'
-        tabIndex='0'
-        id='drop-zone'
         ref={ref}
-        aria-label='Drag and drop or click to upload your avatar image'
         onDragOver={preventDefaultAndPropagation}
         onDragEnter={preventDefaultAndPropagation}
         onDrop={getImage}

@@ -85,7 +85,7 @@
 }
 
 .max-size-error {
-  color: var(--color-error-dark);
+  color: var(--color-error-light);
 }
 
 /* preview avatar */
