@@ -1,14 +1,14 @@
 import { howManyChars } from '../../utils/utils'
 
-/* 
-  * validations[func] requires trimmed string -> str.trim()
-*/
+/*
+ * validations[func] requires trimmed string -> str.trim()
+ */
 const validations = {
   validateUserName(name) {
     const messages = {
       long: 'Name is too long',
       short: 'Name is too short',
-      empty: 'Name can\'t be empty',
+      empty: "Name can't be empty",
       chars: 'Name must not contain numbers or signs'
     }
 
@@ -23,24 +23,25 @@ const validations = {
         if (name.length < 3) return 'short'
 
         if (match) return 'chars'
-      })()]
+      })()
+    ]
   },
 
   validateUserEmail(email) {
     const messages = {
       match: 'Email must match username@domain.tld',
-      empty: 'Email can\'t be empty',
+      empty: "Email can't be empty",
       usernameShort: 'Username is too short',
       domainShort: 'Domain is too short',
       tldShort: 'TLD is too short'
     }
 
     const splittedMail = email.split(/[@\.]/)
-    /* 
+    /*
      * splittedMail[0] = username
      * splittedMail[1] = domain || null
      * splittedMail[2] = tld || null
-    */
+     */
 
     return messages[
       (() => {
@@ -60,12 +61,13 @@ const validations = {
         if (splittedMail[2].length < 2) return 'tldShort'
 
         if (howManyAts > 1 || howManyAts < 1) return 'match'
-      })()]
+      })()
+    ]
   },
 
   validateUserGithubName(githubUser) {
     const messages = {
-      empty: 'Github user can\'t be empty',
+      empty: "Github user can't be empty",
       short: 'Github user is too short',
       match: 'Github user must match @username'
     }
@@ -77,13 +79,14 @@ const validations = {
         if (githubUser.length === 0) return 'empty'
 
         // In this case...[0] will be the @
-        if (githubUser.split(/[@]/)[0] !== '') return 'match'
+        if (githubUser.split('@')[0] !== '') return 'match'
 
         // Github usersnames can be 1 char so we test for @ + char
         if (githubUser.length < 2) return 'short'
 
         if (howManyAts > 1 || howManyAts < 1) return 'match'
-      })()]
+      })()
+    ]
   }
 }
 
