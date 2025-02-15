@@ -8,7 +8,7 @@ const Ticket = forwardRef((props, ref) => {
 
   useEffect(() => {
     setTicketID(Math.floor(Math.random() * 10000) + 1)
-  }, [])
+  }, [setTicketID])
 
   return (
     <div ref={ref}
@@ -47,6 +47,7 @@ const Ticket = forwardRef((props, ref) => {
               className='github-link'
               href={`https://github.com/${githubUser.split('@')[1]}`}
               target='_blank'
+              rel='noreferrer'
               aria-label={`${fullName} github profile`} >
               <img
                 className='github-link__icon'
