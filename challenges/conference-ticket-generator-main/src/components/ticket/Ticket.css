@@ -1,5 +1,5 @@
 .ticket {
-  --ticket-left-items-gap: clamp(.5rem, .5rem + 5vh, 1.5rem);
+  --ticket-left-items-gap: clamp(.5rem, .5rem + 1vmin, 1.5rem);
 
   display: flex;
   justify-content: space-between;
@@ -29,6 +29,7 @@
 
 .ticket__content-left>div {
   display: flex;
+  align-items: center;
   gap: .6rem;
 }
 
@@ -50,7 +51,7 @@
 }
 
 .ticket__date {
-  font-size: clamp(.85rem, .85rem + .5vw, 1.1rem);
+  font-size: clamp(.85rem, .85rem + .3vw, 1.1rem);
   color: var(--color-neutral-300);
 }
 
