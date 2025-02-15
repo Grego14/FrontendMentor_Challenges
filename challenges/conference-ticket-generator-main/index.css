@@ -1,38 +1,34 @@
 @font-face {
   font-family: 'Inconsolata';
-  src: local('Inconsolata Regular');
-  src: url('/assets/fonts/Inconsolata-Regular.woff2') format('woff2'),
-    url('/assets/fonts/Inconsolata-Regular.ttf') format('truetype');
+  src: url('./assets/fonts/Inconsolata-Regular.woff2') format('woff2'),
+    url('./assets/fonts/Inconsolata-Regular.ttf') format('truetype');
   font-style: normal;
-  font-weight: normal;
+  font-weight: 400;
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Inconsolata';
-  src: local('Inconsolata Medium');
-  src: url('/assets/fonts/Inconsolata-Medium.woff2') format('woff2'),
-    url('/assets/fonts/Inconsolata-Medium.woff2') format('truetype');
+  src: url('./assets/fonts/Inconsolata-Medium.woff2') format('woff2'),
+    url('./assets/fonts/Inconsolata-Medium.ttf') format('truetype');
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Inconsolata';
-  src: local('Inconsolata Bold');
-  src: url('/assets/fonts/Inconsolata-Bold.woff2') format('woff2'),
-    url('/assets/fonts/Inconsolata-Bold.ttf') format('truetype');
+  src: url('./assets/fonts/Inconsolata-Bold.woff2') format('woff2'),
+    url('./assets/fonts/Inconsolata-Bold.ttf') format('truetype');
   font-style: normal;
-  font-weight: bold;
+  font-weight: 700;
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Inconsolata';
-  src: local('Inconsolata ExtraBold');
-  src: url('/assets/fonts/Inconsolata-ExtraBold.woff2') format('woff2'),
-    url('/assets/fonts/Inconsolata-ExtraBold.ttf') format('truetype');
+  src: url('./assets/fonts/Inconsolata-ExtraBold.woff2') format('woff2'),
+    url('./assets/fonts/Inconsolata-ExtraBold.ttf') format('truetype');
   font-style: normal;
   font-weight: 800;
   font-display: swap;
