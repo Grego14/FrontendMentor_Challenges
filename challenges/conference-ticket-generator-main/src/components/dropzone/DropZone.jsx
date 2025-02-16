@@ -11,12 +11,13 @@ import {
 import ErrorIcon from '../erroricon/ErrorIcon'
 
 const DropZone = forwardRef(function DropZone(props, ref) {
-  const { setUserAvatar, userAvatar, setImageUploaded, imageUploaded } = props
+  const { setUserAvatar, userAvatar } = props
   const fileInputRef = useRef(null)
   const uploadBtnRef = useRef(null)
 
   const [addBounce, revBounce] = useBounce(uploadBtnRef)
   const [imageIsBig, setImageIsBig] = useState(false)
+  const [imageUploaded, setImageUploaded] = useState(false)
 
   const closestField = getClosest.call(null, ref.current, '.form__field')
 
@@ -111,10 +112,7 @@ const DropZone = forwardRef(function DropZone(props, ref) {
         />
 
         <div
-          className={`drop-zone__preview${imageUploaded
-              ? ' drop-zone__preview--show'
-              : ' drop-zone__preview--hidden'
-            }`}>
+          className={`drop-zone__preview${imageUploaded ? ' show' : ' hidden'}`}>
           <div>
             <img
               className='preview__image'
@@ -143,10 +141,7 @@ const DropZone = forwardRef(function DropZone(props, ref) {
         </div>
 
         <div
-          className={`drop-zone__upload-container${imageUploaded
-              ? ' upload-container--hidden'
-              : ' upload-container--show'
-            }`}>
+          className={`drop-zone__upload-container${imageUploaded ? ' hidden' : ''}`}>
           <button
             className='drop-zone__upload'
             type='button'
