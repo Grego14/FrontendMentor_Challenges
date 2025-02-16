@@ -47,7 +47,7 @@
   gap: .5rem;
 }
 
-.upload-container--hidden {
+.drop-zone__upload-container.hidden {
   display: none;
 }
 
@@ -88,11 +88,11 @@
 
 /* preview avatar */
 
-.drop-zone__preview--hidden {
+.drop-zone__preview.hidden {
   display: none;
 }
 
-.drop-zone__preview--show {
+.drop-zone__preview.show {
   display: flex;
   align-items: center;
   justify-content: center;
