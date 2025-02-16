@@ -7,6 +7,7 @@ import useBounce from '../../hooks/useBounce'
 import { BASE_URL, substring } from '../../utils/utils'
 
 const Ticket = lazy(() => import('../ticket/Ticket'))
+const imageFolder = `${BASE_URL}assets/images/`
 
 export default function App() {
   const dropZoneRef = useRef(null)
@@ -54,31 +55,29 @@ export default function App() {
 
       <img
         className='background-image background-image__pattern-lines'
-        src={`${BASE_URL}assets/images/pattern-lines.svg`}
+        src={`${imageFolder}pattern-lines.svg`}
         alt=''
         aria-hidden='true'
-        fetchpriority='low'
+        fetchpriority='high'
       />
 
       <picture>
         <source
-          srcSet={`${BASE_URL}assets/images/background-mobile.png`}
-          media='(max-width: 480px)'
+          srcSet={`${imageFolder}background-desktop.webp`}
+          media='(min-width: 1200px)'
         />
         <source
-          srcSet={`${BASE_URL}assets/images/background-tablet.png`}
-          media='(min-width: 481px) and (max-width: 1023px)'
-        />
-        <source
-          srcSet={`${BASE_URL}assets/images/background-desktop.png`}
-          media='(min-width: 1024px)'
+          srcSet={`${imageFolder}background-tablet.webp`}
+          media='(min-width: 750px)'
         />
         <img
           className='background-image background-image__main'
-          src={`${BASE_URL}assets/images/background-mobile.png`}
+          src={`${imageFolder}background-mobile.webp`}
           alt=''
           aria-hidden='true'
           draggable='false'
+          width='750'
+          height='1800'
           fetchpriority='high'
         />
       </picture>
@@ -207,7 +206,7 @@ function Header() {
   return (
     <header className='header'>
       <img
-        src={`${BASE_URL}assets/images/logo-full.svg`}
+        src={`${imageFolder}logo-full.svg`}
         className='header-image'
         alt='Coding Conf Logo'
         draggable={false}
