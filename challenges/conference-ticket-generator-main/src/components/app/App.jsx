@@ -14,7 +14,6 @@ export default function App() {
 
   const [ticketVisible, setTicketVisible] = useState(false)
   const [ticketData, dispatch] = useReducer(ticketReducer, {})
-  const [userAvatar, setUserAvatar] = useState('')
   const [ticketID, setTicketID] = useState(null)
 
   function showTicket() {
@@ -30,7 +29,7 @@ export default function App() {
     fullName: ticketData.fullName,
     githubUser: ticketData.github,
     email: ticketData.email,
-    userAvatar,
+    userAvatar: ticketData.userAvatar,
 
     ticket: {
       ticketVisible,
@@ -41,8 +40,7 @@ export default function App() {
 
     conferenceForm: {
       showTicket,
-      sendTicketData,
-      setUserAvatar
+      sendTicketData
     }
   }
 
@@ -65,13 +63,16 @@ export default function App() {
       <picture>
         <source
           srcSet={`${BASE_URL}assets/images/background-mobile.png`}
-          media='(max-width: 480px)'/>
+          media='(max-width: 480px)'
+        />
         <source
           srcSet={`${BASE_URL}assets/images/background-tablet.png`}
-          media='(min-width: 481px) and (max-width: 1023px)'/>
+          media='(min-width: 481px) and (max-width: 1023px)'
+        />
         <source
           srcSet={`${BASE_URL}assets/images/background-desktop.png`}
-          media='(min-width: 1024px)'/>
+          media='(min-width: 1024px)'
+        />
         <img
           className='background-image background-image__main'
           src={`${BASE_URL}assets/images/background-mobile.png`}
@@ -124,20 +125,16 @@ function Layout(props) {
 
   function handleTicketBtnTransition() {
     removeBounceClass()
-
-    new Audio(`${BASE_URL}assets/sounds/button-click.mp3`).play()
   }
 
   const formProps = {
     ...conferenceForm,
     dropZoneRef,
-    ticketVisible,
-    userAvatar
+    ticketVisible
   }
 
   const mainTextProps = {
     fullName,
-    githubUser,
     email,
     ticketVisible
   }
@@ -146,6 +143,7 @@ function Layout(props) {
     ...mainTextProps,
     ticketID: ticket.ticketID,
     setTicketID: ticket.setTicketID,
+    githubUser,
     userAvatar
   }
 
