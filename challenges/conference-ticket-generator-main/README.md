@@ -49,7 +49,7 @@ Users should be able to:
 - Flexbox
 - Mobile-first workflow
 - [React](https://reactjs.org/) - JS library
-- html2canvas - JS library
+- [html2canvas](https://html2canvas.hertzen.com/) - JS library
 
 ### What I learned
 
