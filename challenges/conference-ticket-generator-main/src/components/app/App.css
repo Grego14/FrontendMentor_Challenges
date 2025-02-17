@@ -92,6 +92,7 @@
   margin-block: 0 1.2rem;
   max-width: 50rem;
   font-weight: 800;
+  text-wrap: balance;
 }
 
 .main-text {
