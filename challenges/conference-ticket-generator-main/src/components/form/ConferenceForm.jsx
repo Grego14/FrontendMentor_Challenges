@@ -19,29 +19,26 @@ export default function ConferenceForm({
   sendTicketData,
   dropZoneRef
 }) {
-  const [userData, dispatchUserData] = useReducer(
-    userDataReducer,
-    {
-      'full-name': {
-        value: '',
-        error: ''
-      },
+  const [userData, dispatchUserData] = useReducer(userDataReducer, {
+    'full-name': {
+      value: '',
+      error: ''
+    },
 
-      email: {
-        value: '',
-        error: ''
-      },
+    email: {
+      value: '',
+      error: ''
+    },
 
-      'github-name': {
-        value: '',
-        error: ''
-      },
+    'github-name': {
+      value: '',
+      error: ''
+    },
 
-      userAvatar: {
-        value: ''
-      }
+    userAvatar: {
+      value: ''
     }
-  )
+  })
 
   const formRef = useRef(null)
   const buttonRef = useRef(null)
@@ -78,7 +75,11 @@ export default function ConferenceForm({
 
     let validationError = validateFuncs[inputName](trimmedValue)
 
-    if (inputName === 'github-name' && !validationError && lastGithubUserFetched !== userToFetch) {
+    if (
+      inputName === 'github-name' &&
+      !validationError &&
+      lastGithubUserFetched !== userToFetch
+    ) {
       setValidatingGithubUser(true)
       buttonRef.current.disabled = true
 
@@ -168,11 +169,13 @@ export default function ConferenceForm({
         }
       }
 
-      inputsAreValidTemp =
-        inputsAreValidTemp && userData.userAvatar.value !== ''
+      // avatar validations are managed in the DropZone Component
+      const avatarIsValid = userData.userAvatar.value !== ''
+
+      inputsAreValidTemp = inputsAreValidTemp && avatarIsValid
 
       setInputsAreValid(inputsAreValidTemp)
-        ; (inputsAreValidTemp ? removeErrorAttribute : setErrorAttribute)(
+        ; (avatarIsValid ? removeErrorAttribute : setErrorAttribute)(
           getClosestFormField(dropZoneRef.current)
         )
 
