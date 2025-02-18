@@ -8,7 +8,7 @@
   max-width: 25rem;
   margin-inline: auto;
 
-  transition: transform var(--transition-faster) ease-in-out, opacity var(--transition-faster) ease-in-out;
+  transition: transform var(--transition-faster) ease-in-out .8s, opacity var(--transition-faster) ease-in-out .8s;
 }
 
 .form--hide {
@@ -116,7 +116,7 @@
     background-color: var(--color-bg-input-hover);
   }
 
-  .form__button:hover {
+  .form__button:not(:disabled):hover {
     box-shadow: 0 2px 3px var(--form-button-hover-shadow);
     background-color: var(--color-orange-700);
   }
