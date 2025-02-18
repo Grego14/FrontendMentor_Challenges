@@ -7,7 +7,7 @@
   left: 50%;
   width: clamp(280px, 280px + 10vw, 500px);
   height: clamp(130px, 130px + 6vw, 300px);
-  background: url('./assets/images/pattern-ticket.svg') no-repeat center/100% 100%;
+  background: url('/assets/images/pattern-ticket.svg') no-repeat center/100% 100%;
 
   transform: translate(300%, -40%);
   opacity: 0;
